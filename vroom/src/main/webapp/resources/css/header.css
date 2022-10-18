@@ -1,0 +1,102 @@
+@charset "UTF-8";
+
+* { margin: 0; padding: 0; }
+*, ::after, ::before { box-sizing: border-box; }
+.header {
+	width: 100%;
+	height: 230px;
+	padding: 0;
+	font-weight: 300;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	overflow: auto;
+	z-index: 100;
+}
+.blue-box {
+	background: #4971FF; top: 0; left: 0; z-index: -1;
+	width: 100%; height: 150px; position: absolute;
+}
+.header-top {
+	top: 0; left: 0;
+	width: 100%; height: 55px;
+	padding: 10px; color: white; display: flex;
+	justify-content: space-between; align-items: center;
+}
+
+#logo { margin: 20px 0 0 20px; }
+a:hover, a:active { cursor:pointer; }
+
+.header-right {
+	padding-right: 10px; margin-left: auto;
+}
+.header-right > a {
+	font-size: 8px;
+	font-weight: 500px;
+	cursor: pointer;
+	text-decoration: none;
+	color: white;
+}
+.header-right > a:hover { font-weight: 600; }
+
+.main-nav {
+	margin-bottom: -10px; padding-left: 10%;
+	width: 100%; display: flex;
+	justify-content: left; position: relative;
+}
+.header > ul, li { margin: 0; padding: 0; list-style: none; }
+
+.main-menu > li {
+	float: left;
+	position: relative;
+}
+.main-menu > li > a {
+  	font-size: 14px; color: #fff; font-weight: 500;
+  	text-align: center; text-decoration: none;
+  	letter-spacing: 0.05em; display: block;
+  	padding: 12px 14px; 
+}
+.sub-menu {
+	box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4);
+	position: absolute; font-weight: 500;
+  	text-align: left; font-size: 11px;
+  	opacity: 0; visibility: hidden; transition: all 0.15s ease-in;
+  	background: white; border-radius: 10px; padding-left: 0px;
+}
+.sub-menu > li:first-child { padding-top: 10px; }
+.sub-menu > li:last-child { padding-bottom: 10px; }
+.sub-menu > li { padding: 4px 8px; }
+.sub-menu > li >  a {
+  	text-decoration: none; color: #1D1D1D;
+}
+.main-menu > li:hover .sub-menu {
+  	opacity: 1;
+  	visibility: visible;
+}
+.sub-menu > li >  a:hover {
+ 	color: #4971FF; font-weight: 900;
+}
+.main-menu-a { position: relative; }
+.main-menu-a:after{
+  	content: ""; position: absolute;
+  	left: 18%; bottom: 10px; width: 0px; height: 2px;
+  	transition: all 0.2s ease-in-out;
+  	transition-duration: 0.3s; opacity: 0;
+  	background-color: #fff;
+}
+.main-menu-a:hover:after{ width: 66%; opacity: 1; }
+
+.fake-box {
+	background: white; width: 100%; height: 50px; 
+	border-radius: 100px 100px 0 0;
+}
+
+
+#img-logo {
+	-webkit-filter: brightness(0) invert(1); filter: brightness(0) invert(1);
+}
+
+#img-logo:hover {
+	-webkit-filter: brightness(100%) invert(0); filter: brightness(100%) invert(0);
+}
