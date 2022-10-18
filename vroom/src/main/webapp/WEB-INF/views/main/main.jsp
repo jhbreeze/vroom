@@ -8,12 +8,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 메인</title>
-<jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
+<jsp:include page="/WEB-INF/views/layout/static_mainHeader.jsp"/>
 <style type="text/css">
 main { 
 	position: relative; top: -55px; background: white;
 }
-.container { min-height: 900px; }
+.container { min-height: 900px; margin-top: 100px; }
 
 </style>
 
