@@ -31,7 +31,7 @@ main {
 	    </div>
 	    
 	    <div class="body-main mx-auto">
-			이벤트 입니다. ...
+			이벤트 작성글 입니다. ...
 	    </div>
 	</div>
 </main>
