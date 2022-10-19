@@ -11,25 +11,25 @@
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 
 <style type="text/css">
-.container { min-height: 500px; }
+.container { min-height: 700px; }
 main { 
 	position: relative; top: -55px; background: white;
 }
 .body-container {
 	max-width: 800px; margin: auto;
 }
-tr { font-size: 13px; }
+tr { font-size: 15px; }
 
 tr:hover { background: #fff; box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4); }
 
 .sort{
-	font-size: 8px; border: 1px solid #e2e2e2; width: 50px; 
+	font-size: 10px; border: 1px solid #e2e2e2; width: 50px; 
 	height: 20px; border-radius: 20px;
 	display : flex; justify-content : center; align-items : center;
 }
 .sort-td { width: 80px; }
 .date-th { width: 100px; }
-.date-div { font-size: 10px; line-height: 20.5px; }
+.date-div { font-size: 12px; line-height: 20.5px; }
 </style>
 
 <script type="text/javascript">
