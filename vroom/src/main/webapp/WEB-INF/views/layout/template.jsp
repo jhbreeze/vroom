@@ -31,7 +31,7 @@ main {
 	    </div>
 	    
 	    <div class="body-main mx-auto">
-			내용 입니다. ...
+			내용 입니다....
 	    </div>
 	</div>
 </main>
