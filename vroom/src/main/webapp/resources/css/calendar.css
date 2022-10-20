@@ -1,0 +1,35 @@
+@charset "UTF-8";
+/* table */
+.table { width: 100%; border-spacing: 0; border-collapse: collapse; }
+.table th, .table td { padding-top: 10px; padding-bottom: 10px; }
+
+.table-border thead > tr { border-top: 2px solid #212529; border-bottom: 1px solid #ced4da; }
+.table-border tbody > tr { border-bottom: 1px solid #ced4da; }
+.table-border tfoot > tr { border-bottom: 1px solid #ced4da; }
+.td-border td { border: 1px solid #ced4da; }
+
+/* layout */
+#calendarLayout {
+	width: 280px;
+	margin: 30px auto;
+}
+#calendarLayout .subject{
+	height: 37px;
+	line-height: 37px;
+	text-align: center;
+	font-weight: 600;
+}
+
+#calendarLayout table td { text-align: center; }
+#calendarLayout table td:nth-child(7n+1) { color: orange; }
+#calendarLayout table td:nth-child(7n) { color: #0E6EFD; }
+#calendarLayout table td.gray { color: #ccc; }
+#calendarLayout table td.today { font-weight:700; background: #E6FFFF; }
+
+#calendarLayout .footer { height: 25px; line-height: 25px;
+	text-align: right; font-size: 12px; }
+
+.subject>span, .footer>span { cursor: pointer; }
+.subject>span:hover, .footer>span:hover { color: tomato; }
+#calendarLayout td:hover { background: #eee; }
+.hidden-cal { font-size: 0px; }

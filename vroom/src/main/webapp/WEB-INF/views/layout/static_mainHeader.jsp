@@ -19,3 +19,4 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/footer.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main_header.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/paginate.css" type="text/css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/calendar.css" type="text/css">
