@@ -64,9 +64,10 @@ main {
 .adult-count > button, .adult-count > div  { margin: 0 0 0 10px; }
 .child-count > button, .child-count > div { margin: 0 0 0 10px; }
 .adult-count { margin-bottom: 10px; }
-.adult-count :nth-child(2), .child-count :nth-child(2) { margin-left: 80px; }
+.adult-count :nth-child(2), .child-count :nth-child(2) { margin-left: 165px; }
 #changeButton { background: #0E6EFD; color: white; position: absolute; }
 #changeButton:hover { background: #0D5ED7; cursor: pointer; }
+
 </style>
 <script type="text/javascript">
 function selectDep(){
