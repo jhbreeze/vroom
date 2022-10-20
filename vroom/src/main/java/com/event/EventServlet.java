@@ -166,7 +166,45 @@ public class EventServlet extends MyUploadServlet {
 	}
 	
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/event/write.jsp");
+		EventDAO dao = new EventDAO();
+		
+		String cp = req.getContextPath();
+		
+		String page = req.getParameter("page");
+		String query = "page="+page;
+		
+		try {
+			long eveNum = Long.parseLong(req.getParameter("eveNum"));
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+			
+			EventDTO dto = dao.readList(eveNum);
+			if (dto == null) { // 게시물이 없으면 다시 리스트로
+				resp.sendRedirect(cp + "/event/list.do?" + query);
+				return;
+			}
+			
+			req.setAttribute("dto", dto);
+			req.setAttribute("page", page);
+			req.setAttribute("query", query);
+			
+			forward(req, resp, "/WEB-INF/views/event/article.jsp");
+			return;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		resp.sendRedirect(cp+"/event/list.do?" + query);
 	}
 	
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

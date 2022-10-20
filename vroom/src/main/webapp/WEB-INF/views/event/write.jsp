@@ -85,7 +85,7 @@ main {
 						<tr>
 							<td scope="row">작성자명</td>
 							<td>
-								<p>관리자</p>
+								<p>${sessionScope.member.userName}</p>
 							</td>
 						</tr>
 

@@ -262,7 +262,7 @@ public class EventDAO {
 				
 				dto.setEveNum(rs.getLong("eveNum"));
 				dto.setUserId(rs.getString("userId"));
-				dto.setEveTitle(rs.getString("eveCont"));
+				dto.setEveTitle(rs.getString("eveTitle"));
 				dto.setEveCont(rs.getString("eveCont"));
 				dto.setEveRegDate(rs.getString("eveRegDate"));
 			}

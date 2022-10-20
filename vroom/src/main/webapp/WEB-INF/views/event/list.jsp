@@ -66,7 +66,7 @@ main {
 					<c:forEach var="dto" items="${list}" varStatus="status">
 						<tr>
 							<td>${dataCount - (page-1) * size - status.index}</td>
-							<td><a href="${articleUrl}&num=${dto.eveNum}">${dto.eveTitle}</a>
+							<td><a href="${articleUrl}&eveNum=${dto.eveNum}">${dto.eveTitle}</a>
 							</td>
 							<td>${dto.eveRegDate}</td>
 						</tr>
