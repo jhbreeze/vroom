@@ -67,7 +67,7 @@ main {
 			<li class="nav-item" role="presentation">
 				<button class="nav-link active" id="tab-1" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="1" aria-selected="true">버 스</button>
 			</li>
-			<li class="nav-item" role="presentation">
+			<li class="nav-item" role="presentation" >
 				<button class="nav-link" id="tab-2" data-bs-toggle="tab" data-bs-target="#nav-2" type="button" role="tab" aria-controls="2" aria-selected="true">기 차</button>
 			</li>
 		</ul>
