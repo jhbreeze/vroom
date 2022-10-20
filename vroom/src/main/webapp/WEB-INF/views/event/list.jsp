@@ -100,8 +100,10 @@ main {
 					</form>
 				</div>
 				<div>
-					<button type="button"
-						onclick="location.href='${pageContext.request.contextPath}/event/write.do';">글올리기</button>
+					<c:if test="${sessionScope.member.userId=='admin'}">
+						<button type="button"
+							onclick="location.href='${pageContext.request.contextPath}/event/write.do';">글올리기</button>
+					</c:if>
 				</div>
 			</div>
 		</div>
