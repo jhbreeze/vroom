@@ -36,6 +36,7 @@ main {
 #countCus-left { color: #0E6EFD; font-weight: 600; float: left; } 
 #countCus-right { text-align: right; float: right; font-weight: 600; color: #767676 }
 #half, #full { padding: auto; }
+#bushalf, #busfull { padding: auto; }
 .select-departure { margin-top: 10px; display: flex; width: 100%; }
 .select-destination { margin-top: 10px; display: flex; width: 100%; }
 .select-date { margin-top: 10px; display: flex; width: 45%; }
@@ -66,7 +67,9 @@ main {
 .adult-count { margin-bottom: 10px; }
 .adult-count :nth-child(2), .child-count :nth-child(2) { margin-left: 165px; }
 #changeButton { background: #0E6EFD; color: white; position: absolute; }
+#buschangeButton { background: #0E6EFD; color: white; position: absolute; }
 #changeButton:hover { background: #0D5ED7; cursor: pointer; }
+#buschangeButton:hover { background: #0D5ED7; cursor: pointer; }
 
 </style>
 <script type="text/javascript">
@@ -79,6 +82,13 @@ function selectDep(){
 	$("#departure").val(radioValue);
 	$("#myDialogModal1").modal("hide");
 };
+function busselectDep(){
+	let radioText = $("input[name=radio4]:checked").next("label").text();
+	let radioValue = $("input[name=radio4]:checked").val();
+	$("#busdeparture").text(radioText);
+	$("#busdeparture").val(radioValue);
+	$("#myDialogModal11").modal("hide");
+};
 function selectDes(){
 	let radioText = $("input[name=radio3]:checked").next("label").text();
 	let radioValue = $("input[name=radio3]:checked").val();
@@ -86,12 +96,28 @@ function selectDes(){
 	$("#destination").val(radioValue);
 	$("#myDialogModal2").modal("hide");
 };
+function busselectDes(){
+	let radioText = $("input[name=radio5]:checked").next("label").text();
+	let radioValue = $("input[name=radio5]:checked").val();
+	$("#busdestination").text(radioText);
+	$("#busdestination").val(radioValue);
+	$("#myDialogModal22").modal("hide");
+};
 $(function(){
 	$(".select-date2").hide();
 	$("#full").click(function(){
 		$(".select-date2").show();
 	});
 	$("#half").click(function(){
+		$(".select-date2").hide();
+	});
+});
+$(function(){
+	$(".select-date2").hide();
+	$("#busfull").click(function(){
+		$(".select-date2").show();
+	});
+	$("#bushalf").click(function(){
 		$(".select-date2").hide();
 	});
 });
@@ -149,6 +175,15 @@ $(function(){
 	});
 });
 
+$(function(){
+	$("#buschangeButton").click(function(){
+		let dep = $("#busdeparture").text();
+		let des = $("#busdestination").text();
+		$("#busdeparture").text(des);
+		$("#busdestination").text(dep);
+	});
+});
+
 </script>
 
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -178,18 +213,68 @@ $(function(){
 		</ul>
 
 		<div class="tab-content reserve-tab" id="nav-tabContent" role="group" aria-label="Basic radio toggle button group">
-			
-			
+			<!--  버스 -->
+			<div class="tab-pane fade train-container justify-content-center active show" id="nav-1" role="tabpanel" aria-labelledby="nav-tab-1">
+			<form name="trainReserveForm" method="post">
+				<span id="buschangeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
+				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio1" autocomplete="off" checked>
+  					<label class="col-6 btn btn-outline-primary" id="bushalf" for="busbtnradio1" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>편 도</span></label>
+					
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio2" autocomplete="off">
+  					<label class="col-6 btn btn-outline-primary" id="busfull" for="busbtnradio2" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>왕 복</span></label>
+				</div>
+				<div class="row row-cols-3 text-dark second-row">
+					<div class="col-3" style="margin: 2px; width: 24%">
+					  	<button type="button" class="btn select-departure position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11">
+					  		<div class="small-text">출발지</div>
+					  		<div class="middle-hilight-text" id="busdeparture">선택</div>
+					  	</button>
+					</div>
+					<div class="col-3" style="margin: 2px; width: 24%">
+					  	<button type="button" class="btn select-destination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22">
+						  	<div class="small-text">도착지</div>
+						  	<div class="middle-hilight-text" id="busdestination">선택</div>
+					  	</button>
+					</div>
+					<div class="col-6" style="margin: 2px; width: 49%">
+						<button type="button" class="btn select-date position-relative btn-staDate">
+						  	<div class="small-text">가는날</div>
+						  	<div class="middle-hilight-text" id="busstaDate"></div>
+					 	 </button>
+						<button type="button" class="btn select-date2 position-relative btn-endDate">
+						  	<div class="small-text" style="text-align: right;">오는날</div>
+						  	<div class="middle-hilight-text" style="text-align: right;" id="busendDate"></div>
+					 	 </button>
+					</div>
+				</div>
+				<div class="row row-cols-3 text-dark text-center third-row level-container">
+					<div class="col-6 level-container" style="margin: 2px; width: 48.75%; padding: 16px 12px;">
+						<div class="small-text">등급</div>
+					 	<section class="plan cf">
+							<input type="radio" name="busradio1" id="busall" value="all" checked><label class="free-label four col" for="busall">전체</label>
+							<input type="radio" name="busradio1" id="busbasic" value="basic"><label class="basic-label four col" for="busbasic">일반</label>
+							<input type="radio" name="busradio1" id="bussuperior" value="superior"><label class="superior-label four col" for="bussuperior">우등</label>
+							<input type="radio" name="busradio1" id="buspremium" value="premium"><label class="premium-label four col" for="buspremium">프리미엄</label>
+							
+						</section>
+					</div>
+					<div class="col-6" style="margin: 2px; width: 48.75%">
+						<button type="button" class="btn btn-primary final-button" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
+					</div>
+				</div>
+			</form>
+			</div>
 			<!-- 기차 -->
 			<div class="tab-pane fade train-container justify-content-center" id="nav-2" role="tabpanel" aria-labelledby="nav-tab-2">
 			<form name="trainReserveForm" method="post">
 				<span id="changeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
 				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
 					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-  					<label class="col-3 btn btn-outline-primary" id="bushalf" for="btnradio1" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>편 도</span></label>
+  					<label class="col-3 btn btn-outline-primary" id="half" for="btnradio1" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>편 도</span></label>
 					
 					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-  					<label class="col-3 btn btn-outline-primary" id="busfull" for="btnradio2" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>왕 복</span></label>
+  					<label class="col-3 btn btn-outline-primary" id="full" for="btnradio2" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>왕 복</span></label>
 
 					<div class="col-6" style="margin: 2px; width: 49%">
 					  <button type="button" class="btn countCus-btn position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal">
@@ -227,8 +312,8 @@ $(function(){
 						<div class="small-text">등급</div>
 					 	<section class="plan cf">
 							<input type="radio" name="radio1" id="all" value="all" checked><label class="free-label four col" for="all">전체</label>
-							<input type="radio" name="radio1" id="premium" value="premium"><label class="basic-label four col" for="premium">특실</label>
-							<input type="radio" name="radio1" id="basic" value="basic"><label class="premium-label four col" for="basic">일반</label>
+							<input type="radio" name="radio1" id="premium" value="premium"><label class="premium-label four col" for="premium">특실</label>
+							<input type="radio" name="radio1" id="basic" value="basic"><label class="basic-label four col" for="basic">일반</label>
 						</section>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 48.75%">
@@ -307,9 +392,9 @@ $(function(){
 			<form name="destinationForm">
 				<div class="modal-body" style="min-height: 200px;">
 		        	<section class="plan2 cf">
-						<input type="radio" name="radio3" id="su2" value="서울" checked><label for="su2">서울</label>
-						<input type="radio" name="radio3" id="ydp2" value="영등포"><label for="ydp2">영등포</label>
-						<input type="radio" name="radio3" id="sw2" value="수원"><label for="sw2">수원</label>
+						<input type="radio" name="radio4" id="su2" value="서울" checked><label for="su2">서울</label>
+						<input type="radio" name="radio4" id="ydp2" value="영등포"><label for="ydp2">영등포</label>
+						<input type="radio" name="radio4" id="sw2" value="수원"><label for="sw2">수원</label>
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -363,19 +448,19 @@ $(function(){
 
 <!-- 버스 부분 -->
 <div class="modal fade" id="myDialogModal11" tabindex="-1" 
-		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+		aria-labelledby="myDialogModalLabel2" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myDialogModalLabel">출발지</h5>
+				<h5 class="modal-title" id="myDialogModalLabel2">출발지</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<form name="departureForm">
 				<div class="modal-body"  style="min-height: 200px;">	
 		        	<section class="plan cf">
-						<input type="radio" name="radio4" id="su" value="서울" checked><label class="four col" for="su">서울</label>
-						<input type="radio" name="radio4" id="ydp" value="영등포"><label class="four col" for="ydp">영등포</label>
-						<input type="radio" name="radio4" id="sw" value="수원"><label class="four col" for="sw">수원</label>
+						<input type="radio" name="radio3" id="bussu" value="서울" checked><label class="four col" for="bussu">서울</label>
+						<input type="radio" name="radio3" id="busydp" value="영등포"><label class="four col" for="busydp">영등포</label>
+						<input type="radio" name="radio3" id="bussw" value="수원"><label class="four col" for="bussw">수원</label>
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -388,19 +473,19 @@ $(function(){
 </div>
 
 <div class="modal fade" id="myDialogModal22" tabindex="-1" 
-		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+		aria-labelledby="myDialogModalLabel2" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myDialogModalLabel">도착지</h5>
+				<h5 class="modal-title" id="myDialogModalLabel2">도착지</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<form name="destinationForm">
 				<div class="modal-body" style="min-height: 200px;">
 		        	<section class="plan2 cf">
-						<input type="radio" name="radio5" id="su2" value="서울" checked><label for="su2">서울</label>
-						<input type="radio" name="radio5" id="ydp2" value="영등포"><label for="ydp2">영등포</label>
-						<input type="radio" name="radio5" id="sw2" value="수원"><label for="sw2">수원</label>
+						<input type="radio" name="radio5" id="bussu2" value="서울" checked><label for="bussu2">서울</label>
+						<input type="radio" name="radio5" id="busydp2" value="영등포"><label for="busydp2">영등포</label>
+						<input type="radio" name="radio5" id="bussw2" value="수원"><label for="bussw2">수원</label>
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -413,11 +498,11 @@ $(function(){
 </div>
 
 <div class="modal fade" id="myDialogModal33" tabindex="-1" 
-		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+		aria-labelledby="myDialogModalLabel2" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myDialogModalLabel">가는날</h5>
+				<h5 class="modal-title" id="myDialogModalLabel2">가는날</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -433,11 +518,11 @@ $(function(){
 </div>
 
 <div class="modal fade" id="myDialogModal44" tabindex="-1" 
-		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+		aria-labelledby="myDialogModalLabel2" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="myDialogModalLabel">오는날</h5>
+				<h5 class="modal-title" id="myDialogModalLabel2">오는날</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
@@ -457,6 +542,7 @@ $(function(){
 </main>
 
 <script type="text/javascript">
+
 function calendar(y, m, mode) {
 	let date = new Date(y, m-1, 1); // y년 m월 1일의 Date 객체 생성
 	y = date.getFullYear();
@@ -566,6 +652,29 @@ function calendar(y, m, mode) {
 	}
 	document.querySelector(selector).innerHTML = out;
 }
+$(function(){
+	let now = new Date();
+	let y = now.getFullYear();
+	let m = now.getMonth() + 1;
+	let d = now.getDate();
+	
+	$("#busstaDate").attr("data-year", y);
+	$("#busstaDate").attr("data-month", m);
+	$("#busstaDate").attr("data-date", d);
+	
+	$("#busendDate").attr("data-year", y);
+	$("#busendDate").attr("data-month", m);
+	$("#busendDate").attr("data-date", d);
+	
+	let w = now.getDay(); // 요일 (0~6, 일~토)
+	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
+	
+	let today = y+"."+m+"."+d+" "+week[w];
+	
+	$("#busstaDate").text(today);
+	$("#busendDate").text(today);
+	
+});
 
 $(function(){
 	let now = new Date();
@@ -589,6 +698,47 @@ $(function(){
 	$("#staDate").text(today);
 	$("#endDate").text(today);
 	
+});
+
+$(function(){
+	$(".btn-busstaDate").click(function(){
+		let y = $("#busstaDate").attr("data-year");
+		let m = $("#busstaDate").attr("data-month");
+		let d = $("#busstaDate").attr("data-date");
+		
+		calendar(y, m, "dep");
+		
+		$("#myDialogModal33").modal("show");
+		
+		$("#calendarLayout td").click(function(){
+			let selectTr = $(this).parent().find("td").index(this);
+			let week = ['일','월','화','수','목','금','토'];
+			let selectDate = $(this).children().text();
+			selectDate = selectDate + " " + week[selectTr];
+			
+			$("#busstaDate").text(selectDate);
+			$("#myDialogModal33").modal("hide");
+		});
+	});
+	$(".btn-busendDate").click(function(){
+		let y = $("#busendDate").attr("data-year");
+		let m = $("#busendDate").attr("data-month");
+		let d = $("#busendDate").attr("data-date");
+		
+		calendar(y, m, "des");
+		
+		$("#myDialogModal44").modal("show");
+		
+		$("#calendarLayout td").click(function(){
+			let selectTr = $(this).parent().find("td").index(this);
+			let week = ['일','월','화','수','목','금','토'];
+			let selectDate = $(this).children().text();
+			selectDate = selectDate + " " + week[selectTr];
+			
+			$("#busendDate").text(selectDate);
+			$("#myDialogModal44").modal("hide");
+		});
+	});
 });
 
 $(function(){
