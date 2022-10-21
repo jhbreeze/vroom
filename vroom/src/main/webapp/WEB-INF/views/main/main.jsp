@@ -70,16 +70,18 @@ main {
 
 </style>
 <script type="text/javascript">
+
+// 기차
 function selectDep(){
-	var radioText = $("input[name=radio2]:checked").next("label").text();
-	var radioValue = $("input[name=radio2]:checked").val();
+	let radioText = $("input[name=radio2]:checked").next("label").text();
+	let radioValue = $("input[name=radio2]:checked").val();
 	$("#departure").text(radioText);
 	$("#departure").val(radioValue);
 	$("#myDialogModal1").modal("hide");
 };
 function selectDes(){
-	var radioText = $("input[name=radio3]:checked").next("label").text();
-	var radioValue = $("input[name=radio3]:checked").val();
+	let radioText = $("input[name=radio3]:checked").next("label").text();
+	let radioValue = $("input[name=radio3]:checked").val();
 	$("#destination").text(radioText);
 	$("#destination").val(radioValue);
 	$("#myDialogModal2").modal("hide");
@@ -121,9 +123,9 @@ function countChild(type) {
 	  resultElement.innerText = number;
 }
 function resultCount(){
-	var resultCount = "";
-	var adultCountResult = $("#aCountResult").text();
-	var childCountResult = $("#cCountResult").text();
+	let resultCount = "";
+	let adultCountResult = $("#aCountResult").text();
+	let childCountResult = $("#cCountResult").text();
 	if(adultCountResult > 0) {
 		resultCount = "<span id='countCus-right' value='어른'>성인 "+"<span id='adultCountResult'>"+adultCountResult+"</span>"+" 명</span>";
 	}
@@ -147,7 +149,6 @@ $(function(){
 	});
 });
 
-
 </script>
 
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -166,7 +167,6 @@ $(function(){
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
 </header>
-<form name="reserveForm" method="post">
 	<div class="mb-2 pt-3 reserve-container">
 		<ul class="nav nav-pills justify-content-center tab-button" id="myTab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -178,21 +178,18 @@ $(function(){
 		</ul>
 
 		<div class="tab-content reserve-tab" id="nav-tabContent" role="group" aria-label="Basic radio toggle button group">
-		
-		
-			<div class="tab-pane fade show active" id="nav-1" role="tabpanel" aria-labelledby="nav-tab-1">
-				버스 부분
-			</div>
 			
 			
+			<!-- 기차 -->
 			<div class="tab-pane fade train-container justify-content-center" id="nav-2" role="tabpanel" aria-labelledby="nav-tab-2">
+			<form name="trainReserveForm" method="post">
 				<span id="changeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
 				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
 					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-  					<label class="col-3 btn btn-outline-primary" id="half" for="btnradio1" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>편 도</span></label>
+  					<label class="col-3 btn btn-outline-primary" id="bushalf" for="btnradio1" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>편 도</span></label>
 					
 					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-  					<label class="col-3 btn btn-outline-primary" id="full" for="btnradio2" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>왕 복</span></label>
+  					<label class="col-3 btn btn-outline-primary" id="busfull" for="btnradio2" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>왕 복</span></label>
 
 					<div class="col-6" style="margin: 2px; width: 49%">
 					  <button type="button" class="btn countCus-btn position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal">
@@ -238,13 +235,12 @@ $(function(){
 						<button type="button" class="btn btn-primary final-button" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
 					</div>
 				</div>
+			</form>
 			</div>
 		</div>
-
 	</div>
-</form>
 
-
+<!-- 기차 모달창 -->
 <div class="modal fade" id="myDialogModal" tabindex="-1" 
 		aria-labelledby="myDialogModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
@@ -365,6 +361,96 @@ $(function(){
 	</div>
 </div>
 
+<!-- 버스 부분 -->
+<div class="modal fade" id="myDialogModal11" tabindex="-1" 
+		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myDialogModalLabel">출발지</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form name="departureForm">
+				<div class="modal-body"  style="min-height: 200px;">	
+		        	<section class="plan cf">
+						<input type="radio" name="radio4" id="su" value="서울" checked><label class="four col" for="su">서울</label>
+						<input type="radio" name="radio4" id="ydp" value="영등포"><label class="four col" for="ydp">영등포</label>
+						<input type="radio" name="radio4" id="sw" value="수원"><label class="four col" for="sw">수원</label>
+					</section>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="busselectDep();">등록하기</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myDialogModal22" tabindex="-1" 
+		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myDialogModalLabel">도착지</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form name="destinationForm">
+				<div class="modal-body" style="min-height: 200px;">
+		        	<section class="plan2 cf">
+						<input type="radio" name="radio5" id="su2" value="서울" checked><label for="su2">서울</label>
+						<input type="radio" name="radio5" id="ydp2" value="영등포"><label for="ydp2">영등포</label>
+						<input type="radio" name="radio5" id="sw2" value="수원"><label for="sw2">수원</label>
+					</section>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary" onclick="busselectDes();">등록하기</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myDialogModal33" tabindex="-1" 
+		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myDialogModalLabel">가는날</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+        		<div id="depDate">
+        			
+        		</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myDialogModal44" tabindex="-1" 
+		aria-labelledby="myDialogModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="myDialogModalLabel">오는날</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+        		<div id="desDate">
+        			
+        		</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
 <main>
 	<div class="container body-container">
 	</div>
