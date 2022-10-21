@@ -94,24 +94,23 @@ $(function(){
 	});
 });
 function countAdult(type)  {
-  const resultElement = document.getElementById('adultCountResult');
+  const resultElement = document.getElementById('aCountResult');
   let number = resultElement.innerText;
   if(type === 'plus') {
     number = parseInt(number) + 1;
   }else if(type === 'minus')  {
 	if(parseInt(number)===0){
 		alert("0 이상만 가능합니다.");
-		return;
 	}
     number = parseInt(number) - 1;
   }
   resultElement.innerText = number;
 }
-function countChild(type)  {
-	  const resultElement = document.getElementById('childCountResult');
+function countChild(type) {
+	  const resultElement = document.getElementById('cCountResult');
 	  let number = resultElement.innerText;
 	  if(type === 'plus') {
-	    number = parseInt(number) + 1;
+	  	number = parseInt(number) + 1;
 	  }else if(type === 'minus')  {
 		if(parseInt(number)===0){
 			alert("0 이상만 가능합니다.");
@@ -123,8 +122,8 @@ function countChild(type)  {
 }
 function resultCount(){
 	var resultCount = "";
-	var adultCountResult = $("#adultCountResult").text();
-	var childCountResult = $("#childCountResult").text();
+	var adultCountResult = $("#aCountResult").text();
+	var childCountResult = $("#cCountResult").text();
 	if(adultCountResult > 0) {
 		resultCount = "<span id='countCus-right' value='어른'>성인 "+"<span id='adultCountResult'>"+adultCountResult+"</span>"+" 명</span>";
 	}
@@ -282,13 +281,13 @@ $(function(){
 				<div class="adult-count" style="display: flex; align-items: flex-end;">
 					<span>성인</span>
 					<button type='button' class="pm-button" onclick='countAdult("minus")' value='-'><i class="bi bi-dash-circle"></i></button>
-					<div id='adultCountResult'>0</div>
+					<div id='aCountResult'>0</div>
 	        		<button type='button' class="pm-button" onclick='countAdult("plus")' value='+'><i class="bi bi-plus-circle"></i></button>
 				</div>
 				<div class="child-count" style="display: flex; align-items: flex-end;">
 					<span>아동</span>
 					<button type='button' class="pm-button" onclick='countChild("minus")' value='-'><i class="bi bi-dash-circle"></i></button>
-					<div id='childCountResult'>0</div>
+					<div id='cCountResult'>0</div>
 	        		<button type='button' class="pm-button" onclick='countChild("plus")' value='+'><i class="bi bi-plus-circle"></i></button>
 				</div>
 			</div>
