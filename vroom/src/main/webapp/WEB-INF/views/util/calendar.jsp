@@ -64,7 +64,7 @@ function calendar(y, m) {
 		let w2 = date.getDay();
 		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
 		
-		out += '<td class="'+cls+'">'+ i +'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y+'.'+m+'.'+i+week2[w2]+'</span>'+'</td>';
+		out += '<td class="'+cls+' clsClass">'+ i +'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y+'.'+m+'.'+i+week2[w2]+'</span>'+'</td>';
 		if(i !== lastDay && ++w % 7 ===0) {
 			row++;
 			out += '</tr><tr>';
@@ -124,6 +124,7 @@ $(function(){
 			$("td").click(function(){
 				console.log($(this).children().text());
 			});
+			$("td").prop("disabled", true);
 		}
 	);
 });

@@ -29,7 +29,6 @@
 #calendarLayout .footer { height: 25px; line-height: 25px;
 	text-align: right; font-size: 12px; }
 
-.subject>span, .footer>span { cursor: pointer; }
 .subject>span:hover, .footer>span:hover { color: tomato; }
-#calendarLayout td:hover { background: #eee; }
+.clsClass:hover { background: #eee; cursor: pointer; }
 .hidden-cal { font-size: 0px; }
