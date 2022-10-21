@@ -122,7 +122,6 @@ $(function(){
 	$("body").on("click", "tr",
 		function(){
 			$("td").click(function(){
-				console.log($(this).children().text());
 			});
 			$("td").prop("disabled", true);
 		}

@@ -137,6 +137,7 @@ function resultCount(){
 	$("#countCus-right").html(resultCount);
 	$("#myDialogModal").modal("hide");
 }
+
 $(function(){
 	$("#changeButton").click(function(){
 		let dep = $("#departure").text();
@@ -146,32 +147,7 @@ $(function(){
 	});
 });
 
-$(function(){
-	let today = $("#depDate .today").children().text();
-	$("#staDate").text(today);
-	$("#endDate").text(today);
-	$("#depDate td").click(function(){
-		let depDate = $(this).children().text();
-		$("#staDate").text(depDate);
-		$("#myDialogModal3").modal("hide");
-	});
-});
-/* $(function(){
-	// $("#date1").datepicker();
-	$("#staDate").datepicker({
-		showMonthAfterYear:true
-	});
-});
 
-$(function(){
-	$("#endDate").datepicker({
-		showMonthAfterYear:true
-		,defaultDate:"2021-05-03"
-		//,minDate:0, maxDate:"+5D" // 기준 날짜에서 -5, +5만 선택 가능
-		//,minDate:-5, maxDate:"+1M +5D"
-		,minDate:"2021-05-01", maxDate:"2021-05-10"
-	});
-}); */
 </script>
 
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -239,11 +215,11 @@ $(function(){
 					  	</button>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 49%">
-						<button type="button" class="btn select-date position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal3">
+						<button type="button" class="btn select-date position-relative btn-staDate">
 						  	<div class="small-text">가는날</div>
 						  	<div class="middle-hilight-text" id="staDate"></div>
 					 	 </button>
-						<button type="button" class="btn select-date2 position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal4">
+						<button type="button" class="btn select-date2 position-relative btn-endDate">
 						  	<div class="small-text" style="text-align: right;">오는날</div>
 						  	<div class="middle-hilight-text" style="text-align: right;" id="endDate"></div>
 					 	 </button>
@@ -359,7 +335,7 @@ $(function(){
 			</div>
 			<div class="modal-body">
         		<div id="depDate">
-        			<jsp:include page="/WEB-INF/views/util/calendar.jsp"></jsp:include>
+        			
         		</div>
 			</div>
 			<div class="modal-footer">
@@ -379,12 +355,11 @@ $(function(){
 			</div>
 			<div class="modal-body">
         		<div id="desDate">
-        			<jsp:include page="/WEB-INF/views/util/calendar.jsp"></jsp:include>
+        			
         		</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-				<button type="button" class="btn btn-primary">등록하기</button>
 			</div>
 		</div>
 	</div>
@@ -394,6 +369,184 @@ $(function(){
 	<div class="container body-container">
 	</div>
 </main>
+
+<script type="text/javascript">
+function calendar(y, m, mode) {
+	let date = new Date(y, m-1, 1); // y년 m월 1일의 Date 객체 생성
+	y = date.getFullYear();
+	m = date.getMonth() + 1;
+	
+	let w = date.getDay(); // 요일 (0~6, 일~토)
+	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
+	
+	// 시스템 오늘 날짜
+	let now = new Date();
+	let ny = now.getFullYear();
+	let nm = now.getMonth()+1;
+	let nd = now.getDate();
+	
+	let out = '<div id="calendarLayout">';
+	out += '<div class="subject">';
+	out += '<span class="lr" onclick="calendar('+y+','+(m-1)+')">&lt;</span>&nbsp;&nbsp;'; // onclick : 버튼을 클릭했을 때 발생하는 것을 지정
+	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+	out += '<span onclick="calendar('+y+','+(m+1)+')">&gt;</span>';
+	out += '</div>';
+	
+	out += '<table class="table td-border">';
+	out += '<tr>';
+	for(let i=0; i<week.length; i++){
+		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">' + week[i] + '</td>';
+	}
+	out += '</tr>';
+	
+	// 무조건 6주로 만들기
+	let row = 1; // 주 수
+	
+	// 1일 앞부분 : 이전달
+	let preDate = new Date(y, m-1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+	let pDay = pLastDay - w;
+	
+	
+	out += '<tr>';
+	for(let i=0; i<w; i++){
+		let y2 = y;
+		let m2 = m-1;
+		if(nm===1){
+			y2 = y - 1;
+			m2 = 12;
+		}
+		let date = new Date(y2, m2, pDay-1);
+		let w = date.getDay();
+		let week = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
+		out += '<td class="gray">'+(++pDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y2+'.'+m2+'.'+'</span>'+'</td>';
+	}
+	
+	let cls;
+	let lastDay = (new Date(y, m, 0)).getDate();
+	for(let i=1; i<=lastDay; i++){
+		
+		cls = y===ny && m===nm && i===nd ? ' today ' : '';
+		
+		let date = new Date(y, m, i);
+		let w2 = date.getDay();
+		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
+		
+		out += '<td class="'+cls+' clsClass">'+ i +'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y+'.'+m+'.'+i+'</span>'+'</td>';
+		if(i !== lastDay && ++w % 7 ===0) {
+			row++;
+			out += '</tr><tr>';
+		}
+	}
+	// 마지막 날짜 뒷부분
+	let nDay = 0;
+	for(let i=w%7; i<6; i++){
+		let y3 = ny;
+		let m3 = nm+1;
+		if(nm===12){
+			y3 = ny + 1;
+			m3 = 1;
+		}
+		let date = new Date(y3, m3, nDay+1);
+		let w2 = date.getDay();
+		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
+		out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+'</span>'+'</td>';
+	}
+	out += '</tr>';
+	// 한달은 최대 6주
+	for(let i=row; i<6; i++){
+		out += '<tr>';
+		for(let j=0; j<7; j++){
+			let y3 = ny;
+			let m3 = nm+1;
+			if(nm===12){
+				y3 = ny + 1;
+				m3 = 1;
+			}
+			let date = new Date(y3, m3, nDay+1);
+			let w2 = date.getDay();
+			let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
+			out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+'</span>'+'</td>';
+		}
+		out += '</tr>';
+	}
+	
+	out += '</table></div>';
+	
+	
+	let selector = "#depDate";
+	if(mode === "des") {
+		selector = "#desDate";
+	}
+	document.querySelector(selector).innerHTML = out;
+}
+
+$(function(){
+	let now = new Date();
+	let y = now.getFullYear();
+	let m = now.getMonth() + 1;
+	let d = now.getDate();
+	
+	$("#staDate").attr("data-year", y);
+	$("#staDate").attr("data-month", m);
+	$("#staDate").attr("data-date", d);
+	
+	$("#endDate").attr("data-year", y);
+	$("#endDate").attr("data-month", m);
+	$("#endDate").attr("data-date", d);
+	
+	let w = now.getDay(); // 요일 (0~6, 일~토)
+	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
+	
+	let today = y+"."+m+"."+d+" "+week[w];
+	
+	$("#staDate").text(today);
+	$("#endDate").text(today);
+	
+});
+
+$(function(){
+	$(".btn-staDate").click(function(){
+		let y = $("#staDate").attr("data-year");
+		let m = $("#staDate").attr("data-month");
+		let d = $("#staDate").attr("data-date");
+		
+		calendar(y, m, "dep");
+		
+		$("#myDialogModal3").modal("show");
+		
+		$("#calendarLayout td").click(function(){
+			let selectTr = $(this).parent().find("td").index(this);
+			let week = ['일','월','화','수','목','금','토'];
+			let selectDate = $(this).children().text();
+			selectDate = selectDate + " " + week[selectTr];
+			
+			$("#staDate").text(selectDate);
+			$("#myDialogModal3").modal("hide");
+		});
+	});
+	$(".btn-endDate").click(function(){
+		let y = $("#endDate").attr("data-year");
+		let m = $("#endDate").attr("data-month");
+		let d = $("#endDate").attr("data-date");
+		
+		calendar(y, m, "des");
+		
+		$("#myDialogModal4").modal("show");
+		
+		$("#calendarLayout td").click(function(){
+			let selectTr = $(this).parent().find("td").index(this);
+			let week = ['일','월','화','수','목','금','토'];
+			let selectDate = $(this).children().text();
+			selectDate = selectDate + " " + week[selectTr];
+			
+			$("#endDate").text(selectDate);
+			$("#myDialogModal4").modal("hide");
+		});
+	});
+});
+
+</script>
 
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
