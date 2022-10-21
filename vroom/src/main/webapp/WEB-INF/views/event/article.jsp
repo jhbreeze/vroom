@@ -9,6 +9,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/board2.css"
+	type="text/css">
+<script type="text/javascript">
+	<c:if test="${sessionScope.member.userId=='admin'}">
+	function deleteBoard() {
+		let query = "eveNum=${dto.eveNum}&${query}";
+		let url = "${pageContext.request.contextPath}/event/delete.do?" + query;
+		location.href = url;
+	}
+	</c:if>
+</script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/css/bootstrap.min.css"
+	type="text/css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/icon/bootstrap-icons.css"
+	type="text/css">
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/jquery/js/jquery.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/bootstrap5/js/bootstrap.bundle.min.js"></script>
 <style type="text/css">
 main {
 	position: relative;
@@ -19,23 +43,25 @@ main {
 .container {
 	min-height: 900px;
 }
-</style>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/board2.css"
-	type="text/css">
-<script type="text/javascript">
-	<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
-	function deleteBoard() {
-		if (confirm("게시글을 삭제 하시 겠습니까 ? ")) {
-			let query = "num=${dto.eveNum}&${query}";
-			let url = "${pageContext.request.contextPath}/event/delete.do?"
-					+ query;
-			location.href = url;
-		}
-	}
-	</c:if>
-</script>
 
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
+}
+
+.btn[disabled], fieldset[disabled] .btn {
+	pointer-events: none;
+	cursor: not-allowed;
+	filter: alpha(opacity = 65);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .65;
+}
+
+a {
+  text-decoration-line: none;
+}
+</style>
 </head>
 <body>
 
@@ -52,7 +78,7 @@ main {
 			</div>
 
 			<div class="body-main mx-auto">
-				<table>
+				<table class="table">
 					<thead>
 						<tr>
 							<td colspan="2" align="center">${dto.eveTitle}</td>
@@ -67,8 +93,64 @@ main {
 						<tr>
 							<td colspan="2" valign="top" height="200">${dto.eveCont}</td>
 						</tr>
+						<tr>
+							<td colspan="2">이전글 : <c:if test="${not empty preReadDto}">
+									<a
+										href="${pageContext.request.contextPath}/event/article.do?${query}&eveNum=${preReadDto.eveNum}">${preReadDto.eveTitle}</a>
+								</c:if>
+
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">다음글 : <c:if test="${not empty nextReadDto}">
+									<a
+										href="${pageContext.request.contextPath}/event/article.do?${query}&eveNum=${nextReadDto.eveNum}">${nextReadDto.eveTitle}</a>
+								</c:if>
+							</td>
+						</tr>
 					</tbody>
 				</table>
+
+				<table class="table table-borderless">
+					<tr>
+						<td width="50%"><c:choose>
+								<c:when test="${sessionScope.member.userId=='admin'}">
+									<button type="button" class="btn btn-light"
+										onclick="location.href='${pageContext.request.contextPath}/event/update.do?eveNum=${dto.eveNum}&page=${page}';">수정</button>
+								</c:when>
+							</c:choose> <c:choose>
+								<c:when test="${sessionScope.member.userId=='admin'}">
+									<button type="button" class="btn btn-light"
+										data-bs-toggle="modal" data-bs-target="#exampleModal">
+										삭제</button>
+								</c:when>
+							</c:choose></td>
+						<td class="text-end">
+							<button type="button" class="btn btn-light"
+								onclick="location.href='${pageContext.request.contextPath}/event/list.do?${query}';">리스트</button>
+						</td>
+
+					</tr>
+				</table>
+				<div class="modal fade" id="exampleModal" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">이벤트</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">게시글을 삭제하시겠습니까?</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal">아니요</button>
+								<button type="button" class="btn btn-primary"
+									onclick="deleteBoard();">예</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>

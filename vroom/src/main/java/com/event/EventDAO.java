@@ -242,7 +242,7 @@ public class EventDAO {
 		return list;
 	}
 	
-	public EventDTO readList(Long eveNum) {
+	public EventDTO readList(long eveNum) {
 		EventDTO dto = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -287,18 +287,160 @@ public class EventDAO {
 		return dto;
 	}
 	
+	public EventDTO preReadEvent(long eveNum, String condition, String keyword) {
+		EventDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			if(keyword != null && keyword.length() != 0) {
+				sb.append(" SELECT eveNum, eveTitle ");
+				sb.append(" FROM event e ");
+				sb.append(" JOIN member1 m ON e.userId = m.userId ");
+				sb.append(" WHERE ( eveNum > ? ) ");
+				if (condition.equals("all")) {
+					sb.append("   AND ( INSTR(eveTitle, ?) >= 1 OR INSTR(eveCont, ?) >= 1 ) ");
+				} else if (condition.equals("eveRegDate")) {
+					keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
+					sb.append("   AND ( TO_CHAR(eveRegDate, 'YYYYMMDD') = ? ) ");
+				} else {
+					sb.append("   AND ( INSTR(" + condition + ", ?) >= 1 ) ");
+				}
+				sb.append(" ORDER BY eveNum ASC ");
+				sb.append(" FETCH FIRST 1 ROWS ONLY ");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setLong(1, eveNum);
+				pstmt.setString(2, keyword);
+				if (condition.equals("all")) {
+					pstmt.setString(3, keyword);
+				}
+			} else {
+				sb.append(" SELECT eveNum, eveTitle FROM event ");
+				sb.append(" WHERE eveNum > ? ");
+				sb.append(" ORDER BY eveNum ASC ");
+				sb.append(" FETCH FIRST 1 ROWS ONLY ");
+				
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setLong(1, eveNum);
+			}
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new EventDTO();
+				
+				dto.setEveNum(rs.getLong("eveNum"));
+				dto.setEveTitle(rs.getString("eveTitle"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e2) {
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e2) {
+				}
+			}
+		}
+		return dto;
+	}
+	
+	public EventDTO nextReadEvent(long eveNum, String condition, String keyword) {
+		EventDTO dto = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+
+		try {
+			if (keyword != null && keyword.length() != 0) {
+				sb.append(" SELECT eveNum, eveTitle ");
+				sb.append(" FROM event e ");
+				sb.append(" JOIN member1 m ON e.userId = m.userId ");
+				sb.append(" WHERE ( eveNum < ? ) ");
+				if (condition.equals("all")) {
+					sb.append("   AND ( INSTR(eveTitle, ?) >= 1 OR INSTR(eveCont, ?) >= 1 ) ");
+				} else if (condition.equals("eveRegDate")) {
+					keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
+					sb.append("   AND ( TO_CHAR(eveRegDate, 'YYYYMMDD') = ? ) ");
+				} else {
+					sb.append("   AND ( INSTR(" + condition + ", ?) >= 1 ) ");
+				}
+				sb.append(" ORDER BY eveNum DESC ");
+				sb.append(" FETCH FIRST 1 ROWS ONLY ");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setLong(1, eveNum);
+				pstmt.setString(2, keyword);
+				if (condition.equals("all")) {
+					pstmt.setString(3, keyword);
+				}
+			} else {
+				sb.append(" SELECT eveNum, eveTitle FROM event ");
+				sb.append(" WHERE eveNum < ? ");
+				sb.append(" ORDER BY eveNum DESC ");
+				sb.append(" FETCH FIRST 1 ROWS ONLY ");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				
+				pstmt.setLong(1, eveNum);
+			}
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				dto = new EventDTO();
+				
+				dto.setEveNum(rs.getLong("eveNum"));
+				dto.setEveTitle(rs.getString("eveTitle"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return dto;
+	}
+
+	
 	public void updateEvent(EventDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
 
 		try {
-			sql = "UPDATE event SET eveTitle=?, eveCont=?, "
-					+ " AND userId=? ";
+			sql = "UPDATE event SET eveTitle=?, eveCont=? "
+					+ " WHERE eveNum = ? AND userId = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getEveTitle());
 			pstmt.setString(2, dto.getEveCont());
-			pstmt.setString(3, dto.getUserId());
+			pstmt.setLong(3, dto.getEveNum());
+			pstmt.setString(4, dto.getUserId());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

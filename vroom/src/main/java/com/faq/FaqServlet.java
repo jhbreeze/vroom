@@ -20,10 +20,15 @@ public class FaqServlet extends MyServlet {
 		String uri = req.getRequestURI();
 		
 		if(uri.indexOf("")!=-1) {
+			list(req, resp);
 		} else if (uri.indexOf("")!=-1) {
 		} else if (uri.indexOf("")!=-1) {
 		} else if (uri.indexOf("")!=-1) {
 		}		
+	}
+	
+	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
 	}
 
 }

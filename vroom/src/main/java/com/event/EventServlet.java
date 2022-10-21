@@ -1,6 +1,5 @@
 package com.event;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -23,19 +22,12 @@ import com.util.MyUtilBootstrap;
 public class EventServlet extends MyUploadServlet {
 	private static final long serialVersionUID = 1L;
 
-	private String pathname;
 
 	@Override
 	protected void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
 		String uri = req.getRequestURI();
-		
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		
-		String root = session.getServletContext().getRealPath("/");
-		pathname = root + "uploads" + File.separator+"event";
 
 		if (uri.indexOf("list.do") != -1) {
 			list(req, resp);
@@ -57,63 +49,64 @@ public class EventServlet extends MyUploadServlet {
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
 		MyUtil util = new MyUtilBootstrap();
-		
+
 		String cp = req.getContextPath();
-		
+
 		try {
 			String page = req.getParameter("page");
 			int current_page = 1;
-			if(page != null) {
+			if (page != null) {
 				current_page = Integer.parseInt(page);
 			}
-			
+
 			String condition = req.getParameter("condition");
 			String keyword = req.getParameter("keyword");
-			if(condition == null) {
+			if (condition == null) {
 				condition = "all";
 				keyword = "";
 			}
-			
-			if(req.getMethod().equalsIgnoreCase("GET")) {
+
+			if (req.getMethod().equalsIgnoreCase("GET")) {
 				keyword = URLDecoder.decode(keyword, "utf-8");
 			}
-			
+
 			int dataCount;
-			if(keyword.length() == 0) {
+			if (keyword.length() == 0) {
 				dataCount = dao.dataCount();
 			} else {
 				dataCount = dao.dataCount(condition, keyword);
 			}
-			
+
 			int size = 3;
 			int total_page = util.pageCount(dataCount, size);
-			if(current_page > total_page) {
+			if (current_page > total_page) {
 				current_page = total_page;
 			}
-			
-			int offset = (current_page - 1)*size;
-			if(offset < 0) offset = 0;
-			
+
+			int offset = (current_page - 1) * size;
+			if (offset < 0)
+				offset = 0;
+
 			List<EventDTO> list = null;
-			if(keyword.length() == 0) {
+			if (keyword.length() == 0) {
 				list = dao.listEvent(offset, size);
 			} else {
 				list = dao.listEvent(offset, size, condition, keyword);
 			}
-			
+
 			String query = "";
-			if(keyword.length() != 0) {
-				query = "condition="+condition+"&keyword="+URLEncoder.encode(keyword, "utf-8");
+			if (keyword.length() != 0) {
+				query = "condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "utf-8");
 			}
-			
+
 			String listUrl = cp + "/event/list.do";
-			String articleUrl = cp + "/event/article.do?page="+current_page;
-			if(query.length() != 0) {
+			String articleUrl = cp + "/event/article.do?page=" + current_page;
+			if (query.length() != 0) {
 				listUrl += "?" + query;
 				articleUrl += "&" + query;
 			}
 			String paging = util.paging(current_page, total_page, listUrl);
-			
+
 			req.setAttribute("list", list);
 			req.setAttribute("page", current_page);
 			req.setAttribute("total_page", total_page);
@@ -123,56 +116,56 @@ public class EventServlet extends MyUploadServlet {
 			req.setAttribute("paging", paging);
 			req.setAttribute("condition", condition);
 			req.setAttribute("keyword", keyword);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		forward(req, resp, "/WEB-INF/views/event/list.jsp");
 	}
-	
+
 	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setAttribute("mode", "write");
 		forward(req, resp, "/WEB-INF/views/event/write.jsp");
 	}
-	
+
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
-		
+
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
 		String cp = req.getContextPath();
-		if(req.getMethod().equalsIgnoreCase("GET")) {
-			resp.sendRedirect(cp+"/event/list.do");
+		if (req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/event/list.do");
 			return;
 		}
-		
+
 		try {
 			EventDTO dto = new EventDTO();
-			
-			// dto.setUserId(info.getUserId());
-			
+
+			dto.setUserId(info.getUserId());
+
 			dto.setEveTitle(req.getParameter("eveTitle"));
 			dto.setEveCont(req.getParameter("eveCont"));
-			
+
 			dao.insertEvent(dto);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		resp.sendRedirect(cp+"/event/list.do");
+
+		resp.sendRedirect(cp + "/event/list.do");
 	}
-	
+
 	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
-		
+
 		String cp = req.getContextPath();
-		
+
 		String page = req.getParameter("page");
-		String query = "page="+page;
-		
+		String query = "page=" + page;
+
 		try {
 			long eveNum = Long.parseLong(req.getParameter("eveNum"));
 			String condition = req.getParameter("condition");
@@ -181,44 +174,145 @@ public class EventServlet extends MyUploadServlet {
 				condition = "all";
 				keyword = "";
 			}
-			
+
 			keyword = URLDecoder.decode(keyword, "utf-8");
 
 			if (keyword.length() != 0) {
 				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
 			}
-			
+
 			EventDTO dto = dao.readList(eveNum);
 			if (dto == null) { // 게시물이 없으면 다시 리스트로
 				resp.sendRedirect(cp + "/event/list.do?" + query);
 				return;
 			}
-			
+
+			EventDTO preReadDto = dao.preReadEvent(dto.getEveNum(), condition, keyword);
+			EventDTO nextReadDto = dao.nextReadEvent(dto.getEveNum(), condition, keyword);
+
 			req.setAttribute("dto", dto);
 			req.setAttribute("page", page);
 			req.setAttribute("query", query);
-			
+			req.setAttribute("preReadDto", preReadDto);
+			req.setAttribute("nextReadDto", nextReadDto);
+
 			forward(req, resp, "/WEB-INF/views/event/article.jsp");
 			return;
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-		
-		resp.sendRedirect(cp+"/event/list.do?" + query);
+
+		resp.sendRedirect(cp + "/event/list.do?" + query);
 	}
-	
+
 	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/event/write.jsp");
+		EventDAO dao = new EventDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		String cp = req.getContextPath();
+
+		String page = req.getParameter("page");
+
+		try {
+			long eveNum = Long.parseLong(req.getParameter("eveNum"));
+			EventDTO dto = dao.readList(eveNum);
+
+			if (dto == null) {
+				resp.sendRedirect(cp + "/event/list.do?page=" + page);
+				return;
+			}
+			
+			if (!dto.getUserId().equals(info.getUserId())) {
+				resp.sendRedirect(cp + "/sbbs/list.do?page=" + page);
+				return;
+			}
+
+			req.setAttribute("dto", dto);
+			req.setAttribute("page", page);
+			req.setAttribute("mode", "update");
+			
+			forward(req, resp, "/WEB-INF/views/event/write.jsp");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/event/list.do?page=" + page);
 	}
-	
+
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/event/write.jsp");
+		EventDAO dao = new EventDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		String cp = req.getContextPath();
+		if (req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/event/list.do");
+			return;
+		}
+
+		String page = req.getParameter("page");
+
+		try {
+			EventDTO dto = new EventDTO();
+			dto.setEveNum(Long.parseLong(req.getParameter("eveNum")));
+			dto.setEveTitle(req.getParameter("eveTitle"));
+			dto.setEveCont(req.getParameter("eveCont"));
+			dto.setUserId(info.getUserId());
+			
+			dao.updateEvent(dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/event/list.do?page=" + page);
 	}
-	
+
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/event/write.jsp");
+		EventDAO dao = new EventDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		String cp = req.getContextPath();
+
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
+		try {
+			long eveNum = Long.parseLong(req.getParameter("eveNum"));
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+
+			EventDTO dto = dao.readList(eveNum);
+			if (dto == null) {
+				resp.sendRedirect(cp + "/event/list.do?" + query);
+				return;
+			}
+
+			if (!info.getUserId().equals("admin")) {
+				resp.sendRedirect(cp + "/event/list.do?" + query);
+				return;
+			}
+
+			dao.deleteEvent(eveNum, info.getUserId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/event/list.do?" + query);
 	}
-	
-	
 
 }

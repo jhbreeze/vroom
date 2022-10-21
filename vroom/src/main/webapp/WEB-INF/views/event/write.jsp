@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+
 <style type="text/css">
 main {
 	position: relative;
@@ -18,6 +19,19 @@ main {
 
 .container {
 	min-height: 900px;
+}
+
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color:#eee;
+}
+.btn[disabled], fieldset[disabled] .btn {
+	pointer-events: none;
+	cursor: not-allowed;
+	filter: alpha(opacity=65);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .65;
 }
 </style>
 <link rel="stylesheet"
@@ -36,26 +50,16 @@ main {
 			return false;
 		}
 
-		str = f.content.value.trim();
+		str = f.eveCont.value.trim();
 		if (!str || str === "<p><br></p>") {
 			alert("내용을 입력하세요. ");
-			f.content.focus();
+			f.eveCont.focus();
 			return false;
 		}
 
-		f.action = "${pageContext.request.contextPath}/event/write_ok.do";
+		f.action = "${pageContext.request.contextPath}/event/${mode}_ok.do";
 	}
 
-	<c:if test="${mode=='update'}">
-	function deleteFile(num) {
-		if (!confirm("파일을 삭제하시겠습니까 ?")) {
-			return;
-		}
-		let url = "${pageContext.request.contextPath}/event/deleteFile.do?num="
-				+ num + "&page=${page}";
-		location.href = url;
-	}
-	</c:if>
 </script>
 </head>
 <body>
@@ -85,14 +89,14 @@ main {
 						<tr>
 							<td scope="row">작성자명</td>
 							<td>
-								<p>${sessionScope.member.userName}</p>
+								<p>${sessionScope.member.userId}</p>
 							</td>
 						</tr>
 
 						<tr>
 							<td scope="row">내 용</td>
-							<td><textarea name="content" id="ir1"
-									style="width 1000px; height: 270px;">${dto.eveCont}</textarea></td>
+							<td><textarea name="eveCont" id="ir1"
+									style="width: 95%; height: 270px;">${dto.eveCont}</textarea></td>
 						</tr>
 					</table>
 
@@ -107,7 +111,7 @@ main {
 									onclick="location.href='${pageContext.request.contextPath}/event/list.do';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i
 										class="bi bi-x"></i>
 								</button> <c:if test="${mode=='update'}">
-									<input type="hidden" name="num" value="${dto.eveNum}">
+									<input type="hidden" name="eveNum" value="${dto.eveNum}">
 									<input type="hidden" name="page" value="${page}">
 								</c:if>
 							</td>

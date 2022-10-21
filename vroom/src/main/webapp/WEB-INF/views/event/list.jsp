@@ -20,6 +20,30 @@ main {
 .container {
 	min-height: 900px;
 }
+
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
+}
+
+.btn[disabled], fieldset[disabled] .btn {
+	pointer-events: none;
+	cursor: not-allowed;
+	filter: alpha(opacity = 65);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	opacity: .65;
+}
+
+tr.hover:hover {
+	cursor: pointer;
+	background: #0E6EFD;
+}
+
+a {
+  text-decoration-line: none;
+}
+
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -31,6 +55,7 @@ main {
 		f.submit();
 	}
 </script>
+
 </head>
 <body>
 
@@ -42,7 +67,7 @@ main {
 		<div class="container body-container">
 			<div class="body-title">
 				<h2>
-					<i class="fa-regular fa-square"></i> 이벤트
+					<i class="bi bi-calendar-event"></i> 이벤트
 				</h2>
 			</div>
 
@@ -54,7 +79,7 @@ main {
 			</div>
 
 			<table class="table table-hover board-list">
-				<thead>
+				<thead class="table-light">
 					<tr>
 						<th class="num">번호</th>
 						<th class="subject">제목</th>
@@ -66,7 +91,8 @@ main {
 					<c:forEach var="dto" items="${list}" varStatus="status">
 						<tr>
 							<td>${dataCount - (page-1) * size - status.index}</td>
-							<td><a href="${articleUrl}&eveNum=${dto.eveNum}">${dto.eveTitle}</a>
+							<td class="left"><a
+								href="${articleUrl}&eveNum=${dto.eveNum}" class="text-reset">${dto.eveTitle}</a>
 							</td>
 							<td>${dto.eveRegDate}</td>
 						</tr>
@@ -74,19 +100,19 @@ main {
 				</tbody>
 			</table>
 
-			<div>${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
+			<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
 
-			<div>
-				<div>
-					<button type="button"
+			<div class="row board-list-footer">
+				<div class="col">
+					<button type="button" class="btn btn-light"
 						onclick="location.href='${pageContext.request.contextPath}/event/list.do';">새로고침</button>
 				</div>
-				<div>
-					<form name="searchForm"
+				<div class="col-6 text-center">
+					<form name="searchForm" class="row"
 						action="${pageContext.request.contextPath}/event/list.do"
 						method="post">
-						<div>
-							<select>
+						<div class="col-auto p-1">
+							<select name="condition" class="form-select">
 								<option value="all"
 									${condition=="all"?"selected='selected='selected'":""}>제목+내용</option>
 								<option value="reg_date"
@@ -97,16 +123,25 @@ main {
 									${condition=="content"?"selected='selected'":""}>내용</option>
 							</select>
 						</div>
+						<div class="col-auto p-1">
+							<input type="text" name="keyword" value="${keyword}"
+								class="form-control">
+						</div>
+						<div class="col-auto p-1">
+							<button type="button" class="btn btn-light"
+								onclick="searchList()">검색</button>
+						</div>
 					</form>
 				</div>
-				<div>
+				<div class="col text-end">
 					<c:if test="${sessionScope.member.userId=='admin'}">
-						<button type="button"
+						<button type="button" class="btn btn-light"
 							onclick="location.href='${pageContext.request.contextPath}/event/write.do';">글올리기</button>
 					</c:if>
 				</div>
 			</div>
 		</div>
+		
 	</main>
 
 	<footer>
