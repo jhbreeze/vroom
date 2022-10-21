@@ -156,6 +156,7 @@ $(function(){
 		$("#myDialogModal3").modal("hide");
 	});
 });
+
 /* $(function(){
 	// $("#date1").datepicker();
 	$("#staDate").datepicker({
