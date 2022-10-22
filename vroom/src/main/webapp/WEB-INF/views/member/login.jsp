@@ -56,6 +56,7 @@ div.form-1 {
 	padding: 10px;
 	height: 4em;
 	width: 90%;
+	box-shadow: 2px 2px 2px lightgrey
 }
 
 .btn-control {
@@ -64,6 +65,7 @@ div.form-1 {
 	padding: 10px;
 	height: 4em;
 	width: 90%;
+	box-shadow: 2px 2px 2px lightgrey
 }
 
 .loginbtn {
@@ -105,7 +107,7 @@ function sendLogin() {
 
 				<div class="d-flex">
 					<div class="member p-3 m-3">
-						<div class="mb-5">
+						<div class="mb-4">
 							<h5>회원 로그인</h5>
 						</div>
 						<div class="form">
@@ -118,7 +120,7 @@ function sendLogin() {
 								</div>
 								<div class="loginbtn">
 									<button type="button" class="btn btn-primary fw-bold"
-										style="height: 100%;" onclick="sendLogin();">&nbsp;로그인&nbsp;</button>
+										style="height: 100%; box-shadow: 2px 2px 2px lightgrey" onclick="sendLogin();">&nbsp;로그인&nbsp;</button>
 								</div>
 							</form>
 							<div>
