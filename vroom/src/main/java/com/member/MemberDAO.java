@@ -71,8 +71,15 @@ public class MemberDAO {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
-			//sql
-			
+			sb.append("SELECT m1.userId, userName, userPwd,");
+			sb.append("      enabled, register_date, modify_date,");
+			sb.append("      TO_CHAR(birth, 'YYYY-MM-DD') birth, ");
+			sb.append("      email, tel,");
+			sb.append("      zip, addr1, addr2");
+			sb.append("  FROM member1 m1");
+			sb.append("  LEFT OUTER JOIN member2 m2 ON m1.userId=m2.userId ");
+			sb.append("  WHERE m1.userId = ?");
+
 			pstmt = conn.prepareStatement(sb.toString());
 			
 			pstmt.setString(1, userId);
@@ -90,7 +97,6 @@ public class MemberDAO {
 				dto.setMod_date(rs.getString("modify_date"));
 				dto.setBirth(rs.getString("birth"));
 				dto.setTel(rs.getString("tel"));
-				/*
 				if(dto.getTel() != null) {
 					String[] ss = dto.getTel().split("-");
 					if(ss.length == 3) {
@@ -99,7 +105,6 @@ public class MemberDAO {
 						dto.setTel3(ss[2]);
 					}
 				}
-				*/
 				dto.setEmail(rs.getString("email"));
 				if(dto.getEmail() != null) {
 					String[] ss = dto.getEmail().split("@");
