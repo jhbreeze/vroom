@@ -9,7 +9,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/css/bootstrap.min.css"
+	type="text/css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/icon/bootstrap-icons.css"
+	type="text/css">
 
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/jquery/js/jquery.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/bootstrap5/js/bootstrap.bundle.min.js"></script>
 <style type="text/css">
 main {
 	position: relative;
@@ -104,8 +114,8 @@ a {
 
 			<div class="row board-list-footer">
 				<div class="col">
-					<button type="button" class="btn btn-light"
-						onclick="location.href='${pageContext.request.contextPath}/event/list.do';">새로고침</button>
+				</div>
+				<div class="col">
 				</div>
 				<div class="col-6 text-center">
 					<form name="searchForm" class="row"
