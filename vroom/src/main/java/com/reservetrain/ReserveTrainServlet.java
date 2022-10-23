@@ -26,13 +26,13 @@ public class ReserveTrainServlet extends MyServlet{
 		
 		String uri = req.getRequestURI();
 		
-		if(uri.indexOf("insertDepList.do")!=-1) {
+		if(uri.indexOf("traininsertDepList.do")!=-1) {
 			insertDepList(req, resp);
-		} else if (uri.indexOf("insertDesList.do")!=-1) {
+		} else if (uri.indexOf("traininsertDesList.do")!=-1) {
 			insertDesList(req, resp);
-		} else if (uri.indexOf("steptwo_ok.do")!=-1) {
+		} else if (uri.indexOf("trainsteptwo_ok.do")!=-1) {
 			beforeMoveToStepTwo(req, resp);
-		} else if (uri.indexOf("steptwo.do")!=-1) {
+		} else if (uri.indexOf("trainsteptwo.do")!=-1) {
 			moveToStepTwo(req, resp);
 		} else if (uri.indexOf("")!=-1) {
 		}
@@ -97,7 +97,7 @@ public class ReserveTrainServlet extends MyServlet{
 		// 로그인이 되어있는지 확인(되어있지 않다면 로그인페이지로 넘김)
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
-		ReserveSessionInfo reserveInfo = new ReserveSessionInfo();
+		ReserveTrainSessionInfo reserveInfo = new ReserveTrainSessionInfo();
 		
 		reserveInfo.setCycle(req.getParameter("cycle"));
 		reserveInfo.setAdultCount(Integer.parseInt(req.getParameter("adultCount")));
@@ -112,14 +112,18 @@ public class ReserveTrainServlet extends MyServlet{
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
-			forward(req, resp, "/WEB-INF/views/member/steptwo.do");
+			forward(req, resp, "/WEB-INF/views/member/trainsteptwo.do");
 		}
 	}
 	
-	protected void moveToStepTwo(HttpServletRequest req, HttpServletResponse resp) {
+	protected void moveToStepTwo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
+		String cp = req.getContextPath();
 		
-		ReserveSessionInfo reserveInfo = (ReserveSessionInfo)session.getAttribute("reserveInfo");
-		
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveInfo");
+		if(reserveInfo == null) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
 	}
 }

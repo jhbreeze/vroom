@@ -1,6 +1,6 @@
 package com.reservetrain;
 
-public class ReserveSessionInfo {
+public class ReserveTrainSessionInfo {
 	private String cycle;
 	private int adultCount;
 	private int childCount;

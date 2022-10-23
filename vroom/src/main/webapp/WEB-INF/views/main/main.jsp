@@ -197,7 +197,7 @@ $(function(){
 // 기차 - 출발지 선택리스트
 $(function(){
 	$(".select-departure").click(function(){
-		let url = "${pageContext.request.contextPath}/reservetrain/insertDepList.do";
+		let url = "${pageContext.request.contextPath}/reservetrain/traininsertDepList.do";
 		
 		$.ajax({
 			type:"post",
@@ -228,7 +228,7 @@ $(function(){
 			$(".trainDesList").text("출발지를 선택해주세요.");
 			return false;
 		}
-		let url = "${pageContext.request.contextPath}/reservetrain/insertDesList.do";
+		let url = "${pageContext.request.contextPath}/reservetrain/traininsertDesList.do";
 		let deptStationCode = $("#departure").attr("data-departure"); 
 		let query = "deptStationCode="+deptStationCode;
 		
@@ -300,7 +300,7 @@ $(function(){
 		let grade = $("input[name=radio1]:checked").val();
 		
 		
-		let out = "${pageContext.request.contextPath}/reservetrain/steptwo_ok.do?"
+		let out = "${pageContext.request.contextPath}/reservetrain/trainsteptwo_ok.do?"
 		if(cycle == "full"){
 			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
 			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
@@ -949,7 +949,7 @@ $(function(){
 	});
 });
 
-// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨.추후 강사님께 물어볼 예정)
+// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
 $(function(){
 	let now = new Date();
 	let y = now.getFullYear();
