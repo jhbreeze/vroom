@@ -70,30 +70,37 @@ main {
 #buschangeButton { background: #0E6EFD; color: white; position: absolute; }
 #changeButton:hover { background: #0D5ED7; cursor: pointer; }
 #buschangeButton:hover { background: #0D5ED7; cursor: pointer; }
-
 </style>
 <script type="text/javascript">
 
-// 기차
 function selectDep(){
 	let radioText = $("input[name=radio2]:checked").next("label").text();
-	let radioValue = $("input[name=radio2]:checked").val();
+	let stationCode = $("input[name=radio2]:checked").val();
 	$("#departure").text(radioText);
-	$("#departure").val(radioValue);
+	$("#departure").attr("data-departure", stationCode);
+	if(!radioText) {
+		$("#departure").text("선택");
+		$("#departure").val("선택");
+	} 
 	$("#myDialogModal1").modal("hide");
 };
 function busselectDep(){
-	let radioText = $("input[name=radio4]:checked").next("label").text();
-	let radioValue = $("input[name=radio4]:checked").val();
+	let radioText = $("input[name=radio3]:checked").next("label").text();
+	let radioValue = $("input[name=radio3]:checked").val();
 	$("#busdeparture").text(radioText);
 	$("#busdeparture").val(radioValue);
+	if(!radioText) {
+		$("#departure").text("선택");
+		$("#departure").val("선택");
+	} 
 	$("#myDialogModal11").modal("hide");
 };
 function selectDes(){
-	let radioText = $("input[name=radio3]:checked").next("label").text();
-	let radioValue = $("input[name=radio3]:checked").val();
+	let radioText = $("input[name=radio4]:checked").next("label").text();
+	let stationCode = $("input[name=radio4]:checked").val();
+	console.log(stationCode);
 	$("#destination").text(radioText);
-	$("#destination").val(radioValue);
+	$("#destination").attr("data-destination", stationCode);
 	$("#myDialogModal2").modal("hide");
 };
 function busselectDes(){
@@ -170,8 +177,12 @@ $(function(){
 	$("#changeButton").click(function(){
 		let dep = $("#departure").text();
 		let des = $("#destination").text();
+		let deptStationCode = $("#departure").attr("data-departure"); 
+		let destStationCode = $("#destination").attr("data-destination");
 		$("#departure").text(des);
 		$("#destination").text(dep);
+		$("#departure").attr("data-departure", deptStationCode);
+		$("#destination").attr("data-destination", deptStationCode);
 	});
 });
 
@@ -183,7 +194,139 @@ $(function(){
 		$("#busdestination").text(dep);
 	});
 });
-
+// 기차 - 출발지 선택리스트
+$(function(){
+	$(".select-departure").click(function(){
+		let url = "${pageContext.request.contextPath}/reservetrain/insertDepList.do";
+		
+		$.ajax({
+			type:"post",
+			url:url,
+			data:null,
+			dataType:"json",
+			success:function(data){
+				
+				let out = "";
+				let i = 0;
+				$(data.list).each(function(index, item){
+					let stationCode = item.stationCode;
+					let stationName = item.stationName;
+					out += '<input type="radio" name="radio2" id="'+"trainDep"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDep"+(i)+'">'+stationName+'</label>'
+				});
+				$(".trainDepList").html(out);		
+			},
+			error:function(e) {
+				console.log(e.responseText);
+			}
+		});
+	});
+});
+// 기차 - 출발지 선택 후 도착지 선택 리스트
+$(function(){
+	$(".select-destination").click(function(){
+		if(!$("#departure").attr("data-departure")){
+			$(".trainDesList").text("출발지를 선택해주세요.");
+			return false;
+		}
+		let url = "${pageContext.request.contextPath}/reservetrain/insertDesList.do";
+		let deptStationCode = $("#departure").attr("data-departure"); 
+		let query = "deptStationCode="+deptStationCode;
+		
+		$.ajax({
+			type:"post",
+			url:url,
+			data:query,
+			dataType:"json",
+			success:function(data){
+				
+				let out = "";
+				let i = 0;
+				$(data.list).each(function(index, item){
+					let stationCode = item.stationCode;
+					let stationName = item.stationName;
+					out += '<input type="radio" name="radio4" id="'+"trainDes"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDes"+(i)+'">'+stationName+'</label>'
+				});
+				$(".trainDesList").html(out);		
+			},
+			error:function(e) {
+				console.log(e.responseText);
+			}
+		});
+	});
+});
+// 기차 - 다 선택 후에 조회 눌렀을 때 가져갈 데이터
+$(function(){
+	$(".trainSend").click(function(){
+		// 비어있는 칸 있는지 확인
+		if(!compareDate()){
+			alert("가는날은 오늘날보다 이전이어야 합니다.");
+		}
+		if(!$("#countCus-right").text()){
+			alert("인원수를 입력해주세요.");
+			return false;
+		}
+		if(!$("#departure").attr("data-departure")){
+			alert("출발지 및 도착지를 선택해주세요.");
+		}
+		if(!$("#destination").attr("data-destination")){
+			alert("도착지를 선택해주세요.");
+		}		
+		let cycle = $("input[name=btnradio]:checked").val();
+		let childCount = $("#childCountResult").text();
+		let adultCount = $("#adultCountResult").text();
+		if(!$("#adultCountResult").text()){
+			adultCount = 0;
+		}
+		if(!$("#childCountResult").text()){
+			childCount = 0;
+		}
+		let deptStationCode = $("#departure").attr("data-departure");
+		let destStationCode = $("#destination").attr("data-destination");
+		
+		let y1 = $("#staDate").attr("data-year");
+		let m1 = $("#staDate").attr("data-month");
+		let d1 = $("#staDate").attr("data-date");
+		let tBoardDate1 = encodeURIComponent(y1+"-"+m1+"-"+d1);
+		
+		let tBoardDate2 = "";
+		if(cycle == "full"){
+			let y2 = $("#endDate").attr("data-year");
+			let m2 = $("#endDate").attr("data-month");
+			let d2 = $("#endDate").attr("data-date");
+			tBoardDate2 = encodeURIComponent(y2+"-"+m2+"-"+d2);
+		}
+		console.log(tBoardDate1);
+		console.log(tBoardDate2);
+		let grade = $("input[name=radio1]:checked").val();
+		
+		
+		let out = "${pageContext.request.contextPath}/reservetrain/steptwo_ok.do?"
+		if(cycle == "full"){
+			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
+			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
+			out += "&tBoardDate1="+tBoardDate1+"&tBoardDate2="+tBoardDate2+"&grade="+grade;;
+		} else {
+			out += "cycle="+cycle+"&adultCout="+adultCount+"&childCount="+childCount;
+			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
+			out += "&tBoardDate1="+tBoardDate1+"&grade="+grade;
+		}
+		location.href = out;
+	});
+	function compareDate(){
+		let sy = $("#staDate").attr("data-year");
+		let sm = $("#staDate").attr("data-month");
+		let sd = $("#staDate").attr("data-date");
+		
+		let ey = $("#endDate").attr("data-year");
+		let em = $("#endDate").attr("data-month");
+		let ed = $("#endDate").attr("data-date");
+		
+		if(ey>=sy&&em>=sy&&ed>=sd){
+			return false;
+		}
+		return true;
+	}
+});
 </script>
 
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -270,10 +413,10 @@ $(function(){
 			<form name="trainReserveForm" method="post">
 				<span id="changeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
 				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
-					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="half" checked>
   					<label class="col-3 btn btn-outline-primary" id="half" for="btnradio1" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>편 도</span></label>
 					
-					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" value="full">
   					<label class="col-3 btn btn-outline-primary" id="full" for="btnradio2" style="margin: 2px; width: 24%; border: none; font-weight: 600;"><span>왕 복</span></label>
 
 					<div class="col-6" style="margin: 2px; width: 49%">
@@ -287,13 +430,13 @@ $(function(){
 					<div class="col-3" style="margin: 2px; width: 24%">
 					  	<button type="button" class="btn select-departure position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal1">
 					  		<div class="small-text">출발지</div>
-					  		<div class="middle-hilight-text" id="departure">선택</div>
+					  		<div class="middle-hilight-text" id="departure" data-departure="">선택</div>
 					  	</button>
 					</div>
 					<div class="col-3" style="margin: 2px; width: 24%">
 					  	<button type="button" class="btn select-destination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal2">
 						  	<div class="small-text">도착지</div>
-						  	<div class="middle-hilight-text" id="destination">선택</div>
+						  	<div class="middle-hilight-text" id="destination" data-destination="">선택</div>
 					  	</button>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 49%">
@@ -317,7 +460,7 @@ $(function(){
 						</section>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 48.75%">
-						<button type="button" class="btn btn-primary final-button" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
+						<button type="button" class="btn btn-primary final-button trainSend" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
 					</div>
 				</div>
 			</form>
@@ -366,10 +509,7 @@ $(function(){
 			</div>
 			<form name="departureForm">
 				<div class="modal-body"  style="min-height: 200px;">	
-		        	<section class="plan cf">
-						<input type="radio" name="radio2" id="su" value="서울" checked><label class="four col" for="su">서울</label>
-						<input type="radio" name="radio2" id="ydp" value="영등포"><label class="four col" for="ydp">영등포</label>
-						<input type="radio" name="radio2" id="sw" value="수원"><label class="four col" for="sw">수원</label>
+		        	<section class="plan cf trainDepList">
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -391,10 +531,7 @@ $(function(){
 			</div>
 			<form name="destinationForm">
 				<div class="modal-body" style="min-height: 200px;">
-		        	<section class="plan2 cf">
-						<input type="radio" name="radio4" id="su2" value="서울" checked><label for="su2">서울</label>
-						<input type="radio" name="radio4" id="ydp2" value="영등포"><label for="ydp2">영등포</label>
-						<input type="radio" name="radio4" id="sw2" value="수원"><label for="sw2">수원</label>
+		        	<section class="plan2 cf trainDesList">
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -697,7 +834,6 @@ $(function(){
 	
 	$("#staDate").text(today);
 	$("#endDate").text(today);
-	
 });
 
 $(function(){
@@ -758,8 +894,34 @@ $(function(){
 			selectDate = selectDate + " " + week[selectTr];
 			
 			$("#staDate").text(selectDate);
+			let select2 = selectDate.substring(0, selectDate.length-2);
+			let select = select2.split(".");
+			$("#staDate").attr("data-year", select[0]);
+			$("#staDate").attr("data-month", select[1]);
+			$("#staDate").attr("data-date", select[2]);
+			
+			if(!compareDate()){
+				$("#endDate").text(selectDate);
+				$("#endDate").attr("data-year", select[0]);
+				$("#endDate").attr("data-month", select[1]);
+				$("#endDate").attr("data-date", select[2]);
+			}
 			$("#myDialogModal3").modal("hide");
 		});
+		function compareDate(){
+			let sy = $("#staDate").attr("data-year");
+			let sm = $("#staDate").attr("data-month");
+			let sd = $("#staDate").attr("data-date");
+			
+			let ey = $("#endDate").attr("data-year");
+			let em = $("#endDate").attr("data-month");
+			let ed = $("#endDate").attr("data-date");
+			
+			if(ey>=sy&&em>=sy&&ed>=sd){
+				return false;
+			}
+			return true;
+		}
 	});
 	$(".btn-endDate").click(function(){
 		let y = $("#endDate").attr("data-year");
@@ -776,12 +938,33 @@ $(function(){
 			let selectDate = $(this).children().text();
 			selectDate = selectDate + " " + week[selectTr];
 			
+			let select2 = selectDate.substring(0, selectDate.length-2);
+			let select = select2.split(".");
 			$("#endDate").text(selectDate);
+			$("#endDate").attr("data-year", select[0]);
+			$("#endDate").attr("data-month", select[1]);
+			$("#endDate").attr("data-date", select[2]);
 			$("#myDialogModal4").modal("hide");
 		});
 	});
 });
 
+// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
+$(function(){
+	let now = new Date();
+	let y = now.getFullYear();
+	let m = now.getMonth() + 1;
+	let d = now.getDate();
+	
+	let staDate = $("#staDate").text();
+	let staDate2 = staDate.substring(0, staDate.length-2);
+	let staArr = staDate2.split(".");
+	
+	$("select-date").click(function(){
+		$(".clsClass").css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
+		
+	});
+});
 </script>
 
 <footer>
