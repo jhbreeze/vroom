@@ -6,9 +6,13 @@ public class ReserveTrainSessionInfo {
 	private int childCount;
 	private int deptStationCode;
 	private int destStationCode;
+	private String deptStationName;
+	private String destStationName;
 	private String tBoardDate1;
 	private String tBoardDate2;
 	private String grade;
+	private String staDate;
+	private String endDate;
 	
 	public String getCycle() {
 		return cycle;
@@ -57,5 +61,29 @@ public class ReserveTrainSessionInfo {
 	}
 	public void setGrade(String grade) {
 		this.grade = grade;
+	}
+	public String getStaDate() {
+		return staDate;
+	}
+	public void setStaDate(String staDate) {
+		this.staDate = staDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+	public String getDeptStationName() {
+		return deptStationName;
+	}
+	public void setDeptStationName(String deptStationName) {
+		this.deptStationName = deptStationName;
+	}
+	public String getDestStationName() {
+		return destStationName;
+	}
+	public void setDestStationName(String destStationName) {
+		this.destStationName = destStationName;
 	}
 }

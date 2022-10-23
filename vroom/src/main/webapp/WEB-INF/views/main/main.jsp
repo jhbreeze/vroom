@@ -282,6 +282,8 @@ $(function(){
 		}
 		let deptStationCode = $("#departure").attr("data-departure");
 		let destStationCode = $("#destination").attr("data-destination");
+		let deptStationName = $("#departure").text();
+		let destStationName = $("#destination").text();
 		
 		let y1 = $("#staDate").attr("data-year");
 		let m1 = $("#staDate").attr("data-month");
@@ -295,8 +297,8 @@ $(function(){
 			let d2 = $("#endDate").attr("data-date");
 			tBoardDate2 = encodeURIComponent(y2+"-"+m2+"-"+d2);
 		}
-		console.log(tBoardDate1);
-		console.log(tBoardDate2);
+		let staDate = $("#staDate").text();
+		let endDate = $("#endDate").text();
 		let grade = $("input[name=radio1]:checked").val();
 		
 		
@@ -304,9 +306,11 @@ $(function(){
 		if(cycle == "full"){
 			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
 			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
-			out += "&tBoardDate1="+tBoardDate1+"&tBoardDate2="+tBoardDate2+"&grade="+grade;;
+			out += "&deptStationName="+deptStationName+"&destStationName="+destStationName;
+			out += "&staDate="+staDate+"&endDate="+endDate;
+			out += "&tBoardDate1="+tBoardDate1+"&tBoardDate2="+tBoardDate2+"&grade="+grade;
 		} else {
-			out += "cycle="+cycle+"&adultCout="+adultCount+"&childCount="+childCount;
+			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
 			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
 			out += "&tBoardDate1="+tBoardDate1+"&grade="+grade;
 		}
