@@ -11,6 +11,7 @@ import com.util.DBConn;
 public class ReserveTrainDAO {
 	private Connection conn = DBConn.getConnection();
 	
+	// 출발지 구하기
 	public List<ReserveListDetailDTO> getDepStationList() {
 		List<ReserveListDetailDTO> list = new ArrayList<>();
 		
@@ -48,6 +49,7 @@ public class ReserveTrainDAO {
 		return list;
 	}
 	
+	// 출발지 토대로 도착지 구하기
 	public List<ReserveListDetailDTO> getDesStationList(int deptStationCode) {
 		List<ReserveListDetailDTO> list = new ArrayList<>();
 		
@@ -92,5 +94,158 @@ public class ReserveTrainDAO {
 			}
 		}
 		return list;
+	}
+	
+	// 역코드의 각 노선 상세코드 불러오기
+	public List<Integer> getTRouteDetailCode(int tDeptStationCode, int tDestStationCode) {
+		List<Integer> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+		
+		try {
+			sql = " SELECT tRouteDetailCode FROM trainRouteDetail "
+					+ " WHERE tStationCode = ? "
+					+ "    AND tRouteCode = (SELECT tRouteCode FROM ( "
+					+ "    SELECT tRouteCode, COUNT(*) FROM ( "
+					+ "        SELECT tRouteCode "
+					+ "        FROM trainRouteDetail "
+					+ "        WHERE tStationCode IN (?, ?)) "
+					+ "    GROUP BY tRouteCode "
+					+ "    HAVING COUNT(*) >= 2)) ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, tDeptStationCode);
+			pstmt.setInt(2, tDeptStationCode);
+			pstmt.setInt(3, tDestStationCode);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				list.add(rs.getInt("tRouteDetailCode"));
+			}
+			pstmt.close();
+			pstmt = null;
+			rs.close();
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, tDestStationCode);
+			pstmt.setInt(2, tDeptStationCode);
+			pstmt.setInt(3, tDestStationCode);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				list.add(rs.getInt("tRouteDetailCode"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		return list;
+	}
+
+	// 역코드가 ?와 ?인 것의 소요시간
+	public int getTTakeTime(int tDeptStationCode, int tDestStationCode, String tDiscern){
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+		int takeTime = 0;
+		
+		try {
+			sql = "SELECT tDetailCode, tOperCode, tRouteDetailCode, tStaTime, tTakeTime, "
+					+ "    ((SUM(tTakeTime) OVER(PARTITION BY tOperCode))- "
+					+ "    (LAST_VALUE(tTakeTime) OVER(PARTITION BY tOperCode ORDER BY tRouteDetailCode RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) tTotalTime "
+					+ "FROM ( "
+					+ "    SELECT tDetailCode, tOperCode, tRouteDetailCode, TO_CHAR(tStaTime,'MI:SS') tStaTime, tTakeTime "
+					+ "    FROM trainDetail "
+					+ "    WHERE tOperCode IN (SELECT tOperCode FROM trainRouteInfo "
+					+ "        WHERE tRouteDetailCodeSta = "
+					+ "        (SELECT tRouteDetailCode FROM( "
+					+ "            (SELECT tRouteDetailCode, ranking "
+					+ "                FROM (SELECT tRouteDetailCode, RANK() OVER(ORDER BY tRouteDetailCode ?) ranking "
+					+ "                    FROM trainRouteDetail "
+					+ "                    WHERE tRouteCode = ( "
+					+ "                        SELECT tRouteCode FROM ( "
+					+ "                        SELECT tRouteCode, COUNT(*) FROM ( "
+					+ "                            SELECT tRouteCode "
+					+ "                            FROM trainRouteDetail "
+					+ "                            WHERE tStationCode IN (?, ?)) "
+					+ "                        GROUP BY tRouteCode "
+					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                WHERE ranking = 1)))) "
+					+ "        AND tRouteDetailCode >= ( "
+					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
+					+ "            WHERE tStationCode = ? "
+					+ "                AND tRouteCode = (SELECT tRouteCode "
+					+ "                    FROM (SELECT tRouteCode, COUNT(*) FROM ( "
+					+ "                        SELECT tRouteCode "
+					+ "                        FROM trainRouteDetail "
+					+ "                        WHERE tStationCode IN (?, ?)) "
+					+ "                        GROUP BY tRouteCode "
+					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "        AND tRouteDetailCode <= ( "
+					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
+					+ "            WHERE tStationCode = ? "
+					+ "                AND tRouteCode = (SELECT tRouteCode "
+					+ "                    FROM (SELECT tRouteCode, COUNT(*) FROM ( "
+					+ "                        SELECT tRouteCode "
+					+ "                        FROM trainRouteDetail "
+					+ "                        WHERE tStationCode IN (?, ?)) "
+					+ "                        GROUP BY tRouteCode "
+					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "    ORDER BY tDetailCode)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			tDiscern = tDiscern.equals("하행") ? "" : "DESC";
+			
+			pstmt.setString(1, tDiscern);
+			pstmt.setInt(2, tDeptStationCode);
+			pstmt.setInt(3, tDestStationCode);
+			pstmt.setInt(4, tDeptStationCode);
+			pstmt.setInt(5, tDeptStationCode);
+			pstmt.setInt(6, tDestStationCode);
+			pstmt.setInt(7, tDestStationCode);
+			pstmt.setInt(8, tDeptStationCode);
+			pstmt.setInt(9, tDestStationCode);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				takeTime = rs.getInt("tTakeTime");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return takeTime;
 	}
 }

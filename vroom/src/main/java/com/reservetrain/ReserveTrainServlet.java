@@ -2,6 +2,7 @@ package com.reservetrain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -94,7 +95,6 @@ public class ReserveTrainServlet extends MyServlet{
 	}
 	protected void beforeMoveToStepTwo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		// 로그인이 되어있는지 확인(되어있지 않다면 로그인페이지로 넘김)
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		ReserveTrainSessionInfo reserveInfo = new ReserveTrainSessionInfo();
@@ -104,26 +104,50 @@ public class ReserveTrainServlet extends MyServlet{
 		reserveInfo.setChildCount(Integer.parseInt(req.getParameter("childCount")));
 		reserveInfo.setDeptStationCode(Integer.parseInt(req.getParameter("deptStationCode")));
 		reserveInfo.setDestStationCode(Integer.parseInt(req.getParameter("destStationCode")));
+		reserveInfo.setDeptStationName(req.getParameter("setDeptStationName"));
+		reserveInfo.setDestStationName(req.getParameter("setDestStationName"));
 		reserveInfo.settBoardDate1(req.getParameter("tBoardDate1"));
 		reserveInfo.settBoardDate2(req.getParameter("tBoardDate2"));
+		reserveInfo.setStaDate(req.getParameter("staDate"));
+		reserveInfo.setEndDate(req.getParameter("endDate"));
 		reserveInfo.setGrade(req.getParameter("grade"));
 		
 		session.setAttribute("reserveInfo", reserveInfo);
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
-			forward(req, resp, "/WEB-INF/views/member/trainsteptwo.do");
+			moveToStepTwo(req, resp);
 		}
 	}
 	
 	protected void moveToStepTwo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		String cp = req.getContextPath();
+		ReserveTrainDAO dao = new ReserveTrainDAO();
 		
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveInfo");
 		if(reserveInfo == null) {
 			resp.sendRedirect(cp + "/");
 			return;
 		}
+		
+		String cycle = reserveInfo.getCycle();
+		int deptStationCode = reserveInfo.getDeptStationCode();
+		int destStationCode = reserveInfo.getDestStationCode();
+		String deptStationName = reserveInfo.getDeptStationName();
+		String destStationName = reserveInfo.getDestStationName();
+		List<Integer> tRouteDetailCode = dao.getTRouteDetailCode(deptStationCode, destStationCode);
+		String tDiscern = tRouteDetailCode.get(0) > tRouteDetailCode.get(1) ? "상행" : "하행";
+		String tBoardDate1 = reserveInfo.gettBoardDate1();
+		String tBoardDate2 = null;
+		if(cycle.equals("full")) {
+			tBoardDate2 = reserveInfo.gettBoardDate2();
+		}
+		int tTakeTime = dao.getTTakeTime(deptStationCode, destStationCode, tDiscern);
+		System.out.println(tTakeTime);
+		
+		// 출발역, 출발시간, 기차번호, 소요시간, 도착역, 도착시간, 날짜, 가는날/오는날, 상행/하행
+		
+		forward(req, resp, "/WEB-INF/views/reserveTrain/trainsteptwo.jsp");
 	}
 }
