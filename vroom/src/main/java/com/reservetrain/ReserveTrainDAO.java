@@ -560,7 +560,7 @@ public class ReserveTrainDAO {
 		
 		for(int i=0; i<list.size(); i++) {
 			if(i==0) {
-				sent.append("(");
+				sent.append("(" + list.get(i));
 			} else if(i>0 && i<list.size()-1) {
 				sent.append(list.get(i) + ", ");
 			} else {
@@ -571,8 +571,8 @@ public class ReserveTrainDAO {
 		System.out.println(sent);
 		
 		try {
-			sql = "SELECT tri.tNumId, tri.tOperCode"
-					+ "FROM train t"
+			sql = "SELECT tri.tNumId, tri.tOperCode "
+					+ "FROM train t "
 					+ "RIGHT OUTER JOIN trainRouteInfo tri ON tri.tNumId = t.tNumId "
 					+ "WHERE tOperCode IN " + sent ;
 			

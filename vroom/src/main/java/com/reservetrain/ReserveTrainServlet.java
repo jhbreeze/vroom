@@ -111,7 +111,7 @@ public class ReserveTrainServlet extends MyServlet{
 		reserveInfo.setEndDate(req.getParameter("endDate"));
 		reserveInfo.setGrade(req.getParameter("grade"));
 		
-		session.setAttribute("reserveInfo", reserveInfo);
+		session.setAttribute("reserveTrainInfo", reserveInfo);
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
@@ -124,7 +124,7 @@ public class ReserveTrainServlet extends MyServlet{
 		String cp = req.getContextPath();
 		ReserveTrainDAO dao = new ReserveTrainDAO();
 		
-		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveInfo");
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		if(reserveInfo == null) {
 			resp.sendRedirect(cp + "/");
 			return;
@@ -153,7 +153,7 @@ public class ReserveTrainServlet extends MyServlet{
 			List<String> tendTimeList = dao.getTEndTime(deptStationCode, destStationCode, tDiscern); // 도착시간 리스트(도착역 기준)
 			List<Integer> tNumIdList = dao.getTNumId(deptStationCode, destStationCode, tDiscern); // 열차번호 리스트
 			
-			session.removeAttribute("reserveInfo");
+			session.removeAttribute("reserveTrainInfo");
 			req.setAttribute("cycle", cycle);
 			req.setAttribute("deptStationCode", deptStationCode);
 			req.setAttribute("deptStationCode", deptStationCode);
