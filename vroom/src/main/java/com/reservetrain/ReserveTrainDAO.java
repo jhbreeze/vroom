@@ -164,12 +164,16 @@ public class ReserveTrainDAO {
 		PreparedStatement pstmt = null;
 		String sql = null;
 		ResultSet rs = null;
-		int takeTime = 0;
+		int tTotalTime = 0;
+		String tDiscern2 = tDiscern.equals("하행") ? "" : "DESC";
+		String tDiscern3 = tDiscern.equals("하행") ? "FIRST" : "LAST";
+		System.out.println(tDeptStationCode);
+		System.out.println(tDestStationCode);
 		
 		try {
 			sql = "SELECT tDetailCode, tOperCode, tRouteDetailCode, tStaTime, tTakeTime, "
 					+ "    ((SUM(tTakeTime) OVER(PARTITION BY tOperCode))- "
-					+ "    (LAST_VALUE(tTakeTime) OVER(PARTITION BY tOperCode ORDER BY tRouteDetailCode RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) tTotalTime "
+					+ "    ("+tDiscern3+"_VALUE(tTakeTime) OVER(PARTITION BY tOperCode ORDER BY tRouteDetailCode RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING))) tTotalTime "
 					+ "FROM ( "
 					+ "    SELECT tDetailCode, tOperCode, tRouteDetailCode, TO_CHAR(tStaTime,'MI:SS') tStaTime, tTakeTime "
 					+ "    FROM trainDetail "
@@ -177,7 +181,7 @@ public class ReserveTrainDAO {
 					+ "        WHERE tRouteDetailCodeSta = "
 					+ "        (SELECT tRouteDetailCode FROM( "
 					+ "            (SELECT tRouteDetailCode, ranking "
-					+ "                FROM (SELECT tRouteDetailCode, RANK() OVER(ORDER BY tRouteDetailCode ?) ranking "
+					+ "                FROM (SELECT tRouteDetailCode, RANK() OVER(ORDER BY tRouteDetailCode " + tDiscern2 + ") ranking "
 					+ "                    FROM trainRouteDetail "
 					+ "                    WHERE tRouteCode = ( "
 					+ "                        SELECT tRouteCode FROM ( "
@@ -212,24 +216,31 @@ public class ReserveTrainDAO {
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			tDiscern = tDiscern.equals("하행") ? "" : "DESC";
-			
-			pstmt.setString(1, tDiscern);
-			pstmt.setInt(2, tDeptStationCode);
-			pstmt.setInt(3, tDestStationCode);
-			pstmt.setInt(4, tDeptStationCode);
-			pstmt.setInt(5, tDeptStationCode);
-			pstmt.setInt(6, tDestStationCode);
-			pstmt.setInt(7, tDestStationCode);
-			pstmt.setInt(8, tDeptStationCode);
-			pstmt.setInt(9, tDestStationCode);
+			if(tDiscern.equals("하행")) {
+				pstmt.setInt(1, tDeptStationCode);
+				pstmt.setInt(2, tDestStationCode);
+				pstmt.setInt(3, tDeptStationCode);
+				pstmt.setInt(4, tDeptStationCode);
+				pstmt.setInt(5, tDestStationCode);
+				pstmt.setInt(6, tDestStationCode);
+				pstmt.setInt(7, tDeptStationCode);
+				pstmt.setInt(8, tDestStationCode);
+			} else {
+				pstmt.setInt(1, tDestStationCode);
+				pstmt.setInt(2, tDeptStationCode);
+				pstmt.setInt(3, tDestStationCode);
+				pstmt.setInt(4, tDestStationCode);
+				pstmt.setInt(5, tDeptStationCode);
+				pstmt.setInt(6, tDeptStationCode);
+				pstmt.setInt(7, tDestStationCode);
+				pstmt.setInt(8, tDeptStationCode);
+			}
 			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
-				takeTime = rs.getInt("tTakeTime");
+				tTotalTime = rs.getInt("tTotalTime");
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -246,6 +257,6 @@ public class ReserveTrainDAO {
 				}
 			}
 		}
-		return takeTime;
+		return tTotalTime;
 	}
 }
