@@ -32,7 +32,6 @@ public class ReserveTrainDAO {
 				list.add(dto);
 			}
 		} catch (Exception e) {
-			
 		} finally {
 			if(rs != null) {
 				try {
@@ -319,10 +318,6 @@ public class ReserveTrainDAO {
 					+ "            WHERE tStationCode IN (?, ?)) "
 					+ "        GROUP BY tRouteCode "
 					+ "        HAVING COUNT(*) >= 2))) ";
-			System.out.println(sql);
-			System.out.println(tDiscern);
-			System.out.println(tDeptStationCode);
-			System.out.println(tDestStationCode);
 			pstmt = conn.prepareStatement(sql);
 			
 			if(tDiscern.equals("하행")) {
@@ -355,7 +350,6 @@ public class ReserveTrainDAO {
 			while(rs.next()){
 				staTime = rs.getString("tStaTime");
 				tStaTimeList.add(staTime);
-				System.out.println("출발시간 : "+staTime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -469,7 +463,6 @@ public class ReserveTrainDAO {
 			while(rs.next()){
 				endTime = rs.getString("tStaTime");
 				tEndTimeList.add(endTime);
-				System.out.println("도착시간 : "+endTime);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -560,15 +553,13 @@ public class ReserveTrainDAO {
 		
 		for(int i=0; i<list.size(); i++) {
 			if(i==0) {
-				sent.append("(" + list.get(i));
+				sent.append("(" + list.get(i)+", ");
 			} else if(i>0 && i<list.size()-1) {
 				sent.append(list.get(i) + ", ");
 			} else {
 				sent.append(list.get(i)+")");
 			}
 		}
-		
-		System.out.println(sent);
 		
 		try {
 			sql = "SELECT tri.tNumId, tri.tOperCode "
@@ -584,7 +575,6 @@ public class ReserveTrainDAO {
 				tNumId = rs.getInt("tNumId");
 				tNumIdList.add(tNumId);
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

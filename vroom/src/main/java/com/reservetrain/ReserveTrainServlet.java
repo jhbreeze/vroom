@@ -2,6 +2,9 @@ package com.reservetrain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -103,8 +106,8 @@ public class ReserveTrainServlet extends MyServlet{
 		reserveInfo.setChildCount(Integer.parseInt(req.getParameter("childCount")));
 		reserveInfo.setDeptStationCode(Integer.parseInt(req.getParameter("deptStationCode")));
 		reserveInfo.setDestStationCode(Integer.parseInt(req.getParameter("destStationCode")));
-		reserveInfo.setDeptStationName(req.getParameter("setDeptStationName"));
-		reserveInfo.setDestStationName(req.getParameter("setDestStationName"));
+		reserveInfo.setDeptStationName(req.getParameter("deptStationName"));
+		reserveInfo.setDestStationName(req.getParameter("destStationName"));
 		reserveInfo.settBoardDate1(req.getParameter("tBoardDate1"));
 		reserveInfo.settBoardDate2(req.getParameter("tBoardDate2"));
 		reserveInfo.setStaDate(req.getParameter("staDate"));
@@ -123,6 +126,7 @@ public class ReserveTrainServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		String cp = req.getContextPath();
 		ReserveTrainDAO dao = new ReserveTrainDAO();
+		List<ReserveListDetailDTO> list = new ArrayList<>();
 		
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		if(reserveInfo == null) {
@@ -142,42 +146,73 @@ public class ReserveTrainServlet extends MyServlet{
 			String tDiscern = deptRouteDetailCode > destRouteDetailCode ? "상행" : "하행"; // 상행 / 하행
 			String tBoardDate1 = reserveInfo.gettBoardDate1(); // 출발일
 			String tBoardDate2 = null;
+			String staDate = reserveInfo.getStaDate();
+			String endDate = null;
 			if(cycle.equals("full")) {
 				tBoardDate2 = reserveInfo.gettBoardDate2(); // 도착일
+				endDate = reserveInfo.getEndDate();
 			}
+			
 			int adultCount = reserveInfo.getAdultCount();
 			int childCount = reserveInfo.getChildCount();
 			String grade = reserveInfo.getGrade();
 			int tTotalTime = dao.getTTakeTime(deptStationCode, destStationCode, tDiscern); // 총 소요시간
+			
+			String tTotalTimeString;
+			String a = (tTotalTime/60)+"";
+			String b = (tTotalTime%60)+"";
+			if(Integer.parseInt(a)<10) {
+				a = "0"+a;
+			}
+			tTotalTimeString = a+":"+b;
+			
 			List<String> tStaTimeList = dao.getTStaTime(deptStationCode, destStationCode, tDiscern); // 출발시간 리스트(출발역 기준)
 			List<String> tendTimeList = dao.getTEndTime(deptStationCode, destStationCode, tDiscern); // 도착시간 리스트(도착역 기준)
 			List<Integer> tNumIdList = dao.getTNumId(deptStationCode, destStationCode, tDiscern); // 열차번호 리스트
 			
 			session.removeAttribute("reserveTrainInfo");
-			req.setAttribute("cycle", cycle);
-			req.setAttribute("deptStationCode", deptStationCode);
-			req.setAttribute("deptStationCode", deptStationCode);
-			req.setAttribute("destStationCode", destStationCode);
-			req.setAttribute("deptStationName", deptStationName);
-			req.setAttribute("destStationName", destStationName);
-			req.setAttribute("tRouteDetailCode", tRouteDetailCode);
-			req.setAttribute("deptRouteDetailCode", deptRouteDetailCode);
-			req.setAttribute("destRouteDetailCode", destRouteDetailCode);
-			req.setAttribute("tDiscern", tDiscern);
-			req.setAttribute("tBoardDate1", tBoardDate1);
+			for(int i=0; i<tStaTimeList.size(); i++) {
+				ReserveListDetailDTO dto = new ReserveListDetailDTO();
+				
+				dto.setCycle(cycle);
+				dto.setDeptStationCode(deptStationCode);
+				dto.setDestStationCode(destStationCode);
+				dto.setDeptStationName(deptStationName);
+				dto.setDestStationName(destStationName);
+				dto.setDeptRouteDetailCode(deptRouteDetailCode);
+				dto.setDestRouteDetailCode(destRouteDetailCode);
+				dto.settDiscern(tDiscern);
+				dto.settBoardDate1(tBoardDate1);
+				dto.settBoardDate2(tBoardDate2);
+				dto.settBoardDate1(staDate);
+				dto.settBoardDate2(endDate);
+				dto.setAdultCount(adultCount);
+				dto.setChildCount(childCount);
+				dto.setGrade(grade);
+				dto.settTotalTime(tTotalTime);
+				dto.settTotalTimeString(tTotalTimeString);
+				dto.settStaTime(tStaTimeList.get(i));
+				dto.setTendTime(tendTimeList.get(i));
+				dto.settNumId(tNumIdList.get(i));
+				
+				list.add(dto);
+			}
+			
 			req.setAttribute("tBoardDate2", tBoardDate2);
-			req.setAttribute("adultCount", adultCount);
-			req.setAttribute("childCount", childCount);
-			req.setAttribute("grade", grade);
-			req.setAttribute("tTotalTime", tTotalTime);
+			req.setAttribute("tBoardDate1", tBoardDate1);
+			req.setAttribute("staDate", staDate);
+			req.setAttribute("endDate", endDate);
 			req.setAttribute("tStaTimeList", tStaTimeList);
 			req.setAttribute("tendTimeList", tendTimeList);
 			req.setAttribute("tNumIdList", tNumIdList);
 			
+			req.setAttribute("list", list);
+			
+			forward(req, resp, "/WEB-INF/views/reserveTrain/trainsteptwo.jsp");
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		forward(req, resp, "/WEB-INF/views/reserveTrain/trainsteptwo.jsp");
 	}
 	
 }
