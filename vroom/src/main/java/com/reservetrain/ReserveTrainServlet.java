@@ -2,6 +2,8 @@ package com.reservetrain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -130,24 +132,56 @@ public class ReserveTrainServlet extends MyServlet{
 			resp.sendRedirect(cp + "/");
 			return;
 		}
-		
-		String cycle = reserveInfo.getCycle();
-		int deptStationCode = reserveInfo.getDeptStationCode();
-		int destStationCode = reserveInfo.getDestStationCode();
-		String deptStationName = reserveInfo.getDeptStationName();
-		String destStationName = reserveInfo.getDestStationName();
-		List<Integer> tRouteDetailCode = dao.getTRouteDetailCode(deptStationCode, destStationCode);
-		String tDiscern = tRouteDetailCode.get(0) > tRouteDetailCode.get(1) ? "상행" : "하행";
-		String tBoardDate1 = reserveInfo.gettBoardDate1();
-		String tBoardDate2 = null;
-		if(cycle.equals("full")) {
-			tBoardDate2 = reserveInfo.gettBoardDate2();
+		try {
+			// 편도 / 왕복, 출발역, 출발시간, 기차번호, 총 소요시간, 도착역, 도착시간, 날짜, 가는날/오는날, 상행/하행, 탑승자 수(어른 / 아이), 좌석 등급
+			String cycle = reserveInfo.getCycle(); // 편도 / 왕복
+			int deptStationCode = reserveInfo.getDeptStationCode(); // 출발지 코드
+			int destStationCode = reserveInfo.getDestStationCode(); // 도착지 코드
+			String deptStationName = reserveInfo.getDeptStationName(); // 출발역 이름
+			String destStationName = reserveInfo.getDestStationName(); // 도착역 이름
+			List<Integer> tRouteDetailCode = dao.getTRouteDetailCode(deptStationCode, destStationCode);
+			int deptRouteDetailCode = tRouteDetailCode.get(0); // 출발 노선상세코드
+			int destRouteDetailCode = tRouteDetailCode.get(1); // 도착 노선상세코드
+			String tDiscern = deptRouteDetailCode > destRouteDetailCode ? "상행" : "하행"; // 상행 / 하행
+			String tBoardDate1 = reserveInfo.gettBoardDate1(); // 출발일
+			String tBoardDate2 = null;
+			if(cycle.equals("full")) {
+				tBoardDate2 = reserveInfo.gettBoardDate2(); // 도착일
+			}
+			int adultCount = reserveInfo.getAdultCount();
+			int childCount = reserveInfo.getChildCount();
+			String grade = reserveInfo.getGrade();
+			int tTotalTime = dao.getTTakeTime(deptStationCode, destStationCode, tDiscern); // 총 소요시간
+			List<String> tStaTimeList = dao.getTStaTime(deptStationCode, destStationCode, tDiscern); // 출발시간 리스트(출발역 기준)
+			List<String> tendTimeList = dao.getTEndTime(deptStationCode, destStationCode, tDiscern); // 도착시간 리스트(도착역 기준)
+			List<Integer> tNumIdList = dao.getTNumId(deptStationCode, destStationCode, tDiscern); // 열차번호 리스트
+			
+			session.removeAttribute("reserveInfo");
+			req.setAttribute("cycle", cycle);
+			req.setAttribute("deptStationCode", deptStationCode);
+			req.setAttribute("deptStationCode", deptStationCode);
+			req.setAttribute("destStationCode", destStationCode);
+			req.setAttribute("deptStationName", deptStationName);
+			req.setAttribute("destStationName", destStationName);
+			req.setAttribute("tRouteDetailCode", tRouteDetailCode);
+			req.setAttribute("deptRouteDetailCode", deptRouteDetailCode);
+			req.setAttribute("destRouteDetailCode", destRouteDetailCode);
+			req.setAttribute("tDiscern", tDiscern);
+			req.setAttribute("tBoardDate1", tBoardDate1);
+			req.setAttribute("tBoardDate2", tBoardDate2);
+			req.setAttribute("adultCount", adultCount);
+			req.setAttribute("childCount", childCount);
+			req.setAttribute("grade", grade);
+			req.setAttribute("tTotalTime", tTotalTime);
+			req.setAttribute("tStaTimeList", tStaTimeList);
+			req.setAttribute("tendTimeList", tendTimeList);
+			req.setAttribute("tNumIdList", tNumIdList);
+			
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		int tTakeTime = dao.getTTakeTime(deptStationCode, destStationCode, tDiscern);
-		System.out.println(tTakeTime);
-		
-		// 출발역, 출발시간, 기차번호, 소요시간, 도착역, 도착시간, 날짜, 가는날/오는날, 상행/하행
-		
 		forward(req, resp, "/WEB-INF/views/reserveTrain/trainsteptwo.jsp");
 	}
+	
 }
