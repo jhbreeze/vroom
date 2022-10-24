@@ -148,7 +148,7 @@ function sendLogin() {
 							<div class="col-12 m-2">
 								<button type="button"
 									class="btn btn-primary btn-control btn-lg mx-auto fw-bold"
-									onclick="${pageContext.request.contextPath}/reserveTrain/trainsteptwo.do">&nbsp;비회원 예매&nbsp;</button>
+									onclick="${pageContext.request.contextPath}/member/nomemReserve.do">&nbsp;비회원 예매&nbsp;</button>
 							</div>
 							<div class="col-12 m-2">
 								<button type="button"
