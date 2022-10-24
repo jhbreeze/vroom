@@ -32,6 +32,7 @@ public class ReserveTrainDAO {
 				list.add(dto);
 			}
 		} catch (Exception e) {
+			
 		} finally {
 			if(rs != null) {
 				try {

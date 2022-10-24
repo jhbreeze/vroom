@@ -177,7 +177,6 @@ public class ReserveTrainServlet extends MyServlet{
 			req.setAttribute("tendTimeList", tendTimeList);
 			req.setAttribute("tNumIdList", tNumIdList);
 			
-			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
