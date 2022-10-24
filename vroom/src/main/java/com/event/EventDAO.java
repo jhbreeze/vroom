@@ -133,8 +133,10 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate " + " FROM event e "
-					+ " JOIN member1 m ON e.userId = m.userId " + " ORDER BY eveNum DESC "
+			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate "
+		            + " FROM event e "
+					+ " JOIN member1 m ON e.userId = m.userId " 
+		            + " ORDER BY eveNum DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
