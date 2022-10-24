@@ -61,6 +61,56 @@ public class MemberDAO {
 	}	
 
 	public void insertMember(MemberDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			conn.setAutoCommit(false);
+			
+			sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES (customer_seq.NEXTVAL, ?, ?, ?) ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserName());
+			pstmt.setString(2, dto.getTel());
+			pstmt.setString(3, dto.getEmail());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = "INSERT INTO member1(cusNum, userId, pwd, enabled, reg_date, mod_date, birth) "
+					+ " VALUES (customer_seq.CURRVAL, ?, ?, 1, SYSDATE, SYSDATE, TO_DATE(?,'YYYYMMDD'))";
+			pstmt=conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserId());
+			pstmt.setString(2, dto.getUserPwd());
+			pstmt.setString(3, dto.getBirth());
+			
+			pstmt.executeUpdate();
+			
+			conn.commit();
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e2) {
+			}
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+			
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e2) {
+			}
+		}
 		
 	}
 
@@ -71,15 +121,12 @@ public class MemberDAO {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
-			sb.append("SELECT m1.userId, userName, userPwd,");
-			sb.append("      enabled, register_date, modify_date,");
-			sb.append("      TO_CHAR(birth, 'YYYY-MM-DD') birth, ");
-			sb.append("      email, tel,");
-			sb.append("      zip, addr1, addr2");
+			sb.append("SELECT m1.userId, m1.pwd, name, enabled, reg_date, mod_date,");
+			sb.append("      TO_CHAR(birth, 'YYYY-MM-DD') birth, email, tel ");
 			sb.append("  FROM member1 m1");
-			sb.append("  LEFT OUTER JOIN member2 m2 ON m1.userId=m2.userId ");
+			sb.append("  LEFT OUTER JOIN customer c ON c.cusNum = m1.cusNum ");
 			sb.append("  WHERE m1.userId = ?");
-
+			
 			pstmt = conn.prepareStatement(sb.toString());
 			
 			pstmt.setString(1, userId);
@@ -90,12 +137,20 @@ public class MemberDAO {
 				dto = new MemberDTO();
 				
 				dto.setUserId(rs.getString("userId"));
-				dto.setUserPwd(rs.getString("userPwd"));
-				dto.setUserName(rs.getString("userName"));
+				dto.setUserPwd(rs.getString("pwd"));
+				dto.setUserName(rs.getString("name"));
 				dto.setEnabled(rs.getInt("enabled"));
-				dto.setReg_date(rs.getString("register_date"));
-				dto.setMod_date(rs.getString("modify_date"));
+				dto.setReg_date(rs.getString("reg_date"));
+				dto.setMod_date(rs.getString("mod_date"));
 				dto.setBirth(rs.getString("birth"));
+				dto.setEmail(rs.getString("email"));
+				if(dto.getEmail() != null) {
+					String[] ss = dto.getEmail().split("@");
+					if(ss.length == 2) {
+						dto.setEmail1(ss[0]);
+						dto.setEmail2(ss[1]);
+					}
+				}
 				dto.setTel(rs.getString("tel"));
 				if(dto.getTel() != null) {
 					String[] ss = dto.getTel().split("-");
@@ -103,14 +158,6 @@ public class MemberDAO {
 						dto.setTel1(ss[0]);
 						dto.setTel2(ss[1]);
 						dto.setTel3(ss[2]);
-					}
-				}
-				dto.setEmail(rs.getString("email"));
-				if(dto.getEmail() != null) {
-					String[] ss = dto.getEmail().split("@");
-					if(ss.length == 2) {
-						dto.setEmail1(ss[0]);
-						dto.setEmail2(ss[1]);
 					}
 				}
 			}

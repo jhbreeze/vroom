@@ -18,13 +18,7 @@
 	            	<a href="#" title="알림"><i class="fa-regular fa-bell"></i></a>
 	            	&nbsp;
 					<a href="${pageContext.request.contextPath}/member/logout.do" title="로그아웃">로그아웃</a>
-					<c:if test="${not sessionScope.member.userId == 'admin'}">
-						<a href="${pageContext.request.contextPath}/mypage/update.do" title="마이페이지">마이페이지</a>
-					</c:if>
-	            </c:if>
-	            <c:if test="${sessionScope.member.userId == 'admin'}">
-	            	&nbsp;
-					<a href="#" title="관리자 로그인">관리자 로그인</a>
+					<a href="${pageContext.request.contextPath}/mypage/update.do" title="마이페이지">&nbsp;마이페이지</a>
 	            </c:if>
 			</div>
 		</div>
