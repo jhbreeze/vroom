@@ -6,7 +6,7 @@
 <div class="header">
 
 	<div class="header-top">
-		<a id="logo"><img id="img-logo" src="vroom.png" title="로고" width="130"></a>
+		<a id="logo" href="${pageContext.request.contextPath}/"><img id="img-logo" src="${pageContext.request.contextPath}/resources/images/vroom.png" title="로고" width="100"></a>
 		<div class="header-top">
 			<div class="header-right">
 	            <c:if test="${empty sessionScope.member}">
@@ -18,11 +18,13 @@
 	            	<a href="#" title="알림"><i class="fa-regular fa-bell"></i></a>
 	            	&nbsp;
 					<a href="${pageContext.request.contextPath}/member/logout.do" title="로그아웃">로그아웃</a>
-					<a href="${pageContext.request.contextPath}/mypage/update.do" title="마이페이지">마이페이지</a>
+					<c:if test="${not sessionScope.member.userId == 'admin'}">
+						<a href="${pageContext.request.contextPath}/mypage/update.do" title="마이페이지">마이페이지</a>
+					</c:if>
 	            </c:if>
 	            <c:if test="${sessionScope.member.userId == 'admin'}">
 	            	&nbsp;
-					<a href="#" title="관리자">관리자 로그인</a>
+					<a href="#" title="관리자 로그인">관리자 로그인</a>
 	            </c:if>
 			</div>
 		</div>
@@ -46,25 +48,16 @@
 					</li>
 				
 				<c:if test="${sessionScope.member.userId == 'admin'}">
-					<li><a href="#" class="main-menu-a">운행정보 관리</a>
-						<ul class="sub-menu">
-							<li><a href="${pageContext.request.contextPath}/manage/train.do" aria-label="subemnu">기차</a></li>
-							<li><a href="${pageContext.request.contextPath}/manage/bus.do" aria-label="subemnu">버스</a></li>
-							<li><a href="${pageContext.request.contextPath}/manage/stops.do" aria-label="subemnu">역·정거장</a></li>
-						</ul>
-					</li>
-		
 					<li><a href="#" class="main-menu-a">고객관리</a>
 						<ul class="sub-menu">
 							<li><a href="${pageContext.request.contextPath}/manage/member.do" aria-label="subemnu">회원정보 조회</a></li>
-							<li><a href="${pageContext.request.contextPath}/manage/mileage.do" aria-label="subemnu">마일리지 관리</a></li>
+							<li><a href="${pageContext.request.contextPath}/sales/reserve.do" aria-label="subemnu">예매내역 조회</a></li>
 						</ul>
 					</li>
 		
 					<li><a href="#" class="main-menu-a">매출관리</a>
 						<ul class="sub-menu">
-							<li><a href="${pageContext.request.contextPath}/sales/reserve.do" aria-label="subemnu">고객예매내역조회</a></li>
-							<li><a href="${pageContext.request.contextPath}/sales/transport.do" aria-label="subemnu">지역별·기차별조회</a></li>
+							<li><a href="${pageContext.request.contextPath}/sales/transport.do" aria-label="subemnu">매출조회</a></li>
 						</ul>
 					</li>
 				</c:if>

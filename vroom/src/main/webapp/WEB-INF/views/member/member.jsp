@@ -32,6 +32,50 @@ main {
 </style>
 
 <script type="text/javascript">
+function userIdCheck() {
+	// 아이디 중복 검사
+	let userId = $("#userId").val();
+
+	// 아이디 유효성검사
+	if(!/^(?=.*[a-z])(?=.*\d)[a-z0-9]{5,10}$/i.test(userId)) {
+		
+		let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 사용불가능한 아이디입니다.";
+		$(".userId-box").find(".help-block").html(str);
+		
+		$("#id-possible").hide();
+		$("#id-impossible").show();
+		
+		$("#userIdValid").val("false");
+		
+		$("#userId").val("");
+		$("#userId").focus();
+		
+		return;
+	}
+		
+	let url = "${pageContext.request.contextPath}/member/userIdCheck.do";
+	let query = "userId=" + userId;
+	$.ajax({
+		type : "POST",
+		url : url,
+		data : query,
+		dataType : "json",
+		success : function(data) {
+			let passed = data.passed;
+
+			if (passed === "true") {
+				let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 사용가능합니다.";
+				$(".userId-box").find(".help-block").html(str);
+				
+				$("#id-possible").show();
+				$("#id-impossible").hide();
+				
+				$("#userIdValid").val("true");
+			}
+		}
+	});
+}
+
 	function memberOk() {
 		const f = document.memberForm;
 		let str;
@@ -132,44 +176,7 @@ function chooseEmail() {
 	}
 }
 
-	function userIdCheck() {
-		// 아이디 중복 검사
-		let userId = $("#userId").val();
 
-		if (!/^[a-z][a-z0-9_]{4,9}$/i.test(userId)) {
-			let str = "아이디는 5~10자 이내이며, 첫글자는 영문자로 시작해야 합니다.";
-			$("#userId").focus();
-			$("#userId").parent().find(".help-block").html(str);
-			return;
-		}
-
-		let url = "${pageContext.request.contextPath}/member/userIdCheck.do";
-		let query = "userId=" + userId;
-		$.ajax({
-			type : "POST",
-			url : url,
-			data : query,
-			dataType : "json",
-			success : function(data) {
-				let passed = data.passed;
-
-				if (passed === "true") {
-					let str = "<span style='color:blue; font-weight: bold;'>"
-							+ userId + "</span> 아이디는 사용가능 합니다.";
-					$(".userId-box").find(".help-block").html(str);
-					$("#userIdValid").val("true");
-				} else {
-					let str = "<span style='color:red; font-weight: bold;'>"
-							+ userId + "</span> 아이디는 사용할수 없습니다.";
-					$(".userId-box").find(".help-block").html(str);
-					$("#userId").val("");
-					$("#userIdValid").val("false");
-					$("#userId").focus();
-				}
-			}
-		});
-	}
-	
 	$(function(){
 		$("#pwd-correct").hide();
 		$("#pwd-wrong").hide();
@@ -211,23 +218,27 @@ function chooseEmail() {
 				<div class="body-title mb-5">
 					<div class="fs-4 fw-bolder">👋&nbsp;${title}</div>
 				</div>
-				<div class="box">
+				<div class="box ">
 					<form name="memberForm" method="post">
-						<div class="row mb-3">
+						<div class="row mb-3 userId-box">
 							<label class="mb-2 fw-bold" for="userId">아이디</label>
 							<div class="input-group ps-0">
 								<div class="form-control pt-0" style="border-style:none;">
 									<input type="text" name="userId" id="userId" class="form-control p-2" 
-										value="${dto.userId}"
-										${mode=="update" ? "readonly='readonly' ":""}>
+										placeholder="5~10자의 영문 소문자와 하나이상의 숫자 사용" maxlength="10"
+										value="${dto.userId}" ${mode=="update" ? "readonly='readonly' ":""}>
 								</div>		
 								<div class="p-0">
 									<c:if test="${mode=='member'}">
-										<button type="button" class="btn btn-primary p-2 p-2 ps-3 pe-3"
+										<button type="button" class="btn btn-primary p-2 ps-3 pe-3"
 											onclick="userIdCheck();">중복검사</button>
 									</c:if>
 								</div>
 							</div>
+							<c:if test="${mode=='member'}">
+								<div class="p-1 ps-3 text-primary help-block" id="id-possible"></div>
+								<div class="p-1 ps-3 text-danger help-block" id="id-impossible"></div>
+							</c:if>
 						</div>
 
 						<div class="row mb-3">
@@ -235,7 +246,7 @@ function chooseEmail() {
 							<div>
 								<input type="password" name="userPwd" id="userPwd"
 									class="form-control p-2" autocomplete="off"
-									placeholder="5~10자 영문자와 하나이상의 숫자 또는 특수문자 포함">
+									placeholder="5~10자의 영문자와 하나이상의 숫자 또는 특수문자 포함">
 							</div>
 						</div>
 
@@ -245,7 +256,7 @@ function chooseEmail() {
 								<input type="password" name="userPwd2" id="userPwd2"
 									class="form-control p-2" autocomplete="off">
 							</div>
-							<div class="p-1 ps-3 text-secondary" id="pwd-correct">비밀번호가 일치합니다.</div>
+							<div class="p-1 ps-3 text-primary" id="pwd-correct">비밀번호가 일치합니다.</div>
 							<div class="p-1 ps-3 text-danger" id="pwd-wrong">비밀번호가 일치하지 않습니다.</div>
 						</div>
 

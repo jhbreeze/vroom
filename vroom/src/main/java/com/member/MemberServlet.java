@@ -1,12 +1,15 @@
 package com.member;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.JSONObject;
 
 import com.util.MyServlet;
 
@@ -87,13 +90,11 @@ public class MemberServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		String cp = req.getContextPath();
 
-		// 세션에 저장된 정보를 지운다.
 		session.removeAttribute("member");
 
-		// 세션에 저장된 모든 정보를 지우고 세션을 초기화 한다.
+		// 세션 초기화
 		session.invalidate();
 
-		// 루트로 리다이렉트
 		resp.sendRedirect(cp + "/");
 	}
 
@@ -121,6 +122,22 @@ public class MemberServlet extends MyServlet {
 	}
 
 	private void userIdCheck(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 아이디 중복 검사
+		MemberDAO dao = new MemberDAO();
 		
+		String userId = req.getParameter("userId");
+		MemberDTO dto = dao.readMember(userId);
+		
+		String passed = "false";
+		if(dto == null) {
+			passed = "true";
+		}
+		
+		JSONObject job = new JSONObject();
+		job.put("passed", passed);
+		
+		resp.setContentType("text/html;charset=utf-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
 	}
 }
