@@ -32,15 +32,13 @@ main {
 </style>
 
 <script type="text/javascript">
-function userIdCheck() {
-	// 아이디 중복 검사
+function userIdCheck() { // 아이디 유효성 검사, 중복 검사
 	let userId = $("#userId").val();
 
-	// 아이디 유효성검사
 	if(!/^(?=.*[a-z])(?=.*\d)[a-z0-9]{5,10}$/i.test(userId)) {
 		
-		let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 사용불가능한 아이디입니다.";
-		$(".userId-box").find(".help-block").html(str);
+		let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 사용불가능합니다.";
+		$(".userId-box").find(".help-block2").html(str);
 		
 		$("#id-possible").hide();
 		$("#id-impossible").show();
@@ -65,101 +63,106 @@ function userIdCheck() {
 
 			if (passed === "true") {
 				let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 사용가능합니다.";
-				$(".userId-box").find(".help-block").html(str);
+				$(".userId-box").find(".help-block1").html(str);
 				
 				$("#id-possible").show();
 				$("#id-impossible").hide();
 				
 				$("#userIdValid").val("true");
+			} else {
+				let str = "<span style='font-weight: bold;'>"+ userId + "</span>는 중복된 아이디입니다.";
+				$(".userId-box").find(".help-block2").html(str);
+				
+				$("#id-possible").hide();
+				$("#id-impossible").show();
+				
+				$("#userId").val("");
+				$("#userIdValid").val("false");
+				$("#userId").focus();
 			}
 		}
 	});
 }
 
-	function memberOk() {
+function memberOk() {
 		const f = document.memberForm;
 		let str;
-
-		str = f.userId.value;
-		if (!/^[a-z][a-z0-9_]{4,9}$/i.test(str)) {
-			alert("아이디를 다시 입력 하세요. ");
-			f.userId.focus();
-			return;
-		}
-
+	
 		let mode = "${mode}";
 		if (mode === "member" && f.userIdValid.value === "false") {
-			str = "아이디 중복 검사가 실행되지 않았습니다.";
-			$("#userId").parent().find(".help-block").html(str);
+			alert("아이디 중복 검사가 필요합니다.");
 			f.userId.focus();
 			return;
 		}
-
+	
 		str = f.userPwd.value;
 		if (!/^(?=.*[a-z])(?=.*[!@#$%^*+=-]|.*[0-9]).{5,10}$/i.test(str)) {
-			alert("패스워드를 다시 입력 하세요. ");
+			alert("비밀번호를 다시 입력해주세요.");
 			f.userPwd.focus();
 			return;
 		}
-
+	
 		if (str !== f.userPwd2.value) {
-			alert("패스워드가 일치하지 않습니다. ");
+			alert("비밀번호가 일치하지 않습니다. ");
 			f.userPwd.focus();
 			return;
 		}
-
+	
 		str = f.userName.value;
 		if (!/^[가-힣]{2,5}$/.test(str)) {
 			alert("이름을 다시 입력하세요. ");
 			f.userName.focus();
 			return;
 		}
-
+	
 		str = f.birth.value;
 		if (!str) {
 			alert("생년월일를 입력하세요. ");
 			f.birth.focus();
 			return;
 		}
-
-		str = f.tel1.value;
-		if (!str) {
-			alert("전화번호를 입력하세요. ");
-			f.tel1.focus();
-			return;
-		}
-
-		str = f.tel2.value;
-		if (!/^\d{3,4}$/.test(str)) {
-			alert("숫자만 가능합니다. ");
-			f.tel2.focus();
-			return;
-		}
-
-		str = f.tel3.value;
-		if (!/^\d{4}$/.test(str)) {
-			alert("숫자만 가능합니다. ");
-			f.tel3.focus();
-			return;
-		}
-
+		
 		str = f.email1.value.trim();
 		if (!str) {
 			alert("이메일을 입력하세요. ");
 			f.email1.focus();
 			return;
 		}
-
+	
 		str = f.email2.value.trim();
 		if (!str) {
 			alert("이메일을 입력하세요. ");
 			f.email2.focus();
 			return;
 		}
-
+	
+		str = f.tel1.value;
+		if (!str) {
+			alert("전화번호를 입력하세요. ");
+			f.tel1.focus();
+			return;
+		}
+	
+		str = f.tel2.value;
+		if (!/^\d{3,4}$/.test(str)) {
+			alert("숫자만 가능합니다. ");
+			f.tel2.focus();
+			return;
+		}
+	
+		str = f.tel3.value;
+		if (!/^\d{4}$/.test(str)) {
+			alert("숫자만 가능합니다. ");
+			f.tel3.focus();
+			return;
+		}
+	
+		
 		f.action = "${pageContext.request.contextPath}/member/${mode}_ok.do";
 		f.submit();
-	}
+		alert("회원가입 성공!");
+}
+
 
 function chooseEmail() {
 	const f = document.memberForm;
@@ -168,7 +171,6 @@ function chooseEmail() {
 	if (str !== "direct") {
 		f.email2.value = str;
 		f.email2.readOnly = true;
-		f.email1.focus();
 	} else {
 		f.email2.value = "";
 		f.email2.readOnly = false;
@@ -177,33 +179,33 @@ function chooseEmail() {
 }
 
 
-	$(function(){
-		$("#pwd-correct").hide();
-		$("#pwd-wrong").hide();
-		
-		$("input").keyup(function(){
-			var pwd1 = $("#userPwd").val();
-			var pwd2 = $("#userPwd2").val();
-			
-			if(pwd1 != "" || pwd2 != ""){
-				if(pwd1 != pwd2){
-					$("#pwd-correct").hide();
-					$("#pwd-wrong").show();
-					
-					return false;
-					
-				} else {
-					$("#pwd-correct").show();
-					$("#pwd-wrong").hide();
-					
-					return true;
-				}
-			}
-			
-			
-		})
-	});	
+$(function(){
+	$("#pwd-correct").hide();
+	$("#pwd-wrong").hide();
 	
+	$("input").keyup(function(){
+		var pwd1 = $("#userPwd").val();
+		var pwd2 = $("#userPwd2").val();
+		
+		if(pwd1 != "" && pwd2 != ""){
+			if(pwd1 != pwd2){
+				$("#pwd-correct").hide();
+				$("#pwd-wrong").show();
+				
+				return false;
+				
+			} else {
+				$("#pwd-correct").show();
+				$("#pwd-wrong").hide();
+				
+				return true;
+			}
+		}
+		
+	});
+});	
+
+
 </script>
 </head>
 <body>
@@ -236,8 +238,8 @@ function chooseEmail() {
 								</div>
 							</div>
 							<c:if test="${mode=='member'}">
-								<div class="p-1 ps-3 text-primary help-block" id="id-possible"></div>
-								<div class="p-1 ps-3 text-danger help-block" id="id-impossible"></div>
+								<div class="p-1 ps-3 text-primary help-block1" id="id-possible"></div>
+								<div class="p-1 ps-3 text-danger help-block2" id="id-impossible"></div>
 							</c:if>
 						</div>
 
@@ -263,7 +265,7 @@ function chooseEmail() {
 						<div class="row mb-3">
 							<label class="mb-2 fw-bold" for="userName">이름</label>
 							<div class="row-3">
-								<input type="text" name="userName" id="userName"
+								<input type="text" name="userName" id="userName" maxlength="5"
 									class="form-control p-2" value="${dto.userName}"
 									${mode=="update" ? "readonly='readonly' ":""}>
 							</div>
@@ -328,14 +330,15 @@ function chooseEmail() {
 
 						<c:if test="${mode == 'member'}">
 							<div class="row mb-3">
-								<div class="d-flex justify-content-center">
+								<div class="d-flex">
 									<div class="m-2">
 										<input type="checkbox" id="agree" name="agree" class="form-check-input" checked="checked"
 											style="margin-left: 0;" onchange="form.sendButton.disabled = !checked"> 
 									</div>	
-									<div class="m-2 ms-0">
+									<div class="m-2 ms-0 ">
 										<label class="form-check-label"> 
-										 <a href="#" class="text-decoration-none">이용약관</a> 에 동의합니다.
+										<!--  <a href="#" class="text-decoration-none">이용약관</a> 에 동의합니다.  -->
+										개인정보 수집 및 이용에 동의합니다.
 										</label>
 									</div>
 								</div>
