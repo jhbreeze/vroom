@@ -77,7 +77,7 @@ a {
 		<div class="container body-container">
 			<div class="body-title">
 				<h2>
-					<i class="bi bi-calendar-event"></i> 이벤트
+					이벤트
 				</h2>
 			</div>
 
