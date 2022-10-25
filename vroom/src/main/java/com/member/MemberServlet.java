@@ -44,6 +44,8 @@ public class MemberServlet extends MyServlet {
 			updateSubmit(req, resp);
 		} else if (uri.indexOf("userIdCheck.do") != -1) {
 			userIdCheck(req, resp);
+		} else if(uri.indexOf("nomemReserve.do") != -1) {
+			nomemReserve(req, resp);
 		}
 	}
 
@@ -82,15 +84,13 @@ public class MemberServlet extends MyServlet {
 			
 			session.setAttribute("member", info);
 			
-			if(reserveBusInfo != null) {
-				resp.sendRedirect(cp+"/busReserve/traininsertDepList.do");
+			if (reserveBusInfo != null) {			
+				resp.sendRedirect(cp+"/busReserve/busreservelist.do");
 				return;
-				
-			} else if (reserveTrainInfo != null) {
-				resp.sendRedirect(cp+"/reserveTrain/trainsteptwo.do");
+			} else if(reserveTrainInfo != null) {
+				resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 				return;
-				
-			} else { 
+			}  else { 
 				resp.sendRedirect(cp + "/");
 				return;
 			}
@@ -207,5 +207,29 @@ public class MemberServlet extends MyServlet {
 		resp.setContentType("text/html;charset=utf-8");
 		PrintWriter out = resp.getWriter();
 		out.print(job.toString());
+	}
+	
+	private void nomemReserve(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		ReserveBusSessionInfo reserveBusInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		ReserveTrainSessionInfo reserveTrainInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
+		
+		String cp = req.getContextPath();
+		
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
+		
+		if (reserveBusInfo != null) {			
+			resp.sendRedirect(cp+"/busReserve/busreservelist.do");
+			return;
+		} else if(reserveTrainInfo != null) {
+			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
+			return;
+		} 
+		
+		forward(req, resp, "/main.do/");
+	
 	}
 }
