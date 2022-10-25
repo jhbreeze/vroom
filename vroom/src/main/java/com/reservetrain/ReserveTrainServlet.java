@@ -2,8 +2,6 @@ package com.reservetrain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,7 @@ import org.json.JSONObject;
 import com.member.SessionInfo;
 import com.util.MyServlet;
 
-@WebServlet("/reservetrain/*")
+@WebServlet("/reserveTrain/*")
 public class ReserveTrainServlet extends MyServlet{
 	private static final long serialVersionUID = 1L;
 
@@ -174,23 +172,6 @@ public class ReserveTrainServlet extends MyServlet{
 			for(int i=0; i<tStaTimeList.size(); i++) {
 				ReserveListDetailDTO dto = new ReserveListDetailDTO();
 				
-				dto.setCycle(cycle);
-				dto.setDeptStationCode(deptStationCode);
-				dto.setDestStationCode(destStationCode);
-				dto.setDeptStationName(deptStationName);
-				dto.setDestStationName(destStationName);
-				dto.setDeptRouteDetailCode(deptRouteDetailCode);
-				dto.setDestRouteDetailCode(destRouteDetailCode);
-				dto.settDiscern(tDiscern);
-				dto.settBoardDate1(tBoardDate1);
-				dto.settBoardDate2(tBoardDate2);
-				dto.settBoardDate1(staDate);
-				dto.settBoardDate2(endDate);
-				dto.setAdultCount(adultCount);
-				dto.setChildCount(childCount);
-				dto.setGrade(grade);
-				dto.settTotalTime(tTotalTime);
-				dto.settTotalTimeString(tTotalTimeString);
 				dto.settStaTime(tStaTimeList.get(i));
 				dto.setTendTime(tendTimeList.get(i));
 				dto.settNumId(tNumIdList.get(i));
@@ -198,10 +179,23 @@ public class ReserveTrainServlet extends MyServlet{
 				list.add(dto);
 			}
 			
-			req.setAttribute("tBoardDate2", tBoardDate2);
+			req.setAttribute("cycle", cycle);
+			req.setAttribute("deptStationCode", deptStationCode);
+			req.setAttribute("destStationCode", destStationCode);
+			req.setAttribute("deptStationName", deptStationName);
+			req.setAttribute("destStationName", destStationName);
+			req.setAttribute("deptRouteDetailCode", deptRouteDetailCode);
+			req.setAttribute("destRouteDetailCode", destRouteDetailCode);
+			req.setAttribute("tDiscern", tDiscern);
 			req.setAttribute("tBoardDate1", tBoardDate1);
+			req.setAttribute("tBoardDate2", tBoardDate2);
 			req.setAttribute("staDate", staDate);
 			req.setAttribute("endDate", endDate);
+			req.setAttribute("adultCount", adultCount);
+			req.setAttribute("childCount", childCount);
+			req.setAttribute("grade", grade);
+			req.setAttribute("tTotalTime",tTotalTime);
+			req.setAttribute("tTotalTimeString",tTotalTimeString);
 			req.setAttribute("tStaTimeList", tStaTimeList);
 			req.setAttribute("tendTimeList", tendTimeList);
 			req.setAttribute("tNumIdList", tNumIdList);

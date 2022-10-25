@@ -33,7 +33,6 @@ tr:hover { background: #fff; box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4); }
 .top-section { width: 70%; margin: 50px auto 0; }
 .small-arrow { color: #0E6EFD; } 
 .small-arrow:hover { color: #0D5ED7; } 
-
 </style>
 
 </head>
@@ -50,34 +49,35 @@ tr:hover { background: #fff; box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4); }
 		    	<p class="fw-bold fs-4">가는날</p>
 		    	<div>
 		    		<a class="small-arrow"><i class="bi bi-caret-left-fill" style="width: 20px;"></i></a>
-		    		<span class="fw-bold fs-5" id="selected-date">2022.10.26 수</span>
+		    		<span class="fw-bold fs-5" id="selected-date">${staDate}</span>
 		    		<a class="small-arrow"><i class="bi bi-caret-right-fill" style="width: 20px;"></i></a>
 		    	</div>
 	    	</div>
 		    <div class="reserve-table">
 		    	<table class="table">
 					<tbody>
-						<tr style="height: 70px">
-							<td scope="row" class="ktx-td text-center align-middle"><img src="${pageContext.request.contextPath}/resources/images/ktx_logo.png" title="ktx" width="70"></td>
-							<td scope="row" class="text-center train-td align-middle">
-								<div class="trainNum sort align-middle">0082</div>
-							</td>
-							<td class="place1" style="width: 25%">
-								<span class="departureTime ms-4 fw-bold fs-5">05:08</span>
-								<br>
-								<span class="ms-4 departure">울산</span>
-							</td>
-							<td class="time align-middle" style="width: 15%">
-								<img class="arrow d-flex justify-content-center" src="${pageContext.request.contextPath}/resources/images/arrow.png" style="width: 100px; margin: auto">
-								<span class="takeTime d-flex justify-content-center">02:18 소요</span>
-							</td>
-							<td class="place2" style="width: 25%">
-								<span class="d-flex justify-content-end fw-bold fs-5 destinationTime">07:26</span>
-								<span class="d-flex justify-content-end destination">서울</span>
-							</td>
-							<td class="text-center date-th align-middle" style="width: 15%"><button class="btn btn-primary" type="button">다음</button></td>
-						</tr>
-						
+						<c:forEach var="dto" items="${list}" varStatus="status">
+							<tr style="height: 70px">
+								<td scope="row" class="ktx-td text-center align-middle"><img src="${pageContext.request.contextPath}/resources/images/ktx_logo.png" title="ktx" width="70"></td>
+								<td scope="row" class="text-center train-td align-middle">
+									<div class="trainNum sort align-middle">${dto.tNumId}</div>
+								</td>
+								<td class="place1" style="width: 25%">
+									<span class="departureTime ms-4 fw-bold fs-5">${dto.tStaTime}</span>
+									<br>
+									<span class="ms-4 departure">${deptStationName}</span>
+								</td>
+								<td class="time align-middle" style="width: 15%">
+									<img class="arrow d-flex justify-content-center" src="${pageContext.request.contextPath}/resources/images/arrow.png" style="width: 100px; margin: auto">
+									<span class="takeTime d-flex justify-content-center">${tTotalTimeString} 소요</span>
+								</td>
+								<td class="place2" style="width: 25%; padding-right: 4%; padding-left: 10px;">
+									<span class="d-flex justify-content-end fw-bold fs-5 destinationTime">${dto.tendTime}</span>
+									<span class="d-flex justify-content-end destination">${destStationName}</span>
+								</td>
+								<td class="text-center date-th align-middle" style="width: 85px"><button class="btn btn-primary" type="button" style="width: 85px">좌석선택</button></td>
+							</tr>
+						</c:forEach>
 					</tbody>
 				</table>
 			</div>

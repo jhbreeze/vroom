@@ -9,6 +9,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 메인</title>
 <jsp:include page="/WEB-INF/views/layout/static_mainHeader.jsp"/>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" type="text/css"/>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
 <style type="text/css">
 main { 
 	position: relative; top: -55px; background: white;
@@ -76,6 +81,7 @@ main {
 function selectDep(){
 	let radioText = $("input[name=radio2]:checked").next("label").text();
 	let stationCode = $("input[name=radio2]:checked").val();
+	
 	$("#departure").text(radioText);
 	$("#departure").attr("data-departure", stationCode);
 	if(!radioText) {
@@ -83,6 +89,14 @@ function selectDep(){
 		$("#departure").val("선택");
 	} 
 	$("#myDialogModal1").modal("hide");
+	
+	let departure = $("#departure").text();
+	let destination = $("#destination").text();
+	if(departure === destination){
+		$("#destination").text("선택");
+		$("#destination").val("선택");
+		$("#destination").attr("data-destination", "");
+	}
 };
 function busselectDep(){
 	let radioText = $("input[name=radio3]:checked").next("label").text();
@@ -98,7 +112,6 @@ function busselectDep(){
 function selectDes(){
 	let radioText = $("input[name=radio4]:checked").next("label").text();
 	let stationCode = $("input[name=radio4]:checked").val();
-	console.log(stationCode);
 	$("#destination").text(radioText);
 	$("#destination").attr("data-destination", stationCode);
 	$("#myDialogModal2").modal("hide");
@@ -197,7 +210,7 @@ $(function(){
 // 기차 - 출발지 선택리스트
 $(function(){
 	$(".select-departure").click(function(){
-		let url = "${pageContext.request.contextPath}/reservetrain/traininsertDepList.do";
+		let url = "${pageContext.request.contextPath}/reserveTrain/traininsertDepList.do";
 		
 		$.ajax({
 			type:"post",
@@ -228,7 +241,7 @@ $(function(){
 			$(".trainDesList").text("출발지를 선택해주세요.");
 			return false;
 		}
-		let url = "${pageContext.request.contextPath}/reservetrain/traininsertDesList.do";
+		let url = "${pageContext.request.contextPath}/reserveTrain/traininsertDesList.do";
 		let deptStationCode = $("#departure").attr("data-departure"); 
 		let query = "deptStationCode="+deptStationCode;
 		
@@ -254,6 +267,7 @@ $(function(){
 		});
 	});
 });
+
 // 기차 - 다 선택 후에 조회 눌렀을 때 가져갈 데이터
 $(function(){
 	$(".trainSend").click(function(){
@@ -267,9 +281,11 @@ $(function(){
 		}
 		if(!$("#departure").attr("data-departure")){
 			alert("출발지 및 도착지를 선택해주세요.");
+			return false;
 		}
-		if(!$("#destination").attr("data-destination")){
+		if($("#destination").text()==="선택"){
 			alert("도착지를 선택해주세요.");
+			return false;
 		}		
 		let cycle = $("input[name=btnradio]:checked").val();
 		let childCount = $("#childCountResult").text();
@@ -301,8 +317,7 @@ $(function(){
 		let endDate = $("#endDate").text();
 		let grade = $("input[name=radio1]:checked").val();
 		
-		
-		let out = "${pageContext.request.contextPath}/reservetrain/trainsteptwo_ok.do?"
+		let out = "${pageContext.request.contextPath}/reserveTrain/trainsteptwo_ok.do?"
 		if(cycle == "full"){
 			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
 			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
@@ -311,6 +326,8 @@ $(function(){
 			out += "&tBoardDate1="+tBoardDate1+"&tBoardDate2="+tBoardDate2+"&grade="+grade;
 		} else {
 			out += "cycle="+cycle+"&adultCount="+adultCount+"&childCount="+childCount;
+			out += "&deptStationName="+deptStationName+"&destStationName="+destStationName;
+			out += "&staDate="+staDate+"&endDate="+endDate;
 			out += "&deptStationCode="+deptStationCode+"&destStationCode="+destStationCode;
 			out += "&tBoardDate1="+tBoardDate1+"&grade="+grade;
 		}
@@ -484,15 +501,15 @@ $(function(){
 			<div class="modal-body">
 				<div class="adult-count" style="display: flex; align-items: flex-end;">
 					<span>성인</span>
-					<button type='button' class="pm-button" onclick='countAdult("minus")' value='-'><i class="bi bi-dash-circle"></i></button>
+					<button type='button' class="pm-button" onclick='countAdult("minus")' value='-' style="background: white"><i class="bi bi-dash-circle"></i></button>
 					<div id='aCountResult'>0</div>
-	        		<button type='button' class="pm-button" onclick='countAdult("plus")' value='+'><i class="bi bi-plus-circle"></i></button>
+	        		<button type='button' class="pm-button" onclick='countAdult("plus")' value='+' style="background: white"><i class="bi bi-plus-circle"></i></button>
 				</div>
 				<div class="child-count" style="display: flex; align-items: flex-end;">
 					<span>아동</span>
-					<button type='button' class="pm-button" onclick='countChild("minus")' value='-'><i class="bi bi-dash-circle"></i></button>
+					<button type='button' class="pm-button" onclick='countChild("minus")' value='-' style="background: white"><i class="bi bi-dash-circle"></i></button>
 					<div id='cCountResult'>0</div>
-	        		<button type='button' class="pm-button" onclick='countChild("plus")' value='+'><i class="bi bi-plus-circle"></i></button>
+	        		<button type='button' class="pm-button" onclick='countChild("plus")' value='+' style="background: white"><i class="bi bi-plus-circle"></i></button>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -964,10 +981,11 @@ $(function(){
 	let staDate2 = staDate.substring(0, staDate.length-2);
 	let staArr = staDate2.split(".");
 	
-	$("select-date").click(function(){
+	$(".select-date").click(function(){
 		$(".clsClass").css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
 		
 	});
+	// $("body").on("click", ".clsClass")
 });
 </script>
 
