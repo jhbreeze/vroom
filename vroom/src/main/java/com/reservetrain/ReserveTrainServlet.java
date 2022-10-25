@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import com.member.SessionInfo;
 import com.util.MyServlet;
 
-@WebServlet("/reserveTrain/*")
+@WebServlet("/reservetrain/*")
 public class ReserveTrainServlet extends MyServlet{
 	private static final long serialVersionUID = 1L;
 
@@ -202,7 +202,7 @@ public class ReserveTrainServlet extends MyServlet{
 			
 			req.setAttribute("list", list);
 			
-			forward(req, resp, "/WEB-INF/views/reserveTrain/trainsteptwo.jsp");
+			forward(req, resp, "/WEB-INF/views/reservetrain/trainsteptwo.jsp");
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();
