@@ -108,7 +108,6 @@ public class MemberServlet extends MyServlet {
 
 		session.removeAttribute("member");
 
-		// 세션 초기화
 		session.invalidate();
 
 		resp.sendRedirect(cp + "/");
@@ -210,16 +209,12 @@ public class MemberServlet extends MyServlet {
 	}
 	
 	private void nomemReserve(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 비회원 예매
 		HttpSession session = req.getSession();
 		ReserveBusSessionInfo reserveBusInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
 		ReserveTrainSessionInfo reserveTrainInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		
 		String cp = req.getContextPath();
-		
-		if(req.getMethod().equalsIgnoreCase("GET")) {
-			resp.sendRedirect(cp + "/");
-			return;
-		}
 		
 		if (reserveBusInfo != null) {			
 			resp.sendRedirect(cp+"/busReserve/busreservelist.do");
@@ -227,9 +222,10 @@ public class MemberServlet extends MyServlet {
 		} else if(reserveTrainInfo != null) {
 			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 			return;
-		} 
-		
-		forward(req, resp, "/main.do/");
-	
+		} else {
+			String msg = "홈페이지에서 일정조회후 비회원 예매가 가능합니다.";
+			req.setAttribute("message", msg);
+			forward(req, resp, "/main.do");
+		}
 	}
 }
