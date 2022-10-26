@@ -5,7 +5,7 @@ public class QnADTO {
 	private String qnaSubject;
 	private String qnaContent;
 	private String qnaRegDate;
-	private String userName;
+	private String name;
 	private String qnaName;
 	private String qnaPwd;
 	private String userId;
@@ -52,12 +52,13 @@ public class QnADTO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String name) {
+		this.name = name;
 	}
+
 	
 	
 	

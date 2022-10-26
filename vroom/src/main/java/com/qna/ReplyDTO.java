@@ -4,7 +4,7 @@ public class ReplyDTO {
 	private long replyNum;
 	private long qnaNum;
 	private String userId;
-	private String userName;
+	private String name;
 	private String qnaReplyCont;
 	private String qnaReplyDate;
 	private String qnaReplyModDate;
@@ -45,12 +45,13 @@ public class ReplyDTO {
 	public void setQnaReplyModDate(String qnaReplyModDate) {
 		this.qnaReplyModDate = qnaReplyModDate;
 	}
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String name) {
+		this.name = name;
 	}
+	
 	
 	
 

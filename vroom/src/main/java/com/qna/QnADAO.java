@@ -12,14 +12,14 @@ import com.util.DBConn;
 public class QnADAO {
 	private Connection conn = DBConn.getConnection();
 
-	public void inserQna(QnADTO dto) throws SQLException {
+	public void insertQna(QnADTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
 
 		try {
 
 			sql = " INSERT INTO qna(qnaNum, qnaSubject, qnaContent, qnaRegDate, userId) "
-					+ " VALUES(qnaNum.seq.NEXTVAL, ?, ?, SYSDATE, ?) ";
+					+ " VALUES(qna_seq.NEXTVAL, ?, ?, SYSDATE, ?) ";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dto.getQnaSubject());
@@ -28,8 +28,28 @@ public class QnADAO {
 
 			pstmt.executeUpdate();
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
+	}
+	
+	public void insertQnaN(QnADTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+
+		try {
+
 			sql = " INSERT INTO qna(qnaNum, qnaSubject, qnaContent, qnaRegDate, qnaName, qnaPwd) "
-					+ " VALUES(qnaNum.seq.NEXTVAL, ?, ?, SYSDATE, ?, ?) ";
+					+ " VALUES(qna_seq.NEXTVAL, ?, ?, SYSDATE, ?, ?) ";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dto.getQnaSubject());
@@ -145,9 +165,10 @@ public class QnADAO {
 		String sql;
 
 		try {
-			sql = " SELECT qnaNum, userName, qnaSubject, qnaRegDate, qnaName "
+			sql = " SELECT qnaNum, c.name, qnaSubject, qnaRegDate, qnaName, m.userId "
 					+ " FROM qna q "
-					+ " JOIN member1 m ON b.userId "
+					+ " LEFT OUTER JOIN member1 m ON q.userId = m.userId "
+					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum "
 					+ " ORDER BY qnaNum DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 			
@@ -162,10 +183,11 @@ public class QnADAO {
 				QnADTO dto = new QnADTO();
 				
 				dto.setQnaNum(rs.getLong("qnaNum"));
-				dto.setUserName(rs.getString("userName"));
+				dto.setName(rs.getString("name"));
 				dto.setQnaSubject(rs.getString("qnaSubject"));
 				dto.setQnaRegDate(rs.getString("qnaRegDate"));
 				dto.setQnaName(rs.getString("qnaName"));
+				dto.setUserId(rs.getString("userId"));
 				
 				list.add(dto);
 			}
@@ -225,8 +247,10 @@ public class QnADAO {
 		String sql;
 
 		try {
-			sql = " SELECT qnaNum, q.userId, userName, qnaName, qnaSubject, qnaContent, qnaRegDate "
-					+ " JOIN member1 m ON q.userId = m.userId "
+			sql = " SELECT qnaNum, q.userId, c.name, qnaName, qnaSubject, qnaContent, qnaRegDate "
+					+ " FROM qna q "
+					+ " LEFT OUTER JOIN member1 m ON q.userId = m.userId "
+					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum "
 					+ " WHERE qnaNum = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -238,7 +262,7 @@ public class QnADAO {
 				
 				dto.setQnaNum(rs.getLong("qnaNum"));
 				dto.setUserId(rs.getString("userId"));
-				dto.setUserName(rs.getString("userName"));
+				dto.setName(rs.getString("name"));
 				dto.setQnaName(rs.getString("qnaName"));
 				dto.setQnaSubject(rs.getString("qnaSubject"));
 				dto.setQnaContent(rs.getString("qnaContent"));
@@ -330,7 +354,7 @@ public class QnADAO {
 		
 		try {
 			sql = " INSERT INTO qnaReply(replyNum, qnaNum, userId, qnaReplyCont, qnaReplyDate) "
-					+ " VALUES(replyNum.seq.NEXTVAL, ?, ?, ?, SYSDATE) ";
+					+ " VALUES(qnaReply_seq.NEXTVAL, ?, ?, ?, SYSDATE) ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setLong(1, dto.getQnaNum());
@@ -350,6 +374,44 @@ public class QnADAO {
 			}
 		}
 	}
+	
+	public int dataCountReply(long qnaNum) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = " SELECT COUNT(*) FROM qnaReply WHERE qnaNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, qnaNum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		return result;
+	}
 
 	public List<ReplyDTO> listReply(long qnaNum, int offset, int size) {
 		List<ReplyDTO> list = new ArrayList<>();
@@ -358,9 +420,10 @@ public class QnADAO {
 		String sql;
 
 		try {
-			sql = " SELECT r.replyNum, r.userId, userName, qnaNum, qnaReplyCont, r.qnaReplyDate "
+			sql = " SELECT r.replyNum, r.userId, c.name, qnaNum, qnaReplyCont, r.qnaReplyDate "
 					+ " FROM qnaReply r "
 					+ " JOIN member1 m ON r.userId = m.userId "
+					+ " JOIN customer c ON m.cusNum = c.cusNum "
 					+ " WHERE qnaNum = ? "
 					+ " ORDER BY r.replyNum DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
@@ -379,7 +442,7 @@ public class QnADAO {
 				dto.setReplyNum(rs.getLong("replyNum"));
 				dto.setUserId(rs.getString("userId"));
 				dto.setQnaNum(rs.getLong("qnaNum"));
-				dto.setUserName(rs.getString("userName"));
+
 				dto.setQnaReplyCont(rs.getString("qnaReplyCont"));
 				dto.setQnaReplyDate(rs.getString("qnaReplyDate"));
 				
