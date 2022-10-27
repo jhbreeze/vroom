@@ -13,7 +13,7 @@ public class ReserveTrainSessionInfo {
 	private String grade;
 	private String staDate;
 	private String endDate;
-	
+	private int staEnd;
 	public String getCycle() {
 		return cycle;
 	}
@@ -85,5 +85,11 @@ public class ReserveTrainSessionInfo {
 	}
 	public void setDestStationName(String destStationName) {
 		this.destStationName = destStationName;
+	}
+	public int getStaEnd() {
+		return staEnd;
+	}
+	public void setStaEnd(int staEnd) {
+		this.staEnd = staEnd;
 	}
 }

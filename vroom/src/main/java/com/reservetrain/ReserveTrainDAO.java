@@ -32,7 +32,6 @@ public class ReserveTrainDAO {
 				list.add(dto);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			if(rs != null) {
 				try {
@@ -59,13 +58,13 @@ public class ReserveTrainDAO {
 		String sql;
 		
 		try {
-			sql = " SELECT ts.tStationCode, ts.tStationName  "
-					+ " FROM trainRouteDetail trd\n"
+			sql = " SELECT DISTINCT tStationCode, tStationName FROM ( "
+					+ " SELECT ts.tStationCode, ts.tStationName "
+					+ " FROM trainRouteDetail trd "
 					+ " LEFT OUTER JOIN trainStation ts ON trd.tStationCode = ts.tStationCode "
 					+ " WHERE tRouteCode IN ( "
-					+ "    SELECT DISTINCT tRouteCode FROM trainRouteDetail "
-					+ "    WHERE tStationCode = ? "
-					+ " ) ";
+					+ " SELECT DISTINCT tRouteCode FROM trainRouteDetail "
+					+ " WHERE tStationCode = ? )) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, deptStationCode);
 			rs = pstmt.executeQuery();
