@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.util.MyServlet;
 
 @WebServlet("/mypage/*")
@@ -19,11 +18,23 @@ public class MypageServlet extends MyServlet {
 		
 		String uri = req.getRequestURI();
 		
-		if(uri.indexOf("")!=-1) {
+		if(uri.indexOf("update.do")!=-1) {
+			updateForm(req, resp);
 		} else if (uri.indexOf("")!=-1) {
-		} else if (uri.indexOf("")!=-1) {
-		} else if (uri.indexOf("")!=-1) {
-		}
+			reserveList(req,resp);
+		} 
 	}
+
+	private void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		forward(req, resp, "/WEB-INF/views/mypage/mypage.jsp");
+		
+	}
+
+	
+	private void reserveList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+	}
+
 
 }
