@@ -50,7 +50,6 @@ public class MemberServlet extends MyServlet {
 	}
 
 	private void loginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 로그인 폼
 		String path = "/WEB-INF/views/member/login.jsp";
 		forward(req, resp, path);
 	}
@@ -81,6 +80,9 @@ public class MemberServlet extends MyServlet {
 			SessionInfo info = new SessionInfo();
 			info.setUserId(dto.getUserId());
 			info.setUserName(dto.getUserName());
+			info.setBirth(dto.getBirth());
+			info.setEmail(dto.getEmail());
+			info.setTel(dto.getTel());
 			
 			session.setAttribute("member", info);
 			
@@ -102,7 +104,6 @@ public class MemberServlet extends MyServlet {
 	}
 
 	private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 로그아웃
 		HttpSession session = req.getSession();
 		String cp = req.getContextPath();
 
@@ -177,14 +178,125 @@ public class MemberServlet extends MyServlet {
 	}
 
 	private void pwdForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
 		
+		String cp = req.getContextPath();
+		if (info == null) {
+			resp.sendRedirect(cp + "/member/login.do");
+			return;
+		}
+
+		String mode = req.getParameter("mode");
+		if (mode.equals("update")) {
+			req.setAttribute("title", "정보수정");
+		} else {
+			req.setAttribute("title", "회원탈퇴");
+		}
+		req.setAttribute("mode", mode);
+
+		forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
+
 	}
 
 	private void pwdSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberDAO dao = new MemberDAO();
+		HttpSession session = req.getSession();
 		
+		String cp = req.getContextPath();
+
+		if (req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
+		
+		try {
+			SessionInfo info = (SessionInfo) session.getAttribute("member");
+			if (info == null) {
+				resp.sendRedirect(cp + "/member/login.do");
+				return;
+			}
+			
+			MemberDTO dto = dao.readMember(info.getUserId());
+			if (dto == null) {
+				session.invalidate();
+				resp.sendRedirect(cp + "/");
+				return;
+			}
+			
+			String userPwd = req.getParameter("userPwd");
+			String mode = req.getParameter("mode");
+			if (!dto.getUserPwd().equals(userPwd)) {
+				if (mode.equals("update")) {
+					req.setAttribute("title", "정보수정");
+				} else {
+					req.setAttribute("title", "회원탈퇴");
+				}
+
+				req.setAttribute("mode", mode);
+				req.setAttribute("message", "비밀번호가 일치하지 않습니다.");
+				forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
+				return;
+			}
+			//탈퇴는 아직 안 짬
+			
+			req.setAttribute("title", "정보수정");
+			req.setAttribute("dto", dto);
+			req.setAttribute("mode", "update");
+			forward(req, resp, "/WEB-INF/views/member/member.jsp");
+			return;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		resp.sendRedirect(cp+"/");
 	}
 
 	private void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MemberDAO dao = new MemberDAO();
+		HttpSession session = req.getSession();
+		
+		String cp = req.getContextPath();
+		if(req.getMethod().equalsIgnoreCase("GET")) {
+			resp.sendRedirect(cp+"/");
+			return;
+		}
+		
+		try {
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+			if(info == null) {
+				resp.sendRedirect(cp + "/member/login.do");
+				return;
+			}
+			
+			MemberDTO dto = new MemberDTO();
+			
+			dto.setUserId(req.getParameter("userId"));
+			dto.setUserPwd(req.getParameter("userPwd"));
+			
+			String birth = req.getParameter("birth").replaceAll("(\\.|\\-|\\/)", "");
+			dto.setBirth(birth);
+			
+			dto.setUserName(req.getParameter("userName"));
+			
+			String tel1 = req.getParameter("tel1");
+			String tel2 = req.getParameter("tel2");
+			String tel3 = req.getParameter("tel3");
+			dto.setTel(tel1 + "-" + tel2 + "-" + tel3);
+
+			String email1 = req.getParameter("email1");
+			String email2 = req.getParameter("email2");
+			dto.setEmail(email1 + "@" + email2);
+			dto.setCusNum(0); // ?
+
+			dao.updateMember(dto);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		resp.sendRedirect(cp+"/");
 		
 	}
 

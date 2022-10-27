@@ -32,7 +32,7 @@ main {
 </style>
 
 <script type="text/javascript">
-function userIdCheck() { // 아이디 유효성 검사, 중복 검사
+function userIdCheck() {
 	let userId = $("#userId").val();
 
 	if(!/^(?=.*[a-z])(?=.*\d)[a-z0-9]{5,10}$/i.test(userId)) {
@@ -145,22 +145,21 @@ function memberOk() {
 	
 		str = f.tel2.value;
 		if (!/^\d{3,4}$/.test(str)) {
-			alert("숫자만 가능합니다. ");
+			alert("번호를 입력하세요. ");
 			f.tel2.focus();
 			return;
 		}
 	
 		str = f.tel3.value;
 		if (!/^\d{4}$/.test(str)) {
-			alert("숫자만 가능합니다. ");
+			alert("번호를 입력하세요. ");
 			f.tel3.focus();
 			return;
 		}
 	
-		
 		f.action = "${pageContext.request.contextPath}/member/${mode}_ok.do";
 		f.submit();
-		alert("회원가입 성공!");
+		alert("${mode=="member"?"회원가입 성공!":"수정완료"}");
 }
 
 
@@ -266,8 +265,7 @@ $(function(){
 							<label class="mb-2 fw-bold" for="userName">이름</label>
 							<div class="row-3">
 								<input type="text" name="userName" id="userName" maxlength="5"
-									class="form-control p-2" value="${dto.userName}"
-									${mode=="update" ? "readonly='readonly' ":""}>
+									class="form-control p-2" value="${dto.userName}">
 							</div>
 						</div>
 
@@ -305,24 +303,21 @@ $(function(){
 							<div class="col-sm-10 row">
 								<div class="col-sm-3 pe-2">
 									<input type="text" name="tel1" id="tel1"
-										class="form-control p-2" value="${dto.tel1}" maxlength="3"
-										${mode=="update" ? "readonly='readonly' ":""}>
+										class="form-control p-2" value="${dto.tel1}" maxlength="3">
 								</div>
 								<div class="col-sm-1 px-1" style="width: 2%;">
 									<p class="form-control-plaintext text-center">-</p>
 								</div>
 								<div class="col-sm-3 pe-2">
 									<input type="text" name="tel2" id="tel2"
-										class="form-control p-2" value="${dto.tel2}" maxlength="4"
-										${mode=="update" ? "readonly='readonly' ":""}>
+										class="form-control p-2" value="${dto.tel2}" maxlength="4">
 								</div>
 								<div class="col-sm-1 px-1" style="width: 2%;">
 									<p class="form-control-plaintext text-center">-</p>
 								</div>
 								<div class="col-sm-3 pe-2">
 									<input type="text" name="tel3" id="tel3"
-										class="form-control p-2" value="${dto.tel3}" maxlength="4"
-										${mode=="update" ? "readonly='readonly' ":""}>
+										class="form-control p-2" value="${dto.tel3}" maxlength="4">
 								</div>
 							</div>
 
@@ -345,12 +340,11 @@ $(function(){
 							</div>
 						</c:if>
 
-						<div class="row">
+						<div class="row" style="width: 100%; margin:auto">
 								<button type="button" name="sendButton" class="btn btn-primary p-3"
-									onclick="memberOk();"> ${mode=="member"?"가입하기":"정보수정"}
+									onclick="memberOk();"> ${mode=="member"?"가입하기":"수정완료"}
 								</button>
-								<input type="hidden" name="userIdValid" id="userIdValid"
-									value="false">
+								<input type="hidden" name="userIdValid" id="userIdValid" value="false">
 						</div>
 					</form>
 				</div>

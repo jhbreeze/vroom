@@ -1,9 +1,8 @@
-package com.member;
+package com.mypage;
 
-public class SessionInfo {
+public class MypageDTO {
 	private String userId;
 	private String userName;
-	private int userRoll;
 	private String email;
 	private String tel;
 	private String birth;
@@ -19,12 +18,6 @@ public class SessionInfo {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-	public int getUserRoll() {
-		return userRoll;
-	}
-	public void setUserRoll(int userRoll) {
-		this.userRoll = userRoll;
 	}
 	public String getEmail() {
 		return email;
@@ -44,6 +37,7 @@ public class SessionInfo {
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
+	
 	
 	
 }

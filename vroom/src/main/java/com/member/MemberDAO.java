@@ -17,8 +17,9 @@ public class MemberDAO {
 		StringBuilder sb = new StringBuilder();
 		
 		try {
-			sb.append(" SELECT cusNum, userId, pwd, enabled, reg_date, mod_date, birth ");
-			sb.append(" FROM member1 ");
+			sb.append(" SELECT c.cusNum, name, tel, email, userId, pwd, enabled, reg_date, mod_date, TO_CHAR(birth,'YYYY-MM-DD') birth ");
+			sb.append(" FROM member1 m ");
+			sb.append(" JOIN customer c ON m.cusNum = c.cusNum");
 			sb.append(" WHERE userId = ? AND pwd = ? AND enabled = 1 ");
 			
 			pstmt = conn.prepareStatement(sb.toString());
@@ -32,6 +33,9 @@ public class MemberDAO {
 				dto = new MemberDTO();
 				
 				dto.setCusNum(rs.getInt("cusNum"));
+				dto.setUserName(rs.getString("name"));
+				dto.setTel(rs.getString("tel"));
+				dto.setEmail(rs.getString("email"));
 				dto.setUserId(rs.getString("userId"));
 				dto.setUserPwd(rs.getString("pwd"));
 				dto.setEnabled(rs.getInt("enabled"));
@@ -183,10 +187,47 @@ public class MemberDAO {
 	}	
 	
 	public void updateMember(MemberDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
 		
+		try {
+			sql = " UPDATE member1 SET pwd= ?, mod_date=SYSDATE, birth= ? WHERE usedId = ?  ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserPwd());
+			pstmt.setString(2, dto.getBirth());
+			pstmt.setString(3, dto.getUserId());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = " UPDATE customer SET name = ?, tel = ? , email = ? WHERE cusNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getUserName());
+			pstmt.setString(2, dto.getTel());
+			pstmt.setString(3, dto.getEmail());
+			pstmt.setInt(4, dto.getCusNum()); // 이게 될까? 아니면 현재값? 서브쿼리?
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if( pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
 	}
 	
 	public void deleteMember(String userId) throws SQLException {
 		
 	}
 }
+
