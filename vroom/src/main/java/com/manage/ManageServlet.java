@@ -1,6 +1,7 @@
 package com.manage;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +20,23 @@ public class ManageServlet extends MyServlet {
 		
 		String uri = req.getRequestURI();
 		
-		if(uri.indexOf("")!=-1) {
+		if(uri.indexOf("member.do")!=-1) {
+			manageMem(req,resp);
 		} else if (uri.indexOf("")!=-1) {
 		} else if (uri.indexOf("")!=-1) {
 		} else if (uri.indexOf("")!=-1) {
 		}
+	}
+
+	private void manageMem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ManageDAO dao = new ManageDAO();
+		List<ManageDTO> list = dao.listMember();
+		
+		req.setAttribute("list", list);
+		
+		String path = "/WEB-INF/views/manage/manage.jsp";
+		forward(req, resp, path);
+		
 	}
 	
 }

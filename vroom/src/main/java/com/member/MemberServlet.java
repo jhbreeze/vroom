@@ -83,6 +83,7 @@ public class MemberServlet extends MyServlet {
 			info.setBirth(dto.getBirth());
 			info.setEmail(dto.getEmail());
 			info.setTel(dto.getTel());
+			info.setCusNum(dto.getCusNum());
 			
 			session.setAttribute("member", info);
 			
@@ -232,7 +233,6 @@ public class MemberServlet extends MyServlet {
 				} else {
 					req.setAttribute("title", "회원탈퇴");
 				}
-
 				req.setAttribute("mode", mode);
 				req.setAttribute("message", "비밀번호가 일치하지 않습니다.");
 				forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
@@ -271,24 +271,22 @@ public class MemberServlet extends MyServlet {
 			}
 			
 			MemberDTO dto = new MemberDTO();
-			
-			dto.setUserId(req.getParameter("userId"));
+			dto.setCusNum(info.getCusNum());
+			dto.setUserId(info.getUserId());
 			dto.setUserPwd(req.getParameter("userPwd"));
+			dto.setUserName(req.getParameter("userName"));
 			
 			String birth = req.getParameter("birth").replaceAll("(\\.|\\-|\\/)", "");
 			dto.setBirth(birth);
 			
-			dto.setUserName(req.getParameter("userName"));
+			String email1 = req.getParameter("email1");
+			String email2 = req.getParameter("email2");
+			dto.setEmail(email1 + "@" + email2);
 			
 			String tel1 = req.getParameter("tel1");
 			String tel2 = req.getParameter("tel2");
 			String tel3 = req.getParameter("tel3");
 			dto.setTel(tel1 + "-" + tel2 + "-" + tel3);
-
-			String email1 = req.getParameter("email1");
-			String email2 = req.getParameter("email2");
-			dto.setEmail(email1 + "@" + email2);
-			dto.setCusNum(0); // ?
 
 			dao.updateMember(dto);
 			

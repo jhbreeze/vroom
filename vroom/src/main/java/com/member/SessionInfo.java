@@ -7,7 +7,15 @@ public class SessionInfo {
 	private String email;
 	private String tel;
 	private String birth;
+	private int cusNum;
 	
+	
+	public int getCusNum() {
+		return cusNum;
+	}
+	public void setCusNum(int cusNum) {
+		this.cusNum = cusNum;
+	}
 	public String getUserId() {
 		return userId;
 	}
