@@ -205,7 +205,6 @@ public class ReserveTrainServlet extends MyServlet{
 				
 				list.add(dto);
 			}
-			
 			req.setAttribute("cycle", cycle);
 			req.setAttribute("deptStationName", deptStationName);
 			req.setAttribute("destStationName", destStationName);
