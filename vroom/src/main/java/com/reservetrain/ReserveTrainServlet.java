@@ -225,5 +225,11 @@ public class ReserveTrainServlet extends MyServlet{
 		resp.sendError(400);
 	}
 	
-	
+	protected void beforeMoveToChoiceSeats(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
+		
+		String tStaTime = (String)req.getAttribute("tStaTime");
+		String tEndTime = (String)req.getAttribute("tEndTime");
+	}
 }
