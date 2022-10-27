@@ -27,18 +27,12 @@ public class FaqServlet extends MyServlet {
 
 		if (uri.indexOf("list.do") != -1) {
 			list(req, resp);
-		} else if (uri.indexOf("write.do") != -1) {
-			writeForm(req, resp);
 		} else if (uri.indexOf("write_ok.do") != -1) {
 			writeSubmit(req, resp);
-		} else if (uri.indexOf("article.do") != -1) {
-			article(req, resp);
-		} else if (uri.indexOf("update.do") != -1) {
-			updateForm(req, resp);
-		} else if (uri.indexOf("update_ok.do") != -1) {
-			updateSubmit(req, resp);
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
+		} else if (uri.indexOf("deleteList.do") != -1) {
+			deleteList(req, resp);
 		}
 	}
 
@@ -109,10 +103,6 @@ public class FaqServlet extends MyServlet {
 		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
 	}
 
-	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
-	}
-
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		FaqDAO dao = new FaqDAO();
 		
@@ -142,18 +132,6 @@ public class FaqServlet extends MyServlet {
 		resp.sendRedirect(cp+"/faq/list.do");
 	}
 
-	protected void article(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
-	}
-
-	protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
-	}
-
-	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/faq/list.jsp");
-	}
-
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		FaqDAO dao = new FaqDAO();
 		
@@ -180,6 +158,39 @@ public class FaqServlet extends MyServlet {
 			}
 			
 			dao.deleteFaq(faqNum, info.getUserId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		resp.sendRedirect(cp+"/faq/list.do?"+query);
+	}
+
+	protected void deleteList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		
+		String cp = req.getContextPath();
+		
+		if(!info.getUserId().equals("admin")) {
+			resp.sendRedirect(cp+"/faq/list.do");
+			return;
+		}
+		String page = req.getParameter("page");
+		String size = req.getParameter("size");
+		String query = "size="+size+"page=" + page;
+		
+		try {
+			String[] nn = req.getParameterValues("faqNums");
+			long faqNums[] = null;
+			faqNums = new long[nn.length];
+			for(int i=0;i<nn.length;i++) {
+				faqNums[i] = Long.parseLong(nn[i]);
+			}
+			
+			FaqDAO dao = new FaqDAO();
+			
+			dao.deleteFaqList(faqNums);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

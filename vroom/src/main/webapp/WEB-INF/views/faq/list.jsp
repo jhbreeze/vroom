@@ -58,6 +58,30 @@
 		f.action = "${pageContext.request.contextPath}/faq/write_ok.do";
 		f.submit();
 	}
+
+	<c:if test="${sessionScope.member.userId=='admin'}">
+	$(function() {
+		$("#chkAll").click(function() {
+			if ($(this).is(":checked")) {
+				$("input[name=faqNums]").prop("checked", true);
+			} else {
+				$("input[name=faqNums]").prop("checked", false);
+			}
+		});
+
+		$("#btnDeleteList").click(function() {
+			let cnt = $("input[name=faqNums]:checked").length;
+			if (cnt === 0) {
+				alert("삭제할 게시물을 먼저 선택하세요.");
+				return false;
+			}
+
+			const f = document.listForm;
+			f.action = "${pageContext.request.contextPath}/faq/deleteList.do";
+			f.submit();
+		});
+	});
+	</c:if>
 </script>
 <style type="text/css">
 main {
@@ -92,6 +116,20 @@ tr.hover:hover {
 a {
 	text-decoration-line: none;
 }
+
+#header {
+	background: #0E6EFD;
+	text-align: center;
+	color: white;
+	vertical-align: middle;
+}
+
+#header2 {
+	background: #0E6EFD;
+	text-align: center;
+	vertical-align: middle;
+	color: white;
+}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -116,17 +154,22 @@ a {
 				<c:if test="${sessionScope.member.userId=='admin'}">
 					<form name="boardForm" method="post">
 						<div class='form-header'>
-							<span class="bold">질문/답변<button type="button" class='btn btn-light btnSendReply' onclick="check();">등록하기&nbsp;</button> </span>
+							<span class="bold">질문/답변
+								<button type="button" class='btn btn-light btnSendReply'
+									onclick="check();">등록하기&nbsp;</button>
+							</span>
 						</div>
 
 						<table class="table table-borderless reply-form">
 							<tr>
-								<td class="table-light col-sm-2" scope="row">제 목</td>
+								<td class="table-light col-sm-2" scope="row" id='header'>제
+									목</td>
 								<td><input type="text" name="faqSubject"
 									class="form-control" value="${dto.faqSubject}"></td>
 							</tr>
 							<tr>
-								<td class="table-light col-sm-2" scope="row">내 용</td>
+								<td class="table-light col-sm-2" scope="row" id='header2'>내
+									용</td>
 								<td><textarea class='form-control' name="faqContent">${dto.faqContent}</textarea>
 								</td>
 							</tr>
@@ -145,30 +188,40 @@ a {
 			</div>
 
 			<div class="accordion accordion-flush" id="accordionFlush">
-				<c:forEach var="dto" items="${list}" varStatus="status">
-					<div class="accordion-item">
-						<h2 class="accordion-header" id="flush-heading-">
-							<button class="accordion-button collapsed bg-light" type="button"
-								data-bs-toggle="collapse"
-								data-bs-target="#flush-collapse-${status.index}"
-								aria-expanded="false"
-								aria-controls="flush-collapse-${status.index}">
-								${dto.faqSubject }</button><c:choose>
-								<c:when test="${sessionScope.member.userId=='admin'}">
-									<button type="button" class="btn btn-light"
-										data-bs-toggle="modal" data-bs-target="#exampleModal">
-										삭제</button>
-								</c:when>
-							</c:choose>
-						</h2>
-						<div id="flush-collapse-${status.index}"
-							class="accordion-collapse collapse"
-							aria-labelledby="flush-heading-${status.index}"
-							data-bs-parent="#accordionFlush">
-							<div class="accordion-body">${dto.faqContent }</div>
+				<form name="listForm" method="post">
+					<c:if test="${sessionScope.member.userId=='admin'}">
+						<input type="checkbox" class="form-check-input" name="chkAll"
+							id="chkAll">
+						<button type="button" class="btn btn-light" data-bs-toggle="modal"
+							data-bs-target="#exampleModal" title="삭제">
+							<i class="bi bi-trash"></i>
+						</button>
+					</c:if>
+					<c:forEach var="dto" items="${list}" varStatus="status">
+
+						<div class="accordion-item">
+							<c:if test="${sessionScope.member.userId=='admin'}">
+								<input type="checkbox" class="form-check-input" name="faqNums"
+									value="${dto.faqNum}">
+							</c:if>
+							<h2 class="accordion-header" id="flush-heading-${status.index}">
+								<button class="accordion-button collapsed bg-light"
+									type="button" data-bs-toggle="collapse"
+									data-bs-target="#flush-collapse-${status.index}"
+									aria-expanded="false"
+									aria-controls="flush-collapse-${status.index}">
+									${dto.faqSubject}</button>
+
+							</h2>
+							<div id="flush-collapse-${status.index}"
+								class="accordion-collapse collapse"
+								aria-labelledby="flush-heading-${status.index}"
+								data-bs-parent="#accordionFlush">
+								<div class="accordion-body">${dto.faqContent }</div>
+							</div>
 						</div>
-					</div>
-				</c:forEach>
+					</c:forEach>
+				</form>
 			</div>
 
 
@@ -185,8 +238,7 @@ a {
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-bs-dismiss="modal">아니요</button>
-							<button type="button" class="btn btn-primary"
-								onclick="deleteBoard();">예</button>
+							<button type="button" class="btn btn-primary" id="btnDeleteList">예</button>
 						</div>
 					</div>
 				</div>

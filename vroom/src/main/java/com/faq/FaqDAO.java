@@ -208,16 +208,49 @@ public class FaqDAO {
 		String sql;
 		
 		try {
-			sql = " DELETE FROM faq WHERE faqNum = ? ";
+			if(userId.equals("admin")) {
+				sql = " DELETE FROM faq WHERE faqNum = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, faqNum);
+
+				pstmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+	}
+	
+	public void deleteFaqList(long[] faqNums) throws SQLException{
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = "DELETE FROM faq WHERE faqNum IN (";
+			for (int i = 0; i < faqNums.length; i++) {
+				sql += "?,";
+			}
+			sql = sql.substring(0, sql.length() - 1) + ")";
+
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setLong(1, faqNum);
+			
+			for (int i = 0; i < faqNums.length; i++) {
+				pstmt.setLong(i + 1, faqNums[i]);
+			}
 
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
 		} finally {
-			if (pstmt != null) {
+			if(pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (Exception e2) {

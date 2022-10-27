@@ -148,12 +148,12 @@ function sendLogin() {
 							<div class="col-12 m-2">
 								<button type="button"
 									class="btn btn-primary btn-control btn-lg mx-auto fw-bold"
-									onclick="${pageContext.request.contextPath}/member/nomemReserve.do">&nbsp;비회원 예매&nbsp;</button>
+									onclick="location.href='${pageContext.request.contextPath}/member/nomemReserve.do';">&nbsp;비회원 예매&nbsp;</button>
 							</div>
 							<div class="col-12 m-2">
 								<button type="button"
 									class="btn btn-primary btn-control btn-lg mx-auto fw-bold"
-									onclick="${pageContext.request.contextPath}/reserve/list.do">&nbsp;비회원 조회&nbsp;</button>
+									onclick="location.href='${pageContext.request.contextPath}/reserve/list.do';">&nbsp;비회원 조회&nbsp;</button>
 							</div>
 						</div>
 					</div>

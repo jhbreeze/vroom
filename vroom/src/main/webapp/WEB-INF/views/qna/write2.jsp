@@ -14,10 +14,27 @@
 		const f = document.boardForm;
 		let str;
 
-		str = f.qnaSubject.value.trim();
+		str = f.Subject.value.trim();
+		alert(str);
 		if (!str) {
 			alert("제목을 입력하세요. ");
-			f.qnaSubject.focus();
+			f.Subject.focus();
+			return false;
+		}
+		
+		str = f.qnaName.value.trim();
+		alert(str);
+		if (!str) {
+			alert("이름을 입력하세요. ");
+			f.qnaName.focus();
+			return false;
+		}
+		
+		str = f.qnaPwd.value.trim();
+		alert(str);
+		if (!str) {
+			alert("패스워드를 입력하세요. ");
+			f.qnaPwd.focus();
 			return false;
 		}
 
@@ -28,7 +45,7 @@
 			return false;
 		}
 
-		f.action = "${pageContext.request.contextPath}/qna/write_ok.do";
+		f.action = "${pageContext.request.contextPath}/qna/write_ok2.do";
 	}
 </script>
 <style type="text/css">
@@ -64,13 +81,21 @@ main {
 					<table>
 						<tr>
 							<td>제목</td>
-							<td><input type="text" name="qnaSubject"
+							<td><input type="text" name="Subject"
 								value="${dto.qnaSubject}"></td>
 						</tr>
 						<tr>
 							<td class="table-light col-sm-2" scope="row">작성자명</td>
 	 						<td>
-								<p class="form-control-plaintext">${sessionScope.member.userId}</p>
+								<input type="text" name="qnaName"
+								value="${dto.qnaName}">
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light col-sm-2" scope="row">비밀번호</td>
+	 						<td>
+								<input type="text" name="qnaPwd"
+								value="${dto.qnaPwd}">
 							</td>
 						</tr>
 						<tr>
