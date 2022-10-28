@@ -20,7 +20,7 @@ public class MypageServlet extends MyServlet {
 		
 		if(uri.indexOf("update.do")!=-1) {
 			updateForm(req, resp);
-		} else if (uri.indexOf("")!=-1) {
+		} else if (uri.indexOf("list.do")!=-1) {
 			reserveList(req,resp);
 		} 
 	}
@@ -33,7 +33,7 @@ public class MypageServlet extends MyServlet {
 
 	
 	private void reserveList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 	}
 
 

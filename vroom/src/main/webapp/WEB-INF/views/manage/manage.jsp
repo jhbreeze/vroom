@@ -20,6 +20,15 @@ main {
 	min-height: 900px;
 }
 </style>
+<script type="text/javascript">
+function searchList(){
+	const f = document.searchForm;
+	f.submit();
+}
+
+</script>
+
+
 
 </head>
 <body>
@@ -35,23 +44,22 @@ main {
 			</div>
 
 			<div class="mb-3">
-				<form class="d-flex justify-content-end" name="searchForm" action=""
+				<form class="d-flex justify-content-end" name="searchForm" action="${pageContext.request.contextPath}/manage/member.do"
 					method="post">
 					<div class="col-auto p-1">
 						<select name="condition" class="form-select form-select-sm">
-							<option value="cusNum">고객번호</option>
-							<option value="userId">아이디</option>
-							<option value="userName">이름</option>
-							<option value="tel">전화번호</option>
+							<option value="cusNum" ${condition=="cusNum"?"selected='selected'":""}>고객번호</option>
+							<option value="userId" ${condition=="userId"?"selected='selected'":""}>아이디</option>
+							<option value="name" ${condition=="name"?"selected='selected'":""}>이름</option>
 						</select>
 					</div>
 					<div class="col-auto p-1">
-						<input type="text" name="keyword" value=""
-							class="form-control form-control-sm">
+						<input type="text" name="keyword" value="${keyword}" class="form-control form-control-sm">
 					</div>
 					<div class="col-auto p-1">
+						<button type="button" class="btn btn-primary btn-sm" onclick="searchList()">검색</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="searchList()">검색</button>
+							onclick="location.href='${pageContext.request.contextPath}/manage/member.do'">검색 초기화</button>
 					</div>
 				</form>
 			</div>
@@ -86,7 +94,7 @@ main {
 			</table>
 			
 				<div class="page-navigation">
-					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging} dididi
+					${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 				</div>
 				
 		</div>

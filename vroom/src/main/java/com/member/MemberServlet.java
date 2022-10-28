@@ -327,7 +327,7 @@ public class MemberServlet extends MyServlet {
 		String cp = req.getContextPath();
 		
 		if (reserveBusInfo != null) {			
-			resp.sendRedirect(cp+"/busReserve/busreservelist.do");
+			resp.sendRedirect(cp+"/busreserve/busreservelist.do");
 			return;
 		} else if(reserveTrainInfo != null) {
 			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
