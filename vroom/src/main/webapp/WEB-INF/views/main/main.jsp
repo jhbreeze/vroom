@@ -542,10 +542,10 @@ $(function(){
 			<form name="busReserveForm" method="post">
 				<span id="buschangeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
 				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
-					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio1" autocomplete="off" checked>
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio1" autocomplete="off" checked value="half">
   					<label class="col-6 btn btn-outline-primary" id="bushalf" for="busbtnradio1" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>편 도</span></label>
 					
-					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio2" autocomplete="off">
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio2" autocomplete="off" value="full">
   					<label class="col-6 btn btn-outline-primary" id="busfull" for="busbtnradio2" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>왕 복</span></label>
 				</div>
 				<div class="row row-cols-3 text-dark second-row">

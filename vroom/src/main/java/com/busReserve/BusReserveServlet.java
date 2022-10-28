@@ -116,8 +116,8 @@ public class BusReserveServlet extends MyServlet {
 		reserveInfo.setBusstaDate(req.getParameter("busstaDate"));
 		reserveInfo.setBusendDate(req.getParameter("busendDate"));
 		reserveInfo.setBgrade(req.getParameter("bgrade"));
-		
-		session.setAttribute("reserveTrainInfo", reserveInfo);
+		System.out.print(reserveInfo);
+		session.setAttribute("reserveBusInfo", reserveInfo);
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
