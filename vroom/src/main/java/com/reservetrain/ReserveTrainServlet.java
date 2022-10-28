@@ -159,7 +159,6 @@ public class ReserveTrainServlet extends MyServlet{
 		List<Integer> tNumIdList = new ArrayList<>(); // 열차번호 리스트 - 가는날
 		List<Integer> tOperCodeList = new ArrayList<>(); // 열차번호 리스트 - 가는날
 		
-		
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		if(reserveInfo == null) {
 			resp.sendRedirect(cp + "/");
