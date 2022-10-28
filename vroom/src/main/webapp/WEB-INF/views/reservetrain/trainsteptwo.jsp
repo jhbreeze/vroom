@@ -140,10 +140,26 @@ $(function(){
 });
 
 function listPage(){
+	let cycle = $("input[name=cycle]").attr("data-cycle");
+	let hORf = $("input[name=hORf]").attr("data-halffull");
 	url = "${pageContext.request.contextPath}/reservetrain/reloadsteptwolist.do";
 	let selector = "#trainst2List";
 	let query = "";
+	if(cycle==='full') {
+		query = "hORf="+hORf;
+	}
 	const fn = function(data){
+		// 다음을 눌렀을 때, 가는날 -> 오는날로 바꾸고, selected-date를 staDate -> endDate로 바꾸기
+		let cycle = $("input[name=cycle]").attr("data-cycle");
+		let hORf =  $("input[name=hORf]").attr("data-halffull");
+		if (cycle==='full' && hORf==="2"){
+			$("#title-when").text("오는날");
+			$("#selected-date").text("${endDate}");
+			$("input[name=hORf]").attr("data-halffull", "3");
+			$(".departure").text('${destStationName}');
+			$(".destination").text('${deptStationName}');
+		}
+		
 		$(selector).html(data);
 		
 		let selectDate = $("#selected-date").text();
@@ -159,7 +175,11 @@ function listPage(){
 		let nd = date.getDate();
 		
 		let nh = date.getHours();
-		let nM = date.getMinutes();
+		let nM = Number(date.getMinutes())+30;
+		if(nM > 60){
+			nh = nh + 1;
+			nM = nM - 60;
+		}
 		
 		// 날짜가 같으면 시간비교를 해서 disalbed하기
 		if(sy==ny&&sm==nm&&sd==nd){ 
@@ -169,15 +189,19 @@ function listPage(){
 				
 				let tArr = t.split(":");
 				let th = Number(tArr[0]);
-				let tm = Number(tArr[1])+30;
-				if(tm > 60){
-					th = th + 1;
-					tm = tm - 60;
+				let tm = Number(tArr[1]);
+				if(th < 6){
+					th = Number(th)+24;
 				}
 				let tTime = th*100+tm;
+				
 				if(nTime > tTime){
 					$(item).find(".next-btn").prop("disabled", true);
 				}
+			});
+		} else {
+			$("#trainst2List .times").each(function(index, item){
+				$(item).find(".next-btn").prop("disabled", false);
 			});
 		}
 	};
@@ -210,6 +234,73 @@ function ajaxFun(url, method, query, dataType, fn) {
 }
 // 가는날, 오는날 판별 / selected-date에 (staDate / endDate) 판별
 
+// 편도인 경우, 다음을 눌렀을 때, 좌석선택하는 주소로 감.
+$(function(){
+	let cycle = $("input[name=cycle]").attr("data-cycle");
+	$("body").on("click", ".next-btn", function(){
+		if (cycle==='half'){
+			let tStaTime = $(this).closest("tr").find(".staTime").text();
+			let tEndTime = $(this).closest("tr").find(".endTime").text();
+			let staDate = $("#selected-date").text();
+			let tOperCode = $(this).closest("tr").find(".tOperCode").val();
+			
+			let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats_ok.do?";
+			out += "staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime+"&tOperCode="+tOperCode;
+			
+			let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
+			+'\n출발시간 : '+tStaTime+'   도착시간 : '+tEndTime
+			+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
+			
+			if(confirm(statement)){
+				location.href = out;
+			}
+		} else if (cycle==='full') {
+			let hORf = $("input[name=hORf]").attr("data-halffull");
+			if(hORf === "1"){
+				let deptStaDateTime = $(this).closest("tr").find(".staTime").text();
+				let deptEndDateTime = $(this).closest("tr").find(".endTime").text();
+				let deptOperCode = $(this).closest("tr").find(".tOperCode").val();
+				let staDate = $("#selected-date").text();
+				$("input[name=deptStaDateTime]").attr("data-date", deptStaDateTime);
+				$("input[name=deptEndDateTime]").attr("data-date", deptEndDateTime);
+				$("input[name=deptOperCode]").attr("data-tOperCode", deptOperCode);
+				$("input[name=staDate]").attr("data-staDate", staDate);
+				$("input[name=hORf]").attr("data-halffull", "2");
+				listPage();
+			} else if((hORf === "3")){
+				let destStaDateTime = $(this).closest("tr").find(".staTime").text();
+				let destEndDateTime = $(this).closest("tr").find(".endTime").text();
+				let destOperCode = $(this).closest("tr").find(".tOperCode").val();
+				$("input[name=destStaDateTime]").attr("data-date", destStaDateTime);
+				$("input[name=destEndDateTime]").attr("data-date", destEndDateTime);
+				$("input[name=destOperCode]").attr("data-tOperCode", destOperCode);
+				let hORf = $("input[name=hORf]").attr("data-halffull");
+				let deptStaDateTime = $("input[name=deptStaDateTime]").attr("data-date");
+				let deptEndDateTime = $("input[name=deptEndDateTime]").attr("data-date");
+				let deptOperCode = $("input[name=deptOperCode]").attr("data-tOperCode");
+				let staDate = $("input[name=staDate]").attr("data-staDate");
+				let endDate = $("#selected-date").text();
+				
+				let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats_ok.do?";
+				query = "staDate="+staDate+"&endDate="+endDate
+						+"&deptStaDateTime="+deptStaDateTime+"&deptEndDateTime="+deptEndDateTime
+						+"&destStaDateTime="+destStaDateTime+"&destEndDateTime="+destEndDateTime
+						+"&deptOperCode="+deptOperCode+"&destOperCode="+destOperCode;
+				
+				let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
+							+'\n출발시간 : '+deptStaDateTime+'   도착시간 : '+deptEndDateTime
+							+'\n오는날 : '+endDate
+							+'\n출발역 ➔ 도착역 : '+'${destStationName}'+'➔'+'${deptStationName}'
+							+'\n출발시간 : '+destStaDateTime+'   도착시간 : '+destEndDateTime
+							+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
+				if(confirm(statement)){
+					location.href = out+query;
+				}
+				
+			}
+		}
+	});
+});
 </script>
 
 </head>
@@ -239,9 +330,17 @@ function ajaxFun(url, method, query, dataType, fn) {
 	    </div>
 	</div>
 </main>
-<form name="">
-	<input type="hidden" name="staDateTime">
-	<input type="hidden" name="endDateTIme">
+<form name="hiddenForm">
+	<input type="hidden" name="cycle" data-cycle="${cycle}">
+	<input type="hidden" name="hORf" data-halffull="1">
+	<input type="hidden" name="staDate" data-staDate="">
+	<input type="hidden" name="endDate" data-endDate="">
+	<input type="hidden" name="deptStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 출발시간이 저장됨. -->
+	<input type="hidden" name="deptEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 도착시간이 저장됨. -->
+	<input type="hidden" name="destStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
+	<input type="hidden" name="destEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
+	<input type="hidden" name="deptOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 운행코드가 저장됨. -->
+	<input type="hidden" name="destOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 운행코드가 저장됨. -->
 </form>
 
 <footer>

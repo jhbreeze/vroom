@@ -37,8 +37,10 @@ public class ReserveTrainServlet extends MyServlet{
 			moveToStepTwo(req, resp);
 		} else if (uri.indexOf("reloadsteptwolist.do")!=-1) {
 			reploadStepTwoListHTML(req, resp);
-		} else if (uri.indexOf("")!=-1) {
-		} else if (uri.indexOf("")!=-1) {
+		} else if (uri.indexOf("trainChoiceSeats_ok.do")!=-1) {
+			beforeMoveToChoiceSeats(req, resp);
+		} else if (uri.indexOf("trainChoiceSeats.do")!=-1) {
+			moveToChoiceSeats(req, resp);
 		} else if (uri.indexOf("")!=-1) {
 		}
 	}
@@ -129,10 +131,16 @@ public class ReserveTrainServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		try {
+			String cycle = reserveInfo.getCycle();
 			String staDate = reserveInfo.getStaDate();
 			String endDate = reserveInfo.getEndDate();
+			String deptStationName = reserveInfo.getDeptStationName();
+			String destStationName = reserveInfo.getDestStationName();
+			req.setAttribute("cycle", cycle);
 			req.setAttribute("staDate", staDate);
 			req.setAttribute("endDate", endDate);
+			req.setAttribute("deptStationName", deptStationName);
+			req.setAttribute("destStationName", destStationName);
 			forward(req, resp, "/WEB-INF/views/reservetrain/trainsteptwo.jsp");
 			return;
 		} catch (Exception e) {
@@ -146,7 +154,11 @@ public class ReserveTrainServlet extends MyServlet{
 		String cp = req.getContextPath();
 		ReserveTrainDAO dao = new ReserveTrainDAO();
 		List<ReserveListDetailDTO> list = new ArrayList<>(); // 편도일 때
-		List<ReserveListDetailDTO> list2 = new ArrayList<>(); // 왕복일 때 추가됨
+		List<String> tStaTimeList = new ArrayList<>(); // 출발시간 리스트(출발역 기준) - 가는날
+		List<String> tendTimeList = new ArrayList<>(); // 도착시간 리스트(도착역 기준) - 가는날
+		List<Integer> tNumIdList = new ArrayList<>(); // 열차번호 리스트 - 가는날
+		List<Integer> tOperCodeList = new ArrayList<>(); // 열차번호 리스트 - 가는날
+		
 		
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		if(reserveInfo == null) {
@@ -179,32 +191,39 @@ public class ReserveTrainServlet extends MyServlet{
 			if(Integer.parseInt(a)<10) {
 				a = "0"+a;
 			}
+			String hORf = req.getParameter("hORf"); // 없으면 null
 			tTotalTimeString = a+":"+b;
-			List<String> tStaTimeList = dao.getTStaTime(deptStationCode, destStationCode, tDiscern); // 출발시간 리스트(출발역 기준) - 가는날
-			List<String> tendTimeList = dao.getTEndTime(deptStationCode, destStationCode, tDiscern); // 도착시간 리스트(도착역 기준) - 가는날
-			List<Integer> tNumIdList = dao.getTNumId(deptStationCode, destStationCode, tDiscern); // 열차번호 리스트 - 가는날
-			if(cycle.equals("full")) {
-				List<String> tStaTimeList2 = dao.getTStaTime(destStationCode, deptStationCode, tDiscern2); // 출발시간 리스트(출발역 기준) - 오는날
-				List<String> tEndTimeList2 = dao.getTEndTime(destStationCode, deptStationCode, tDiscern2); // 도착시간 리스트(도착역 기준) - 오는날
-				List<Integer> tNumIdList2 = dao.getTNumId(destStationCode, deptStationCode, tDiscern2); // 열차번호 리스트 - 오는날
-				for(int i=0; i<tStaTimeList2.size(); i++ ) {
-					ReserveListDetailDTO dto2 = new ReserveListDetailDTO();
-					dto2.settStaTime(tStaTimeList2.get(i));
-					dto2.setTendTime(tEndTimeList2.get(i));
-					dto2.settNumId(tNumIdList2.get(i));
+			if(hORf==null||hORf.equals("1")) {
+				tStaTimeList = dao.getTStaTime(deptStationCode, destStationCode, tDiscern); // 출발시간 리스트(출발역 기준) - 가는날
+				tendTimeList = dao.getTEndTime(deptStationCode, destStationCode, tDiscern); // 도착시간 리스트(도착역 기준) - 가는날
+				tNumIdList = dao.getTNumId(deptStationCode, destStationCode, tDiscern); // 열차번호 리스트 - 가는날
+				tOperCodeList = dao.getTOperCode(deptStationCode, destStationCode, tDiscern); // 운행코드 리스트 - 가는날
+				
+				for(int i=0; i<tStaTimeList.size(); i++) {
+					ReserveListDetailDTO dto = new ReserveListDetailDTO();
+					dto.settStaTime(tStaTimeList.get(i));
+					dto.setTendTime(tendTimeList.get(i));
+					dto.settNumId(tNumIdList.get(i));
+					dto.settOperCode(tOperCodeList.get(i));
 					
-					list2.add(dto2);
+					list.add(dto);
+				}
+			} else if(hORf.equals("2")) {
+				tStaTimeList = dao.getTStaTime(destStationCode, deptStationCode, tDiscern2); // 출발시간 리스트(출발역 기준) - 오는날
+				tendTimeList = dao.getTEndTime(destStationCode, deptStationCode, tDiscern2); // 도착시간 리스트(도착역 기준) - 오는날
+				tNumIdList = dao.getTNumId(destStationCode, deptStationCode, tDiscern2); // 열차번호 리스트 - 오는날
+				tOperCodeList = dao.getTOperCode(destStationCode, deptStationCode, tDiscern2); // 운행코드 리스트 - 오는날
+				for(int i=0; i<tStaTimeList.size(); i++ ) {
+					ReserveListDetailDTO dto = new ReserveListDetailDTO();
+					dto.settStaTime(tStaTimeList.get(i));
+					dto.setTendTime(tendTimeList.get(i));
+					dto.settNumId(tNumIdList.get(i));
+					dto.settOperCode(tOperCodeList.get(i));
+					
+					list.add(dto);
 				}
 			}
-			for(int i=0; i<tStaTimeList.size(); i++) {
-				ReserveListDetailDTO dto = new ReserveListDetailDTO();
-				
-				dto.settStaTime(tStaTimeList.get(i));
-				dto.setTendTime(tendTimeList.get(i));
-				dto.settNumId(tNumIdList.get(i));
-				
-				list.add(dto);
-			}
+			
 			req.setAttribute("cycle", cycle);
 			req.setAttribute("deptStationName", deptStationName);
 			req.setAttribute("destStationName", destStationName);
@@ -229,7 +248,30 @@ public class ReserveTrainServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
 		
-		String tStaTime = (String)req.getAttribute("tStaTime");
-		String tEndTime = (String)req.getAttribute("tEndTime");
+		if(reserveInfo.getCycle().equals("full")) {
+			req.setAttribute("staDate", req.getParameter("staDate"));
+			req.setAttribute("endDate", req.getParameter("endDate"));
+			req.setAttribute("deptStaDateTime", req.getParameter("deptStaDateTime"));
+			req.setAttribute("deptEndDateTIme", req.getParameter("deptEndDateTIme"));
+			req.setAttribute("destStaDateTime", req.getParameter("destStaDateTime"));
+			req.setAttribute("destEndDateTime", req.getParameter("destEndDateTime"));
+			req.setAttribute("grade", reserveInfo.getGrade());
+		} else if(reserveInfo.getCycle().equals("half")) {
+			req.setAttribute("staDate", req.getParameter("staDate"));
+			req.setAttribute("tStaTime", req.getParameter("tStaTime"));
+			req.setAttribute("tEndTime", req.getParameter("tEndTime"));
+			req.setAttribute("grade", reserveInfo.getGrade());
+		}
+		moveToChoiceSeats(req, resp);
+	}
+	
+	protected void moveToChoiceSeats(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			forward(req, resp, "/WEB-INF/views/reservetrain/choiceseats.jsp");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		resp.sendError(400);
 	}
 }

@@ -11,6 +11,7 @@
 						<td scope="row" class="ktx-td text-center align-middle"><img src="${pageContext.request.contextPath}/resources/images/ktx_logo.png" title="ktx" width="70"></td>
 						<td scope="row" class="text-center train-td align-middle">
 							<div class="trainNum sort align-middle">${dto.tNumId}</div>
+							<input type="hidden" name="tOperCode" class="tOperCode" value="${dto.tOperCode}">
 						</td>
 						<td class="place1" style="width: 25%">
 							<span class="departureTime ms-4 fw-bold fs-5 staTime">${dto.tStaTime}</span>
@@ -25,7 +26,9 @@
 							<span class="d-flex justify-content-end fw-bold fs-5 destinationTime endTime">${dto.tendTime}</span>
 							<span class="d-flex justify-content-end destination">${destStationName}</span>
 						</td>
-						<td class="text-center date-th align-middle" style="width: 85px"><button class="btn btn-primary next-btn" type="button" style="width: 85px" onclick="">다음</button></td>
+						<td class="text-center date-th align-middle" style="width: 85px">
+							<button class="btn btn-primary next-btn" type="button" style="width: 85px">다음</button>
+						</td>
 					</tr>
 					<form name='reserveTrainFrom'>
 						<span></span>
