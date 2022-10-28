@@ -2,14 +2,15 @@ package com.busReserve;
 
 public class ReserveBusSessionInfo {
 	private String bcycle;
-	private int bdeptStationCode;
-	private int bdestStationCode;
-	private String bdeptStationName;
-	private String bdestStationName;
+	private int depbStationCode;
+	private int desbStationCode;
+	private String depbStationName;
+	private String desbStationName;
 	private String bBoardDate1;
 	private String bBoardDate2;
 	private String bgrade;
-	private String bstaDate;
+	private String busstaDate;
+	private String busendDate;
 	
 	public String getBcycle() {
 		return bcycle;
@@ -17,29 +18,29 @@ public class ReserveBusSessionInfo {
 	public void setBcycle(String bcycle) {
 		this.bcycle = bcycle;
 	}
-	public int getBdeptStationCode() {
-		return bdeptStationCode;
+	public int getDepbStationCode() {
+		return depbStationCode;
 	}
-	public void setBdeptStationCode(int bdeptStationCode) {
-		this.bdeptStationCode = bdeptStationCode;
+	public void setDepbStationCode(int depbStationCode) {
+		this.depbStationCode = depbStationCode;
 	}
-	public int getBdestStationCode() {
-		return bdestStationCode;
+	public int getDesbStationCode() {
+		return desbStationCode;
 	}
-	public void setBdestStationCode(int bdestStationCode) {
-		this.bdestStationCode = bdestStationCode;
+	public void setDesbStationCode(int desbStationCode) {
+		this.desbStationCode = desbStationCode;
 	}
-	public String getBdeptStationName() {
-		return bdeptStationName;
+	public String getDepbStationName() {
+		return depbStationName;
 	}
-	public void setBdeptStationName(String bdeptStationName) {
-		this.bdeptStationName = bdeptStationName;
+	public void setDepbStationName(String depbStationName) {
+		this.depbStationName = depbStationName;
 	}
-	public String getBdestStationName() {
-		return bdestStationName;
+	public String getDesbStationName() {
+		return desbStationName;
 	}
-	public void setBdestStationName(String bdestStationName) {
-		this.bdestStationName = bdestStationName;
+	public void setDesbStationName(String desbStationName) {
+		this.desbStationName = desbStationName;
 	}
 	public String getbBoardDate1() {
 		return bBoardDate1;
@@ -59,17 +60,18 @@ public class ReserveBusSessionInfo {
 	public void setBgrade(String bgrade) {
 		this.bgrade = bgrade;
 	}
-	public String getBstaDate() {
-		return bstaDate;
+	public String getBusstaDate() {
+		return busstaDate;
 	}
-	public void setBstaDate(String bstaDate) {
-		this.bstaDate = bstaDate;
+	public void setBusstaDate(String busstaDate) {
+		this.busstaDate = busstaDate;
 	}
-	public String getBendDate() {
-		return bendDate;
+	public String getBusendDate() {
+		return busendDate;
 	}
-	public void setBendDate(String bendDate) {
-		this.bendDate = bendDate;
+	public void setBusendDate(String busendDate) {
+		this.busendDate = busendDate;
 	}
-	private String bendDate;
+	
+	
 }

@@ -93,10 +93,7 @@ overflow-x:hidden;
 	border-radius: 10px;
     background: rgba(33, 122, 244, .1);  /*스크롤바 뒷 배경 색상*/
 }
-.row{
-margin-left:0px;
-margin-right:0px;
-}
+
 .buslist{
 min-height: 30px;
 min-width: 100px;
@@ -111,15 +108,9 @@ min-height: 60px;
 #buslist:hover {
 	border-color: rgba(ff,ff,ff,.9);
 }
-.fblock2{
-	margin-left:10px;
-    width: 800px;
-    height: 720px;
-	padding: 20px;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 30px;
-    box-shadow: 4px 4px 4px rgb(0 0 0 / 12%);
-
+#fblock2{
+	padding: 10px 0px;
+	min-width: 700px;
 }
 #fblock2_title{
 	padding: 10px 16px;
@@ -195,7 +186,7 @@ window.onload = () => {
 <main >
 	<div class="container gx-10 d-flex justify-content-center ">
 	    <div class="d-flex justify-content-center">
-		    <div class="fblock1  text-light " style="border-radius: 30px; padding:20px;">
+		    <div class="fblock1  text-light rounded" >
 		    	<div class="h-20 p-3 text-center fs-5">2022.10.26 수</div>
 		    	<div class="h-15 text-center fblock1_1">
 	    			<div class="fblock1_icon bg-light text-primary p-10 m-2 text-center fw-bold">출발</div>
@@ -213,7 +204,7 @@ window.onload = () => {
 		    </div>
 	    </div>
 	    
-	    <div class="fblock2">
+	    <div class="fblock2" style="padding: 20px; width: 800px; height: 750px;">
 		    <div id="calendarLayout" style="z-index: 1000;" >
 		    </div>
 		    <div class="fblock2-1" >
