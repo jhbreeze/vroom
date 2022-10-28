@@ -21,7 +21,8 @@ public class ManageDAO {
 			sql = " SELECT c.cusNum, userId, name, TO_CHAR(birth, 'YYYY-MM-DD') birth, tel, "
 					+ " email, TO_CHAR(reg_date, 'YYYY-MM-DD') reg_date, TO_CHAR(mod_date, 'YYYY-MM-DD') mod_date "
 					+ " FROM member1 m"
-					+ " JOIN customer c ON m.cusNum = c.cusNum ";
+					+ " JOIN customer c ON m.cusNum = c.cusNum "
+					+ " ORDER BY c.cusNum DESC " ;
 			
 			pstmt = conn.prepareStatement(sql);
 			

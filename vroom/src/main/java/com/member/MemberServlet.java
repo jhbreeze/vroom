@@ -88,7 +88,7 @@ public class MemberServlet extends MyServlet {
 			session.setAttribute("member", info);
 			
 			if (reserveBusInfo != null) {			
-				resp.sendRedirect(cp+"/busReserve/busreservelist.do");
+				resp.sendRedirect(cp+"/busreserve/busreservelist.do");
 				return;
 			} else if(reserveTrainInfo != null) {
 				resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
@@ -333,7 +333,7 @@ public class MemberServlet extends MyServlet {
 			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 			return;
 		} else {
-			String msg = "홈페이지에서 일정조회후 비회원 예매가 가능합니다.";
+			String msg = "홈페이지에서 일정조회 후 비회원 예매가 가능합니다.";
 			req.setAttribute("message", msg);
 			forward(req, resp, "/main.do");
 		}
