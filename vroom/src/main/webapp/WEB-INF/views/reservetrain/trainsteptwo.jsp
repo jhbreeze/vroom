@@ -37,8 +37,8 @@ tr:hover { background: #fff; box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4); }
 </style>
 
 <script type="text/javascript">
-/* //오늘 날짜이면 왼쪽 화살표를 막음
-$(function(){
+//오늘 날짜이면 왼쪽 화살표를 막음
+/* $(function(){
 	let now = new Date();
 	let a = $("#selected-date").text();
 	let b = a.trim().slice(0,-1);
@@ -156,8 +156,6 @@ function listPage(){
 			$("#title-when").text("오는날");
 			$("#selected-date").text("${endDate}");
 			$("input[name=hORf]").attr("data-halffull", "3");
-			$(".departure").text('${destStationName}');
-			$(".destination").text('${deptStationName}');
 		}
 		
 		$(selector).html(data);
@@ -204,6 +202,10 @@ function listPage(){
 				$(item).find(".next-btn").prop("disabled", false);
 			});
 		}
+		if (cycle==='full' && hORf==="2"){
+			$(".departure").text('${destStationName}');
+			$(".destination").text('${deptStationName}');
+		}
 	};
 	ajaxFun(url, "get", query, "html", fn);
 }
@@ -243,10 +245,12 @@ $(function(){
 			let tEndTime = $(this).closest("tr").find(".endTime").text();
 			let staDate = $("#selected-date").text();
 			let tOperCode = $(this).closest("tr").find(".tOperCode").val();
+			let tDiscern = $(this).closest("tr").find(".tDiscern").val();
 			
-			let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats_ok.do?";
-			out += "staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime+"&tOperCode="+tOperCode;
-			
+			let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats.do?";
+			out += "staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime+"&tOperCode="+tOperCode
+			out += "&tDiscern="+tDiscern;
+			alert(out);
 			let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
 			+'\n출발시간 : '+tStaTime+'   도착시간 : '+tEndTime
 			+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
@@ -261,31 +265,37 @@ $(function(){
 				let deptEndDateTime = $(this).closest("tr").find(".endTime").text();
 				let deptOperCode = $(this).closest("tr").find(".tOperCode").val();
 				let staDate = $("#selected-date").text();
+				let statDiscern = $(this).closest("tr").find(".tDiscern").val();
 				$("input[name=deptStaDateTime]").attr("data-date", deptStaDateTime);
 				$("input[name=deptEndDateTime]").attr("data-date", deptEndDateTime);
 				$("input[name=deptOperCode]").attr("data-tOperCode", deptOperCode);
 				$("input[name=staDate]").attr("data-staDate", staDate);
+				$("input[name=statDiscern]").attr("data-statDiscern", statDiscern);
 				$("input[name=hORf]").attr("data-halffull", "2");
 				listPage();
 			} else if((hORf === "3")){
 				let destStaDateTime = $(this).closest("tr").find(".staTime").text();
 				let destEndDateTime = $(this).closest("tr").find(".endTime").text();
 				let destOperCode = $(this).closest("tr").find(".tOperCode").val();
+				let endtDiscern = $(this).closest("tr").find(".tDiscern").val();
 				$("input[name=destStaDateTime]").attr("data-date", destStaDateTime);
 				$("input[name=destEndDateTime]").attr("data-date", destEndDateTime);
 				$("input[name=destOperCode]").attr("data-tOperCode", destOperCode);
+				$("input[name=endtDiscern]").attr("data-endtDiscern", endtDiscern);
 				let hORf = $("input[name=hORf]").attr("data-halffull");
 				let deptStaDateTime = $("input[name=deptStaDateTime]").attr("data-date");
 				let deptEndDateTime = $("input[name=deptEndDateTime]").attr("data-date");
 				let deptOperCode = $("input[name=deptOperCode]").attr("data-tOperCode");
 				let staDate = $("input[name=staDate]").attr("data-staDate");
 				let endDate = $("#selected-date").text();
+				let statDiscern = $("input[name=statDiscern]").attr("data-statDiscern");
 				
-				let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats_ok.do?";
+				let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats.do?";
 				query = "staDate="+staDate+"&endDate="+endDate
 						+"&deptStaDateTime="+deptStaDateTime+"&deptEndDateTime="+deptEndDateTime
 						+"&destStaDateTime="+destStaDateTime+"&destEndDateTime="+destEndDateTime
-						+"&deptOperCode="+deptOperCode+"&destOperCode="+destOperCode;
+						+"&deptOperCode="+deptOperCode+"&destOperCode="+destOperCode
+						+"&statDiscern="+statDiscern+"&endtDiscern="+endtDiscern;
 				
 				let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
 							+'\n출발시간 : '+deptStaDateTime+'   도착시간 : '+deptEndDateTime
@@ -293,6 +303,7 @@ $(function(){
 							+'\n출발역 ➔ 도착역 : '+'${destStationName}'+'➔'+'${deptStationName}'
 							+'\n출발시간 : '+destStaDateTime+'   도착시간 : '+destEndDateTime
 							+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
+				alert(query);
 				if(confirm(statement)){
 					location.href = out+query;
 				}
@@ -335,6 +346,8 @@ $(function(){
 	<input type="hidden" name="hORf" data-halffull="1">
 	<input type="hidden" name="staDate" data-staDate="">
 	<input type="hidden" name="endDate" data-endDate="">
+	<input type="hidden" name="statDiscern" data-statDiscern="">
+	<input type="hidden" name="endtDiscern" data-endtDiscern="">
 	<input type="hidden" name="deptStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 출발시간이 저장됨. -->
 	<input type="hidden" name="deptEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 도착시간이 저장됨. -->
 	<input type="hidden" name="destStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->

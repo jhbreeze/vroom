@@ -12,6 +12,7 @@
 						<td scope="row" class="text-center train-td align-middle">
 							<div class="trainNum sort align-middle">${dto.tNumId}</div>
 							<input type="hidden" name="tOperCode" class="tOperCode" value="${dto.tOperCode}">
+							<input type="hidden" name="tDiscern" class="tDiscern" value="${tDiscern}">
 						</td>
 						<td class="place1" style="width: 25%">
 							<span class="departureTime ms-4 fw-bold fs-5 staTime">${dto.tStaTime}</span>

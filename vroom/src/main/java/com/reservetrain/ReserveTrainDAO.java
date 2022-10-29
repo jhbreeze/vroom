@@ -28,7 +28,6 @@ public class ReserveTrainDAO {
 				ReserveListDetailDTO dto = new ReserveListDetailDTO();
 				dto.settStationCode(rs.getInt("tStationCode"));
 				dto.settStationName(rs.getString("tStationName"));
-				System.out.println();
 				list.add(dto);
 			}
 		} catch (Exception e) {
@@ -593,4 +592,250 @@ public class ReserveTrainDAO {
 		}
 		return tNumIdList;
 	}
+	
+	/* 
+	 * 필요한 변수 : 역 2개, 운행코드, 등급 
+	 * 역 두 개 -> 노선상세코드(이미 있음)
+	 * 운행코드와 노선상세코드 -> 기차상세코드
+	 * 운행코드 -> 열차번호 알아내기
+	 * 운행코드, 등급, 호차리스트 -> 호차번호, 총 좌석수 알아내기
+	 * 출발상세코드, 도착상세코드, 일자 -> YYYY년 MM월 DD일 호차번호(List)에 예매된 좌석들 List뽑아내기
+	 * 예매된 좌석 수는 length()로 처리
+	 */
+	
+	
+	// 운행코드와 노선상세코드 -> 기차상세코드
+	public int getTDetailCode(int tOperCode, int tRouteDetailCode) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT tDetailCode FROM trainDetail "
+					+ "WHERE tOperCode = ? AND tRouteDetailCode = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, tOperCode);
+			pstmt.setInt(2, tRouteDetailCode);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt("tDetailCode");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	// 운행코드 -> 열차번호
+	public int getTNumId(int tOperCode) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT tNumId FROM trainRouteInfo "
+					+ "WHERE tOperCode = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, tOperCode);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt("tNumId");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	// 운행코드, 등급, 열차번호 -> 호차번호(List) 알아내기
+	public List<HochaDTO> getTHochaList(int tOperCode, String grade, int tNumId) {
+		List<HochaDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		String query;
+		HochaDTO dto = null;
+		if(grade.equals("all")) {
+			query = "";
+		} else if(grade.equals("premium")) {
+			query = "AND hoDiv = '특실' ";
+		} else {
+			query = "AND hoDiv = '일반' ";
+		}
+		
+		try {
+			sql = "SELECT tHoNum, tNumId, hoNum, hoDiv "
+					+ "FROM hocha "
+					+ "WHERE tNumId = (SELECT tNumId FROM trainRouteInfo "
+					+ "    WHERE tOperCode = ?) "
+					+ query
+					+ "    AND tNumId = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, tOperCode);
+			pstmt.setInt(2, tNumId);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				dto = new HochaDTO();
+				dto.settHoNum(rs.getString("tHoNum"));
+				dto.settNumId(rs.getInt("tNumId"));
+				dto.setHoNum(rs.getInt("hoNum"));
+				dto.setHoDiv(rs.getString("hoDiv"));
+				
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
+	
+	// 호차번호, 출발상세코드, 도착상세코드, 일자 -> YYYY년 MM월 DD일 호차번호에 예매된 좌석들 List뽑아내기
+	public List<String> getReservedSeats(String tHoNum, int staDetailCode, int endDetailCode, String date){
+		List<String> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		String sql;
+		ResultSet rs = null;
+		String result;
+		
+		try {
+			sql = "SELECT tSeatNum "
+					+ "FROM trainTkDetail "
+					+ "WHERE tHoNum = ? AND "
+					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
+					+ "    WHERE ((tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
+					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?)) "
+					+ "    AND TO_CHAR(tBoardDate, 'YYYY-MM-DD') = ?) ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tHoNum);
+			pstmt.setInt(2, staDetailCode);
+			pstmt.setInt(3, endDetailCode);
+			pstmt.setInt(4, staDetailCode);
+			pstmt.setInt(5, staDetailCode);
+			pstmt.setString(6, date);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				result = rs.getString("tSeatNum");
+				list.add(result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
+	
+	// 호차번호, 출발상세코드, 도착상세코드, 일자 -> YYYY년 MM월 DD일 호차번호(List)에 예매된 좌석들 List뽑아내기
+	public List<HochaDTO> getReservedSeatsList(List<String> hochaList, int staDetailCode, int endDetailCode, String date){
+		List<HochaDTO> list = new ArrayList<>();
+		List<String> li = null;
+		PreparedStatement pstmt = null;
+		String sql;
+		ResultSet rs = null;
+		
+		try {
+			sql = "SELECT tSeatNum "
+					+ "FROM trainTkDetail "
+					+ "WHERE tHoNum = ? AND "
+					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
+					+ "    WHERE (tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
+					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?) "
+					+ "    AND tBoardDate = TO_DATE( ? , 'YYYY-MM-DD')) ";
+			for(String thoNum : hochaList) {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, thoNum);
+				pstmt.setInt(2, staDetailCode);
+				pstmt.setInt(3, endDetailCode);
+				pstmt.setInt(4, staDetailCode);
+				pstmt.setInt(5, staDetailCode);
+				pstmt.setString(6, date);
+				
+				rs = pstmt.executeQuery();
+				
+				li = new ArrayList<>();
+				while(rs.next()) {
+					li.add(rs.getString("tSeatNum"));
+				}
+				HochaDTO dto = new HochaDTO();
+				dto.settHoNum(thoNum);
+				dto.settSeatNumList(li);
+				list.add(dto);
+				pstmt.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
+	
 }

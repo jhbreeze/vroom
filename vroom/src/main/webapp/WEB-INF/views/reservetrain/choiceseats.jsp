@@ -3,16 +3,7 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%
-	/* int rows = 10;
-	int cols = 15;
-	
-	int width = cols * 30 + 20 * (cols/5) + 30;
-	if(cols/5 == 0) width -= 20; */
-	String[] list = (String[])request.getAttribute("checkedList");
-	
-	String []cc = {"B-3","B-4","E-1","E-2","H-2","H-3"};
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,15 +38,277 @@ main { position: relative; top: -55px; background: white; }
 .inner-text { position: relative; top: 15px; font-size: 20px; }
 .aisle { padding-top: 30px }
 .form_check_btn input[type=checkbox]:disabled+label { background: #A2A6AD; color: white; }
+#div-seats-count { margin: 0 auto; color: #0E6EFD; text-align: center; }
 </style>
 <script type="text/javascript">
 $(function(){
-	<% for(int i=0; i<cc.length; i++) { %>
-		$("input[value=<%=cc[i]%>]").prop("checked", true);
-		$("input[value=<%=cc[i]%>]").prop("disabled", true);
-	<% } %>
 	let grade = $("input[name=grade]").val();
+	
+	// 사전에 선택한 인원수보다 더 많이 골랐을 경우 alert창을 띄움
+	let count = $("input[name=count]").val();
+	
+	$("#seatForm-div").on("click", "input[name=seats]", function(){
+		let check = $("input[name=seats]:checked").length; // 체크된 좌석 개수
+		$("#selected-count").text(check);	
+		
+		// 사전에 선택한 인원수보다 더 많이 골랐을 경우 alert창을 띄움
+		if(count < check) {
+			alert("이미 모두 선택하셨습니다.");
+			$(this).prop("checked", false);
+			$("#selected-count").text(check-1);
+		}
+	});
 });
+// 선택 완료버튼을 누르면, 선택한 좌석들의 이름이 confirm창으로 뜨고, 결제하시겠냐고 물어봄
+
+// 왕복일 경우, 선택 완료를 누르면, 왕복좌석 선택을 하기위해 한 번 더 실행함
+
+function listSeats(){
+	// 상행일때, 하행일때 화살표 방향 다름 + 화살표 방향에 맞게 순방향/역방향 다르게
+	let cycle = $("input[name=cycle]").val();
+	let statDiscern = $("input[name=statDiscern]").val();
+	let endtDiscern = $("input[name=endtDiscern]").val();
+	let hORf = $("input[name=hORf]").val();
+	let selector = "#seatForm-div";
+	
+	if(cycle==="half"){
+		let tDiscern = $("input[name=tDiscern]").val();
+		let statDiscern = $("input[name=statDiscern]").val();
+		let endtDiscern = $("input[name=endtDiscern]").val();
+			
+		if(tDiscern==="하행") {
+			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("역방향");
+			$(".direction2").text("순방향");
+		} else if(tDiscern==="상행") {
+			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("순방향");
+			$(".direction2").text("역방향");
+		}
+	} else if(cycle==="full"){
+		if(hORf==="1"&&statDiscern==="하행"){
+			$("#sORn").text("가는날 ");
+			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("역방향");
+			$(".direction2").text("순방향");
+		} else if(hORf==="1"&&statDiscern==="상행"){
+			$("#sORn").text("가는날 ");
+			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("순방향");
+			$(".direction2").text("역방향");
+		} else if(hORf==="2"&&endtDiscern==="하행"){
+			$("#sORn").text("오는날 ");
+			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("역방향");
+			$(".direction2").text("순방향");
+		} else if(hORf==="2"&&endtDiscern==="상행"){
+			$("#sORn").text("오는날 ");
+			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("순방향");
+			$(".direction2").text("역방향");
+		}
+	}
+	
+	url = "${pageContext.request.contextPath}/reservetrain/choiceSeatsList.do?";
+	let query = "";
+	let grade = $("input[name=grade]").val();
+	let count = $("input[name=count]").val();
+	let staDate = $("input[name=staDate]").val();
+	let endDate = $("input[name=endDate]").val();
+	let deptOperCode = $("input[name=deptOperCode]").val();
+	let destOperCode = $("input[name=destOperCode]").val();
+	let statDetailCode = $("input[name=statDetailCode]").val();
+	let endtDetailCode = $("input[name=endtDetailCode]").val();
+	let depstatDetailCode = $("input[name=depstatDetailCode]").val();
+	let desstatDetailCode = $("input[name=desstatDetailCode]").val();
+	let dependtDetailCode = $("input[name=dependtDetailCode]").val();
+	let desendtDetailCode = $("input[name=desendtDetailCode]").val();
+	let tOperCode = $("input[name=tOperCode]").val();
+	if(cycle==="half"){
+		query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
+			+"&statDetailCode="+statDetailCode+"&endtDetailCode="+endtDetailCode
+			+"&tOperCode="+tOperCode;
+	} else if(hORf==="1"&&cycle==="full"){
+		query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
+			+"&depstatDetailCode="+depstatDetailCode+"&desstatDetailCode="+desstatDetailCode
+			+"&deptOperCode="+deptOperCode+"&hORf="+hORf;
+	} else if(hORf==="2"&&endtDiscern==="full"){
+		query = "grade="+grade+"&cycle="+cycle+"&endDate="+endDate+"&count="+count
+			+"&dependtDetailCode="+dependtDetailCode+"&desendtDetailCode="+desendtDetailCode
+			+"&destOperCode="+destOperCode+"&hORf="+hORf;
+	}
+	
+	const fn = function(data){
+		$(selector).html(data);
+		/* let cc = data.reservedSeatsArr;
+		for(let i of cc) {
+			$("input[value="+i+"]").prop("disabled", true);
+		} */
+	}
+	
+	ajaxFun(url, "get", query, "html", fn);
+}
+
+$(function(){
+	listSeats();
+});
+
+function ajaxFun(url, method, query, dataType, fn) {
+	$.ajax({
+		type:method,
+		url:url,
+		data:query,
+		dataType:dataType,
+		success:function(data) {
+			fn(data);
+		},
+		beforeSend:function(jqXHR){
+			jqXHR.setRequestHeader("AJAX", true);
+		},
+		error:function(jqXHR) {
+			if(jqXHR.status === 403){
+				login();
+				return false;
+			} else if(jqXHR.status === 400) {
+				alert("요청 처리가 실패했습니다");
+				return false;
+			}
+			console.log(jqXHR.responseText);
+		}
+	});
+}
+
+// 체크된 항목들 저장
+$(function(){
+	let cycle = $("input[name=cycle]").val();
+	let hORf = $("input[name=hORf]").val();
+	let count = $("input[name=count]").val();
+	
+	$("body").on("click", "#select-complete", function(){
+		let selectedArr = [];
+		$("input[name=seats]:checked").each(function(){
+			let selected = $(this).next("label").find(".inner-text").text();
+			selectedArr.push(selected);
+		});
+		if(cycle==='half') {
+			$("input[name=selSeats]").attr("data-selSeats", selectedArr.join());
+		} else if (cycle==="full" && hORf==="1"){
+			$("input[name=staSelSeats]").attr("data-staSelSeats", selectedArr.join());
+		} else if (cycle==="full" && hORf==="1"){
+			$("input[name=endSelSeats]").attr("data-endSelSeats", selectedArr.join());
+		}
+		if(selectedArr.length < count) {
+			alert("선택하신 좌석 수가 모자랍니다.");
+			return false;
+		};
+	});
+});
+
+// 호차를 눌렀을 때 다시 서버 갔다오도록 함
+$(function(){
+	$("body").on("change", "#ho-select", function(){
+		let tHoNum = $(this).val();
+		let cycle = $("input[name=cycle]").val();
+		let statDiscern = $("input[name=statDiscern]").val();
+		let endtDiscern = $("input[name=endtDiscern]").val();
+		let hORf = $("input[name=hORf]").val();
+		let selector = "#seatForm-div";
+		
+		$("input[name=selTHoNum]").attr("data-selTHoNum",tHoNum);
+		console.log($("input[name=selTHoNum]").attr("data-selTHoNum"));
+		if(cycle==="half"){
+			let tDiscern = $("input[name=tDiscern]").val();
+			let statDiscern = $("input[name=statDiscern]").val();
+			let endtDiscern = $("input[name=endtDiscern]").val();
+				
+			if(tDiscern==="하행") {
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(tDiscern==="상행") {
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			}
+		} else if(cycle==="full"){
+			if(hORf==="1"&&statDiscern==="하행"){
+				$("#sORn").text("가는날 ");
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(hORf==="1"&&statDiscern==="상행"){
+				$("#sORn").text("가는날 ");
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			} else if(hORf==="2"&&endtDiscern==="하행"){
+				$("#sORn").text("오는날 ");
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(hORf==="2"&&endtDiscern==="상행"){
+				$("#sORn").text("오는날 ");
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			}
+		}
+		
+		url = "${pageContext.request.contextPath}/reservetrain/choiceSeatsList.do?";
+		let query = "";
+		let grade = $("input[name=grade]").val();
+		let count = $("input[name=count]").val();
+		let staDate = $("input[name=staDate]").val();
+		let endDate = $("input[name=endDate]").val();
+		let deptOperCode = $("input[name=deptOperCode]").val();
+		let destOperCode = $("input[name=destOperCode]").val();
+		let statDetailCode = $("input[name=statDetailCode]").val();
+		let endtDetailCode = $("input[name=endtDetailCode]").val();
+		let depstatDetailCode = $("input[name=depstatDetailCode]").val();
+		let desstatDetailCode = $("input[name=desstatDetailCode]").val();
+		let dependtDetailCode = $("input[name=dependtDetailCode]").val();
+		let desendtDetailCode = $("input[name=desendtDetailCode]").val();
+		let tOperCode = $("input[name=tOperCode]").val();
+		if(cycle==="half"){
+			query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
+				+"&statDetailCode="+statDetailCode+"&endtDetailCode="+endtDetailCode
+				+"&tOperCode="+tOperCode+"&tHoNum="+tHoNum;
+		} else if(hORf==="1"&&cycle==="full"){
+			query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
+				+"&depstatDetailCode="+depstatDetailCode+"&desstatDetailCode="+desstatDetailCode
+				+"&deptOperCode="+deptOperCode+"&hORf="+hORf+"&tHoNum="+tHoNum;
+		} else if(hORf==="2"&&endtDiscern==="full"){
+			query = "grade="+grade+"&cycle="+cycle+"&endDate="+endDate+"&count="+count
+				+"&dependtDetailCode="+dependtDetailCode+"&desendtDetailCode="+desendtDetailCode
+				+"&destOperCode="+destOperCode+"&hORf="+hORf+"&tHoNum="+tHoNum;
+		}
+		
+		const fn = function(data){
+			$(selector).html(data);
+			let tHoNum = $("input[name=selTHoNum]").attr("data-selTHoNum");
+			$(".hocha-list").each(function(index, item){
+				if($(item).val=tHoNum){
+					$(item).prop("checked", true);
+				}
+			})
+		}
+		
+		ajaxFun(url, "get", query, "html", fn);
+	});
+});
+
 </script>
 </head>
 <body>
@@ -66,54 +319,42 @@ $(function(){
 	
 <main>
 	<div class="container body-container">
-		
-		<form name="seatForm">
-			<div class="hocha-button d-flex justify-content-between" style="width: 80%; margin: 0 auto">
-				<div class="top-section">
-				<select class="form-select fw-bolder" id="ho-select" aria-label=".form-select-lg example" style="color: #9B9B9B">
-				  	<option selected value="1">1 호차 잔여 17석 / 일반석 60석</option>
-				  	<option value="2">2 호차</option>
-				  	<option value="3">3 호차</option>
-				  	<option value="4">4 호차</option>
-				  	<option value="5">5 호차</option>
-				  	<option value="6">6 호차</option>
-				</select>
-				</div>
-				<div class="top-section-btn">
-					<button class="btn btn-primary" type="reset">새로고침</button>	
-					<button class="btn btn-primary" type="button" onclick="sendOk()">선택완료</button>	
-				</div>
-			</div>
+		<div id="seatForm-div">
 			
-			<div class="mb-3" id="choice-seats">
-				<% for(int i=0; i<15; i++) {%>
-					<div class="form_toggle d-flex flex-row justify-content-center">
-					<% for(int j=1; j<=5; j++) {%>
-						<% if(j==3) {%>
-							<div class="aisle"><div style="text-align: center;"><i class="bi bi-caret-down-fill" style="color: white;"></i></div></div>
-						<% } %>
-						<% if(j==5) {%>
-							<br>
-						<% } %>
-						<% if(j!=5) {%>
-						<div class="form_check_btn">
-							<input id="<%=(char)(65+i)+"-"+j%>" type="checkbox" name="seats" value="<%= (char)(65+i)+"-"+j %>">
-							<% if(i>15/2) {%>
-								<label for="<%=(char)(65+i)+"-"+j%>" style="height: 100%;"><span class="inner-text"><%= (char)(65+i)+"-"+j %></span><br><span class="direction">순방향</span></label>
-							<% } else {%>
-								<label for="<%=(char)(65+i)+"-"+j%>" style="height: 100%;"><span class="inner-text"><%= (char)(65+i)+"-"+j %></span><br><span class="direction">역방향</span></label>
-							<% } %>
-						</div>
-						<% } %>
-					<% } %>
-					</div>
-				<%} %>
-			</div>
-		</form>
+			
+		</div>
+		<div id="div-seats-count"><span id="sORn"></span>선택하신 좌석 : <span id="selected-count">0</span> / ${count} 개</div>
 	</div>
 </main>
 <form name="hiddenForm">
-	<input name="grade" value="${grade}">
+	<input type="hidden" name="tDiscern" class="tDiscern" value="${tDiscern}">
+	<input type="hidden" name="statDiscern" class="statDiscern" value="${statDiscern}">
+	<input type="hidden" name="endtDiscern" class="endtDiscern" value="${endtDiscern}">
+	<input type="hidden" name="hORf" value="1">
+	<input type="hidden" name="cycle" value="${cycle}">
+	<input type="hidden" name="grade" value="${grade}">
+	<input type="hidden" name="count" value="${count}">
+	<input type="hidden" name="staDate" value="${staDate}">
+	<input type="hidden" name="endDate" value="${endDate}">
+	<input type="hidden" name="deptOperCode" value="${deptOperCode}">
+	<input type="hidden" name="destOperCode" value="${destOperCode}">
+	<input type="hidden" name="tOperCode" value="${tOperCode}">
+	<input type="hidden" name="statSeatNum" value="${statSeatNum}">
+	<input type="hidden" name="statHoNum" value="${statHoNum}">
+	<input type="hidden" name="statNumId" value="${statNumId}">
+	<input type="hidden" name="endtSeatNum" value="${endtSeatNum}">
+	<input type="hidden" name="endtHoNum" value="${endtHoNum}">
+	<input type="hidden" name="endtNumId" value="${endtNumId}">
+	<input type="hidden" name="statDetailCode" value="${statDetailCode}">
+	<input type="hidden" name="endtDetailCode" value="${endtDetailCode}">
+	<input type="hidden" name="depstatDetailCode" value="${depstatDetailCode}">
+	<input type="hidden" name="desstatDetailCode" value="${desstatDetailCode}">
+	<input type="hidden" name="dependtDetailCode" value="${dependtDetailCode}">
+	<input type="hidden" name="desendtDetailCode" value="${desendtDetailCode}">
+	<input type="hidden" name="selSeats" data-selSeats="">
+	<input type="hidden" name="staSelSeats" data-staSelSeats="">
+	<input type="hidden" name="endSelSeats" data-endSelSeats="">
+	<input type="hidden" name="selTHoNum" data-selTHoNum="">
 </form>
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
