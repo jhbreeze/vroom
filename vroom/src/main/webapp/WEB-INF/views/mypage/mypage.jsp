@@ -59,10 +59,13 @@ main {
 								<tr>
 									<th class="table-primary text-center tth" >아이디</th>
 									<td>${sessionScope.member.userId}</td>
-									<th class="table-primary text-center tth">회원명</th>
-									<td>${sessionScope.member.userName}</td>
 								</tr>
-
+								
+								<tr>
+									<th class="table-primary text-center tth">회원명</th>
+									<td colspan="3">${sessionScope.member.userName}</td>
+								</tr>
+									
 								<tr>
 									<th class="table-primary text-center tth">생년월일</th>
 									<td colspan="3">${sessionScope.member.birth}</td>

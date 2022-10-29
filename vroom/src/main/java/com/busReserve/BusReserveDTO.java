@@ -3,15 +3,18 @@ package com.busReserve;
 import java.util.Date;
 
 public class BusReserveDTO {
+	private int bTotPrice;
+	private int bStationCode;
+	private String bStationName;
 	private int bTkNum;
 	private int cusNum;
 	private int bTotNum;
-	private Date tPayDay;
+	private Date bPayDay;
 	private long bPayPrice;
 	private long bDisPrice;
 	private int bOperCode;
 	private Date bBoardDate;
-	private long bNum;
+	private int bNum;
 	private long bFee;
 	private String bPassinger;
 	private String bSeatNum;
@@ -30,11 +33,30 @@ public class BusReserveDTO {
 	private int bOrder;
 	private int bDistance;
 	private int bTakeTime;
+	private String bRouteName;
 	private int bRouteCode;
 	private int bFeeCode;
 	private String bDiv;
 	//일반 우등 프리미엄
 	
+	public int getbTotPrice() {
+		return bTotPrice;
+	}
+	public void setbTotPrice(int bTotPrice) {
+		this.bTotPrice = bTotPrice;
+	}
+	public Date getbPayDay() {
+		return bPayDay;
+	}
+	public void setbPayDay(Date bPayDay) {
+		this.bPayDay = bPayDay;
+	}
+	public String getbStationName() {
+		return bStationName;
+	}
+	public void setbStationName(String bStationName) {
+		this.bStationName = bStationName;
+	}
 	public int getbFeeCode() {
 		return bFeeCode;
 	}
@@ -65,12 +87,7 @@ public class BusReserveDTO {
 	public void setbTotNum(int bTotNum) {
 		this.bTotNum = bTotNum;
 	}
-	public Date gettPayDay() {
-		return tPayDay;
-	}
-	public void settPayDay(Date tPayDay) {
-		this.tPayDay = tPayDay;
-	}
+	
 	public long getbPayPrice() {
 		return bPayPrice;
 	}
@@ -98,7 +115,7 @@ public class BusReserveDTO {
 	public long getbNum() {
 		return bNum;
 	}
-	public void setbNum(long bNum) {
+	public void setbNum(int bNum) {
 		this.bNum = bNum;
 	}
 	public long getbFee() {
@@ -221,20 +238,12 @@ public class BusReserveDTO {
 	public void setbStationCode(int bStationCode) {
 		this.bStationCode = bStationCode;
 	}
-	public int getbStationName() {
-		return bStationName;
-	}
-	public void setbStationName(int bStationName) {
-		this.bStationName = bStationName;
-	}
+	
 	public String getbRouteName() {
 		return bRouteName;
 	}
 	public void setbRouteName(String bRouteName) {
 		this.bRouteName = bRouteName;
 	}
-	private int bStationCode;
-	private int bStationName;
-	private String bRouteName;
 }
 
