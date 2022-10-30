@@ -29,7 +29,7 @@ main {
 </style>
 
 <script type="text/javascript">
-	
+
 </script>
 </head>
 <body>
@@ -86,6 +86,7 @@ main {
 							<button class="btn btn-primary"
 								onclick="location.href='${pageContext.request.contextPath}/member/pwd.do?mode=update';">
 								정보 수정</button>
+							<button class="btn btn-primary delete" onclick="location.href='${pageContext.request.contextPath}/member/pwd.do?mode=delete';">회원 탈퇴</button>	
 						</div>	
 					</div>
 				</div>

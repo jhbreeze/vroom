@@ -51,6 +51,9 @@ function sendOk() {
 	f.action = "${pageContext.request.contextPath}/member/pwd_ok.do";
 	f.submit();
 }
+
+
+
 </script>
 </head>
 <body>
@@ -81,7 +84,7 @@ function sendOk() {
 	                            <input type="password" name="userPwd" class="form-control form-control-lg" placeholder="비밀번호">
 	                        </div>
 	                        <div class="d-grid">
-	                            <button type="button" class="btn btn-lg btn-primary" onclick="sendOk();">다음 단계</button>
+	                            <button type="button" class="btn btn-lg btn-primary" onclick="sendOk();">${title}하기</button>
 	                            <input type="hidden" name="mode" value="${mode}">
 	                        </div>
 	                         <div class="d-grid">
