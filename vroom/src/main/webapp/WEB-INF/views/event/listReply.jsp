@@ -6,6 +6,7 @@
 .backColor{
 background: #0E6EFD;
 color: white;
+border-radius: 30px;
 }
 </style>
 
@@ -18,7 +19,7 @@ color: white;
 	<c:forEach var="vo" items="${listReply}">
 		<tr class="backColor">
 			<td width='50%'><span>${vo.name}</span></td>
-			<td width='50%' align='right'><span>${vo.qnaReplyDate}</span> | <c:choose>
+			<td width='50%' align='right'><span>${vo.evReplyDate}</span> | <c:choose>
 					<c:when
 						test="${sessionScope.member.userId=='admin' || sessionScope.member.userId==vo.userId}">
 						<span class='deleteReply' data-replyNum='${vo.replyNum}'
@@ -30,7 +31,7 @@ color: white;
 				</c:choose></td>
 		</tr>
 		<tr>
-		<td>${vo.qnaReplyCont}</td>
+			<td>${vo.evReplyContent}</td>
 		</tr>
 	</c:forEach>
 </table>

@@ -17,7 +17,22 @@ main {
 }
 
 .container {
-	min-height: 900px;
+	min-height: 700px;
+}
+
+thead tr {
+	font-size: 45px;
+}
+
+.col-3, .container {
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
+	border: none;
+	border-radius: 30px;
+}
+
+.body-container {
+	max-width: 1200px;
+	margin: auto;
 }
 </style>
 
@@ -32,6 +47,14 @@ main {
 		}
 	}
 	</c:if>
+	function deleteBoard2() {
+		if (confirm("게시글을 삭제 하시 겠습니까 ? ")) {
+			let query = "qnaNum=${dto.qnaNum}&${query}";
+			let url = "${pageContext.request.contextPath}/qna/delete2.do?"
+					+ query;
+			location.href = url;
+		}
+	}
 </script>
 
 <script type="text/javascript">
@@ -65,68 +88,68 @@ main {
 			}
 		});
 	}
-	
+
 	$(function() {
 		listPage(1);
 	});
 	function listPage(page) {
 		let url = "${pageContext.request.contextPath}/qna/listReply.do";
-		let query = "qnaNum=${dto.qnaNum}&pageNo="+page;
+		let query = "qnaNum=${dto.qnaNum}&pageNo=" + page;
 		let selector = "#listReply";
-		
+
 		const fn = function(data) {
 			$(selector).html(data);
 		};
 		ajaxFun(url, "get", query, "html", fn);
 	}
-	
+
 	$(function() {
 		$(".btnSendReply").click(function() {
-			let qnaNum = "${dto.qnaNum}"; 
+			let qnaNum = "${dto.qnaNum}";
 			const $tb = $(this).closest("table");
 			let qnaReplyCont = $tb.find("textarea").val().trim();
-			if(!qnaReplyCont){
+			if (!qnaReplyCont) {
 				$tb.find("textarea").focus();
 				return false;
 			}
 			content = encodeURIComponent(qnaReplyCont);
-			
+
 			let url = "${pageContext.request.contextPath}/qna/insertReply.do";
-			let query = "qnaNum="+qnaNum+"&qnaReplyCont="+qnaReplyCont;
-			
+			let query = "qnaNum=" + qnaNum + "&qnaReplyCont=" + qnaReplyCont;
+
 			const fn = function(data) { // 데이터를 함수로 표현
 				$tb.find("textarea").val("");
-			    
-				if(data.state === "true"){
+
+				if (data.state === "true") {
 					listPage(1); // 등록이 끝나면 리스트 페이지 부름
 				} else {
 					alert("댓글 등록에 실패했습니다.");
 				}
-			
+
 			};
-			
-			ajaxFun(url,"post", query,"json", fn);
+
+			ajaxFun(url, "post", query, "json", fn);
 		});
 	});
-	
+
 	$(function() {
 		$("body").on("click", ".deleteReply", function() {
-			if(! confirm('게시글을 삭제하시겠습니까 ? ')){
+			if (!confirm('게시글을 삭제하시겠습니까 ? ')) {
 				return false;
 			}
-			
+
 			let replyNum = $(this).attr("data-replyNum");
 			let page = $(this).attr("data-pageNo");
-			
+
 			let url = "${pageContext.request.contextPath}/qna/deleteReply.do";
-			let query = "replyNum="+replyNum;
-			
+			let query = "replyNum=" + replyNum;
+
 			const fn = function(data) {
 				listPage(page);
 			};
-			
+
 			ajaxFun(url, "post", query, "json", fn);
-			
+
 		});
 	});
 </script>
@@ -139,77 +162,78 @@ main {
 	</header>
 
 	<main>
-		<div class="container body-container">
-			<div class="body-title">
-				<h2>
-					<i class="fa-regular fa-square"></i> 1:1 문의
-				</h2>
-			</div>
+		<div class="container">
+			<div class="body-container">
+				<div class="body-title">
+					<h2>1:1 문의</h2>
+				</div>
 
-			<div class="body-main mx-auto">
-				<table>
-					<thead>
-						<tr>
-							<td>${dto.qnaSubject}</td>
-						</tr>
-					</thead>
+				<div class="body-main mx-auto">
+					<table class="table">
+						<thead>
+							<tr>
+								<td colspan="2" align="center">${dto.qnaSubject}</td>
+							</tr>
+						</thead>
 
-					<tbody>
+						<tbody>
+							<tr>
+								<td width="50%">이름 : <c:choose>
+										<c:when test="${dto.name == null }">${dto.qnaName}</c:when>
+										<c:otherwise>${dto.name}</c:otherwise>
+									</c:choose></td>
+								<td align="right">${dto.qnaRegDate}</td>
+							</tr>
+							<tr>
+								<td colspan="2" valign="top" height="200">${dto.qnaContent}</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table class="table table-borderless">
 						<tr>
-							<td>이름 : <c:choose>
-									<c:when test="${dto.name == null }">${dto.qnaName}</c:when>
-									<c:otherwise>${dto.name}</c:otherwise>
+							<td width="50%"><c:choose>
+									<c:when
+										test="${not empty dto.userId && sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+										<button type="button" class="btn btn-light"
+											onclick="deleteBoard();">삭제</button>
+									</c:when>
+									<c:when test="${empty sessionScope.member && empty dto.userId}">
+										<button type="button" class="btn btn-light"
+											onclick="deleteBoard2();">삭제</button>
+									</c:when>
 								</c:choose></td>
-							<td>${dto.qnaRegDate}</td>
+							<td class="text-end">
+								<button type="button" class="btn btn-light"
+									onclick="location.href='${pageContext.request.contextPath}/qna/list.do?${query}';">리스트</button>
+							</td>
 						</tr>
-						<tr>
-							<td colspan="2" valign="top" height="200">${dto.qnaContent}</td>
-						</tr>
-					</tbody>
-				</table>
+					</table>
 
-				<table class="table table-borderless">
-					<tr>
-						<td width="50%"><c:choose>
-								<c:when
-									test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
-									<button type="button" class="btn btn-light"
-										onclick="deleteBoard();">삭제</button>
-								</c:when>
-								<c:otherwise>
-									<button type="button" class="btn btn-light" disabled="disabled">삭제</button>
-								</c:otherwise>
-							</c:choose></td>
-						<td class="text-end">
-							<button type="button" class="btn btn-light"
-								onclick="location.href='${pageContext.request.contextPath}/qna/list.do?${query}';">리스트</button>
-						</td>
-					</tr>
-				</table>
+					<div class="reply">
+						<c:if test="${sessionScope.member.userId=='admin'}">
+							<form name="replyForm" method="post">
+								<div class='form-header'>
+									<span class="bold">답변 등록</span>
+								</div>
 
-				<div class="reply">
-				<c:if test="${sessionScope.member.userId=='admin'}">
-					<form name="replyForm" method="post">
-						<div class='form-header'>
-							<span class="bold">답변 등록</span>
-						</div>
+								<table class="table table-borderless reply-form">
+									<tr>
+										<td><textarea class='form-control' name="qnaContent"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<td align='right'>
+											<button type='button' class='btn btn-light btnSendReply'>답변
+												등록</button>
+										</td>
+									</tr>
+								</table>
+							</form>
+						</c:if>
 
-						<table class="table table-borderless reply-form">
-							<tr>
-								<td><textarea class='form-control' name="qnaContent"></textarea>
-								</td>
-							</tr>
-							<tr>
-								<td align='right'>
-									<button type='button' class='btn btn-light btnSendReply'>답변
-										등록</button>
-								</td>
-							</tr>
-						</table>
-					</form>
-					</c:if>
-
-					<div id="listReply"></div>
+						<div id="listReply"></div>
+					</div>
 				</div>
 			</div>
 		</div>
