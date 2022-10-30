@@ -71,50 +71,6 @@ function listSeats(){
 	let hORf = $("input[name=hORf]").val();
 	let selector = "#seatForm-div";
 	
-	if(cycle==="half"){
-		let tDiscern = $("input[name=tDiscern]").val();
-		let statDiscern = $("input[name=statDiscern]").val();
-		let endtDiscern = $("input[name=endtDiscern]").val();
-			
-		if(tDiscern==="하행") {
-			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("역방향");
-			$(".direction2").text("순방향");
-		} else if(tDiscern==="상행") {
-			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("순방향");
-			$(".direction2").text("역방향");
-		}
-	} else if(cycle==="full"){
-		if(hORf==="1"&&statDiscern==="하행"){
-			$("#sORn").text("가는날 ");
-			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("역방향");
-			$(".direction2").text("순방향");
-		} else if(hORf==="1"&&statDiscern==="상행"){
-			$("#sORn").text("가는날 ");
-			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("순방향");
-			$(".direction2").text("역방향");
-		} else if(hORf==="2"&&endtDiscern==="하행"){
-			$("#sORn").text("오는날 ");
-			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("역방향");
-			$(".direction2").text("순방향");
-		} else if(hORf==="2"&&endtDiscern==="상행"){
-			$("#sORn").text("오는날 ");
-			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
-			$(".aisle").html(arrow);
-			$(".direction1").text("순방향");
-			$(".direction2").text("역방향");
-		}
-	}
-	
 	url = "${pageContext.request.contextPath}/reservetrain/choiceSeatsList.do?";
 	let query = "";
 	let grade = $("input[name=grade]").val();
@@ -130,18 +86,19 @@ function listSeats(){
 	let dependtDetailCode = $("input[name=dependtDetailCode]").val();
 	let desendtDetailCode = $("input[name=desendtDetailCode]").val();
 	let tOperCode = $("input[name=tOperCode]").val();
+	let tHoNum = $("option:selected").val();
 	if(cycle==="half"){
 		query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
 			+"&statDetailCode="+statDetailCode+"&endtDetailCode="+endtDetailCode
-			+"&tOperCode="+tOperCode;
+			+"&tOperCode="+tOperCode+"&tHoNum="+tHoNum;
 	} else if(hORf==="1"&&cycle==="full"){
 		query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
 			+"&depstatDetailCode="+depstatDetailCode+"&desstatDetailCode="+desstatDetailCode
-			+"&deptOperCode="+deptOperCode+"&hORf="+hORf;
+			+"&deptOperCode="+deptOperCode+"&hORf="+hORf+"&tHoNum="+tHoNum;
 	} else if(hORf==="2"&&endtDiscern==="full"){
 		query = "grade="+grade+"&cycle="+cycle+"&endDate="+endDate+"&count="+count
 			+"&dependtDetailCode="+dependtDetailCode+"&desendtDetailCode="+desendtDetailCode
-			+"&destOperCode="+destOperCode+"&hORf="+hORf;
+			+"&destOperCode="+destOperCode+"&hORf="+hORf+"&tHoNum="+tHoNum;
 	}
 	
 	const fn = function(data){
@@ -150,10 +107,115 @@ function listSeats(){
 		for(let i of cc) {
 			$("input[value="+i+"]").prop("disabled", true);
 		} */
+		
+		let cycle = $("input[name=cycle]").val();
+		let statDiscern = $("input[name=statDiscern]").val();
+		let endtDiscern = $("input[name=endtDiscern]").val();
+		let hORf = $("input[name=hORf]").val();
+		
+		if(cycle==="half"){
+			let tDiscern = $("input[name=tDiscern]").val();
+			let statDiscern = $("input[name=statDiscern]").val();
+			let endtDiscern = $("input[name=endtDiscern]").val();
+				
+			if(tDiscern==="하행") {
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(tDiscern==="상행") {
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			}
+		} else if(cycle==="full"){
+			if(hORf==="1"&&statDiscern==="하행"){
+				$("#sORn").text("가는날 ");
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(hORf==="1"&&statDiscern==="상행"){
+				$("#sORn").text("가는날 ");
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			} else if(hORf==="2"&&endtDiscern==="하행"){
+				$("#sORn").text("오는날 ");
+				let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("역방향");
+				$(".direction2").text("순방향");
+			} else if(hORf==="2"&&endtDiscern==="상행"){
+				$("#sORn").text("오는날 ");
+				let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+				$(".aisle").html(arrow);
+				$(".direction1").text("순방향");
+				$(".direction2").text("역방향");
+			}
+		}
 	}
 	
 	ajaxFun(url, "get", query, "html", fn);
 }
+
+function fullOne(){
+	// 상행일때, 하행일때 화살표 방향 다름 + 화살표 방향에 맞게 순방향/역방향 다르게
+	let cycle = $("input[name=cycle]").val();
+	let statDiscern = $("input[name=statDiscern]").val();
+	let endtDiscern = $("input[name=endtDiscern]").val();
+	let hORf = $("input[name=hORf]").val();
+	let selector = "#seatForm-div";
+	
+	url = "${pageContext.request.contextPath}/reservetrain/choiceSeatsList.do?";
+	let query = "";
+	let grade = $("input[name=grade]").val();
+	let count = $("input[name=count]").val();
+	let staDate = $("input[name=staDate]").val();
+	let endDate = $("input[name=endDate]").val();
+	let deptOperCode = $("input[name=deptOperCode]").val();
+	let depstatDetailCode = $("input[name=depstatDetailCode]").val();
+	let desstatDetailCode = $("input[name=desstatDetailCode]").val();
+	let tHoNum = $("option:selected").val();
+	if(hORf==="1"&&cycle==="full"){
+		query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
+			+"&depstatDetailCode="+depstatDetailCode+"&desstatDetailCode="+desstatDetailCode
+			+"&deptOperCode="+deptOperCode+"&hORf="+hORf+"&tHoNum="+tHoNum;
+	}
+	
+	const fn = function(data){
+		$(selector).html(data);
+		/* let cc = data.reservedSeatsArr;
+		for(let i of cc) {
+			$("input[value="+i+"]").prop("disabled", true);
+		} */
+		$("input[name=hORf]").val("2");
+		
+		let cycle = $("input[name=cycle]").val();
+		let statDiscern = $("input[name=statDiscern]").val();
+		let endtDiscern = $("input[name=endtDiscern]").val();
+		let hORf = $("input[name=hORf]").val();
+		
+		if(hORf==="2"&&endtDiscern==="하행"){
+			$("#sORn").text("오는날 ");
+			let arrow = "<i class='bi bi-caret-down-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("역방향");
+			$(".direction2").text("순방향");
+		} else if(hORf==="2"&&endtDiscern==="상행"){
+			$("#sORn").text("오는날 ");
+			let arrow = "<i class='bi bi-caret-up-fill' style='color: white;'></i>";
+			$(".aisle").html(arrow);
+			$(".direction1").text("순방향");
+			$(".direction2").text("역방향");
+		}
+	}
+	
+	ajaxFun(url, "get", query, "html", fn);
+}
+
 
 $(function(){
 	listSeats();
@@ -191,22 +253,63 @@ $(function(){
 	let count = $("input[name=count]").val();
 	
 	$("body").on("click", "#select-complete", function(){
+		let cycle = $("input[name=cycle]").val();
+		// !!!!!!!all일 때 grade 셀렉트된것으로 받아야함!!!!!!!!
+		let grade = $("option:checked").attr("data-hoDiv");
+		
 		let selectedArr = [];
 		$("input[name=seats]:checked").each(function(){
 			let selected = $(this).next("label").find(".inner-text").text();
 			selectedArr.push(selected);
 		});
-		if(cycle==='half') {
-			$("input[name=selSeats]").attr("data-selSeats", selectedArr.join());
-		} else if (cycle==="full" && hORf==="1"){
-			$("input[name=staSelSeats]").attr("data-staSelSeats", selectedArr.join());
-		} else if (cycle==="full" && hORf==="1"){
-			$("input[name=endSelSeats]").attr("data-endSelSeats", selectedArr.join());
-		}
+		$("input[name=selSeats]").attr("data-selSeats", selectedArr.join());
+		
 		if(selectedArr.length < count) {
 			alert("선택하신 좌석 수가 모자랍니다.");
 			return false;
 		};
+		
+		let url = "${pageContext.request.contextPath}/reservetrain/beforePay.do?";
+		let query = "";
+		
+		if(cycle==='half') {
+			$("input[name=selSeats]").attr("data-selSeats", selectedArr.join());
+			// 선택한 등급 selGrade에 저장하는식 들어가야함
+			// 선택한 호차 번호 selTHoNum에 저장하는 식 들어가야함
+			// 선택한 열차 번호 selTNumId에 저장하는 식 들어가야함
+			let selGrade = $("input[name=gradetHoNum]").val();
+			let selTHoNum = $("option:selected").val(); 
+			
+			let tDiscern = $("input[name=tDiscern]").val();
+			let staDate = $("input[name=staDate]").val();
+			let tStaTime = $("input[name=tStaTime]").val();
+			let tEndTime = $("input[name=tEndTime]").val();
+			let tOperCode = $("input[name=tOperCode]").val();
+			let statDetailCode = $("input[name=statDetailCode]").val();
+			let endtDetailCode = $("input[name=endtDetailCode]").val();
+			let selSeats = $("input[name=selSeats]").attr("data-selSeats");
+			
+			query = "tDiscern="+tDiscern+"&staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime
+				+"&tOperCode="+tOperCode+"&statDetailCode="+statDetailCode
+				+"&endtDetailCode="+endtDetailCode+"&selSeats="+selSeats
+				+"&selTHoNum="+selTHoNum+"&selGrade="+selGrade;
+			
+		} else if (cycle==="full" && hORf==="1"){
+			$("input[name=staSeats]").attr("data-staSeats", selectedArr.join());
+			let staGrade = $("input[name=gradetHoNum]").val();
+			let staTHoNum = $("option:selected").val();
+			let staTNumId = $("option:selected").val();
+			$("input[name=staGrade]").attr("data-staGrade", staGrade);
+			$("input[name=staTHoNum]").attr("data-staTHoNum", staTHoNum);
+			
+			// fullOne();
+		} else if (cycle==="full" && hORf==="2"){
+			$("input[name=endSeats]").attr("data-endSeats", selectedArr.join());
+			// 선택한 등급 endGrade에 저장하는식 들어가야함
+			// 선택한 호차 번호 endTHoNum에 저장하는 식 들어가야함
+			// 선택한 열차 번호 endTNumId에 저장하는 식 들어가야함
+		}
+		location.href= url + query;
 	});
 });
 
@@ -281,6 +384,7 @@ $(function(){
 		let dependtDetailCode = $("input[name=dependtDetailCode]").val();
 		let desendtDetailCode = $("input[name=desendtDetailCode]").val();
 		let tOperCode = $("input[name=tOperCode]").val();
+		
 		if(cycle==="half"){
 			query = "grade="+grade+"&cycle="+cycle+"&staDate="+staDate+"&count="+count
 				+"&statDetailCode="+statDetailCode+"&endtDetailCode="+endtDetailCode
@@ -299,7 +403,7 @@ $(function(){
 			$(selector).html(data);
 			let tHoNum = $("input[name=selTHoNum]").attr("data-selTHoNum");
 			$(".hocha-list").each(function(index, item){
-				if($(item).val=tHoNum){
+				if($(item).val()===tHoNum){
 					$(item).prop("checked", true);
 				}
 			})
@@ -308,6 +412,7 @@ $(function(){
 		ajaxFun(url, "get", query, "html", fn);
 	});
 });
+
 
 </script>
 </head>
@@ -323,7 +428,7 @@ $(function(){
 			
 			
 		</div>
-		<div id="div-seats-count"><span id="sORn"></span>선택하신 좌석 : <span id="selected-count">0</span> / ${count} 개</div>
+		<div id="div-seats-count"><span id="sORn"></span>선택된 좌석 : <span id="selected-count">0</span> / ${count} 개</div>
 	</div>
 </main>
 <form name="hiddenForm">
@@ -336,25 +441,30 @@ $(function(){
 	<input type="hidden" name="count" value="${count}">
 	<input type="hidden" name="staDate" value="${staDate}">
 	<input type="hidden" name="endDate" value="${endDate}">
+	<input type="hidden" name="tStaTime" value="${tStaTime}">
+	<input type="hidden" name="tEndTime" value="${tEndTime}">
+	<input type="hidden" name="deptStaDateTime" value="${deptStaDateTime}">
+	<input type="hidden" name="deptEndDateTime" value="${deptEndDateTime}">
+	<input type="hidden" name="destStaDateTime" value="${destStaDateTime}">
+	<input type="hidden" name="destEndDateTime" value="${destEndDateTime}">
+	<input type="hidden" name="tOperCode" value="${tOperCode}">
 	<input type="hidden" name="deptOperCode" value="${deptOperCode}">
 	<input type="hidden" name="destOperCode" value="${destOperCode}">
-	<input type="hidden" name="tOperCode" value="${tOperCode}">
-	<input type="hidden" name="statSeatNum" value="${statSeatNum}">
-	<input type="hidden" name="statHoNum" value="${statHoNum}">
-	<input type="hidden" name="statNumId" value="${statNumId}">
-	<input type="hidden" name="endtSeatNum" value="${endtSeatNum}">
-	<input type="hidden" name="endtHoNum" value="${endtHoNum}">
-	<input type="hidden" name="endtNumId" value="${endtNumId}">
 	<input type="hidden" name="statDetailCode" value="${statDetailCode}">
 	<input type="hidden" name="endtDetailCode" value="${endtDetailCode}">
 	<input type="hidden" name="depstatDetailCode" value="${depstatDetailCode}">
 	<input type="hidden" name="desstatDetailCode" value="${desstatDetailCode}">
 	<input type="hidden" name="dependtDetailCode" value="${dependtDetailCode}">
 	<input type="hidden" name="desendtDetailCode" value="${desendtDetailCode}">
-	<input type="hidden" name="selSeats" data-selSeats="">
-	<input type="hidden" name="staSelSeats" data-staSelSeats="">
-	<input type="hidden" name="endSelSeats" data-endSelSeats="">
-	<input type="hidden" name="selTHoNum" data-selTHoNum="">
+	<input type="hidden" name="selSeats" data-selSeats=""> <!-- 편도 : 선택한 좌석 번호 -->
+	<input type="hidden" name="staSeats" data-staSeats=""> <!-- 왕복 가는날 : 선택한 좌석 번호 -->
+	<input type="hidden" name="endSeats" data-endSeats=""> <!-- 왕복 오는날 : 선택한 좌석 번호 -->
+	
+	<input type="hidden" name="staTHoNum" data-staTHoNum=""> <!-- 왕복 가는날 : 선택한 호차번호 -->
+	<input type="hidden" name="endTHoNum" data-endTHoNum=""> <!-- 왕복 오는날 : 선택한 호차번호 -->
+	
+	<input type="hidden" name="staGrade" data-staGrade=""> <!-- 왕복 가는날 : 좌석등급 -->
+	<input type="hidden" name="endGrade" data-endGrade=""> <!-- 왕복 오는날 : 좌석등급 -->
 </form>
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>

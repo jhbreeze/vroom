@@ -601,6 +601,7 @@ public class ReserveTrainDAO {
 	 * 운행코드, 등급, 호차리스트 -> 호차번호, 총 좌석수 알아내기
 	 * 출발상세코드, 도착상세코드, 일자 -> YYYY년 MM월 DD일 호차번호(List)에 예매된 좌석들 List뽑아내기
 	 * 예매된 좌석 수는 length()로 처리
+	 * 호차번호 -> 등급
 	 */
 	
 	
@@ -838,4 +839,79 @@ public class ReserveTrainDAO {
 		return list;
 	}
 	
+	// 호차번호 -> 등급
+	public String getGrade(String tHoNum) {
+		String grade = "";
+		PreparedStatement pstmt = null;
+		String sql = "";
+		ResultSet rs = null;
+		
+		try {
+			sql = "SELECT hoDiv FROM hocha WHERE tHoNum = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tHoNum);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				grade = rs.getString("hoDiv");
+			}
+			if(grade.equals("특실")) {
+				grade = "premium";
+			} else {
+				grade = "basic";
+			}
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return grade;
+	}
+	
+	// 역간 거리 구하는 법(노선상세코드 출발역, 도착역 필요)
+	public int getTDistance(int deptRouteDetailCode, int destRouteDetailCode) {
+		int tDistance = 0;
+		PreparedStatement pstmt = null;
+		String sql;
+		ResultSet rs = null;
+		
+		try {
+			sql = "SELECT SUM(tDistance) FROM trainRouteDetail "
+					+ "WHERE tRouteDetailCode > ? AND tRouteDetailCode <= ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, deptRouteDetailCode);
+			pstmt.setInt(2, destRouteDetailCode);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				tDistance = rs.getInt(1);
+			}
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return tDistance;
+	}
 }

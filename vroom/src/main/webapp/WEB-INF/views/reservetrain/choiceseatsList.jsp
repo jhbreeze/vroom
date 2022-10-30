@@ -5,7 +5,11 @@
 <%
 	// 예약된 좌석 목록
 	String[] cc = (String[]) request.getAttribute("reservedSeatsArr");
+	String gradetHoNum = (String) request.getAttribute("gradetHoNum");
 	String grade = (String) request.getAttribute("grade");
+	if(gradetHoNum!=null){
+		grade = gradetHoNum;
+	}
 	int cols, rows, step, ais;
 	if (grade.equals("premium")) {
 		cols = 3;
@@ -19,19 +23,19 @@
 		ais = 3;
 	}
 %>
-
 <% for (int i = 0; i < cc.length; i++) { %>
 	$("input[value=<%=cc[i]%>]").prop("disabled", true);
 <% } %>
 
 <form name="seatForm">
+	<input type="hidden" name="gradetHoNum" value="${gradetHoNum}">
 	<div class="hocha-button d-flex justify-content-between"
 		style="width: 80%; margin: 0 auto">
 		<div class="top-section">
 			<select class="form-select fw-bolder" id="ho-select"
 				aria-label=".form-select-lg example" style="color: #9B9B9B">
 				<c:forEach var="dto" items="${list}" varStatus="status">
-				<option class="hocha-list" id="${dto.tHoNum}" value="${dto.tHoNum}">${dto.num} 호차 잔여 ${dto.leftSeats}석 / ${dto.hoNum}석</option>
+				<option class="hocha-list" value="${dto.tHoNum}" data-hoDiv="${dto.hoDiv}">${dto.num} 호차 잔여 ${dto.leftSeats}석 / ${dto.hoNum}석</option>
 				</c:forEach>
 			</select>
 		</div>
@@ -55,7 +59,7 @@
 			<% } %>
 			<% if (j != step) { %>
 			<div class="form_check_btn">
-				<input id="<%=(char) (65+i) + "-" + j%>" type="checkbox" name="seats" name="<%=(char) (65+i) + "-" + j%>">
+				<input id="<%=(char) (65+i) + "-" + j%>" type="checkbox" name="seats" value="<%=(char) (65+i) + "-" + j%>">
 				<% if (i > 15 / 2) { %>
 				<label for="<%=(char) (65+i) + "-" + j%>" style="height: 100%;">
 					<span class="inner-text"><%=(char) (65+i) + "-" + j%></span>

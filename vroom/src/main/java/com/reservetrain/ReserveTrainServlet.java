@@ -41,6 +41,8 @@ public class ReserveTrainServlet extends MyServlet{
 			moveToChoiceSeats(req, resp);
 		} else if (uri.indexOf("choiceSeatsList.do")!=-1) {
 			choiceSeatsListHTML(req, resp);
+		} else if (uri.indexOf("beforePay.do")!=-1) {
+			beforePay(req, resp);
 		}
 	}
 	
@@ -129,12 +131,15 @@ public class ReserveTrainServlet extends MyServlet{
 	protected void moveToStepTwo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
+		session.setAttribute("reservetraininfo", reserveInfo);
+		ReserveTrainSessionInfo reserveInfo2 = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
+		session.removeAttribute("reserveTrainInfo");
 		try {
-			String cycle = reserveInfo.getCycle();
-			String staDate = reserveInfo.getStaDate();
-			String endDate = reserveInfo.getEndDate();
-			String deptStationName = reserveInfo.getDeptStationName();
-			String destStationName = reserveInfo.getDestStationName();
+			String cycle = reserveInfo2.getCycle();
+			String staDate = reserveInfo2.getStaDate();
+			String endDate = reserveInfo2.getEndDate();
+			String deptStationName = reserveInfo2.getDeptStationName();
+			String destStationName = reserveInfo2.getDestStationName();
 			req.setAttribute("cycle", cycle);
 			req.setAttribute("staDate", staDate);
 			req.setAttribute("endDate", endDate);
@@ -159,7 +164,7 @@ public class ReserveTrainServlet extends MyServlet{
 		List<Integer> tOperCodeList = new ArrayList<>(); // 열차번호 리스트 - 가는날
 		
 		
-		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
 		if(reserveInfo == null) {
 			resp.sendRedirect(cp + "/");
 			return;
@@ -244,7 +249,7 @@ public class ReserveTrainServlet extends MyServlet{
 	
 	protected void moveToChoiceSeats(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reserveTrainInfo");
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
 		ReserveTrainDAO dao = new ReserveTrainDAO();
 		try {
 			if(reserveInfo.getCycle().equals("full")) {
@@ -329,6 +334,7 @@ public class ReserveTrainServlet extends MyServlet{
 				List<HochaDTO> reservedSeatsList = dao.getReservedSeatsList(hochaList, statDetailCode, endtDetailCode, staDate); // 모든 호차들의 예매된 좌석 리스트
 				
 				String tHoNum = req.getParameter("tHoNum");
+				String gradetHoNum = null;
 				// 호차번호가 정해지지 않았을 경우, 호차중에 남은 좌석수가 선택한 인원수보다 크면 초기 호차를 해당호차로 정의
 				if(tHoNum==null) {
 					for(int i=0; i<reservedSeatsList.size(); i++) {
@@ -340,7 +346,10 @@ public class ReserveTrainServlet extends MyServlet{
 							break;
 						}
 					}
+				} else {
+					gradetHoNum = dao.getGrade(tHoNum) ;
 				}
+				
 				List<String> reservedSeats = new ArrayList<>();
 				reservedSeats = dao.getReservedSeats(tHoNum, statDetailCode, endtDetailCode, staDate); // 특정 호차의 예매된 좌석 리스트
 				String[] reservedSeatsArr = reservedSeats.toArray(new String[0]);
@@ -364,6 +373,7 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("grade", grade);
 				req.setAttribute("reservedSeatsArr", reservedSeatsArr);
 				req.setAttribute("tHoNum", tHoNum);
+				req.setAttribute("gradetHoNum", gradetHoNum);
 				
 				forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
 				return;
@@ -384,6 +394,8 @@ public class ReserveTrainServlet extends MyServlet{
 					List<HochaDTO> reservedSeatsList = dao.getReservedSeatsList(hochaList, depstatDetailCode, desstatDetailCode, staDate);
 					
 					String tHoNum = req.getParameter("tHoNum");
+					String gradetHoNum = null;
+					// 호차번호가 정해지지 않았을 경우, 호차중에 남은 좌석수가 선택한 인원수보다 크면 초기 호차를 해당호차로 정의
 					if(tHoNum==null) {
 						for(int i=0; i<reservedSeatsList.size(); i++) {
 							List<String> tSeatNumList = reservedSeatsList.get(i).gettSeatNumList();
@@ -394,6 +406,8 @@ public class ReserveTrainServlet extends MyServlet{
 								break;
 							}
 						}
+					} else {
+						gradetHoNum = dao.getGrade(tHoNum) ;
 					}
 					
 					List<String> reservedSeats = new ArrayList<>();
@@ -412,6 +426,7 @@ public class ReserveTrainServlet extends MyServlet{
 							int num = Integer.parseInt(hochaName.substring(4));
 							dto.setNum(num); // 몇 호차인지(이름에서 열차번호 뺀거)
 							dto.setLeftSeats(leftSeats);
+							dto.setHoDiv(reservedSeatsList.get(i).getHoDiv());
 							selectHochaList.add(dto);
 						}
 					}
@@ -419,6 +434,7 @@ public class ReserveTrainServlet extends MyServlet{
 					req.setAttribute("grade", grade);
 					req.setAttribute("reservedSeatsArr", reservedSeatsArr);
 					req.setAttribute("tHoNum", tHoNum);
+					req.setAttribute("gradetHoNum", gradetHoNum);
 					
 					forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
 					return;
@@ -441,7 +457,8 @@ public class ReserveTrainServlet extends MyServlet{
 					List<HochaDTO> reservedSeatsList = dao.getReservedSeatsList(hochaList, dependtDetailCode, desendtDetailCode, endDate);
 					
 					String tHoNum = req.getParameter("tHoNum");
-					
+					String gradetHoNum = null;
+					// 호차번호가 정해지지 않았을 경우, 호차중에 남은 좌석수가 선택한 인원수보다 크면 초기 호차를 해당호차로 정의
 					if(tHoNum==null) {
 						for(int i=0; i<reservedSeatsList.size(); i++) {
 							List<String> tSeatNumList = reservedSeatsList.get(i).gettSeatNumList();
@@ -452,6 +469,8 @@ public class ReserveTrainServlet extends MyServlet{
 								break;
 							}
 						}
+					} else {
+						gradetHoNum = dao.getGrade(tHoNum) ;
 					}
 					
 					List<String> reservedSeats = new ArrayList<>();
@@ -477,6 +496,7 @@ public class ReserveTrainServlet extends MyServlet{
 					req.setAttribute("grade", grade);
 					req.setAttribute("reservedSeatsArr", reservedSeatsArr);
 					req.setAttribute("tHoNum", tHoNum);
+					req.setAttribute("gradetHoNum", gradetHoNum);
 					
 					forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
 					return;
@@ -488,5 +508,12 @@ public class ReserveTrainServlet extends MyServlet{
 			e.printStackTrace();
 		}
 		resp.sendError(400);
+	}
+	
+	protected void beforePay(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		
+		forward(req, resp, "/WEB-INF/views/reservetrain/trainPay.jsp");
+		return;
 	}
 }
