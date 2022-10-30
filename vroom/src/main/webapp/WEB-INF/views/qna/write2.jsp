@@ -14,11 +14,10 @@
 		const f = document.boardForm;
 		let str;
 
-		str = f.Subject.value.trim();
-		alert(str);
+		str = f.qnaSubject.value.trim();
 		if (!str) {
 			alert("제목을 입력하세요. ");
-			f.Subject.focus();
+			f.qnaSubject.focus();
 			return false;
 		}
 		
@@ -31,7 +30,6 @@
 		}
 		
 		str = f.qnaPwd.value.trim();
-		alert(str);
 		if (!str) {
 			alert("패스워드를 입력하세요. ");
 			f.qnaPwd.focus();
@@ -71,17 +69,17 @@ main {
 		<div class="container body-container">
 			<div class="body-title">
 				<h2>
-					<i class="fa-regular fa-square"></i> 1:1 문의
+					1:1 문의
 				</h2>
 			</div>
 
 			<div class="body-main mx-auto">
 				<form name="boardForm" method="post" enctype="multipart/form-data"
 					onsubmit="return submitContents(this);">
-					<table>
+					<table class="table write-form mt-5">
 						<tr>
-							<td>제목</td>
-							<td><input type="text" name="Subject"
+							<td class="table-light col-sm-2" scope="row">제목</td>
+							<td><input type="text" name="qnaSubject"
 								value="${dto.qnaSubject}"></td>
 						</tr>
 						<tr>
@@ -99,7 +97,7 @@ main {
 							</td>
 						</tr>
 						<tr>
-							<td>내용</td>
+							<td class="table-light col-sm-2" scope="row">내용</td>
 							<td> <textarea name="qnaContent" id="ir1">${dto.qnaContent}</textarea> </td>
 						</tr>
 					</table>
@@ -108,7 +106,7 @@ main {
 							<td class="text-center">
 								<button type="submit" class="btn btn-dark">등록하기<i class="bi bi-check2"></i></button>
 								<button type="reset" class="btn btn-light">다시입력</button>
-								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/sbbs/list.do';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
+								<button type="button" class="btn btn-light" onclick="location.href='${pageContext.request.contextPath}/qna/list.do';">${mode=='update'?'수정취소':'등록취소'}&nbsp;<i class="bi bi-x"></i></button>
 								<c:if test="${mode=='update'}">
 									<input type="hidden" name="qnaNum" value="${dto.qnaNum}">
 									<input type="hidden" name="page" value="${page}">

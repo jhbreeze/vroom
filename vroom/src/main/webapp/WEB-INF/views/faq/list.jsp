@@ -90,8 +90,18 @@ main {
 	background: white;
 }
 
+#accordion:hover {
+	background: #fff;
+	box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4);
+}
+
 .container {
-	min-height: 900px;
+	min-height: 700px;
+}
+
+.body-container {
+	max-width: 1200px;
+	margin: auto;
 }
 
 .btn:active, .btn:focus, .btn:hover {
@@ -117,18 +127,10 @@ a {
 	text-decoration-line: none;
 }
 
-#header {
-	background: #0E6EFD;
-	text-align: center;
-	color: white;
-	vertical-align: middle;
-}
-
-#header2 {
-	background: #0E6EFD;
-	text-align: center;
-	vertical-align: middle;
-	color: white;
+.col-3, .container {
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
+	border: none;
+	border-radius: 30px;
 }
 </style>
 <link rel="stylesheet"
@@ -145,106 +147,108 @@ a {
 	</header>
 
 	<main>
-		<div class="container body-container">
-			<div class="body-title">
-				<h2>자주하는 질문</h2>
-			</div>
-
-			<div class="reply">
-				<c:if test="${sessionScope.member.userId=='admin'}">
-					<form name="boardForm" method="post">
-						<div class='form-header'>
-							<span class="bold">질문/답변
-								<button type="button" class='btn btn-light btnSendReply'
-									onclick="check();">등록하기&nbsp;</button>
-							</span>
-						</div>
-
-						<table class="table table-borderless reply-form">
-							<tr>
-								<td class="table-light col-sm-2" scope="row" id='header'>제
-									목</td>
-								<td><input type="text" name="faqSubject"
-									class="form-control" value="${dto.faqSubject}"></td>
-							</tr>
-							<tr>
-								<td class="table-light col-sm-2" scope="row" id='header2'>내
-									용</td>
-								<td><textarea class='form-control' name="faqContent">${dto.faqContent}</textarea>
-								</td>
-							</tr>
-						</table>
-					</form>
-				</c:if>
-
-				<div id="listReply"></div>
-			</div>
-
-			<div class="body-main">
-				<div>
-					<div>${dataCount}개(${page}/${total_page}페이지)</div>
-					<div>&nbsp;</div>
+		<div class="container ">
+			<div class="body-container">
+				<div class="body-title">
+					<h2>자주하는 질문</h2>
 				</div>
-			</div>
 
-			<div class="accordion accordion-flush" id="accordionFlush">
-				<form name="listForm" method="post">
+				<div class="reply">
 					<c:if test="${sessionScope.member.userId=='admin'}">
-						<input type="checkbox" class="form-check-input" name="chkAll"
-							id="chkAll">
-						<button type="button" class="btn btn-light" data-bs-toggle="modal"
-							data-bs-target="#exampleModal" title="삭제">
-							<i class="bi bi-trash"></i>
-						</button>
-					</c:if>
-					<c:forEach var="dto" items="${list}" varStatus="status">
-
-						<div class="accordion-item">
-							<c:if test="${sessionScope.member.userId=='admin'}">
-								<input type="checkbox" class="form-check-input" name="faqNums"
-									value="${dto.faqNum}">
-							</c:if>
-							<h2 class="accordion-header" id="flush-heading-${status.index}">
-								<button class="accordion-button collapsed bg-light"
-									type="button" data-bs-toggle="collapse"
-									data-bs-target="#flush-collapse-${status.index}"
-									aria-expanded="false"
-									aria-controls="flush-collapse-${status.index}">
-									${dto.faqSubject}</button>
-
-							</h2>
-							<div id="flush-collapse-${status.index}"
-								class="accordion-collapse collapse"
-								aria-labelledby="flush-heading-${status.index}"
-								data-bs-parent="#accordionFlush">
-								<div class="accordion-body">${dto.faqContent }</div>
+						<form name="boardForm" method="post">
+							<div class='form-header'>
+								<span class="bold">질문/답변
+									<button type="button" class='btn btn-light btnSendReply'
+										onclick="check();">등록하기&nbsp;</button>
+								</span>
 							</div>
-						</div>
-					</c:forEach>
-				</form>
-			</div>
+
+							<table class="table table-borderless reply-form">
+								<tr>
+									<td class="table-light col-sm-2" scope="row" id='header'>제
+										목</td>
+									<td><input type="text" name="faqSubject"
+										class="form-control" value="${dto.faqSubject}"></td>
+								</tr>
+								<tr>
+									<td class="table-light col-sm-2" scope="row" id='header2'>내
+										용</td>
+									<td><textarea class='form-control' name="faqContent">${dto.faqContent}</textarea>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</c:if>
+
+					<div id="listReply"></div>
+				</div>
+
+				<div class="body-main">
+					<div>
+						<div>${dataCount}개(${page}/${total_page}페이지)</div>
+						<div>&nbsp;</div>
+					</div>
+				</div>
+
+				<div class="accordion accordion-flush" id="accordionFlush">
+					<form name="listForm" method="post">
+						<c:if test="${sessionScope.member.userId=='admin'}">
+							<input type="checkbox" class="form-check-input" name="chkAll"
+								id="chkAll">
+							<button type="button" class="btn btn-light"
+								data-bs-toggle="modal" data-bs-target="#exampleModal" title="삭제">
+								<i class="bi bi-trash"></i>
+							</button>
+						</c:if>
+						<c:forEach var="dto" items="${list}" varStatus="status">
+
+							<div class="accordion-item" id="accordion">
+								<c:if test="${sessionScope.member.userId=='admin'}">
+									<input type="checkbox" class="form-check-input" name="faqNums"
+										value="${dto.faqNum}">
+								</c:if>
+								<h2 class="accordion-header" id="flush-heading-${status.index}">
+									<button class="accordion-button collapsed bg-light"
+										type="button" data-bs-toggle="collapse"
+										data-bs-target="#flush-collapse-${status.index}"
+										aria-expanded="false"
+										aria-controls="flush-collapse-${status.index}">
+										${dto.faqSubject}</button>
+
+								</h2>
+								<div id="flush-collapse-${status.index}"
+									class="accordion-collapse collapse"
+									aria-labelledby="flush-heading-${status.index}"
+									data-bs-parent="#accordionFlush">
+									<div class="accordion-body">${dto.faqContent }</div>
+								</div>
+							</div>
+						</c:forEach>
+					</form>
+				</div>
 
 
-			<div class="modal fade" id="exampleModal" tabindex="-1"
-				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">자주하는 질문</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
-						</div>
-						<div class="modal-body">게시글을 삭제하시겠습니까?</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">아니요</button>
-							<button type="button" class="btn btn-primary" id="btnDeleteList">예</button>
+				<div class="modal fade" id="exampleModal" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">자주하는 질문</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">게시글을 삭제하시겠습니까?</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-bs-dismiss="modal">아니요</button>
+								<button type="button" class="btn btn-primary" id="btnDeleteList">예</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
+				<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
+			</div>
 		</div>
 	</main>
 

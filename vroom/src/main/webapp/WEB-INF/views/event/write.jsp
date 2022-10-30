@@ -33,14 +33,30 @@ main {
 	box-shadow: none;
 	opacity: .65;
 }
+.body-container {
+	max-width: 800px;
+}
+
+.write-form .img-viewer {
+	cursor: pointer;
+	border: 1px solid #ccc;
+	width: 45px;
+	height: 45px;
+	border-radius: 45px;
+	background-image: url("${pageContext.request.contextPath}/resources/images/add_photo.png");
+	position: relative;
+	z-index: 9999;
+	background-repeat : no-repeat;
+	background-size : cover;
+}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
 	type="text/css">
 
 <script type="text/javascript">
-	function check() {
-		const f = document.boardForm;
+	function sendOk() {
+		const f = document.eventForm;
 		let str;
 
 		str = f.eveTitle.value.trim();
@@ -56,9 +72,57 @@ main {
 			f.eveCont.focus();
 			return false;
 		}
+		
+		let mode = "${mode}";
+	    if( (mode === "write") && (!f.selectFile.value) ) {
+	        alert("이미지 파일을 추가 하세요. ");
+	        f.selectFile.focus();
+	        return;
+	    }
 
 		f.action = "${pageContext.request.contextPath}/event/${mode}_ok.do";
+		f.submit();
 	}
+	
+	$(function() {
+		let img = "${dto.imageFilename}";
+		if( img ) { // 수정인 경우
+			img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+			$(".write-form .img-viewer").empty();
+			$(".write-form .img-viewer").css("background-image", "url("+img+")");
+		}
+		
+		$(".write-form .img-viewer").click(function(){
+			$("form[name=eventForm] input[name=selectFile]").trigger("click"); 
+		});
+		
+		$("form[name=eventForm] input[name=selectFile]").change(function(){
+			let file=this.files[0];
+			if(! file) {
+				$(".write-form .img-viewer").empty();
+				if( img ) {
+					img = "${pageContext.request.contextPath}/uploads/photo/" + img;
+					$(".write-form .img-viewer").css("background-image", "url("+img+")");
+				} else {
+					img = "${pageContext.request.contextPath}/resources/images/add_photo.png";
+					$(".write-form .img-viewer").css("background-image", "url("+img+")");
+				}
+				return false;
+			}
+			
+			if(! file.type.match("image.*")) {
+				this.focus();
+				return false;
+			}
+			
+			let reader = new FileReader();
+			reader.onload = function(e) {
+				$(".write-form .img-viewer").empty();
+				$(".write-form .img-viewer").css("background-image", "url("+e.target.result+")");
+			}
+			reader.readAsDataURL(file);
+		});
+	});
 
 </script>
 </head>
@@ -72,13 +136,12 @@ main {
 		<div class="container body-container">
 			<div class="body-title">
 				<h2>
-					<i class="fa-regular fa-square"></i> 이벤트
+					 이벤트
 				</h2>
 			</div>
 
 			<div class="body-main">
-				<form name="boardForm" method="post" enctype="multipart/form-data"
-					onsubmit="return submitContents(this);">
+				<form name="eventForm" method="post" enctype="multipart/form-data">
 					<table class="table write-form mt-5">
 						<tr>
 							<td scope="row">제 목</td>
@@ -92,18 +155,33 @@ main {
 								<p>${sessionScope.member.userId}</p>
 							</td>
 						</tr>
+						
+						<tr>
+							<td class="table-light col-sm-2" scope="row">이벤트진행여부</td>
+							<td>
+								<input type="checkbox" class="form-check-input" name="event" id="event" value="1" ${dto.event==1 ? "checked='checked' ":"" } >
+								<label class="form-check-label" for="event">이벤트 종료</label>
+							</td>
+						</tr>
 
 						<tr>
 							<td scope="row">내 용</td>
 							<td><textarea name="eveCont" id="ir1"
 									style="width: 95%; height: 270px;">${dto.eveCont}</textarea></td>
 						</tr>
+						<tr>
+							<td class="table-light col-sm-2" scope="row">이미지</td>
+							<td>
+								<div class="img-viewer"></div>
+								<input type="file" name="selectFile" accept="image/*" class="form-control" style="display: none;">
+							</td>
+						</tr>
 					</table>
 
 					<table class="table table-borderless">
 						<tr>
 							<td class="text-center">
-								<button type="submit" class="btn btn-dark">${mode=='update'?'수정완료':'등록하기'}&nbsp;<i
+								<button type="button" class="btn btn-dark" onclick="sendOk();">${mode=='update'?'수정완료':'등록하기'}&nbsp;<i
 										class="bi bi-check2"></i>
 								</button>
 								<button type="reset" class="btn btn-light">다시입력</button>
@@ -121,35 +199,6 @@ main {
 			</div>
 		</div>
 	</main>
-
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/se2/js/service/HuskyEZCreator.js"
-		charset="utf-8"></script>
-	<script type="text/javascript">
-		var oEditors = [];
-		nhn.husky.EZCreator
-				.createInIFrame({
-					oAppRef : oEditors,
-					elPlaceHolder : "ir1",
-					sSkinURI : "${pageContext.request.contextPath}/resources/se2/SmartEditor2Skin.html",
-					fCreator : "createSEditor2"
-				});
-
-		function submitContents(elClickedObj) {
-			oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
-			try {
-				// elClickedObj.form.submit();
-				return check();
-			} catch (e) {
-			}
-		}
-
-		function setDefaultFont() {
-			var sDefaultFont = '돋움';
-			var nFontSize = 12;
-			oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
-		}
-	</script>
 
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>

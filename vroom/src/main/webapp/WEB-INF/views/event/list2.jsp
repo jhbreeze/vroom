@@ -64,12 +64,6 @@ a {
 	border-radius: 30px;
 }
 
-.image {
-	display: block;
-	width: 100%;
-	height: auto;
-}
-
 .textbox {
 	position: absolute;
 	top: 0;
@@ -80,11 +74,11 @@ a {
 	width: 100%;
 	opacity: 0;
 	transition: .5s ease;
-	background-color: rgb(0, 140, 186);
+	background-color: #eee;
 }
 
 .text {
-	color: #eee;
+	color: white;
 	font-size: 25px;
 	font-family: verdana, sans-serif;
 	position: absolute;
@@ -124,17 +118,18 @@ a {
 	</header>
 
 	<main>
-		<div class="container ">
+		<div class="container">
 			<div class="body-container">
 				<div class="body-title">
 					<h2>이벤트</h2>
 				</div>
 				<ul class="nav nav-tabs">
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">진행중인 이벤트</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="list2.do?page=1">종료된 이벤트</a></li>
+					<li class="nav-item"><a class="nav-link" aria-current="page"
+						href="list.do?page=1">진행중인 이벤트</a></li>
+					<li class="nav-item"><a class="nav-link active" href="#">종료된
+							이벤트</a></li>
 				</ul>
+
 
 				<div class="body-main">
 					<div class="row board-list-header">
@@ -145,9 +140,9 @@ a {
 						</div>
 					</div>
 
-					<div class="row ">
+					<div class="row">
 						<c:forEach var="dto" items="${list}" varStatus="status">
-							<c:if test="${dto.event == 0}">
+							<c:if test="${dto.event == 1}">
 								<div class="col-md-4 col-lg-3 p-1 item imagebox">
 									<img class="img-fluid img-thumbnail w-100 h-100 image"
 										src="${pageContext.request.contextPath}/uploads/photo/${dto.imageFilename}">

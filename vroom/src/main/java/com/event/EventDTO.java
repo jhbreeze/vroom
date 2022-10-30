@@ -6,7 +6,9 @@ public class EventDTO {
 	private String eveTitle;
 	private String eveCont;
 	private String eveRegDate;
-	private String eveModDate;
+	private long event;
+	private String name;
+	private String imageFilename;
 	
 	public long getEveNum() {
 		return eveNum;
@@ -38,13 +40,28 @@ public class EventDTO {
 	public void setEveRegDate(String eveRegDate) {
 		this.eveRegDate = eveRegDate;
 	}
-	public String getEveModDate() {
-		return eveModDate;
+	public long getEvent() {
+		return event;
 	}
-	public void setEveModDate(String eveModDate) {
-		this.eveModDate = eveModDate;
+	public void setEvent(long event) {
+		this.event = event;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getImageFilename() {
+		return imageFilename;
+	}
+	public void setImageFilename(String imageFilename) {
+		this.imageFilename = imageFilename;
 	}
 	
+	
+
+
 	
 
 }

@@ -17,12 +17,14 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = "INSERT INTO event(eveNum, userId, eveTitle, eveCont, eveRegDate)"
-					+ " VALUES (event_seq.NEXTVAL, 'admin', ?, ?, SYSDATE)";
+			sql = "INSERT INTO event(eveNum, userId, eveTitle, eveCont, imageFilename, event, eveRegDate)"
+					+ " VALUES (event_seq.NEXTVAL, 'admin', ?, ?, ?, ?, SYSDATE)";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dto.getEveTitle());
 			pstmt.setString(2, dto.getEveCont());
+			pstmt.setString(3, dto.getImageFilename());
+			pstmt.setLong(4, dto.getEvent());
 
 			pstmt.executeUpdate();
 
@@ -46,7 +48,42 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = "SELECT COUNT(*) FROM event";
+			sql = "SELECT COUNT(*) FROM event WHERE event = 0 ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+
+		}
+
+		return result;
+	}
+	public int dataCount2() {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = "SELECT COUNT(*) FROM event WHERE event = 1 ";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -133,7 +170,7 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate "
+			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate, imageFilename, event "
 		            + " FROM event e "
 					+ " JOIN member1 m ON e.userId = m.userId " 
 		            + " ORDER BY eveNum DESC "
@@ -152,6 +189,8 @@ public class EventDAO {
 				dto.setEveNum(rs.getLong("eveNum"));
 				dto.setEveTitle(rs.getString("eveTitle"));
 				dto.setEveRegDate(rs.getString("eveRegDate"));
+				dto.setImageFilename(rs.getString("imageFilename"));
+				dto.setEvent(rs.getLong("event"));
 
 				list.add(dto);
 
@@ -185,7 +224,7 @@ public class EventDAO {
 		String sql;
 		
 		try {
-			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate "
+			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate, imageFilename "
 					+ " FROM event ";
 			if(condition.equals("all")) {
 				sql += " WHERE INSTR(eveTitle, ?) >= 1 OR INSTR(eveCont, ?) >= 1 ";
@@ -219,6 +258,7 @@ public class EventDAO {
 				dto.setEveNum(rs.getLong("eveNum"));
 				dto.setEveTitle(rs.getString("eveTitle"));
 				dto.setEveRegDate(rs.getString("eveRegDate"));
+				dto.setImageFilename(rs.getString("imageFilename"));
 				
 				list.add(dto);
 				
@@ -251,8 +291,10 @@ public class EventDAO {
 		String sql;
 		
 		try {
-			sql = " SELECT eveNum, userId, eveTitle, eveCont, eveRegDate "
-					+ " FROM event "
+			sql = " SELECT eveNum, e.userId, eveTitle, eveCont, eveRegDate, imageFilename, event, name "
+					+ " FROM event e"
+					+ " JOIN member1 m ON e.userId = m.userId " 
+					+ " JOIN customer c ON m.cusNum = c.cusNum " 
 					+ " WHERE eveNum = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -267,6 +309,9 @@ public class EventDAO {
 				dto.setEveTitle(rs.getString("eveTitle"));
 				dto.setEveCont(rs.getString("eveCont"));
 				dto.setEveRegDate(rs.getString("eveRegDate"));
+				dto.setImageFilename(rs.getString("imageFilename"));
+				dto.setEvent(rs.getLong("event"));
+				dto.setName(rs.getString("name"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -435,14 +480,15 @@ public class EventDAO {
 		String sql;
 
 		try {
-			sql = "UPDATE event SET eveTitle=?, eveCont=? "
-					+ " WHERE eveNum = ? AND userId = ? ";
+			sql = "UPDATE event SET eveTitle=?, eveCont=?, imageFilename=?, event=? "
+					+ " WHERE eveNum = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getEveTitle());
 			pstmt.setString(2, dto.getEveCont());
-			pstmt.setLong(3, dto.getEveNum());
-			pstmt.setString(4, dto.getUserId());
+			pstmt.setString(3, dto.getImageFilename());
+			pstmt.setLong(4, dto.getEvent());
+			pstmt.setLong(5, dto.getEveNum());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -491,5 +537,166 @@ public class EventDAO {
 			}
 		}
 	}
+	
+	public List<ReplyDTO> listReply(long eveNum, int offset, int size) {
+		List<ReplyDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = " SELECT r.replyNum, r.userId, name, r.eveNum, evReplyContent, evReplyDate "
+					+ " FROM eventReply r "
+					+ " JOIN member1 m ON r.userId = m.userId "
+					+ " JOIN customer c ON m.cusNum = c.cusNum "
+					+ " WHERE eveNum = ? "
+					+ " ORDER BY r.replyNum DESC "
+					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, eveNum);
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, size);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ReplyDTO dto = new ReplyDTO();
+				
+				dto.setReplyNum(rs.getLong("replyNum"));
+				dto.setEveNum(rs.getLong("eveNum"));
+				dto.setEvReplyContent(rs.getString("evReplyContent"));
+				dto.setUserId(rs.getString("userId"));
+				dto.setName(rs.getString("name"));
+				dto.setEvReplyDate(rs.getString("evReplyDate"));
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	public int dataCountReply(long eveNum){
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = " SELECT COUNT(*) FROM eventReply WHERE eveNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, eveNum);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	public void insertReply(ReplyDTO dto) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
+		
+		try {
+			sql = " INSERT INTO eventReply(replyNum, eveNum, userId, evReplyContent, evReplyDate) "
+					+ " VALUES(eventReply_seq.NEXTVAL, ?, ?, ?, SYSDATE) ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, dto.getEveNum());
+			pstmt.setString(2, dto.getUserId());
+			pstmt.setString(3, dto.getEvReplyContent());
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+	}
+	
+	public void deleteRely(long replyNum, String userId) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			if(!userId.equals("admin")) {
+				sql = " SELECT replyNum FROM eventReply WHERE replyNum = ? AND userId = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, replyNum);
+				pstmt.setString(2, userId);
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if(rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
+				
+				if(!b) {
+					return;
+				}
+			}
+			
+			sql = " DELETE FROM eventReply "
+					+ " WHERE replyNum = ? ";
+					
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, replyNum);
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+	}
+
 
 }

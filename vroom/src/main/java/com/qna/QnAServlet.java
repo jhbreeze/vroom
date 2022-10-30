@@ -43,8 +43,12 @@ public class QnAServlet extends MyServlet {
 			writeSubmit2(req, resp);
 		} else if (uri.indexOf("article.do") != -1) {
 			article(req, resp);
+		} else if (uri.indexOf("article1.do") != -1) {
+			article1(req, resp);
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
+		} else if (uri.indexOf("delete2.do") != -1) {
+			delete2(req, resp);
 		} else if (uri.indexOf("insertReply.do") != -1) {
 			insertReply(req, resp);
 		} else if (uri.indexOf("listReply.do") != -1) {
@@ -157,7 +161,12 @@ public class QnAServlet extends MyServlet {
 		try {
 			QnADTO dto = new QnADTO();
 
-			dto.setUserId(info.getUserId());
+			if(info==null) {
+				
+			} else {
+				dto.setUserId(info.getUserId());
+				
+			}
 
 			dto.setQnaSubject(req.getParameter("qnaSubject"));
 			dto.setQnaContent(req.getParameter("qnaContent"));
@@ -241,6 +250,56 @@ public class QnAServlet extends MyServlet {
 
 		resp.sendRedirect(cp + "/qna/list.do?" + query);
 	}
+	
+	protected void article1(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		QnADAO dao = new QnADAO();
+
+		String cp = req.getContextPath();
+
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
+		try {
+			long qnaNum = Long.parseLong(req.getParameter("qnaNum"));
+			String qnaPwd = req.getParameter("qnaPwd");
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+
+			QnADTO dto = dao.readQna1(qnaNum);
+			
+			if (dto == null) {
+				resp.sendRedirect(cp + "/qna/list.do?" + query);
+				return;
+			}
+			
+			if(!dto.getQnaPwd().equals(qnaPwd)) {
+				resp.setContentType("text/html;charset=utf-8");
+				PrintWriter out = resp.getWriter();
+				out.print("<script>alert('패스워드가 일치하지 않습니다.'); history.back();</script>");
+				return;
+			}
+
+			req.setAttribute("dto", dto);
+			req.setAttribute("page", page);
+			req.setAttribute("query", query);
+
+			forward(req, resp, "/WEB-INF/views/qna/article.jsp");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/qna/list.do?" + query);
+	}
 
 	protected void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		QnADAO dao = new QnADAO();
@@ -279,6 +338,41 @@ public class QnAServlet extends MyServlet {
 			}
 
 			dao.deleteQna1(qnaNum, info.getUserId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resp.sendRedirect(cp + "/qna/list.do?" + query);
+	}
+	protected void delete2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		QnADAO dao = new QnADAO();
+
+		String cp = req.getContextPath();
+
+		String page = req.getParameter("page");
+		String query = "page=" + page;
+
+		try {
+			long qnaNum = Long.parseLong(req.getParameter("qnaNum"));
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+			keyword = URLDecoder.decode(keyword, "utf-8");
+
+			if (keyword.length() != 0) {
+				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
+			}
+
+			QnADTO dto = dao.readQna(qnaNum);
+			if (dto == null) {
+				resp.sendRedirect(cp + "/qna/list.do?" + query);
+				return;
+			}
+
+			dao.deleteQna2(qnaNum);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
