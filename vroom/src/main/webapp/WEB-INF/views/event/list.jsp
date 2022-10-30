@@ -56,9 +56,10 @@ tr.hover:hover {
 
 a {
 	text-decoration-line: none;
+	text-decoration: none;
 }
 
-.col-3, .container {
+.container {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;
 	border-radius: 30px;
@@ -80,12 +81,12 @@ a {
 	width: 100%;
 	opacity: 0;
 	transition: .5s ease;
-	background-color: rgb(0, 140, 186);
+	background-color: #0E6EFD;
 }
 
 .text {
 	color: #eee;
-	font-size: 25px;
+	font-size: 30px;
 	font-family: verdana, sans-serif;
 	position: absolute;
 	top: 50%;
@@ -153,20 +154,16 @@ a {
 										src="${pageContext.request.contextPath}/uploads/photo/${dto.imageFilename}">
 
 									<div class="textbox">
-										<div class="text">
+										<div >
 											<a href="${articleUrl}&eveNum=${dto.eveNum}"
-												title="${dto.eveTitle}"> ${dto.eveTitle}</a>
+												title="${dto.eveTitle}" class="text"> ${dto.eveTitle}</a>
 										</div>
 									</div>
 								</div>
 							</c:if>
 						</c:forEach>
 					</div>
-					<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
 				</div>
-
-
-
 
 				<div class="row board-list-footer">
 					<div class="col"></div>
@@ -205,6 +202,7 @@ a {
 						</c:if>
 					</div>
 				</div>
+				<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
 			</div>
 		</div>
 

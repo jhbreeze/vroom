@@ -79,7 +79,7 @@ a {
 
 .text {
 	color: white;
-	font-size: 25px;
+	font-size: 30px;
 	font-family: verdana, sans-serif;
 	position: absolute;
 	top: 50%;
@@ -157,11 +157,7 @@ a {
 							</c:if>
 						</c:forEach>
 					</div>
-					<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
 				</div>
-
-
-
 
 				<div class="row board-list-footer">
 					<div class="col"></div>
@@ -200,6 +196,7 @@ a {
 						</c:if>
 					</div>
 				</div>
+				<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}</div>
 			</div>
 		</div>
 

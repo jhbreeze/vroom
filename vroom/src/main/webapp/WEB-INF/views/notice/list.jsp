@@ -60,7 +60,7 @@ tr:hover {
 	line-height: 20.5px;
 }
 
-.col-3, .container {
+.container {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;
 	border-radius: 30px;

@@ -17,7 +17,22 @@ main {
 }
 
 .container {
-	min-height: 900px;
+	min-height: 700px;
+}
+
+thead tr {
+	font-size: 45px;
+}
+
+.col-3, .container {
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
+	border: none;
+	border-radius: 30px;
+}
+
+.body-container {
+	max-width: 1200px;
+	margin: auto;
 }
 </style>
 
@@ -147,78 +162,78 @@ main {
 	</header>
 
 	<main>
-		<div class="container body-container">
-			<div class="body-title">
-				<h2>
-					<i class="fa-regular fa-square"></i> 1:1 문의
-				</h2>
-			</div>
+		<div class="container">
+			<div class="body-container">
+				<div class="body-title">
+					<h2>1:1 문의</h2>
+				</div>
 
-			<div class="body-main mx-auto">
-				<table class="table">
-					<thead>
-						<tr>
-							<td colspan="2" align="center">${dto.qnaSubject}</td>
-						</tr>
-					</thead>
+				<div class="body-main mx-auto">
+					<table class="table">
+						<thead>
+							<tr>
+								<td colspan="2" align="center">${dto.qnaSubject}</td>
+							</tr>
+						</thead>
 
-					<tbody>
+						<tbody>
+							<tr>
+								<td width="50%">이름 : <c:choose>
+										<c:when test="${dto.name == null }">${dto.qnaName}</c:when>
+										<c:otherwise>${dto.name}</c:otherwise>
+									</c:choose></td>
+								<td align="right">${dto.qnaRegDate}</td>
+							</tr>
+							<tr>
+								<td colspan="2" valign="top" height="200">${dto.qnaContent}</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<table class="table table-borderless">
 						<tr>
-							<td width="50%">이름 : <c:choose>
-									<c:when test="${dto.name == null }">${dto.qnaName}</c:when>
-									<c:otherwise>${dto.name}</c:otherwise>
+							<td width="50%"><c:choose>
+									<c:when
+										test="${not empty dto.userId && sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+										<button type="button" class="btn btn-light"
+											onclick="deleteBoard();">삭제</button>
+									</c:when>
+									<c:when test="${empty sessionScope.member && empty dto.userId}">
+										<button type="button" class="btn btn-light"
+											onclick="deleteBoard2();">삭제</button>
+									</c:when>
 								</c:choose></td>
-							<td align="right">${dto.qnaRegDate}</td>
-						</tr>
-						<tr>
-							<td colspan="2" valign="top" height="200">${dto.qnaContent}</td>
-						</tr>
-					</tbody>
-				</table>
-
-				<table class="table table-borderless">
-					<tr>
-						<td width="50%"><c:choose>
-								<c:when
-									test="${not empty dto.userId && sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
-									<button type="button" class="btn btn-light"
-										onclick="deleteBoard();">삭제</button>
-								</c:when>
-								<c:when test="${empty sessionScope.member && empty dto.userId}">
+							<td class="text-end">
 								<button type="button" class="btn btn-light"
-										onclick="deleteBoard2();">삭제</button>
-								</c:when>
-							</c:choose></td>
-						<td class="text-end">
-							<button type="button" class="btn btn-light"
-								onclick="location.href='${pageContext.request.contextPath}/qna/list.do?${query}';">리스트</button>
-						</td>
-					</tr>
-				</table>
+									onclick="location.href='${pageContext.request.contextPath}/qna/list.do?${query}';">리스트</button>
+							</td>
+						</tr>
+					</table>
 
-				<div class="reply">
-					<c:if test="${sessionScope.member.userId=='admin'}">
-						<form name="replyForm" method="post">
-							<div class='form-header'>
-								<span class="bold">답변 등록</span>
-							</div>
+					<div class="reply">
+						<c:if test="${sessionScope.member.userId=='admin'}">
+							<form name="replyForm" method="post">
+								<div class='form-header'>
+									<span class="bold">답변 등록</span>
+								</div>
 
-							<table class="table table-borderless reply-form">
-								<tr>
-									<td><textarea class='form-control' name="qnaContent"></textarea>
-									</td>
-								</tr>
-								<tr>
-									<td align='right'>
-										<button type='button' class='btn btn-light btnSendReply'>답변
-											등록</button>
-									</td>
-								</tr>
-							</table>
-						</form>
-					</c:if>
+								<table class="table table-borderless reply-form">
+									<tr>
+										<td><textarea class='form-control' name="qnaContent"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<td align='right'>
+											<button type='button' class='btn btn-light btnSendReply'>답변
+												등록</button>
+										</td>
+									</tr>
+								</table>
+							</form>
+						</c:if>
 
-					<div id="listReply"></div>
+						<div id="listReply"></div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -132,6 +132,12 @@ a {
 	border: none;
 	border-radius: 30px;
 }
+.backColor{
+background-color : #99ccff;
+color: black;
+font-size: 20px;
+font-weight: 600;
+}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -208,7 +214,7 @@ a {
 										value="${dto.faqNum}">
 								</c:if>
 								<h2 class="accordion-header" id="flush-heading-${status.index}">
-									<button class="accordion-button collapsed bg-light"
+									<button class="accordion-button collapsed  backColor"
 										type="button" data-bs-toggle="collapse"
 										data-bs-target="#flush-collapse-${status.index}"
 										aria-expanded="false"

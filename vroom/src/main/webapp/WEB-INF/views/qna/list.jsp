@@ -171,7 +171,7 @@ tr:hover {
 										<c:otherwise>${dto.name}</c:otherwise>
 									</c:choose></td>
 								<td class="text-left date-th"><div class="date-div">${dto.qnaRegDate}</div></td>
-								<td>${reCount == 0 ? "미답변" : "답변완료"}</td>
+								<td>${replyCount == 0 ? "미답변" : "답변완료"}</td>
 							</tr>
 
 						</c:forEach>
@@ -205,7 +205,8 @@ tr:hover {
 
 				<div class="row board-list-footer">
 					<div class="col"></div>
-					<div class="col-4 text-center">
+					<div class="col"></div>
+					<div class="col-6 text-center">
 						<form class="row" name="searchForm"
 							action="${pageContext.request.contextPath}/qna/list.do"
 							method="post">

@@ -532,7 +532,7 @@ public class QnADAO {
 				dto.setReplyNum(rs.getLong("replyNum"));
 				dto.setUserId(rs.getString("userId"));
 				dto.setQnaNum(rs.getLong("qnaNum"));
-
+				dto.setName(rs.getString("name"));
 				dto.setQnaReplyCont(rs.getString("qnaReplyCont"));
 				dto.setQnaReplyDate(rs.getString("qnaReplyDate"));
 

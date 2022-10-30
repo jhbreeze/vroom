@@ -1,7 +1,6 @@
 package com.notice;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -30,15 +29,6 @@ public class NoticeServlet extends MyServlet {
 		req.setCharacterEncoding("utf-8");
 
 		String uri = req.getRequestURI();
-		String cp = req.getContextPath();
-
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-		if (uri.indexOf("list.do") == -1 && info == null) {
-			resp.sendRedirect(cp + "/member/login.do");
-			return;
-		}
 		if (uri.indexOf("list.do") != -1) {
 			list(req, resp);
 		} else if (uri.indexOf("write.do") != -1) {
