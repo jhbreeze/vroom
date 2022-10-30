@@ -18,11 +18,6 @@ main {
 	width: 500px; box-shadow: 0px 0px 8px rgb(72, 92, 161, 0.3); min-height: 50px; 
 	border-radius: 10px; margin: 0 auto; margin-top: 20px; padding: 20px 30px 20px 30px;
 }
-/* #check-title { 
-	background: #0E6EFD; width: 250px; height: 40px; font-size: 17px;
-	text-align: center; color: white; line-height: 40px; vertical-align: 40px;
-	border-radius: 40px;
-} */
 #check-title { 
 	font-size: 25px; font-weight: 600; width: 500px; margin: 0 auto;
 }
