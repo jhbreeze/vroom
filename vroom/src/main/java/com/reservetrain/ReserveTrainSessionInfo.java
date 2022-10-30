@@ -14,6 +14,12 @@ public class ReserveTrainSessionInfo {
 	private String staDate;
 	private String endDate;
 	private int staEnd;
+	private String tStaTime;
+	private String tEndTime;
+	private String deptStaDateTime;
+	private String deptEndDateTIme;
+	private String destStaDateTime;
+	private String destEndDateTime;
 	public String getCycle() {
 		return cycle;
 	}
@@ -91,5 +97,41 @@ public class ReserveTrainSessionInfo {
 	}
 	public void setStaEnd(int staEnd) {
 		this.staEnd = staEnd;
+	}
+	public String gettStaTime() {
+		return tStaTime;
+	}
+	public void settStaTime(String tStaTime) {
+		this.tStaTime = tStaTime;
+	}
+	public String gettEndTime() {
+		return tEndTime;
+	}
+	public void settEndTime(String tEndTime) {
+		this.tEndTime = tEndTime;
+	}
+	public String getDeptStaDateTime() {
+		return deptStaDateTime;
+	}
+	public void setDeptStaDateTime(String deptStaDateTime) {
+		this.deptStaDateTime = deptStaDateTime;
+	}
+	public String getDeptEndDateTIme() {
+		return deptEndDateTIme;
+	}
+	public void setDeptEndDateTIme(String deptEndDateTIme) {
+		this.deptEndDateTIme = deptEndDateTIme;
+	}
+	public String getDestStaDateTime() {
+		return destStaDateTime;
+	}
+	public void setDestStaDateTime(String destStaDateTime) {
+		this.destStaDateTime = destStaDateTime;
+	}
+	public String getDestEndDateTime() {
+		return destEndDateTime;
+	}
+	public void setDestEndDateTime(String destEndDateTime) {
+		this.destEndDateTime = destEndDateTime;
 	}
 }

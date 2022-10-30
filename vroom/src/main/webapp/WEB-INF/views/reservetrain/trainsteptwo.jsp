@@ -37,7 +37,7 @@ tr:hover { background: #fff; box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4); }
 </style>
 
 <script type="text/javascript">
-/* //오늘 날짜이면 왼쪽 화살표를 막음
+//오늘 날짜이면 왼쪽 화살표를 막음
 $(function(){
 	let now = new Date();
 	let a = $("#selected-date").text();
@@ -48,7 +48,6 @@ $(function(){
 	let sd = sdArr[2];
 	
 	let date = new Date(sy, sm-1, sd-1);
-	console.log(date);
 	if(date < now){
 		$("#left-arrow").hide();
 	} else {
@@ -77,11 +76,12 @@ $(function(){
 	} else {
 		$("#right-arrow").show();
 	}
-}); */
+});
 // 왼쪽 버튼을 누를 경우
 $(function(){
 	$("#left-arrow").click(function(){
 		// 날짜 바꿈	
+		let now = new Date();
 		let selectDate = $("#selected-date").text();
 		let sDate = selectDate.trim().slice(0,-1);
 		let sdArr = sDate.split(".");
@@ -104,6 +104,33 @@ $(function(){
 		let query = "";
 		const fn = function(data){
 			$(selector).html(data);
+			
+			disableBtn();
+			
+			let a = $("#selected-date").text();
+			let b = a.trim().slice(0,-1);
+			let sdArr = b.split(".");
+			let sy = sdArr[0];
+			let sm = sdArr[1];
+			let sd = sdArr[2];
+			let date = new Date(sy, sm-1, sd-1);
+			
+			let now = new Date();
+			let y = now.getFullYear();
+			let m = now.getMonth() + 1;
+			let d = now.getDate();
+			let max = new Date(y, m-1, Number(d)+9);
+			
+			if(date < now){
+				$("#left-arrow").hide();
+			} else {
+				$("#left-arrow").show();
+			}
+			if(date >= max){
+				$("#right-arrow").hide();
+			} else {
+				$("#right-arrow").show();
+			}
 		};
 		ajaxFun(url, "get", query, "html", fn);
 	});
@@ -130,7 +157,39 @@ $(function(){
 		$("#selected-date").text(selectedDate);
 		
 		// 오른쪽 버튼을 누를 경우 서버 갔다와서 다시 뿌림
-		listPage();
+		url = "${pageContext.request.contextPath}/reservetrain/reloadsteptwolist.do";
+		let selector = "#trainst2List";
+		let query = "";
+		
+		const fn = function(data){
+			$(selector).html(data);
+			
+			let now = new Date();
+			let y = now.getFullYear();
+			let m = now.getMonth() + 1;
+			let d = now.getDate();
+			let max = new Date(y, m-1, Number(d)+9);
+			
+			let a = $("#selected-date").text();
+			let b = a.trim().slice(0,-1);
+			let sdArr = b.split(".");
+			let sy = sdArr[0];
+			let sm = sdArr[1];
+			let sd = sdArr[2];
+			let date = new Date(sy, sm-1, sd)
+
+			if(date < now){
+				$("#left-arrow").hide();
+			} else {
+				$("#left-arrow").show();
+			}
+			if(date >= max){
+				$("#right-arrow").hide();
+			} else {
+				$("#right-arrow").show();
+			}
+		};
+		ajaxFun(url, "get", query, "html", fn);
 	});
 });
 
@@ -140,45 +199,31 @@ $(function(){
 });
 
 function listPage(){
+	let cycle = $("input[name=cycle]").attr("data-cycle");
+	let hORf = $("input[name=hORf]").attr("data-halffull");
 	url = "${pageContext.request.contextPath}/reservetrain/reloadsteptwolist.do";
 	let selector = "#trainst2List";
 	let query = "";
+	if(cycle==='full') {
+		query = "hORf="+hORf;
+	}
 	const fn = function(data){
+		// 다음을 눌렀을 때, 가는날 -> 오는날로 바꾸고, selected-date를 staDate -> endDate로 바꾸기
+		let cycle = $("input[name=cycle]").attr("data-cycle");
+		let hORf =  $("input[name=hORf]").attr("data-halffull");
+		if (cycle==='full' && hORf==="2"){
+			$("#title-when").text("오는날");
+			$("#selected-date").text("${endDate}");
+			$("input[name=hORf]").attr("data-halffull", "3");
+		}
+		
 		$(selector).html(data);
 		
-		let selectDate = $("#selected-date").text();
-		let sDate = selectDate.trim().slice(0,-1);
-		let sdArr = sDate.split(".");
-		let sy = sdArr[0];
-		let sm = sdArr[1];
-		let sd = sdArr[2];
+		disableBtn();
 		
-		let date = new Date();
-		let ny = date.getFullYear();
-		let nm = date.getMonth()+1;
-		let nd = date.getDate();
-		
-		let nh = date.getHours();
-		let nM = date.getMinutes();
-		
-		// 날짜가 같으면 시간비교를 해서 disalbed하기
-		if(sy==ny&&sm==nm&&sd==nd){ 
-			$("#trainst2List .times").each(function(index, item){
-				let t = $(item).attr("data-tStaTime");
-				let nTime = nh*100+nM;
-				
-				let tArr = t.split(":");
-				let th = Number(tArr[0]);
-				let tm = Number(tArr[1])+30;
-				if(tm > 60){
-					th = th + 1;
-					tm = tm - 60;
-				}
-				let tTime = th*100+tm;
-				if(nTime > tTime){
-					$(item).find(".next-btn").prop("disabled", true);
-				}
-			});
+		if (cycle==='full' && hORf==="2"){
+			$(".departure").text('${destStationName}');
+			$(".destination").text('${deptStationName}');
 		}
 	};
 	ajaxFun(url, "get", query, "html", fn);
@@ -208,7 +253,136 @@ function ajaxFun(url, method, query, dataType, fn) {
 		}
 	});
 }
+
+function disableBtn(){
+	let selectDate = $("#selected-date").text();
+	let sDate = selectDate.trim().slice(0,-1);
+	let sdArr = sDate.split(".");
+	let sy = sdArr[0];
+	let sm = sdArr[1];
+	let sd = sdArr[2];
+	
+	let date = new Date();
+	let ny = date.getFullYear();
+	let nm = date.getMonth()+1;
+	let nd = date.getDate();
+	
+	let nh = date.getHours();
+	let nM = Number(date.getMinutes())+30;
+	if(nM > 60){
+		nh = nh + 1;
+		nM = nM - 60;
+	}
+	
+	// 날짜가 같으면 시간비교를 해서 disalbed하기
+	if(sy==ny&&sm==nm&&sd==nd){ 
+		$("#trainst2List .times").each(function(index, item){
+			let t = $(item).attr("data-tStaTime");
+			let nTime = nh*100+nM;
+			
+			let tArr = t.split(":");
+			let th = Number(tArr[0]);
+			let tm = Number(tArr[1]);
+			if(th < 6){
+				th = Number(th)+24;
+			}
+			let tTime = th*100+tm;
+			
+			if(nTime > tTime){
+				$(item).find(".next-btn").prop("disabled", true);
+			}
+		});
+	} else {
+		$("#trainst2List .times").each(function(index, item){
+			$(item).find(".next-btn").prop("disabled", false);
+		});
+	}
+}
 // 가는날, 오는날 판별 / selected-date에 (staDate / endDate) 판별
+
+// 편도인 경우, 다음을 눌렀을 때, 좌석선택하는 주소로 감.
+$(function(){
+	let cycle = $("input[name=cycle]").attr("data-cycle");
+	$("body").on("click", ".next-btn", function(){
+		if (cycle==='half'){
+			let tStaTime = $(this).closest("tr").find(".staTime").text();
+			let tEndTime = $(this).closest("tr").find(".endTime").text();
+			let staDate = $("#selected-date").text();
+			let tOperCode = $(this).closest("tr").find(".tOperCode").val();
+			let tDiscern = $(this).closest("tr").find(".tDiscern").val();
+			
+			let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats.do?";
+			out += "staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime+"&tOperCode="+tOperCode
+			out += "&tDiscern="+tDiscern;
+			let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
+			+'\n출발시간 : '+tStaTime+'   도착시간 : '+tEndTime
+			+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
+			
+			if(confirm(statement)){
+				location.href = out;
+			}
+		} else if (cycle==='full') {
+			let hORf = $("input[name=hORf]").attr("data-halffull");
+			if(hORf === "1"){
+				let deptStaDateTime = $(this).closest("tr").find(".staTime").text();
+				let deptEndDateTime = $(this).closest("tr").find(".endTime").text();
+				let deptOperCode = $(this).closest("tr").find(".tOperCode").val();
+				let staDate = $("#selected-date").text();
+				let statDiscern = $(this).closest("tr").find(".tDiscern").val();
+				$("input[name=deptStaDateTime]").attr("data-date", deptStaDateTime);
+				$("input[name=deptEndDateTime]").attr("data-date", deptEndDateTime);
+				$("input[name=deptOperCode]").attr("data-tOperCode", deptOperCode);
+				$("input[name=staDate]").attr("data-staDate", staDate);
+				$("input[name=statDiscern]").attr("data-statDiscern", statDiscern);
+				$("input[name=hORf]").attr("data-halffull", "2");
+				listPage();
+			} else if((hORf === "3")){
+				let destStaDateTime = $(this).closest("tr").find(".staTime").text();
+				let destEndDateTime = $(this).closest("tr").find(".endTime").text();
+				let destOperCode = $(this).closest("tr").find(".tOperCode").val();
+				let endtDiscern = $(this).closest("tr").find(".tDiscern").val();
+				$("input[name=destStaDateTime]").attr("data-date", destStaDateTime);
+				$("input[name=destEndDateTime]").attr("data-date", destEndDateTime);
+				$("input[name=destOperCode]").attr("data-tOperCode", destOperCode);
+				$("input[name=endtDiscern]").attr("data-endtDiscern", endtDiscern);
+				let hORf = $("input[name=hORf]").attr("data-halffull");
+				let deptStaDateTime = $("input[name=deptStaDateTime]").attr("data-date");
+				let deptEndDateTime = $("input[name=deptEndDateTime]").attr("data-date");
+				let deptOperCode = $("input[name=deptOperCode]").attr("data-tOperCode");
+				let staDate = $("input[name=staDate]").attr("data-staDate");
+				let endDate = $("#selected-date").text();
+				let statDiscern = $("input[name=statDiscern]").attr("data-statDiscern");
+				
+				let out = "${pageContext.request.contextPath}/reservetrain/trainChoiceSeats.do?";
+				query = "staDate="+staDate+"&endDate="+endDate
+						+"&deptStaDateTime="+deptStaDateTime+"&deptEndDateTime="+deptEndDateTime
+						+"&destStaDateTime="+destStaDateTime+"&destEndDateTime="+destEndDateTime
+						+"&deptOperCode="+deptOperCode+"&destOperCode="+destOperCode
+						+"&statDiscern="+statDiscern+"&endtDiscern="+endtDiscern;
+				
+				let statement = '< 예매 내역 >\n가는날 : '+staDate+'\n출발역 ➔ 도착역 : '+'${deptStationName}'+'➔'+'${destStationName}'
+							+'\n출발시간 : '+deptStaDateTime+'   도착시간 : '+deptEndDateTime
+							+'\n오는날 : '+endDate
+							+'\n출발역 ➔ 도착역 : '+'${destStationName}'+'➔'+'${deptStationName}'
+							+'\n출발시간 : '+destStaDateTime+'   도착시간 : '+destEndDateTime
+							+'\n\n좌석 선택 단계로 넘어가시겠습니까?';
+				if(confirm(statement)){
+					location.href = out+query;
+				}
+				
+			}
+		}
+	});
+});
+
+//왕복이면 화살표 안보이게
+$(function(){
+	let cycle = $("input[name=cycle]").attr("data-cycle");
+	if(cycle==="full"){
+		$("#left-arrow").hide();
+		$("#right-arrow").hide();
+	}
+});
 
 </script>
 
@@ -226,7 +400,7 @@ function ajaxFun(url, method, query, dataType, fn) {
 		    	<p class="fw-bold fs-4" id="title-when">가는날</p>
 		    	<div class="reserveTrain-date">
 		    		<a class="small-arrow" id="left-arrow"><i class="bi bi-caret-left-fill" style="width: 20px;"></i></a>
-		    		<span class="fw-bold fs-5" id="selected-date">${staDate}</span>
+		    		<span class="fw-bold fs-5" id="selected-date" style="width: 135px; text-align: center">${staDate}</span>
 		    		<a class="small-arrow" id="right-arrow"><i class="bi bi-caret-right-fill" style="width: 20px;"></i></a>
 		    	</div>
 	    	</div>
@@ -239,9 +413,19 @@ function ajaxFun(url, method, query, dataType, fn) {
 	    </div>
 	</div>
 </main>
-<form name="">
-	<input type="hidden" name="staDateTime">
-	<input type="hidden" name="endDateTIme">
+<form name="hiddenForm">
+	<input type="hidden" name="cycle" data-cycle="${cycle}">
+	<input type="hidden" name="hORf" data-halffull="1">
+	<input type="hidden" name="staDate" data-staDate="">
+	<input type="hidden" name="endDate" data-endDate="">
+	<input type="hidden" name="statDiscern" data-statDiscern="">
+	<input type="hidden" name="endtDiscern" data-endtDiscern="">
+	<input type="hidden" name="deptStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 출발시간이 저장됨. -->
+	<input type="hidden" name="deptEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 도착시간이 저장됨. -->
+	<input type="hidden" name="destStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
+	<input type="hidden" name="destEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
+	<input type="hidden" name="deptOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 운행코드가 저장됨. -->
+	<input type="hidden" name="destOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 운행코드가 저장됨. -->
 </form>
 
 <footer>

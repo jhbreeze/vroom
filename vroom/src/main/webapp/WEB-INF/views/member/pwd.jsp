@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>VROONG</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 
 <style type="text/css">
@@ -43,7 +43,7 @@ function sendOk() {
 
 	let str = f.userPwd.value;
 	if(!str) {
-		alert("패스워드를 입력하세요. ");
+		alert("비밀번호를 입력하세요. ");
 		f.userPwd.focus();
 		return;
 	}
@@ -65,16 +65,16 @@ function sendOk() {
 
 	        <div class="row justify-content-md-center">
 	            <div class="col-md-7">
-	                <div class="border mt-5 p-4 pb-2 member">
+	                <div class="mt-5 pb-2">
 	                    <form name="pwdForm" method="post" class="row g-3">
-	                        <h3 class="text-center fw-bold">비밀번호 확인</h3>
+	                        <h3 class="text-center fw-bold">🔹 비밀번호 확인 🔹</h3>
 	                        
 			                <div class="d-grid">
-								<p class="form-control-plaintext text-center">본인확인을 위해 비밀번호를 입력해주세요.</p>
+								<p class="form-control-plaintext text-center mb-3">본인확인을 위해 비밀번호를 입력해주세요.</p>
 			                </div>
 	                        
 	                        <div class="d-grid">
-	                            <input type="text" name="userId" class="form-control form-control-lg" placeholder="아이디"
+	                            	<input type="text" name="userId" class="form-control form-control-lg" placeholder="아이디"
 	                            		value="${sessionScope.member.userId}" readonly="readonly">
 	                        </div>
 	                        <div class="d-grid">

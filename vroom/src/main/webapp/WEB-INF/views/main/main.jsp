@@ -9,9 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 메인</title>
 <jsp:include page="/WEB-INF/views/layout/static_mainHeader.jsp"/>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css" type="text/css"/>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
 <style type="text/css">
@@ -97,32 +95,45 @@ function selectDep(){
 		$("#destination").val("선택");
 		$("#destination").attr("data-destination", "");
 	}
-};
+}
+
 function busselectDep(){
 	let radioText = $("input[name=radio3]:checked").next("label").text();
-	let radioValue = $("input[name=radio3]:checked").val();
+	let stationCode = $("input[name=radio3]:checked").val();
+	
 	$("#busdeparture").text(radioText);
-	$("#busdeparture").val(radioValue);
+	$("#busdeparture").attr("data-busdeparture", stationCode);
 	if(!radioText) {
-		$("#departure").text("선택");
-		$("#departure").val("선택");
+		$("#busdeparture").text("선택");
+		$("#busdeparture").val("선택");
 	} 
 	$("#myDialogModal11").modal("hide");
-};
+	
+	let busdeparture = $("#busdeparture").text();
+	let busdestination = $("#busdestination").text();
+	if(busdeparture === busdestination){
+		$("#busdestination").text("선택");
+		$("#busdestination").val("선택");
+		$("#busdestination").attr("data-busdestination", "");
+	}
+}
+	
 function selectDes(){
 	let radioText = $("input[name=radio4]:checked").next("label").text();
 	let stationCode = $("input[name=radio4]:checked").val();
 	$("#destination").text(radioText);
 	$("#destination").attr("data-destination", stationCode);
 	$("#myDialogModal2").modal("hide");
-};
+}
+
 function busselectDes(){
 	let radioText = $("input[name=radio5]:checked").next("label").text();
-	let radioValue = $("input[name=radio5]:checked").val();
+	let stationCode = $("input[name=radio5]:checked").val();
 	$("#busdestination").text(radioText);
-	$("#busdestination").val(radioValue);
+	$("#busdestination").attr("data-busdestination", stationCode);
 	$("#myDialogModal22").modal("hide");
-};
+}
+
 $(function(){
 	$(".select-date2").hide();
 	$("#full").click(function(){
@@ -198,15 +209,20 @@ $(function(){
 		$("#destination").attr("data-destination", deptStationCode);
 	});
 });
-
+//버스
 $(function(){
 	$("#buschangeButton").click(function(){
 		let dep = $("#busdeparture").text();
 		let des = $("#busdestination").text();
+		let depbStationCode = $("#busdeparture").attr("data-busdeparture"); 
+		let desbStationCode = $("#busdestination").attr("data-busdestination");
 		$("#busdeparture").text(des);
 		$("#busdestination").text(dep);
+		$("#busdeparture").attr("data-busdeparture", depbStationCode);
+		$("#busdestination").attr("data-busdestination", depbStationCode);
 	});
 });
+
 // 기차 - 출발지 선택리스트
 $(function(){
 	$(".select-departure").click(function(){
@@ -224,7 +240,7 @@ $(function(){
 				$(data.list).each(function(index, item){
 					let stationCode = item.stationCode;
 					let stationName = item.stationName;
-					out += '<input type="radio" name="radio2" id="'+"trainDep"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDep"+(i)+'">'+stationName+'</label>'
+					out += '<input type="radio" name="radio2" id="'+"trainDep"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDep"+(i)+'">'+stationName+'</label>';
 				});
 				$(".trainDepList").html(out);		
 			},
@@ -234,6 +250,36 @@ $(function(){
 		});
 	});
 });
+
+//버스 - 출발지 선택리스트
+$(function(){
+	$(".select-busdeparture").click(function(){
+		let url = "${pageContext.request.contextPath}/busreserve/businsertlist.do";
+		
+		$.ajax({
+			type:"post",
+			url:url,
+			data:null,
+			dataType:"json",
+			success:function(data){
+				
+				let out = "";
+				let i = 0;
+				$(data.list).each(function(index, item){
+					let stationCode = item.stationCode;
+					let stationName = item.stationName;
+					out += '<input type="radio" name="radio3" id="'+"busDep"+(++i)+'" value="'+stationCode+'"><label class="col" for="'+"busDep"+(i)+'">'+stationName+'</label>';
+				});
+				
+				$(".busDepList").html(out);		
+			},
+			error:function(e) {
+				console.log(e.responseText);
+			}
+		});
+	});
+});
+
 // 기차 - 출발지 선택 후 도착지 선택 리스트
 $(function(){
 	$(".select-destination").click(function(){
@@ -257,9 +303,43 @@ $(function(){
 				$(data.list).each(function(index, item){
 					let stationCode = item.stationCode;
 					let stationName = item.stationName;
-					out += '<input type="radio" name="radio4" id="'+"trainDes"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDes"+(i)+'">'+stationName+'</label>'
+					out += '<input type="radio" name="radio4" id="'+"trainDes"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"trainDes"+(i)+'">'+stationName+'</label>';
 				});
 				$(".trainDesList").html(out);		
+			},
+			error:function(e) {
+				console.log(e.responseText);
+			}
+		});
+	});
+});
+
+//버스 - 출발지 선택 후 도착지 선택 리스트
+$(function(){
+	$(".select-busdestination").click(function(){
+		if(!$("#busdeparture").attr("data-busdeparture")){
+			$(".busDesList").text("출발지를 선택해주세요.");
+			return false;
+		}
+		let url = "${pageContext.request.contextPath}/busreserve/businsertlist.do";
+		let depbStationCode = $("#busdeparture").attr("data-busdeparture"); 
+		let query = "depbStationCode="+depbStationCode;
+		
+		$.ajax({
+			type:"post",
+			url:url,
+			data:query,
+			dataType:"json",
+			success:function(data){
+				
+				let out = "";
+				let i = 0;
+				$(data.list).each(function(index, item){
+					let stationCode = item.stationCode;
+					let stationName = item.stationName;
+					out += '<input type="radio" name="radio5" id="'+"busDes"+(++i)+'" value="'+stationCode+'"><label class="four col" for="'+"busDes"+(i)+'">'+stationName+'</label>';
+				});
+				$(".busDesList").html(out);		
 			},
 			error:function(e) {
 				console.log(e.responseText);
@@ -333,6 +413,7 @@ $(function(){
 		}
 		location.href = out;
 	});
+	
 	function compareDate(){
 		let sy = $("#staDate").attr("data-year");
 		let sm = $("#staDate").attr("data-month");
@@ -342,7 +423,86 @@ $(function(){
 		let em = $("#endDate").attr("data-month");
 		let ed = $("#endDate").attr("data-date");
 		
-		if(ey>=sy&&em>=sy&&ed>=sd){
+		if(ey>=sy&&em>=sy&&ed>=sd) {
+			return false;
+		}
+		return true;
+	}
+});
+//버스데이터
+// 기차 - 다 선택 후에 조회 눌렀을 때 가져갈 데이터
+$(function(){
+	$(".busSend").click(function(){
+		// 비어있는 칸 있는지 확인
+		if(!compareDate()){
+			alert("가는날은 오늘날보다 이전이어야 합니다.");
+		}
+		if(!$("#busdeparture").attr("data-busdeparture")){
+			alert("출발지 및 도착지를 선택해주세요.");
+			return false;
+		}
+		if($("#busdestination").text()==="선택"){
+			alert("도착지를 선택해주세요.");
+			return false;
+		}		
+		let bcycle = $("input[name=busbtnradio]:checked").val();
+		let childCount = $("#childCountResult").text();
+		let adultCount = $("#adultCountResult").text();
+		if(!$("#adultCountResult").text()){
+			adultCount = 0;
+		}
+		if(!$("#childCountResult").text()){
+			childCount = 0;
+		}
+		let depbStationCode = $("#busdeparture").attr("data-busdeparture");
+		let desbStationCode = $("#busdestination").attr("data-busdestination");
+		let depbStationName = $("#busdeparture").text();
+		let desbStationName = $("#busdestination").text();
+		
+		let y1 = $("#busstaDate").attr("data-year");
+		let m1 = $("#busstaDate").attr("data-month");
+		let d1 = $("#busstaDate").attr("data-date");
+		let bBoardDate1 = encodeURIComponent(y1+"-"+m1+"-"+d1);
+		
+		let bBoardDate2 = "";
+		//왕복, 편도
+		if(bcycle == "busfull"){
+			let y2 = $("#busendDate").attr("data-year");
+			let m2 = $("#busendDate").attr("data-month");
+			let d2 = $("#busendDate").attr("data-date");
+			bBoardDate2 = encodeURIComponent(y2+"-"+m2+"-"+d2);
+		}
+		let busstaDate = $("#busstaDate").text();
+		let busendDate = $("#busendDate").text();
+		let bgrade = $("input[name=busradio1]:checked").val();
+		
+		let out = "${pageContext.request.contextPath}/busreserve/buslistbefore.do?"
+		if(bcycle == "busfull"){
+			out += "bcycle="+bcycle;
+			out += "&depbStationCode="+depbStationCode+"&desbStationCode="+desbStationCode;
+			out += "&depbStationName="+depbStationName+"&desbStationName="+desbStationName;
+			out += "&busstaDate="+busstaDate+"&busendDate="+busendDate;
+			out += "&bBoardDate1="+bBoardDate1+"&bBoardDate2="+bBoardDate2+"&bgrade="+bgrade;
+		} else {
+			out += "bcycle="+bcycle;
+			out += "&depbStationCode="+depbStationCode+"&desbStationCode="+desbStationCode;
+			out += "&depbStationName="+depbStationName+"&desbStationName="+desbStationName;
+			out += "&busstaDate="+busstaDate+"&busendDate="+busendDate;
+			out += "&bBoardDate1="+bBoardDate1+"&bgrade="+bgrade;
+		}
+		location.href = out;
+	});
+	
+	function compareDate(){
+		let sy = $("#busstaDate").attr("data-year");
+		let sm = $("#busstaDate").attr("data-month");
+		let sd = $("#busstaDate").attr("data-date");
+		
+		let ey = $("#busendDate").attr("data-year");
+		let em = $("#busendDate").attr("data-month");
+		let ed = $("#busendDate").attr("data-date");
+		
+		if(ey>=sy&&em>=sy&&ed>=sd) {
 			return false;
 		}
 		return true;
@@ -379,26 +539,26 @@ $(function(){
 		<div class="tab-content reserve-tab" id="nav-tabContent" role="group" aria-label="Basic radio toggle button group">
 			<!--  버스 -->
 			<div class="tab-pane fade train-container justify-content-center active show" id="nav-1" role="tabpanel" aria-labelledby="nav-tab-1">
-			<form name="trainReserveForm" method="post">
+			<form name="busReserveForm" method="post">
 				<span id="buschangeButton" style="width: 30px; height: 30px; border-radius: 30px; left: 170px; top: 70px; padding: auto; padding-left: 7px; padding-top: 3px; z-index: 300;"><i class="bi bi-arrow-left-right"></i></span>
 				<div class="btn-goup row row-cols-3 text-dark text-center" style="margin: 0px;" role="group" aria-label="Basic radio toggle button group">
-					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio1" autocomplete="off" checked>
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio1" autocomplete="off" checked value="half">
   					<label class="col-6 btn btn-outline-primary" id="bushalf" for="busbtnradio1" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>편 도</span></label>
 					
-					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio2" autocomplete="off">
+					<input type="radio" class="btn-check" name="busbtnradio" id="busbtnradio2" autocomplete="off" value="full">
   					<label class="col-6 btn btn-outline-primary" id="busfull" for="busbtnradio2" style="margin: 2px; width: 49%; border: none; font-weight: 600;"><span>왕 복</span></label>
 				</div>
 				<div class="row row-cols-3 text-dark second-row">
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-departure position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11">
+					  	<button type="button" class="btn select-busdeparture position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11">
 					  		<div class="small-text">출발지</div>
-					  		<div class="middle-hilight-text" id="busdeparture">선택</div>
+					  		<div class="middle-hilight-text" id="busdeparture" data-busdeparture="">선택</div>
 					  	</button>
 					</div>
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-destination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22">
+					  	<button type="button" class="btn select-busdestination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22">
 						  	<div class="small-text">도착지</div>
-						  	<div class="middle-hilight-text" id="busdestination">선택</div>
+						  	<div class="middle-hilight-text" id="busdestination" data-busdestination="">선택</div>
 					  	</button>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 49%">
@@ -424,7 +584,7 @@ $(function(){
 						</section>
 					</div>
 					<div class="col-6" style="margin: 2px; width: 48.75%">
-						<button type="button" class="btn btn-primary final-button" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
+						<button type="button" class="btn btn-primary final-button busSend" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
 					</div>
 				</div>
 			</form>
@@ -614,11 +774,8 @@ $(function(){
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<form name="departureForm">
-				<div class="modal-body"  style="min-height: 200px;">	
-		        	<section class="plan cf">
-						<input type="radio" name="radio3" id="bussu" value="서울" checked><label class="four col" for="bussu">서울</label>
-						<input type="radio" name="radio3" id="busydp" value="영등포"><label class="four col" for="busydp">영등포</label>
-						<input type="radio" name="radio3" id="bussw" value="수원"><label class="four col" for="bussw">수원</label>
+				<div class="modal-body"  style="min-height: 500px;">	
+		        	<section class="plan cf busDepList">
 					</section>
 				</div>
 				<div class="modal-footer">
@@ -639,11 +796,8 @@ $(function(){
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<form name="destinationForm">
-				<div class="modal-body" style="min-height: 200px;">
-		        	<section class="plan2 cf">
-						<input type="radio" name="radio5" id="bussu2" value="서울" checked><label for="bussu2">서울</label>
-						<input type="radio" name="radio5" id="busydp2" value="영등포"><label for="busydp2">영등포</label>
-						<input type="radio" name="radio5" id="bussw2" value="수원"><label for="bussw2">수원</label>
+				<div class="modal-body" style="min-height: 500px;">
+		        	<section class="plan2 cf busDesList">
 					</section>
 				</div>
 				<div class="modal-footer">

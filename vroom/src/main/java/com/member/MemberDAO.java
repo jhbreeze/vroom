@@ -191,7 +191,7 @@ public class MemberDAO {
 		String sql;
 		
 		try {
-			sql = " UPDATE member1 SET pwd= ?, mod_date=SYSDATE, birth= ? WHERE usedId = ?  ";
+			sql = " UPDATE member1 SET pwd= ?, mod_date=SYSDATE, birth= ? WHERE userId = ?  ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, dto.getUserPwd());
@@ -209,7 +209,7 @@ public class MemberDAO {
 			pstmt.setString(1, dto.getUserName());
 			pstmt.setString(2, dto.getTel());
 			pstmt.setString(3, dto.getEmail());
-			pstmt.setInt(4, dto.getCusNum()); // 이게 될까? 아니면 현재값? 서브쿼리?
+			pstmt.setInt(4, dto.getCusNum());
 			
 			pstmt.executeUpdate();
 			

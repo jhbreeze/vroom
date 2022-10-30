@@ -159,7 +159,7 @@ function memberOk() {
 	
 		f.action = "${pageContext.request.contextPath}/member/${mode}_ok.do";
 		f.submit();
-		alert("${mode=="member"?"회원가입 성공!":"수정완료"}");
+		alert("${mode=="member"?"가입에 성공했습니다.":"정보가 수정되었습니다."}");
 }
 
 

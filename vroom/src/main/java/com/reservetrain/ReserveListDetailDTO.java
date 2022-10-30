@@ -33,7 +33,12 @@ public class ReserveListDetailDTO {
 	private List<Integer> tNumIdList;
 	private String tStaTime;
 	private String tendTime;
+	private String deptStaDateTime;
+	private String deptEndDateTIme;
+	private String destStaDateTime;
+	private String destEndDateTime;
 	private int tNumId;
+	private int tOperCode;
 	
 	public String gettStationName() {
 		return tStationName;
@@ -220,5 +225,35 @@ public class ReserveListDetailDTO {
 	}
 	public void settNumId(int tNumId) {
 		this.tNumId = tNumId;
+	}
+	public String getDeptStaDateTime() {
+		return deptStaDateTime;
+	}
+	public void setDeptStaDateTime(String deptStaDateTime) {
+		this.deptStaDateTime = deptStaDateTime;
+	}
+	public String getDeptEndDateTIme() {
+		return deptEndDateTIme;
+	}
+	public void setDeptEndDateTIme(String deptEndDateTIme) {
+		this.deptEndDateTIme = deptEndDateTIme;
+	}
+	public String getDestStaDateTime() {
+		return destStaDateTime;
+	}
+	public void setDestStaDateTime(String destStaDateTime) {
+		this.destStaDateTime = destStaDateTime;
+	}
+	public String getDestEndDateTime() {
+		return destEndDateTime;
+	}
+	public void setDestEndDateTime(String destEndDateTime) {
+		this.destEndDateTime = destEndDateTime;
+	}
+	public int gettOperCode() {
+		return tOperCode;
+	}
+	public void settOperCode(int tOperCode) {
+		this.tOperCode = tOperCode;
 	}
 }
