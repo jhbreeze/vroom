@@ -884,17 +884,25 @@ public class ReserveTrainDAO {
 		PreparedStatement pstmt = null;
 		String sql;
 		ResultSet rs = null;
+		int a, b;
+		if(deptRouteDetailCode < destRouteDetailCode) {
+			a = deptRouteDetailCode;
+			b = destRouteDetailCode;
+		} else {
+			a = destRouteDetailCode;
+			b = deptRouteDetailCode;
+		}
 		
 		try {
-			sql = "SELECT SUM(tDistance) FROM trainRouteDetail "
+			sql = "SELECT SUM(tDistance) t FROM trainRouteDetail "
 					+ "WHERE tRouteDetailCode > ? AND tRouteDetailCode <= ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, deptRouteDetailCode);
-			pstmt.setInt(2, destRouteDetailCode);
+			pstmt.setInt(1, a);
+			pstmt.setInt(2, b);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				tDistance = rs.getInt(1);
+				tDistance = rs.getInt("t");
 			}
 		}  catch (Exception e) {
 			e.printStackTrace();
@@ -913,5 +921,44 @@ public class ReserveTrainDAO {
 			}
 		}
 		return tDistance;
+	}
+	
+	// 열차번호, 등급 -> 요금할증 구하기
+	public List<Integer> getTCostList(int tNumId) {
+		List<Integer> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT fee1, fee2, tKidsale, tOldsale, tDissale "
+					+ "FROM train WHERE tNumId = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, tNumId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				list.add(rs.getInt("fee1"));
+				list.add(rs.getInt("fee2"));
+				list.add(rs.getInt("tKidsale"));
+				list.add(rs.getInt("tOldsale"));
+				list.add(rs.getInt("tDissale"));
+			}
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
 	}
 }
