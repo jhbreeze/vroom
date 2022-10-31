@@ -45,6 +45,8 @@
 		</div>
 	</div>
 
+
+
 	<div class="mb-3" id="choice-seats">
 		<% for (int i = 0; i < rows; i++) { %>
 		<div class="form_toggle d-flex flex-row justify-content-center">

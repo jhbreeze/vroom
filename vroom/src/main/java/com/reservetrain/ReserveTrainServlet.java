@@ -2,6 +2,7 @@ package com.reservetrain;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +122,7 @@ public class ReserveTrainServlet extends MyServlet{
 		reserveInfo.setStaEnd(1);
 		
 		session.setAttribute("reserveTrainInfo", reserveInfo);
+		session.setAttribute("reserve", "기차");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
@@ -272,7 +274,7 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("depstatDetailCode", depstatDetailCode);
 				req.setAttribute("desstatDetailCode", desstatDetailCode);
 				List<Integer> tRouteDetailCodeList2 = dao.getTRouteDetailCode(deptStationCode, destStationCode);
-				int destOperCode = Integer.parseInt(req.getParameter("deptOperCode"));
+				int destOperCode = Integer.parseInt(req.getParameter("destOperCode"));
 				int dependtDetailCode = dao.getTDetailCode(destOperCode, tRouteDetailCodeList2.get(0));
 				int desendtDetailCode = dao.getTDetailCode(destOperCode, tRouteDetailCodeList2.get(1));
 				req.setAttribute("dependtDetailCode", dependtDetailCode);
@@ -343,11 +345,16 @@ public class ReserveTrainServlet extends MyServlet{
 						String honum = reservedSeatsList.get(i).gettHoNum();
 						if(leftSeat > count) {
 							tHoNum = honum;
+							gradetHoNum = dao.getGrade(honum);
 							break;
 						}
 					}
 				} else {
 					gradetHoNum = dao.getGrade(tHoNum) ;
+				}
+				
+				if(gradetHoNum==null&&grade.equals("premium")) {
+					gradetHoNum = "premium";
 				}
 				
 				List<String> reservedSeats = new ArrayList<>();
@@ -369,14 +376,28 @@ public class ReserveTrainServlet extends MyServlet{
 						selectHochaList.add(dto);
 					}
 				}
-				req.setAttribute("list", selectHochaList);
-				req.setAttribute("grade", grade);
-				req.setAttribute("reservedSeatsArr", reservedSeatsArr);
-				req.setAttribute("tHoNum", tHoNum);
-				req.setAttribute("gradetHoNum", gradetHoNum);
 				
-				forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
-				return;
+				JSONObject job = new JSONObject();
+				JSONArray jarr = new JSONArray();
+				for(HochaDTO dto : selectHochaList) {
+					JSONObject jo = new JSONObject();
+					
+					jo.put("tHoNum", dto.gettHoNum());
+					jo.put("hoNum", dto.getHoNum());
+					jo.put("num", dto.getNum());
+					jo.put("leftSeats", dto.getLeftSeats());
+					
+					jarr.put(jo);
+				}
+				job.put("list", jarr);
+				job.put("grade", grade);
+				job.put("reservedSeatsArr", reservedSeatsArr);
+				job.put("gradetHoNum", gradetHoNum);
+				
+				resp.setContentType("text/html;charset=utf-8");
+				PrintWriter out = resp.getWriter();
+				
+				out.print(job.toString());
 				
 			} else if(cycle.equals("full")) {
 				if(hORf.equals("1")) {
@@ -403,11 +424,16 @@ public class ReserveTrainServlet extends MyServlet{
 							String honum = reservedSeatsList.get(i).gettHoNum();
 							if(leftSeat > count) {
 								tHoNum = honum;
+								gradetHoNum = dao.getGrade(honum);
 								break;
 							}
 						}
 					} else {
 						gradetHoNum = dao.getGrade(tHoNum) ;
+					}
+					
+					if(gradetHoNum==null&&grade.equals("premium")) {
+						gradetHoNum = "premium";
 					}
 					
 					List<String> reservedSeats = new ArrayList<>();
@@ -419,25 +445,38 @@ public class ReserveTrainServlet extends MyServlet{
 						HochaDTO dto = new HochaDTO();
 						List<String> tSeatNumList = reservedSeatsList.get(i).gettSeatNumList();
 						int leftSeats = tHoNumList.get(i).getHoNum()-tSeatNumList.size();
-						if(leftSeats >= count) {
-							dto.setHoNum(reservedSeatsList.get(i).getHoNum()); // 좌석수
+						if(leftSeats > count) {
+							dto.setHoNum(tHoNumList.get(i).getHoNum()); // 좌석수
 							dto.settHoNum(reservedSeatsList.get(i).gettHoNum()); // 호차 이름
 							String hochaName = reservedSeatsList.get(i).gettHoNum();
 							int num = Integer.parseInt(hochaName.substring(4));
 							dto.setNum(num); // 몇 호차인지(이름에서 열차번호 뺀거)
 							dto.setLeftSeats(leftSeats);
-							dto.setHoDiv(reservedSeatsList.get(i).getHoDiv());
 							selectHochaList.add(dto);
 						}
 					}
-					req.setAttribute("list", selectHochaList);
-					req.setAttribute("grade", grade);
-					req.setAttribute("reservedSeatsArr", reservedSeatsArr);
-					req.setAttribute("tHoNum", tHoNum);
-					req.setAttribute("gradetHoNum", gradetHoNum);
 					
-					forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
-					return;
+					JSONObject job = new JSONObject();
+					JSONArray jarr = new JSONArray();
+					for(HochaDTO dto : selectHochaList) {
+						JSONObject jo = new JSONObject();
+						
+						jo.put("tHoNum", dto.gettHoNum());
+						jo.put("hoNum", dto.getHoNum());
+						jo.put("num", dto.getNum());
+						jo.put("leftSeats", dto.getLeftSeats());
+						
+						jarr.put(jo);
+					}
+					job.put("list", jarr);
+					job.put("grade", grade);
+					job.put("reservedSeatsArr", reservedSeatsArr);
+					job.put("gradetHoNum", gradetHoNum);
+					
+					resp.setContentType("text/html;charset=utf-8");
+					PrintWriter out = resp.getWriter();
+					
+					out.print(job.toString());
 					
 				} else if(hORf.equals("2")) {
 					String endDate = req.getParameter("endDate");
@@ -466,11 +505,16 @@ public class ReserveTrainServlet extends MyServlet{
 							String honum = reservedSeatsList.get(i).gettHoNum();
 							if(leftSeat > count) {
 								tHoNum = honum;
+								gradetHoNum = dao.getGrade(honum);
 								break;
 							}
 						}
 					} else {
 						gradetHoNum = dao.getGrade(tHoNum) ;
+					}
+					
+					if(gradetHoNum==null&&grade.equals("premium")) {
+						gradetHoNum = "premium";
 					}
 					
 					List<String> reservedSeats = new ArrayList<>();
@@ -483,7 +527,7 @@ public class ReserveTrainServlet extends MyServlet{
 						List<String> tSeatNumList = reservedSeatsList.get(i).gettSeatNumList();
 						int leftSeats = tHoNumList.get(i).getHoNum()-tSeatNumList.size();
 						if(leftSeats > count) {
-							dto.setHoNum(reservedSeatsList.get(i).getHoNum()); // 좌석수
+							dto.setHoNum(tHoNumList.get(i).getHoNum()); // 좌석수
 							dto.settHoNum(reservedSeatsList.get(i).gettHoNum()); // 호차 이름
 							String hochaName = reservedSeatsList.get(i).gettHoNum();
 							int num = Integer.parseInt(hochaName.substring(4));
@@ -492,14 +536,28 @@ public class ReserveTrainServlet extends MyServlet{
 							selectHochaList.add(dto);
 						}
 					}
-					req.setAttribute("list", selectHochaList);
-					req.setAttribute("grade", grade);
-					req.setAttribute("reservedSeatsArr", reservedSeatsArr);
-					req.setAttribute("tHoNum", tHoNum);
-					req.setAttribute("gradetHoNum", gradetHoNum);
 					
-					forward(req, resp, "/WEB-INF/views/reservetrain/choiceseatsList.jsp");
-					return;
+					JSONObject job = new JSONObject();
+					JSONArray jarr = new JSONArray();
+					for(HochaDTO dto : selectHochaList) {
+						JSONObject jo = new JSONObject();
+						
+						jo.put("tHoNum", dto.gettHoNum());
+						jo.put("hoNum", dto.getHoNum());
+						jo.put("num", dto.getNum());
+						jo.put("leftSeats", dto.getLeftSeats());
+						
+						jarr.put(jo);
+					}
+					job.put("list", jarr);
+					job.put("grade", grade);
+					job.put("reservedSeatsArr", reservedSeatsArr);
+					job.put("gradetHoNum", gradetHoNum);
+					
+					resp.setContentType("text/html;charset=utf-8");
+					PrintWriter out = resp.getWriter();
+					
+					out.print(job.toString());
 				}
 				
 			}
@@ -507,13 +565,138 @@ public class ReserveTrainServlet extends MyServlet{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		resp.sendError(400);
 	}
 	
 	protected void beforePay(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		
-		forward(req, resp, "/WEB-INF/views/reservetrain/trainPay.jsp");
-		return;
+		HttpSession session = req.getSession();
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
+		ReserveTrainDAO dao = new ReserveTrainDAO();
+		try {
+			String cycle = reserveInfo.getCycle();
+			int adultCount = reserveInfo.getAdultCount();
+			int childCount = reserveInfo.getChildCount();
+			req.setAttribute("cycle", cycle);
+			if(cycle.equals("half")) {
+				String selTHoNum = req.getParameter("selTHoNum");
+				int staTNumId = Integer.parseInt(selTHoNum.substring(0, 3));
+				req.setAttribute("statDiscern", req.getParameter("tDiscern"));
+				req.setAttribute("staDate", req.getParameter("staDate"));
+				req.setAttribute("deptStaDateTime", req.getParameter("tStaTime"));
+				req.setAttribute("deptEndDateTime", req.getParameter("tEndTime"));
+				req.setAttribute("tOperCode", req.getParameter("tOperCode"));
+				req.setAttribute("statDetailCode", req.getParameter("statDetailCode"));
+				req.setAttribute("endtDetailCode", req.getParameter("endtDetailCode"));
+				req.setAttribute("staSeats", req.getParameter("selSeats"));
+				req.setAttribute("selTHoNum", req.getParameter("selTHoNum"));
+				req.setAttribute("staTNumId", staTNumId);
+				req.setAttribute("staTNum", Integer.parseInt(selTHoNum.substring(4)));
+				req.setAttribute("selGrade", req.getParameter("selGrade"));
+				req.setAttribute("statStaionName", reserveInfo.getDeptStationName());
+				req.setAttribute("endtStaionName", reserveInfo.getDestStationName());
+				String selGrade = req.getParameter("selGrade");
+				
+				// 가격 계산
+				List<Integer> tRouteDetailCodeList = dao.getTRouteDetailCode(reserveInfo.getDeptStationCode(), reserveInfo.getDestStationCode());
+				int distance = dao.getTDistance(tRouteDetailCodeList.get(0), tRouteDetailCodeList.get(1));
+				List<Integer> costList = dao.getTCostList(staTNumId);
+				
+				int adultCost = 0;
+				int childCost = 0;
+				if(selGrade.equals("premium")) {
+					adultCost = distance*adultCount*costList.get(1);
+					childCost = distance*childCount*costList.get(1)*costList.get(2)/100;
+				} else {
+					adultCost = distance*adultCount*costList.get(0);
+					childCost = distance*childCount*costList.get(0)*costList.get(2)/100;
+				}
+				int totalCost = adultCost + childCost;
+				DecimalFormat formatter = new DecimalFormat("###,###");
+				req.setAttribute("staadultCost", formatter.format(adultCost));
+				req.setAttribute("stachildCost", formatter.format(childCost));
+				req.setAttribute("statotalCost", formatter.format(totalCost));
+				req.setAttribute("adultCount", adultCount);
+				req.setAttribute("childCount", childCount);
+				
+				forward(req, resp, "/WEB-INF/views/reservetrain/trainPay.jsp");
+				return;
+			}else if(cycle.equals("full")) {
+				String staTHoNum = req.getParameter("staTHoNum");
+				int staTNumId = Integer.parseInt(staTHoNum.substring(0, 3));
+				String endTHoNum = req.getParameter("endTHoNum");
+				int endTNumId = Integer.parseInt(endTHoNum.substring(0, 3));
+				req.setAttribute("staTNum", Integer.parseInt(staTHoNum.substring(4)));
+				req.setAttribute("endTNum", Integer.parseInt(endTHoNum.substring(4)));
+				req.setAttribute("statDiscern", req.getParameter("statDiscern"));
+				req.setAttribute("endtDiscern", req.getParameter("endtDiscern"));
+				req.setAttribute("staDate", req.getParameter("staDate"));
+				req.setAttribute("endDate", req.getParameter("endDate"));
+				req.setAttribute("deptStaDateTime", req.getParameter("deptStaDateTime"));
+				req.setAttribute("deptEndDateTime", req.getParameter("deptEndDateTime"));
+				req.setAttribute("destStaDateTime", req.getParameter("destStaDateTime"));
+				req.setAttribute("destEndDateTime", req.getParameter("destEndDateTime"));
+				req.setAttribute("deptOperCode", req.getParameter("deptOperCode"));
+				req.setAttribute("destOperCode", req.getParameter("destOperCode"));
+				req.setAttribute("depstatDetailCode", req.getParameter("depstatDetailCode"));
+				req.setAttribute("desstatDetailCode", req.getParameter("desstatDetailCode"));
+				req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
+				req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
+				req.setAttribute("staSeats", req.getParameter("staSeats"));
+				req.setAttribute("endSeats", req.getParameter("endSeats"));
+				req.setAttribute("staTHoNum", req.getParameter("staTHoNum"));
+				req.setAttribute("endTHoNum", req.getParameter("endTHoNum"));
+				req.setAttribute("staTNumId", staTNumId);
+				req.setAttribute("endTNumId", endTNumId);
+				req.setAttribute("statStaionName", reserveInfo.getDeptStationName());
+				req.setAttribute("endtStaionName", reserveInfo.getDestStationName());
+				req.setAttribute("staGrade", req.getParameter("staGrade"));
+				req.setAttribute("endGrade", req.getParameter("endGrade"));
+				String staGrade = req.getParameter("staGrade");
+				String endGrade = req.getParameter("endGrade");
+				
+				// 가격 계산
+				List<Integer> tRouteDetailCodeList = dao.getTRouteDetailCode(reserveInfo.getDeptStationCode(), reserveInfo.getDestStationCode());
+				int distance = dao.getTDistance(tRouteDetailCodeList.get(0), tRouteDetailCodeList.get(1));
+				List<Integer> costList = dao.getTCostList(staTNumId);
+				List<Integer> costList2 = dao.getTCostList(endTNumId);
+				
+				int staadultCost = 0;
+				int stachildCost = 0;
+				if(staGrade.equals("premium")) {
+					staadultCost = distance*adultCount*costList.get(1);
+					stachildCost = distance*childCount*costList.get(1)*costList.get(2)/100;
+				} else {
+					staadultCost = distance*adultCount*costList.get(0);
+					stachildCost = distance*childCount*costList.get(0)*costList.get(2)/100;
+				}
+				int statotalCost = staadultCost + stachildCost;
+				
+				int endadultCost = 0;
+				int endchildCost = 0;
+				if(endGrade.equals("premium")) {
+					endadultCost = distance*adultCount*costList2.get(1);
+					endchildCost = distance*childCount*costList2.get(1)*costList.get(2)/100;
+				} else {
+					endadultCost = distance*adultCount*costList2.get(0);
+					endchildCost = distance*childCount*costList2.get(0)*costList.get(2)/100;
+				}
+				int endtotalCost = endadultCost + endchildCost;
+				
+				DecimalFormat formatter = new DecimalFormat("###,###");
+				req.setAttribute("staadultCost", formatter.format(staadultCost));
+				req.setAttribute("stachildCost", formatter.format(stachildCost));
+				req.setAttribute("endadultCost", formatter.format(endadultCost));
+				req.setAttribute("endchildCost", formatter.format(endchildCost));
+				req.setAttribute("statotalCost", formatter.format(statotalCost));
+				req.setAttribute("endtotalCost", formatter.format(endtotalCost));
+				req.setAttribute("adultCount", adultCount);
+				req.setAttribute("childCount", childCount);
+				
+				
+				forward(req, resp, "/WEB-INF/views/reservetrain/trainPay.jsp");
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

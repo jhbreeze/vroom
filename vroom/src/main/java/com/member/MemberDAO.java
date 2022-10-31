@@ -226,8 +226,53 @@ public class MemberDAO {
 		}
 	}
 	
-	public void deleteMember(String userId) throws SQLException {
+	public void deleteMember(String userId, Integer cusNum) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql;
 		
+		try {
+			conn.setAutoCommit(false);
+			
+			sql = " DELETE FROM member1 WHERE userId = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userId);
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			pstmt = null;
+			
+			sql = " DELETE FROM customer WHERE cusNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, cusNum);
+			
+			pstmt.executeUpdate();
+			
+			conn.commit();
+			
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e2) {
+			}
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e2) {
+			}
+		}
+
 	}
 }
 

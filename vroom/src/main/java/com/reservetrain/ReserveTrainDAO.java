@@ -3,7 +3,9 @@ package com.reservetrain;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.util.DBConn;
@@ -884,17 +886,25 @@ public class ReserveTrainDAO {
 		PreparedStatement pstmt = null;
 		String sql;
 		ResultSet rs = null;
+		int a, b;
+		if(deptRouteDetailCode < destRouteDetailCode) {
+			a = deptRouteDetailCode;
+			b = destRouteDetailCode;
+		} else {
+			a = destRouteDetailCode;
+			b = deptRouteDetailCode;
+		}
 		
 		try {
-			sql = "SELECT SUM(tDistance) FROM trainRouteDetail "
+			sql = "SELECT SUM(tDistance) t FROM trainRouteDetail "
 					+ "WHERE tRouteDetailCode > ? AND tRouteDetailCode <= ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, deptRouteDetailCode);
-			pstmt.setInt(2, destRouteDetailCode);
+			pstmt.setInt(1, a);
+			pstmt.setInt(2, b);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				tDistance = rs.getInt(1);
+				tDistance = rs.getInt("t");
 			}
 		}  catch (Exception e) {
 			e.printStackTrace();
@@ -913,5 +923,274 @@ public class ReserveTrainDAO {
 			}
 		}
 		return tDistance;
+	}
+	
+	// 열차번호, 등급 -> 요금할증 구하기
+	public List<Integer> getTCostList(int tNumId) {
+		List<Integer> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		
+		try {
+			sql = "SELECT fee1, fee2, tKidsale, tOldsale, tDissale "
+					+ "FROM train WHERE tNumId = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, tNumId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				list.add(rs.getInt("fee1"));
+				list.add(rs.getInt("fee2"));
+				list.add(rs.getInt("tKidsale"));
+				list.add(rs.getInt("tOldsale"));
+				list.add(rs.getInt("tDissale"));
+			}
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return list;
+	}
+	
+	// 결제정보 입력(편도)
+	public int halfInsertPayInfo(PaymentDTO dto) {
+		int result = 0;
+		int tTkNumSeq = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+			
+		try {
+			conn.setAutoCommit(false);
+				
+			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				tTkNumSeq = rs.getInt(1);
+			}
+			pstmt.close();
+			pstmt = null;
+				
+			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
+					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
+					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+			pstmt = conn.prepareStatement(sql);
+				
+			pstmt.setInt(1, dto.getCusNum());
+			pstmt.setInt(2, dto.gettTotNum());
+			pstmt.setInt(3, dto.gettTotPrice());
+			pstmt.setString(4, dto.gettPayDay());
+			pstmt.setInt(5, dto.gettPayPrice());
+			pstmt.setInt(5, dto.gettDisPrice());
+			pstmt.setInt(5, dto.gettDetailCodeEnd());
+			pstmt.setInt(6, dto.gettDetailCodeSta());
+			pstmt.setString(7, dto.gettBoardDate());
+				
+			result += pstmt.executeUpdate();
+				
+			pstmt.close();
+			pstmt = null;
+			
+			String tNum;
+			Date now = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			tNum = sdf.format(now);
+			int randomInt = (int)Math.random()*1000;
+			tNum += randomInt;
+			
+			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+					+ "	VALUES("+ tNum +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
+			for(int i=0; i<dto.gettPassinger().size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, dto.gettFee().get(i));
+				pstmt.setString(2, dto.gettPassinger().get(i));
+				pstmt.setString(3, dto.gettSeat());
+				pstmt.setString(4, dto.gettHoNum());
+				pstmt.setString(5, dto.gettSeatNum().get(i));
+			}
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return result;
+	}
+	
+	public int fullInsertPayInfo(PaymentDTO staDto, PaymentDTO endDto) {
+		int result = 0;
+		int tTkNumSeq = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+			
+		try {
+			conn.setAutoCommit(false);
+				
+			// ---------------- 가는날
+			
+			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				tTkNumSeq = rs.getInt(1);
+			}
+			pstmt.close();
+			rs.close();
+			pstmt = null;
+				
+			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
+					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
+					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+			pstmt = conn.prepareStatement(sql);
+				
+			pstmt.setInt(1, staDto.getCusNum());
+			pstmt.setInt(2, staDto.gettTotNum());
+			pstmt.setInt(3, staDto.gettTotPrice());
+			pstmt.setString(4, staDto.gettPayDay());
+			pstmt.setInt(5, staDto.gettPayPrice());
+			pstmt.setInt(5, staDto.gettDisPrice());
+			pstmt.setInt(5, staDto.gettDetailCodeEnd());
+			pstmt.setInt(6, staDto.gettDetailCodeSta());
+			pstmt.setString(7, staDto.gettBoardDate());
+				
+			result += pstmt.executeUpdate();
+				
+			pstmt.close();
+			pstmt = null;
+			
+			String tNum;
+			Date now = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			tNum = sdf.format(now);
+			int randomInt = (int)Math.random()*1000;
+			tNum += randomInt;
+			
+			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+					+ "	VALUES("+ tNum +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
+			for(int i=0; i<staDto.gettPassinger().size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, staDto.gettFee().get(i));
+				pstmt.setString(2, staDto.gettPassinger().get(i));
+				pstmt.setString(3, staDto.gettSeat());
+				pstmt.setString(4, staDto.gettHoNum());
+				pstmt.setString(5, staDto.gettSeatNum().get(i));
+				
+				result += pstmt.executeUpdate();
+				
+				pstmt.close();
+				pstmt = null;
+			}
+			
+			// ---------------- 오는날
+			
+			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				tTkNumSeq = rs.getInt(1);
+			}
+			pstmt.close();
+			pstmt = null;
+				
+			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
+					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
+					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+			pstmt = conn.prepareStatement(sql);
+				
+			pstmt.setInt(1, endDto.getCusNum());
+			pstmt.setInt(2, endDto.gettTotNum());
+			pstmt.setInt(3, endDto.gettTotPrice());
+			pstmt.setString(4, endDto.gettPayDay());
+			pstmt.setInt(5, endDto.gettPayPrice());
+			pstmt.setInt(5, endDto.gettDisPrice());
+			pstmt.setInt(5, endDto.gettDetailCodeEnd());
+			pstmt.setInt(6, endDto.gettDetailCodeSta());
+			pstmt.setString(7, endDto.gettBoardDate());
+				
+			result += pstmt.executeUpdate();
+				
+			pstmt.close();
+			pstmt = null;
+			
+			String tNum2;
+			Date now2 = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			tNum2 = sdf2.format(now2);
+			int randomInt2 = (int)Math.random()*1000;
+			tNum2 += randomInt2;
+			
+			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+					+ "	VALUES("+ tNum2 +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
+			for(int i=0; i<staDto.gettPassinger().size(); i++) {
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, endDto.gettFee().get(i));
+				pstmt.setString(2, endDto.gettPassinger().get(i));
+				pstmt.setString(3, endDto.gettSeat());
+				pstmt.setString(4, endDto.gettHoNum());
+				pstmt.setString(5, endDto.gettSeatNum().get(i));
+				
+				result += pstmt.executeUpdate();
+				
+				pstmt.close();
+				pstmt = null;
+			}
+			
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		
+		return result;
 	}
 }

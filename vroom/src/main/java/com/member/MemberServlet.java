@@ -229,17 +229,27 @@ public class MemberServlet extends MyServlet {
 			String mode = req.getParameter("mode");
 			if (!dto.getUserPwd().equals(userPwd)) {
 				if (mode.equals("update")) {
-					req.setAttribute("title", "정보수정");
+					req.setAttribute("title", "정보 수정");
 				} else {
-					req.setAttribute("title", "회원탈퇴");
+					req.setAttribute("title", "회원 탈퇴");
 				}
 				req.setAttribute("mode", mode);
 				req.setAttribute("message", "비밀번호가 일치하지 않습니다.");
 				forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
 				return;
 			}
-			//탈퇴는 아직 안 짬
 			
+			if(mode.equals("delete")) {
+				dao.deleteMember(info.getUserId(), info.getCusNum());
+				
+				session.removeAttribute("member");
+				session.invalidate();
+				req.setAttribute("message", "탈퇴가 처리되었습니다.");
+				
+				resp.sendRedirect(cp + "/");
+				return;
+			}
+				
 			req.setAttribute("title", "정보수정");
 			req.setAttribute("dto", dto);
 			req.setAttribute("mode", "update");
@@ -333,9 +343,7 @@ public class MemberServlet extends MyServlet {
 			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 			return;
 		} else {
-			String msg = "홈페이지에서 일정조회 후 비회원 예매가 가능합니다.";
-			req.setAttribute("message", msg);
-			forward(req, resp, "/main.do");
+			forward(req, resp, "/WEB-INF/views/main/main.jsp");
 		}
 	}
 }
