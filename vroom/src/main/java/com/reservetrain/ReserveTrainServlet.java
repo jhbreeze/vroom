@@ -122,6 +122,7 @@ public class ReserveTrainServlet extends MyServlet{
 		reserveInfo.setStaEnd(1);
 		
 		session.setAttribute("reserveTrainInfo", reserveInfo);
+		session.setAttribute("reserve", "기차");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {

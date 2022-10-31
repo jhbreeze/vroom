@@ -871,7 +871,7 @@ function calendar(y, m, mode) {
 	
 	let out = '<div id="calendarLayout">';
 	out += '<div class="subject">';
-	out += '<span class="lr" onclick="calendar('+y+','+(m-1)+')">&lt;</span>&nbsp;&nbsp;'; // onclick : 버튼을 클릭했을 때 발생하는 것을 지정
+	out += '<span class="lr" onclick="calendar('+y+','+(m-1)+')">&lt;</span>&nbsp;&nbsp;';
 	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
 	out += '<span onclick="calendar('+y+','+(m+1)+')">&gt;</span>';
 	out += '</div>';
@@ -903,7 +903,7 @@ function calendar(y, m, mode) {
 		let date = new Date(y2, m2, pDay-1);
 		let w = date.getDay();
 		let week = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-		out += '<td class="gray">'+(++pDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y2+'.'+m2+'.'+'</span>'+'</td>';
+		out += '<td class="gray">'+(++pDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y2+'.'+m2+'.'+pDay+'</span>'+'</td>';
 	}
 	
 	let cls;
@@ -934,7 +934,7 @@ function calendar(y, m, mode) {
 		let date = new Date(y3, m3, nDay+1);
 		let w2 = date.getDay();
 		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-		out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+'</span>'+'</td>';
+		out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+nDay+'</span>'+'</td>';
 	}
 	out += '</tr>';
 	// 한달은 최대 6주
@@ -950,7 +950,7 @@ function calendar(y, m, mode) {
 			let date = new Date(y3, m3, nDay+1);
 			let w2 = date.getDay();
 			let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-			out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+'</span>'+'</td>';
+			out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+nDay+'</span>'+'</td>';
 		}
 		out += '</tr>';
 	}
@@ -1105,7 +1105,7 @@ $(function(){
 		
 		calendar(y, m, "des");
 		
-		$("#myDialogModal4").modal("show");
+		$("#myDialogModal3").modal("show");
 		
 		$("#calendarLayout td").click(function(){
 			let selectTr = $(this).parent().find("td").index(this);
@@ -1119,28 +1119,13 @@ $(function(){
 			$("#endDate").attr("data-year", select[0]);
 			$("#endDate").attr("data-month", select[1]);
 			$("#endDate").attr("data-date", select[2]);
-			$("#myDialogModal4").modal("hide");
+			$("#myDialogModal3").modal("hide");
 		});
 	});
 });
 
 // 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
-$(function(){
-	let now = new Date();
-	let y = now.getFullYear();
-	let m = now.getMonth() + 1;
-	let d = now.getDate();
-	
-	let staDate = $("#staDate").text();
-	let staDate2 = staDate.substring(0, staDate.length-2);
-	let staArr = staDate2.split(".");
-	
-	$(".select-date").click(function(){
-		$(".clsClass").css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
-		
-	});
-	// $("body").on("click", ".clsClass")
-});
+
 </script>
 
 <footer>

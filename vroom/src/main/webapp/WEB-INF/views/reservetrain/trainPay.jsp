@@ -113,11 +113,11 @@ $(function(){
 			<div class="ticket-3">
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">어른&nbsp;&nbsp;${adultCount}명</div>
-					<div>${staadultCost}&nbsp;원</div>
+					<div class="left-side">${staadultCost}&nbsp;원</div>
 				</div>
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">아이&nbsp;&nbsp;${childCount}명</div>
-					<div>${stachildCost}&nbsp;원</div>
+					<div class="left-side">${stachildCost}&nbsp;원</div>
 				</div>
 				<div id="grade-3" class="left-side"></div>
 				<div class="info6  d-flex justify-content-end"><span class="cost">${statotalCost}</span><span class="won">&nbsp;원</span></div>
@@ -125,10 +125,10 @@ $(function(){
 			<div class="ticket-4">
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">어른&nbsp;&nbsp;${adultCount}명</div>
-					<div>${endadultCost}&nbsp;원</div>
+					<div class="left-side">${endadultCost}&nbsp;원</div>
 				</div>
 				<div class="info5 d-flex justify-content-between">
-					<div>아이&nbsp;&nbsp;${childCount}명</div>
+					<div class="left-side">아이&nbsp;&nbsp;${childCount}명</div>
 					<div class="left-side">${endchildCost}&nbsp;원</div>
 				</div>
 				<div id="grade-4" class="left-side"></div>
