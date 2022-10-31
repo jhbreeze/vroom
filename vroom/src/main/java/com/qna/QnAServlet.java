@@ -65,7 +65,6 @@ public class QnAServlet extends MyServlet {
 		String cp = req.getContextPath();
 
 		try {
-			//long qnaNum = Long.parseLong(req.getParameter("qnaNum"));
 			String page = req.getParameter("page");
 			int current_page = 1;
 			if (page != null) {
@@ -94,10 +93,7 @@ public class QnAServlet extends MyServlet {
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
-			}
-
-			int replyCount = 0;
-			// replyCount =  dao.dataCountReply(qnaNum);			
+			}		
 			
 			int offset = (current_page - 1) * size;
 			if (offset < 0)
@@ -132,7 +128,6 @@ public class QnAServlet extends MyServlet {
 			req.setAttribute("paging", paging);
 			req.setAttribute("condition", condition);
 			req.setAttribute("keyword", keyword);
-			req.setAttribute("replyCount", replyCount);
 
 		} catch (Exception e) {
 			e.printStackTrace();

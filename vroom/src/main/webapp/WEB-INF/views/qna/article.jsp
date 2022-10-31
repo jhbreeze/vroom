@@ -9,6 +9,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/board2.css"
+	type="text/css">
 <style type="text/css">
 main {
 	position: relative;
@@ -34,26 +38,26 @@ thead tr {
 	max-width: 1200px;
 	margin: auto;
 }
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
+}
 </style>
 
 <script type="text/javascript">
 	<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
 	function deleteBoard() {
-		if (confirm("게시글을 삭제 하시 겠습니까 ? ")) {
 			let query = "qnaNum=${dto.qnaNum}&${query}";
 			let url = "${pageContext.request.contextPath}/qna/delete.do?"
 					+ query;
 			location.href = url;
-		}
 	}
 	</c:if>
 	function deleteBoard2() {
-		if (confirm("게시글을 삭제 하시 겠습니까 ? ")) {
 			let query = "qnaNum=${dto.qnaNum}&${query}";
 			let url = "${pageContext.request.contextPath}/qna/delete2.do?"
 					+ query;
 			location.href = url;
-		}
 	}
 </script>
 
@@ -153,7 +157,17 @@ thead tr {
 		});
 	});
 </script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/css/bootstrap.min.css"
+	type="text/css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/bootstrap5/icon/bootstrap-icons.css"
+	type="text/css">
 
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/jquery/js/jquery.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/bootstrap5/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -179,7 +193,7 @@ thead tr {
 						<tbody>
 							<tr>
 								<td width="50%">이름 : <c:choose>
-										<c:when test="${dto.name == null }">${dto.qnaName}</c:when>
+										<c:when test="${dto.name == '*' }">${dto.qnaName}</c:when>
 										<c:otherwise>${dto.name}</c:otherwise>
 									</c:choose></td>
 								<td align="right">${dto.qnaRegDate}</td>
@@ -196,11 +210,14 @@ thead tr {
 									<c:when
 										test="${not empty dto.userId && sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
 										<button type="button" class="btn btn-light"
-											onclick="deleteBoard();">삭제</button>
+											data-bs-toggle="modal" data-bs-target="#memDelete">
+											삭제</button>
 									</c:when>
 									<c:when test="${empty sessionScope.member && empty dto.userId}">
 										<button type="button" class="btn btn-light"
-											onclick="deleteBoard2();">삭제</button>
+											data-bs-toggle="modal" data-bs-target="#nonDelete">
+											삭제</button>
+
 									</c:when>
 								</c:choose></td>
 							<td class="text-end">
@@ -233,6 +250,44 @@ thead tr {
 						</c:if>
 
 						<div id="listReply"></div>
+					</div>
+					<div class="modal fade" id="memDelete" tabindex="-1"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">1:1문의</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">게시글을 삭제하시겠습니까?</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">아니요</button>
+									<button type="button" class="btn btn-primary"
+										onclick="deleteBoard();">예</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="nonDelete" tabindex="-1"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">1:1문의</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="modal-body">게시글을 삭제하시겠습니까?</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-bs-dismiss="modal">아니요</button>
+									<button type="button" class="btn btn-primary"
+										onclick="deleteBoard2();">예</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

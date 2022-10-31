@@ -9,7 +9,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/board2.css"
+	type="text/css">
 <script type="text/javascript">
 	function sendOk() {
 		const f = document.noticeForm;

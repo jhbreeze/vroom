@@ -138,6 +138,10 @@ color: black;
 font-size: 20px;
 font-weight: 600;
 }
+#header2{
+background: #0E6EFD;
+color: white;
+}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -169,15 +173,15 @@ font-weight: 600;
 								</span>
 							</div>
 
-							<table class="table table-borderless reply-form">
+							<table class="table write-form  mt-5">
 								<tr>
-									<td class="table-light col-sm-2" scope="row" id='header'>제
+									<td class="col-sm-2" scope="row" id='header'>제
 										목</td>
 									<td><input type="text" name="faqSubject"
 										class="form-control" value="${dto.faqSubject}"></td>
 								</tr>
 								<tr>
-									<td class="table-light col-sm-2" scope="row" id='header2'>내
+									<td class="col-sm-2" scope="row" id='header2'>내
 										용</td>
 									<td><textarea class='form-control' name="faqContent">${dto.faqContent}</textarea>
 									</td>

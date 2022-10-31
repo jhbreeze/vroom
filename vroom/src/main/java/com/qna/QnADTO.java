@@ -9,6 +9,7 @@ public class QnADTO {
 	private String qnaName;
 	private String qnaPwd;
 	private String userId;
+	private int replyCount;
 	
 	public long getQnaNum() {
 		return qnaNum;
@@ -58,11 +59,11 @@ public class QnADTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
-	
-	
-
-	
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}	
 
 }

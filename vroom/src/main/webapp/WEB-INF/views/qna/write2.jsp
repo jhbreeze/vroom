@@ -9,6 +9,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/board2.css"
+	type="text/css">
 <script type="text/javascript">
 	function check() {
 		const f = document.boardForm;
@@ -22,7 +26,6 @@
 		}
 
 		str = f.qnaName.value.trim();
-		alert(str);
 		if (!str) {
 			alert("이름을 입력하세요. ");
 			f.qnaName.focus();
@@ -57,7 +60,7 @@ main {
 	min-height: 700px;
 }
 
-.col-3, .container {
+.container {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;
 	border-radius: 30px;
@@ -70,6 +73,10 @@ main {
 #backColor{
 background: #0E6EFD;
 color: white;
+}
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
 }
 </style>
 

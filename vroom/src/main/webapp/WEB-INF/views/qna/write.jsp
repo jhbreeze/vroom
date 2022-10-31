@@ -9,6 +9,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
+
+<style type="text/css">
+main {
+	position: relative;
+	top: -55px;
+	background: white;
+}
+
+.container {
+	min-height: 700px;
+}
+
+.container {
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
+	border: none;
+	border-radius: 30px;
+}
+
+.body-container {
+	max-width: 1200px;
+	margin: auto;
+}
+#backColor{
+background: #0E6EFD;
+color: white;
+}
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
+}
+</style>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/board2.css"
+	type="text/css">
 <script type="text/javascript">
 	function check() {
 		const f = document.boardForm;
@@ -31,32 +65,6 @@
 		f.action = "${pageContext.request.contextPath}/qna/write_ok.do";
 	}
 </script>
-<style type="text/css">
-main {
-	position: relative;
-	top: -55px;
-	background: white;
-}
-
-.container {
-	min-height: 700px;
-}
-
-.col-3, .container {
-	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
-	border: none;
-	border-radius: 30px;
-}
-
-.body-container {
-	max-width: 1200px;
-	margin: auto;
-}
-#backColor{
-background: #0E6EFD;
-color: white;
-}
-</style>
 
 </head>
 <body>

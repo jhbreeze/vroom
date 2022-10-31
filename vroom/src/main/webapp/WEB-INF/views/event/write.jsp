@@ -168,7 +168,7 @@ color: white;
 
 				<div class="body-main mx-auto">
 					<form name="eventForm" method="post" enctype="multipart/form-data">
-						<table class="table write-form mt-5">
+						<table class="table write-form  mt-5">
 							<tr>
 								<td scope="row">제 목</td>
 								<td><input type="text" name="eveTitle"
@@ -183,7 +183,7 @@ color: white;
 							</tr>
 
 							<tr>
-								<td class="table-light col-sm-2" scope="row">이벤트진행여부</td>
+								<td class="col-sm-2" scope="row">이벤트진행여부</td>
 								<td><input type="checkbox" class="form-check-input"
 									name="event" id="event" value="1"
 									${dto.event==1 ? "checked='checked' ":"" }> <label

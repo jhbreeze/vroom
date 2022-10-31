@@ -47,20 +47,20 @@ tr:hover {
 	align-items: center;
 }
 
-#k {
+#button {
 	all: unset;
 }
 
-#k:hover {
+#button:hover {
 	cursor: pointer;
 	color: #0E6EFD;
 }
 
-#kk {
+#href {
 	text-decoration-line: none;
 }
 
-#kk:hover {
+#href:hover {
 	color: #0E6EFD;
 }
 
@@ -78,6 +78,10 @@ tr:hover {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;
 	border-radius: 30px;
+}
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
 }
 </style>
 <script type="text/javascript">
@@ -129,35 +133,37 @@ tr:hover {
 						<div class="col-auto me-auto">${dataCount}개(${page}/${total_page}
 							페이지)</div>
 						<div class="col-auto">&nbsp;</div>
+						<br>
+						<br>
 					</div>
 				</div>
 
-				<table class="table">
+				<table class="table board-list">
 					<thead>
 						<tr>
-							<th class="qnaNum text-center" scope="row">번호</th>
-							<th class="qnaSubject">제목</th>
-							<th class="userName">작성자</th>
-							<th class="qnaRegDate text-left date-th">작성일</th>
-							<th class="reply text-left">답변여부</th>
+							<th class="num text-center" width="10%">번호</th>
+							<th class="subject" width="45%">제목</th>
+							<th class="name text-center" width="15%">작성자</th>
+							<th class="date" width="15%">작성일</th>
+							<th class="hit text-center" width="15%">답변여부</th>
 						</tr>
 					</thead>
 
 					<tbody>
 						<c:forEach var="dto" items="${list}" varStatus="status">
 							<tr>
-								<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
-								<td class="left" scope="row"><c:choose>
+								<td scope="row" class="text-center" width="10%">${dataCount - (page-1) * size - status.index}</td>
+								<td class="left" width="45%"><c:choose>
 										<c:when
 											test="${not empty sessionScope.member && sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
 											<a href="${articleUrl}&qnaNum=${dto.qnaNum}"
-												class="text-reset" id="kk"
+												class="text-reset" id="href"
 												class="text-reset text-decoration-none">${dto.qnaSubject}<i
 												class="bi bi-unlock"></i></a>
 										</c:when>
 										<c:when
 											test="${empty sessionScope.member && empty dto.userId}">
-											<button type="button" class="btn btn-light btnpwd" id="kk"
+											<button type="button" class="btn btn-light btnpwd" id="button"
 												data-qnaNum="${dto.qnaNum}">
 												${dto.qnaSubject}<i class="bi bi-lock-fill"></i>
 											</button>
@@ -166,12 +172,12 @@ tr:hover {
 											${dto.qnaSubject}
 									</c:otherwise>
 									</c:choose></td>
-								<td><c:choose>
-										<c:when test="${dto.name == '*'}">${dto.qnaName}</c:when>
-										<c:otherwise>${dto.name}</c:otherwise>
+								<td width="15%"><c:choose>
+										<c:when test="${dto.name == '*'}"> <div class="text-center">${dto.qnaName}</div> </c:when>
+										<c:otherwise><div class="text-center">${dto.name}</div></c:otherwise>
 									</c:choose></td>
-								<td class="text-left date-th"><div class="date-div">${dto.qnaRegDate}</div></td>
-								<td>${replyCount == 0 ? "미답변" : "답변완료"}</td>
+								<td class="text-left" width="15%"><div class="date-div">${dto.qnaRegDate}</div></td>
+								<td class="text-center"  width="15%">${dto.replyCount == 0 ? "미답변" : "답변완료"}</td>
 							</tr>
 
 						</c:forEach>

@@ -35,7 +35,6 @@ tr:hover {
 	box-shadow: 0px 0px 4px rgb(72, 92, 161, 0.4);
 }
 
-
 .sort {
 	font-size: 10px;
 	border: 1px solid #e2e2e2;
@@ -56,14 +55,17 @@ tr:hover {
 }
 
 .date-div {
-	font-size: 12px;
-	line-height: 20.5px;
+	text-align: center;
 }
 
 .container {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;
 	border-radius: 30px;
+}
+.btn:active, .btn:focus, .btn:hover {
+	background-color: #0E6EFD;
+	color: #eee;
 }
 </style>
 
@@ -111,15 +113,16 @@ tr:hover {
 		<div class="container">
 			<div class="body-container">
 				<div class="body-title">
-					<div class="fs-5 fw-bolder">&nbsp;공지사항</div>
+					<h2>공지사항</h2>
 				</div>
 
 				<div class="body-main">
 					<form name="listForm" method="post">
 						<div class="row board-list-header">
-							<p class="form-control-plaintext">
-								${dataCount}개(${page}/${total_page} 페이지)</p>
-								<div class="col-auto">&nbsp;</div>
+							<div class="col-auto me-auto">${dataCount}개(${page}/${total_page}
+								페이지)</div>
+							<div class="col-auto">&nbsp;</div>
+							<br> <br>
 						</div>
 
 
@@ -127,7 +130,7 @@ tr:hover {
 							<tbody>
 								<c:forEach var="dto" items="${listNotice}">
 									<tr>
-										<td><span class="badge bg-primary">공지</span></td>
+										<td><span class="badge bg-primary text-center">공지</span></td>
 										<td scope="row" class="text-center sort-td"><div
 												class="sort">${dto.category}</div></td>
 										<td class="left"><a
@@ -162,6 +165,7 @@ tr:hover {
 						<div class="col">
 							<button type="button" class="btn btn-light"></button>
 						</div>
+						<div class="col"></div>
 						<div class="col-6 text-center">
 							<form class="row" name="searchForm" action="" method="post">
 								<div class="col-auto p-1">
@@ -184,11 +188,13 @@ tr:hover {
 							</form>
 						</div>
 						<div class="col text-end">
-							<button type="button" class="btn btn-light btn-sm"
-								onclick="location.href='${pageContext.request.contextPath}/notice/write.do?size=${size}';">글올리기</button>
+							<c:if test="${sessionScope.member.userId=='admin'}">
+								<button type="button" class="btn btn-light btn-sm"
+									onclick="location.href='${pageContext.request.contextPath}/notice/write.do?size=${size}';">글올리기</button>
+							</c:if>
 						</div>
 					</div>
-					
+
 					<div class="page-navigation">${dataCount == 0 ? "등록된 게시물이 없습니다." : paging}
 					</div>
 

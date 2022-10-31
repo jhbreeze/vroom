@@ -166,12 +166,15 @@ public class QnADAO {
 		String sql;
 
 		try {
-			sql = " SELECT qnaNum, "
+			sql = " SELECT q.qnaNum, "
 					+ " SUBSTR(name,1,1)||NVL(LPAD('*', LENGTH(name)-2,'*'),'*') ||SUBSTR(name,-1,1) name, qnaSubject, qnaRegDate, "
-					+ " SUBSTR(qnaName,1,1)||NVL(LPAD('*', LENGTH(qnaName)-2,'*'),'*') ||SUBSTR(qnaName,-1,1)qnaName, m.userId "
+					+ " SUBSTR(qnaName,1,1)||NVL(LPAD('*', LENGTH(qnaName)-2,'*'),'*') ||SUBSTR(qnaName,-1,1)qnaName, m.userId, NVL(replyCount, 0) replyCount "
 					+ " FROM qna q "
 					+ " LEFT OUTER JOIN member1 m ON q.userId = m.userId "
-					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum " + " ORDER BY qnaNum DESC "
+					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum "
+					+ " LEFT OUTER JOIN ( SELECT qnaNum, COUNT(*) replyCount "
+					+ " FROM qnaReply GROUP BY qnaNum ) c ON q.qnaNum = c.qnaNum "
+					+ " ORDER BY qnaNum DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -190,6 +193,8 @@ public class QnADAO {
 				dto.setQnaRegDate(rs.getString("qnaRegDate"));
 				dto.setQnaName(rs.getString("qnaName"));
 				dto.setUserId(rs.getString("userId"));
+				
+				dto.setReplyCount(rs.getInt("replyCount"));
 
 				list.add(dto);
 			}
@@ -293,7 +298,7 @@ public class QnADAO {
 		String sql;
 
 		try {
-			sql = " SELECT qnaNum, q.userId, SUBSTR(name,1,1)||NVL(LPAD('*', LENGTH(name)-2,'*'),'*') ||SUBSTR(name,-1,1) name, qnaName, qnaSubject, qnaContent, qnaRegDate " + " FROM qna q "
+			sql = " SELECT qnaNum, q.userId, SUBSTR(name,1,1)||NVL(LPAD('*', LENGTH(name)-2,'*'),'*') ||SUBSTR(name,-1,1) name, SUBSTR(qnaName,1,1)||NVL(LPAD('*', LENGTH(qnaName)-2,'*'),'*') ||SUBSTR(qnaName,-1,1)qnaName, qnaSubject, qnaContent, qnaRegDate " + " FROM qna q "
 					+ " LEFT OUTER JOIN member1 m ON q.userId = m.userId "
 					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum " + " WHERE qnaNum = ? ";
 
@@ -469,6 +474,7 @@ public class QnADAO {
 		}
 	}
 
+	// 답글 갯수 가져오기
 	public int dataCountReply(long qnaNum) {
 		int result = 0;
 		PreparedStatement pstmt = null;
