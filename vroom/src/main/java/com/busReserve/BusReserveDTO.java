@@ -1,6 +1,5 @@
 package com.busReserve;
 
-import java.util.Date;
 
 public class BusReserveDTO {
 	private int bTotPrice;
@@ -9,11 +8,11 @@ public class BusReserveDTO {
 	private int bTkNum;
 	private int cusNum;
 	private int bTotNum;
-	private Date bPayDay;
+	private String bPayDay;
 	private long bPayPrice;
 	private long bDisPrice;
 	private int bOperCode;
-	private Date bBoardDate;
+	private String bBoardString;
 	private int bNum;
 	private long bFee;
 	private String bPassinger;
@@ -24,8 +23,8 @@ public class BusReserveDTO {
 	private int seatNum;
 	private int bKidsale;
 	private int bOldsale;
-	private Date bFirstStaTime;
-	private Date bEndStaTime;
+	private String bFirstStaTime;
+	private String bEndStaTime;
 	private String bDiscern;
 	private int bRouteDetailCodeSta;
 	private int bRouteDetailCodeEnd;
@@ -45,10 +44,10 @@ public class BusReserveDTO {
 	public void setbTotPrice(int bTotPrice) {
 		this.bTotPrice = bTotPrice;
 	}
-	public Date getbPayDay() {
+	public String getbPayDay() {
 		return bPayDay;
 	}
-	public void setbPayDay(Date bPayDay) {
+	public void setbPayDay(String bPayDay) {
 		this.bPayDay = bPayDay;
 	}
 	public String getbStationName() {
@@ -106,11 +105,11 @@ public class BusReserveDTO {
 	public void setbOperCode(int bOperCode) {
 		this.bOperCode = bOperCode;
 	}
-	public Date getbBoardDate() {
-		return bBoardDate;
+	public String getbBoardString() {
+		return bBoardString;
 	}
-	public void setbBoardDate(Date bBoardDate) {
-		this.bBoardDate = bBoardDate;
+	public void setbBoardString(String bBoardString) {
+		this.bBoardString = bBoardString;
 	}
 	public long getbNum() {
 		return bNum;
@@ -172,16 +171,16 @@ public class BusReserveDTO {
 	public void setbOldsale(int bOldsale) {
 		this.bOldsale = bOldsale;
 	}
-	public Date getbFirstStaTime() {
+	public String getbFirstStaTime() {
 		return bFirstStaTime;
 	}
-	public void setbFirstStaTime(Date bFirstStaTime) {
+	public void setbFirstStaTime(String bFirstStaTime) {
 		this.bFirstStaTime = bFirstStaTime;
 	}
-	public Date getbEndStaTime() {
+	public String getbEndStaTime() {
 		return bEndStaTime;
 	}
-	public void setbEndStaTime(Date bEndStaTime) {
+	public void setbEndStaTime(String bEndStaTime) {
 		this.bEndStaTime = bEndStaTime;
 	}
 	public String getbDiscern() {
