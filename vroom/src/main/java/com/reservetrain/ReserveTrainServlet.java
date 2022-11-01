@@ -48,6 +48,8 @@ public class ReserveTrainServlet extends MyServlet{
 			beforePayment(req, resp);
 		} else if (uri.indexOf("insertPayInfo.do")!=-1) {
 			insertPayInfo(req, resp);
+		} else if (uri.indexOf("completereserve.do")!=-1) {
+			completereserve(req, resp);
 		}
 	}
 	
@@ -657,7 +659,7 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("depstatDetailCode", req.getParameter("depstatDetailCode"));
 				req.setAttribute("desstatDetailCode", req.getParameter("desstatDetailCode"));
 				req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
-				req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
+				req.setAttribute("desendtDetailCode", req.getParameter("desendtDetailCode"));
 				req.setAttribute("staSeats", req.getParameter("staSeats"));
 				req.setAttribute("endSeats", req.getParameter("endSeats"));
 				req.setAttribute("staTHoNum", req.getParameter("staTHoNum"));
@@ -767,7 +769,7 @@ public class ReserveTrainServlet extends MyServlet{
 		ReserveTrainDAO dao = new ReserveTrainDAO();
 		String cycle = reserveInfo.getCycle();
 		PaymentDTO dto = new PaymentDTO();
-		// PaymentDTO dto2 = new PaymentDTO();
+		PaymentDTO dto2 = new PaymentDTO();
 		String cp = req.getContextPath();
 		
 		try {
@@ -778,8 +780,12 @@ public class ReserveTrainServlet extends MyServlet{
 				dto.setName(req.getParameter("name"));
 				dto.setTel(req.getParameter("tel"));
 				dto.setEmail(req.getParameter("email"));
+				req.setAttribute("tel", req.getParameter("tel"));
+				req.setAttribute("email", req.getParameter("email"));
 			} else {
 				cusNum = info.getCusNum();
+				req.setAttribute("tel", req.getParameter("tel"));
+				req.setAttribute("email", req.getParameter("email"));
 			}
 			
 			dto.setCusNum(cusNum);
@@ -846,11 +852,87 @@ public class ReserveTrainServlet extends MyServlet{
 			dto.settFee(feeList);
 			dto.settSeatNum(tSeatNum);
 			
-			if(cycle.equals("half")) {
+			// 편도 인서트
+			if (cycle.equals("half")) {
 				int result = dao.halfInsertPayInfo(dto);
-				if(result > 0) {
-					resp.sendRedirect(cp + "/");
+				if (result > 0) {
+					resp.sendRedirect(cp + "/reservetrain/completereserve.do");
 					return;
+				}
+			}
+
+			if(cycle.equals("full")) {
+				// 여기서부터 왕복 2번째 부분
+				dto2.settTotNum(Integer.parseInt(req.getParameter("adultCount"))+Integer.parseInt(req.getParameter("childCount")));
+				dto2.settTotPrice(Integer.parseInt(req.getParameter("endtotalCost").replace(",", "")));
+				dto2.settPayPrice(Integer.parseInt(req.getParameter("endtotalCost").replace(",", "")));
+				dto2.settDetailCodeSta(Integer.parseInt(req.getParameter("dependtDetailCode")));
+				dto2.settDetailCodeEnd(Integer.parseInt(req.getParameter("desendtDetailCode")));
+				dto2.settHoNum(req.getParameter("ebdTHoNum"));
+				
+				String endDate = req.getParameter("endDate");
+				endDate = endDate.substring(0, endDate.length()-2);
+				String[] end = endDate.split("[.]");
+				if(Integer.parseInt(end[1])<10){
+					end[1] = "0"+end[1];
+				}
+				if(Integer.parseInt(end[2])<10){
+					end[2] = "0"+end[2];
+				}
+				endDate = end[0]+"-"+end[1]+"-"+end[2];
+				
+				dto2.settBoardDate(endDate);
+				String tSeat2 = req.getParameter("endGrade").equals("premium") ? "특실" : "일반";
+				dto2.settSeat(tSeat2);
+				List<Integer> feeList2 = new ArrayList<>();
+				List<String> passengerList2 = new ArrayList<>();
+				List<String> tSeatNum2 = new ArrayList<>();
+				int count2 = Integer.parseInt(req.getParameter("adultCount")) + Integer.parseInt(req.getParameter("childCount"));
+				int adultCount2 = Integer.parseInt(req.getParameter("adultCount"));
+				int childCount2 = Integer.parseInt(req.getParameter("childCount"));
+				int adultCost2 = Integer.parseInt(req.getParameter("endadultCost").replace(",", ""));
+				int childCost2 = Integer.parseInt(req.getParameter("endchildCost").replace(",", ""));
+				int ac2;
+				int cc2;
+				if(adultCount==0) {
+					ac2 = 0;
+				} else {
+					ac2 = adultCost2/adultCount2;
+				}
+				if(childCount2==0) {
+					cc2 = 0;
+				} else {
+					cc2 = childCost2/childCount2;
+				}
+				
+				String endSeats = req.getParameter("endSeats");
+				String[] seatsArr2 = endSeats.split(",");
+				
+				for(int i=0; i<count2; i++) {
+					if(adultCount2>0) {
+						passengerList2.add("어른");
+						feeList2.add(ac2);
+						tSeatNum2.add(seatsArr2[i]);
+						adultCount2--;
+						continue;
+					} else if(childCount2>0) {
+						passengerList2.add("아동");
+						tSeatNum2.add(seatsArr2[i]);
+						feeList2.add(cc2);
+						childCount2--;
+					}
+				}
+				dto2.settPassenger(passengerList2);
+				dto2.settFee(feeList2);
+				dto2.settSeatNum(tSeatNum2);
+				
+				// 왕복 인서트
+				if(cycle.equals("full")) {
+					int result = dao.fullInsertPayInfo(dto, dto2);
+					if(result > 0) {
+						resp.sendRedirect(cp + "/reservetrain/completereserve.do");
+						return;
+					}
 				}
 			}
 			
@@ -858,5 +940,10 @@ public class ReserveTrainServlet extends MyServlet{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	protected void completereserve(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		forward(req, resp, "/WEB-INF/views/mail/complete.jsp");
+		return;
 	}
 }

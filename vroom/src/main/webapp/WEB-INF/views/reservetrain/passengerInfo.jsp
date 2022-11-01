@@ -9,7 +9,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
-
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript"
+	src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <style type="text/css">
 .container {
 	min-height: 600px;
@@ -66,25 +69,10 @@ function sendOk() {
 		f.tel3.focus();
 		return;
 	}
-	send();
+	
+	requestPay();
 }
 
-function send(){
-	let name = $("input[name=userName]").val();
-	
-	let tel1 = $("input[name=tel1]").val();
-	let tel2 = $("input[name=tel2]").val();
-	let tel3 = $("input[name=tel3]").val();
-	let tel = tel1+'-'+tel2+'-'+tel3;
-	
-	let email = $("input[name=userEmail]").val();
-	
-	let url = "${pageContext.request.contextPath}/reservetrain/insertPayInfo.do?"
-	let query = $("form[name=hiddenForm]").serialize()
-		+"&name="+name+"&tel="+tel+"&email="+email;
-	alert(query);
-	location.href = url+query;
-}
 </script>
 </head>
 <body>
@@ -195,6 +183,9 @@ function send(){
 		<input type="hidden" name="statotalCost" value="${statotalCost}">
 		<input type="hidden" name="endtotalCost" value="${endtotalCost}">
 		
+		<input type="hidden" name="name" >
+		<input type="hidden" name="email">
+		<input type="hidden" name="tel">
 	</form>
 
 	<footer>
@@ -202,6 +193,71 @@ function send(){
 	</footer>
 
 	<jsp:include page="/WEB-INF/views/layout/staticFooter.jsp" />
+	
+<script>
+	var IMP = window.IMP;
+	IMP.init("imp63805620");
+
+	var msg;
+	var today = new Date();
+	var hours = today.getHours(); // 시
+	var minutes = today.getMinutes(); // 분
+	var seconds = today.getSeconds(); // 초
+	var milliseconds = today.getMilliseconds();
+	var makeMerchantUid = hours + minutes + seconds + milliseconds;
+	
+	let money;
+
+	if ( $('input[name="cycle"]').val() == "half" ) {
+		money = $('input[name="statotalCost"]').val(); 
+	} else {
+		let money1 = $('input[name="statotalCost"]').val().replace(",", "");
+		let money2 = $('input[name="endtotalCost"]').val().replace(",", "");
+		money = Number(money1) + Number(money2);
+		alert(money);
+	}		
+	
+	function requestPay() {
+		let name = $("input[name=userName]").val();
+		
+		let tel1 = $("input[name=tel1]").val();
+		let tel2 = $("input[name=tel2]").val();
+		let tel3 = $("input[name=tel3]").val();
+		let tel = tel1+'-'+tel2+'-'+tel3;
+		
+		let email = $("input[name=userEmail]").val();	
+				
+		const f = document.hiddenForm;
+		f.name.value = name;
+		f.email.value = email;
+		f.tel.value = tel;
+		
+		IMP.request_pay({
+			pg : 'kakaopay',
+			merchant_uid : "IMP" + makeMerchantUid,
+			name : ' : 운임요금',
+			amount : money,
+			buyer_name : name,
+			buyer_email : email,
+			buyer_tel : tel,
+		}, function(rsp) {
+			if (rsp.success) {
+				
+				alert("결제가 완료되었습니다.");
+				
+				f.action = "${pageContext.request.contextPath}/reservetrain/insertPayInfo.do";
+				f.submit();
+				
+			} else {
+				msg = '결제에 실패하였습니다.';
+                msg += '에러내용 : ' + rsp.error_msg;
+                location.href="${pageContext.request.contextPath}/reservetrain/beforePayment.do";
+                alert(msg);
+			}
+		});
+		
+	}
+</script>
 
 </body>
 </html>

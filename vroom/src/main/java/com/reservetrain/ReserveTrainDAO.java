@@ -977,7 +977,7 @@ public class ReserveTrainDAO {
 			
 			int cusNum = dto.getCusNum();
 			
-			if(cusNum == 0) {
+			if(cusNum == 0) { // 비회원인 경우 고객에 추가
 				sql = "SELECT customer_seq.NEXTVAL FROM dual";
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
@@ -1026,30 +1026,41 @@ public class ReserveTrainDAO {
 			result += pstmt.executeUpdate();
 				
 			pstmt.close();
-			
+			pstmt = null;
 			
 			List<String> tPassenger = dto.gettPassenger();
 			List<Integer> tFee = dto.gettFee();
 			List<String> tSeatNum = dto.gettSeatNum();
 			
-			System.out.println("승객수 : " + tPassenger.size());
+			String tNum;
+			Date now = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			List<String> tNumList = new ArrayList<>();
+			int[] randomArr = new int[tPassenger.size()];
+			tNum = sdf.format(now);
 			
+			for (int i = 0; i < tPassenger.size(); i++) {
+				randomArr[i]= (int)Math.random()*1000;
+				for(int j = 0; j < i; j++) {
+					if(randomArr[i] == randomArr[j]) {
+						i--;
+						break;
+					} 
+				}
+			}
+			
+			for(int i=0; i<tPassenger.size(); i++) {
+				tNumList.add(tNum+randomArr[i]);
+			}
 			
 			
 			for(int i=0; i<tPassenger.size(); i++) {
-				String tNum;
-				Date now = new Date(System.currentTimeMillis());
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-				tNum = sdf.format(now);
-				int randomInt = (int)Math.random()*1000;
-				tNum += randomInt;
 				
-				System.out.println(i+"--------");
 				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
 						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, tNum);
+				pstmt.setString(1, tNumList.get(i));
 				pstmt.setInt(2, tTkNumSeq);
 				pstmt.setInt(3, tFee.get(i));
 				pstmt.setString(4, tPassenger.get(i));
@@ -1057,20 +1068,10 @@ public class ReserveTrainDAO {
 				pstmt.setString(6, dto.gettHoNum());
 				pstmt.setString(7, tSeatNum.get(i));
 				
-				System.out.println("실행 - "+i);
-				System.out.println(tNum);
-				System.out.println(tTkNumSeq);
-				System.out.println(tFee.get(i));
-				System.out.println(tPassenger.get(i));
-				System.out.println(dto.gettSeat());
-				System.out.println(dto.gettHoNum());
-				System.out.println(tSeatNum.get(i));
-				
 				result += pstmt.executeUpdate();
 				
 				pstmt.close();
 			}
-			System.out.println("실행됨");
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -1112,7 +1113,7 @@ public class ReserveTrainDAO {
 			
 			int cusNum = staDto.getCusNum();
 			
-			if(cusNum == 0) {
+			if(cusNum == 0) { // 비회원인 경우 고객에 추가
 				sql = "SELECT customer_seq.NEXTVAL FROM dual";
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
@@ -1135,7 +1136,7 @@ public class ReserveTrainDAO {
 				pstmt.close();
 				pstmt = null;
 			}
-				
+			
 			// ---------------- 가는날
 			
 			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
@@ -1145,21 +1146,19 @@ public class ReserveTrainDAO {
 				tTkNumSeq = rs.getInt(1);
 			}
 			pstmt.close();
-			rs.close();
 			pstmt = null;
-			rs.close();
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
-					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, SYSDATE, "
+					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, "
 					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, cusNum);
-			pstmt.setInt(2, staDto.gettTotNum());
-			pstmt.setInt(3, staDto.gettTotPrice());
-			pstmt.setInt(4, staDto.gettPayPrice());
-			pstmt.setInt(5, staDto.gettDisPrice());
+			pstmt.setInt(1, tTkNumSeq);
+			pstmt.setInt(2, cusNum);
+			pstmt.setInt(3, staDto.gettTotNum());
+			pstmt.setInt(4, staDto.gettTotPrice());
+			pstmt.setInt(5, staDto.gettPayPrice());
 			pstmt.setInt(6, staDto.gettDetailCodeEnd());
 			pstmt.setInt(7, staDto.gettDetailCodeSta());
 			pstmt.setString(8, staDto.gettBoardDate());
@@ -1169,23 +1168,46 @@ public class ReserveTrainDAO {
 			pstmt.close();
 			pstmt = null;
 			
+			List<String> tPassenger = staDto.gettPassenger();
+			List<Integer> tFee = staDto.gettFee();
+			List<String> tSeatNum = staDto.gettSeatNum();
+			
+			
 			String tNum;
 			Date now = new Date(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			List<String> tNumList = new ArrayList<>();
+			int[] randomArr = new int[tPassenger.size()];
 			tNum = sdf.format(now);
-			int randomInt = (int)Math.random()*1000;
-			tNum += randomInt;
 			
-			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
-					+ "	VALUES("+ tNum +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
+			for (int i = 0; i < tPassenger.size(); i++) {
+				randomArr[i]= (int)Math.random()*1000;
+				for(int j = 0; j < i; j++) {
+					if(randomArr[i] == randomArr[j]) {
+						i--;
+						break;
+					} 
+				}
+			}
+			
+			for(int i=0; i<tPassenger.size(); i++) {
+				tNumList.add(tNum+randomArr[i]);
+			}
+			
 			for(int i=0; i<staDto.gettPassenger().size(); i++) {
+				
+				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
+				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(1, staDto.gettFee().get(i));
-				pstmt.setString(2, staDto.gettPassenger().get(i));
-				pstmt.setString(3, staDto.gettSeat());
-				pstmt.setString(4, staDto.gettHoNum());
-				pstmt.setString(5, staDto.gettSeatNum().get(i));
+				pstmt.setString(1, tNumList.get(i));
+				pstmt.setInt(2, tTkNumSeq);
+				pstmt.setInt(3, tFee.get(i));
+				pstmt.setString(4, tPassenger.get(i));
+				pstmt.setString(5, staDto.gettSeat());
+				pstmt.setString(6, staDto.gettHoNum());
+				pstmt.setString(7, tSeatNum.get(i));;
 				
 				result += pstmt.executeUpdate();
 				
@@ -1206,42 +1228,63 @@ public class ReserveTrainDAO {
 			rs.close();
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
-					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, SYSDATE, "
+					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, "
 					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, cusNum);
-			pstmt.setInt(2, endDto.gettTotNum());
-			pstmt.setInt(3, endDto.gettTotPrice());
-			pstmt.setInt(4, endDto.gettPayPrice());
-			pstmt.setInt(5, endDto.gettDisPrice());
-			pstmt.setInt(6, endDto.gettDetailCodeEnd());
-			pstmt.setInt(7, endDto.gettDetailCodeSta());
-			pstmt.setString(8, endDto.gettBoardDate());
+			pstmt.setInt(1, tTkNumSeq);
+			pstmt.setInt(2, cusNum);
+			pstmt.setInt(3, endDto.gettTotNum());
+			pstmt.setInt(4, endDto.gettTotPrice());
+			pstmt.setInt(5, endDto.gettPayPrice());
+			pstmt.setInt(7, endDto.gettDetailCodeEnd());
+			pstmt.setInt(8, endDto.gettDetailCodeSta());
+			pstmt.setString(9, endDto.gettBoardDate());
 				
 			result += pstmt.executeUpdate();
 				
 			pstmt.close();
 			pstmt = null;
 			
+			List<String> tPassenger2 = endDto.gettPassenger();
+			List<Integer> tFee2 = endDto.gettFee();
+			List<String> tSeatNum2 = endDto.gettSeatNum();
+			
 			String tNum2;
 			Date now2 = new Date(System.currentTimeMillis());
-			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			tNum2 = sdf2.format(now2);
-			int randomInt2 = (int)Math.random()*1000;
-			tNum2 += randomInt2;
+			List<String> tNumList2 = new ArrayList<>();
+			int[] randomArr2 = new int[tPassenger2.size()];
+			tNum2 = sdf.format(now2);
 			
-			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
-					+ "	VALUES("+ tNum2 +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
+			for (int i = 0; i < tPassenger2.size(); i++) {
+				randomArr2[i]= (int)Math.random()*1000;
+				for(int j = 0; j < i; j++) {
+					if(randomArr2[i] == randomArr2[j]) {
+						i--;
+						break;
+					} 
+				}
+			}
+			
+			for(int i=0; i<tPassenger2.size(); i++) {
+				tNumList2.add(tNum2+randomArr2[i]);
+			}
+			
 			for(int i=0; i<staDto.gettPassenger().size(); i++) {
+				
+				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
+				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(1, endDto.gettFee().get(i));
-				pstmt.setString(2, endDto.gettPassenger().get(i));
-				pstmt.setString(3, endDto.gettSeat());
-				pstmt.setString(4, endDto.gettHoNum());
-				pstmt.setString(5, endDto.gettSeatNum().get(i));
+				pstmt.setString(1, tNumList2.get(i));
+				pstmt.setInt(2, tTkNumSeq);
+				pstmt.setInt(3, tFee2.get(i));
+				pstmt.setString(4, tPassenger2.get(i));
+				pstmt.setString(5, endDto.gettSeat());
+				pstmt.setString(6, endDto.gettHoNum());
+				pstmt.setString(7, tSeatNum2.get(i));
 				
 				result += pstmt.executeUpdate();
 				

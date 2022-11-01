@@ -245,7 +245,7 @@ $(function(){
 					+"&destStaDateTime="+destStaDateTime+"&destEndDateTime="+destEndDateTime
 					+"&deptOperCode="+deptOperCode+"&destOperCode="+destOperCode+"&depstatDetailCode="+depstatDetailCode
 					+"&desstatDetailCode="+desstatDetailCode+"&dependtDetailCode="+dependtDetailCode
-					+"&dependtDetailCode="+dependtDetailCode+"&staSeats="+staSeats+"&endSeats="+endSeats
+					+"&desendtDetailCode="+desendtDetailCode+"&staSeats="+staSeats+"&endSeats="+endSeats
 					+"&staTHoNum="+staTHoNum+"&endTHoNum="+endTHoNum+"&staGrade="+staGrade+"&endGrade="+endGrade;
 			} else {
 				return false;
