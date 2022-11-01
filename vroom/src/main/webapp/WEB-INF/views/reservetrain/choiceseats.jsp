@@ -185,10 +185,16 @@ $(function(){
 			let endtDetailCode = $("input[name=endtDetailCode]").val();
 			let selSeats = $("input[name=selSeats]").attr("data-selSeats");
 			
-			query = "tDiscern="+tDiscern+"&staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime
-				+"&tOperCode="+tOperCode+"&statDetailCode="+statDetailCode
-				+"&endtDetailCode="+endtDetailCode+"&selSeats="+selSeats
-				+"&selTHoNum="+selTHoNum+"&selGrade="+selGrade;
+			let gra = selGrade === 'premium'? '특실' : '일반';
+			let statement = "< 가는날 >\n등급 : "+gra+"\n호실번호 : "+selTHoNum+"\n좌석번호 : "+selectedArr.join()+"\n\n결제창으로 넘어가시겠습니까?";
+			if(confirm(statement)){
+				query = "tDiscern="+tDiscern+"&staDate="+staDate+"&tStaTime="+tStaTime+"&tEndTime="+tEndTime
+					+"&tOperCode="+tOperCode+"&statDetailCode="+statDetailCode
+					+"&endtDetailCode="+endtDetailCode+"&selSeats="+selSeats
+					+"&selTHoNum="+selTHoNum+"&selGrade="+selGrade;
+			} else {
+				return false;
+			}
 			
 		} else if (cycle==="full" && hORf==="1"){
 			$("input[name=staSeats]").attr("data-staSeats", selectedArr.join());
@@ -336,7 +342,6 @@ $(function(){
 			
 			$(data.reservedSeatsArr).each(function(index, item){
 				$(selector+" input[name=seats]").each(function(){
-
 					if($(this).val()===item){
 						$(this).prop("disabled", true);
 					}

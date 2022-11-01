@@ -44,6 +44,10 @@ public class ReserveTrainServlet extends MyServlet{
 			choiceSeatsListHTML(req, resp);
 		} else if (uri.indexOf("beforePay.do")!=-1) {
 			beforePay(req, resp);
+		} else if (uri.indexOf("beforePayment.do")!=-1) {
+			beforePayment(req, resp);
+		} else if (uri.indexOf("insertPayInfo.do")!=-1) {
+			insertPayInfo(req, resp);
 		}
 	}
 	
@@ -318,7 +322,15 @@ public class ReserveTrainServlet extends MyServlet{
 			String cycle = req.getParameter("cycle");
 			String grade = req.getParameter("grade");
 			String staDate = req.getParameter("staDate");
-			staDate = staDate.substring(0, staDate.length()-2).replace(".", "-");
+			staDate = staDate.substring(0, staDate.length()-2);
+			String[] sta = staDate.split("[.]");
+			if(Integer.parseInt(sta[1])<10){
+				sta[1] = "0"+sta[1];
+			}
+			if(Integer.parseInt(sta[2])<10){
+				sta[2] = "0"+sta[2];
+			}
+			staDate = sta[0]+"-"+sta[1]+"-"+sta[2];
 			int count = Integer.parseInt(req.getParameter("count"));
 			
 			if(cycle.equals("half")) {
@@ -363,6 +375,7 @@ public class ReserveTrainServlet extends MyServlet{
 				
 				List<HochaDTO> selectHochaList = new ArrayList<>();
 				for(int i=0; i<reservedSeatsList.size(); i++) {
+					
 					HochaDTO dto = new HochaDTO();
 					List<String> tSeatNumList = reservedSeatsList.get(i).gettSeatNumList();
 					int leftSeats = tHoNumList.get(i).getHoNum()-tSeatNumList.size();
@@ -480,7 +493,15 @@ public class ReserveTrainServlet extends MyServlet{
 					
 				} else if(hORf.equals("2")) {
 					String endDate = req.getParameter("endDate");
-					endDate = endDate.substring(0, endDate.length()-2).replace(".", "-");
+					endDate = endDate.substring(0, endDate.length()-2);
+					String[] end = endDate.split("[.]");
+					if(Integer.parseInt(end[1])<10){
+						end[1] = "0"+end[1];
+					}
+					if(Integer.parseInt(end[2])<10){
+						end[2] = "0"+end[2];
+					}
+					endDate = end[0]+"-"+end[1]+"-"+end[2];
 					
 					int destOperCode = Integer.parseInt(req.getParameter("destOperCode"));
 					int dependtDetailCode = Integer.parseInt(req.getParameter("dependtDetailCode"));
@@ -583,14 +604,13 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("staDate", req.getParameter("staDate"));
 				req.setAttribute("deptStaDateTime", req.getParameter("tStaTime"));
 				req.setAttribute("deptEndDateTime", req.getParameter("tEndTime"));
-				req.setAttribute("tOperCode", req.getParameter("tOperCode"));
-				req.setAttribute("statDetailCode", req.getParameter("statDetailCode"));
-				req.setAttribute("endtDetailCode", req.getParameter("endtDetailCode"));
+				req.setAttribute("depstatDetailCode", req.getParameter("statDetailCode"));
+				req.setAttribute("desstatDetailCode", req.getParameter("endtDetailCode"));
 				req.setAttribute("staSeats", req.getParameter("selSeats"));
-				req.setAttribute("selTHoNum", req.getParameter("selTHoNum"));
+				req.setAttribute("staTHoNum", req.getParameter("selTHoNum"));
 				req.setAttribute("staTNumId", staTNumId);
 				req.setAttribute("staTNum", Integer.parseInt(selTHoNum.substring(4)));
-				req.setAttribute("selGrade", req.getParameter("selGrade"));
+				req.setAttribute("staGrade", req.getParameter("selGrade"));
 				req.setAttribute("statStaionName", reserveInfo.getDeptStationName());
 				req.setAttribute("endtStaionName", reserveInfo.getDestStationName());
 				String selGrade = req.getParameter("selGrade");
@@ -634,8 +654,6 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("deptEndDateTime", req.getParameter("deptEndDateTime"));
 				req.setAttribute("destStaDateTime", req.getParameter("destStaDateTime"));
 				req.setAttribute("destEndDateTime", req.getParameter("destEndDateTime"));
-				req.setAttribute("deptOperCode", req.getParameter("deptOperCode"));
-				req.setAttribute("destOperCode", req.getParameter("destOperCode"));
 				req.setAttribute("depstatDetailCode", req.getParameter("depstatDetailCode"));
 				req.setAttribute("desstatDetailCode", req.getParameter("desstatDetailCode"));
 				req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
@@ -661,6 +679,7 @@ public class ReserveTrainServlet extends MyServlet{
 				
 				int staadultCost = 0;
 				int stachildCost = 0;
+				int staDisCost = 0;
 				if(staGrade.equals("premium")) {
 					staadultCost = distance*adultCount*costList.get(1);
 					stachildCost = distance*childCount*costList.get(1)*costList.get(2)/100;
@@ -688,6 +707,7 @@ public class ReserveTrainServlet extends MyServlet{
 				req.setAttribute("endchildCost", formatter.format(endchildCost));
 				req.setAttribute("statotalCost", formatter.format(statotalCost));
 				req.setAttribute("endtotalCost", formatter.format(endtotalCost));
+				req.setAttribute("staDisCost", formatter.format(staDisCost));
 				req.setAttribute("adultCount", adultCount);
 				req.setAttribute("childCount", childCount);
 				
@@ -698,5 +718,145 @@ public class ReserveTrainServlet extends MyServlet{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	protected void beforePayment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
+		try {
+			String cycle = reserveInfo.getCycle();
+			
+			req.setAttribute("statDiscern", req.getParameter("statDiscern"));
+			req.setAttribute("endtDiscern", req.getParameter("endtDiscern"));
+			req.setAttribute("adultCount", req.getParameter("adultCount"));
+			req.setAttribute("childCount", req.getParameter("childCount"));
+			req.setAttribute("staDate", req.getParameter("staDate"));
+			req.setAttribute("endDate", req.getParameter("endDate"));
+			req.setAttribute("deptStaDateTime", req.getParameter("deptStaDateTime"));
+			req.setAttribute("deptEndDateTime", req.getParameter("deptEndDateTime"));
+			req.setAttribute("destStaDateTime", req.getParameter("destStaDateTime"));
+			req.setAttribute("destEndDateTime", req.getParameter("destEndDateTime"));
+			req.setAttribute("depstatDetailCode", req.getParameter("depstatDetailCode"));
+			req.setAttribute("desstatDetailCode", req.getParameter("desstatDetailCode"));
+			req.setAttribute("dependtDetailCode", req.getParameter("dependtDetailCode"));
+			req.setAttribute("desendtDetailCode", req.getParameter("desendtDetailCode"));
+			req.setAttribute("staSeats", req.getParameter("staSeats"));
+			req.setAttribute("endSeats", req.getParameter("endSeats"));
+			req.setAttribute("staTHoNum", req.getParameter("staTHoNum"));
+			req.setAttribute("endTHoNum", req.getParameter("endTHoNum"));
+			req.setAttribute("staGrade", req.getParameter("staGrade"));
+			req.setAttribute("endGrade", req.getParameter("endGrade"));
+			req.setAttribute("staadultCost", req.getParameter("staadultCost"));
+			req.setAttribute("stachildCost", req.getParameter("stachildCost"));
+			req.setAttribute("endadultCost", req.getParameter("endadultCost"));
+			req.setAttribute("endchildCost", req.getParameter("endchildCost"));
+			req.setAttribute("statotalCost", req.getParameter("statotalCost"));
+			req.setAttribute("endtotalCost", req.getParameter("endtotalCost"));
+			req.setAttribute("cycle", cycle);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		forward(req, resp, "/WEB-INF/views/reservetrain/passengerInfo.jsp");
+		return;
+	}
+	protected void insertPayInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		ReserveTrainDAO dao = new ReserveTrainDAO();
+		String cycle = reserveInfo.getCycle();
+		PaymentDTO dto = new PaymentDTO();
+		// PaymentDTO dto2 = new PaymentDTO();
+		String cp = req.getContextPath();
+		
+		try {
+			int cusNum;
+			// 비회원이면 cusNum에 0 넣기
+			if(info==null) {
+				cusNum = 0;
+				dto.setName(req.getParameter("name"));
+				dto.setTel(req.getParameter("tel"));
+				dto.setEmail(req.getParameter("email"));
+			} else {
+				cusNum = info.getCusNum();
+			}
+			
+			dto.setCusNum(cusNum);
+			dto.settTotNum(Integer.parseInt(req.getParameter("adultCount"))+Integer.parseInt(req.getParameter("childCount")));
+			dto.settTotPrice(Integer.parseInt(req.getParameter("statotalCost").replace(",", "")));
+			dto.settPayPrice(Integer.parseInt(req.getParameter("statotalCost").replace(",", "")));
+			dto.settDetailCodeSta(Integer.parseInt(req.getParameter("depstatDetailCode")));
+			dto.settDetailCodeEnd(Integer.parseInt(req.getParameter("desstatDetailCode")));
+			dto.settHoNum(req.getParameter("staTHoNum"));
+			
+			String staDate = req.getParameter("staDate");
+			staDate = staDate.substring(0, staDate.length()-2);
+			String[] sta = staDate.split("[.]");
+			if(Integer.parseInt(sta[1])<10){
+				sta[1] = "0"+sta[1];
+			}
+			if(Integer.parseInt(sta[2])<10){
+				sta[2] = "0"+sta[2];
+			}
+			staDate = sta[0]+"-"+sta[1]+"-"+sta[2];
+			
+			dto.settBoardDate(staDate);
+			String tSeat = req.getParameter("staGrade").equals("premium") ? "특실" : "일반";
+			dto.settSeat(tSeat);
+			List<Integer> feeList = new ArrayList<>();
+			List<String> passengerList = new ArrayList<>();
+			List<String> tSeatNum = new ArrayList<>();
+			int count = Integer.parseInt(req.getParameter("adultCount")) + Integer.parseInt(req.getParameter("childCount"));
+			int adultCount = Integer.parseInt(req.getParameter("adultCount"));
+			int childCount = Integer.parseInt(req.getParameter("childCount"));
+			int adultCost = Integer.parseInt(req.getParameter("staadultCost").replace(",", ""));
+			int childCost = Integer.parseInt(req.getParameter("stachildCost").replace(",", ""));
+			int ac;
+			int cc;
+			if(adultCount==0) {
+				ac = 0;
+			} else {
+				ac = adultCost/adultCount;
+			}
+			if(childCount==0) {
+				cc = 0;
+			} else {
+				cc = childCost/childCount;
+			}
+			
+			String staSeats = req.getParameter("staSeats");
+			String[] seatsArr = staSeats.split(",");
+			
+			for(int i=0; i<count; i++) {
+				if(adultCount>0) {
+					passengerList.add("어른");
+					feeList.add(ac);
+					tSeatNum.add(seatsArr[i]);
+					adultCount--;
+					continue;
+				} else if(childCount>0) {
+					passengerList.add("아동");
+					tSeatNum.add(seatsArr[i]);
+					feeList.add(cc);
+					childCount--;
+				}
+			}
+			dto.settPassenger(passengerList);
+			dto.settFee(feeList);
+			dto.settSeatNum(tSeatNum);
+			
+			if(cycle.equals("half")) {
+				int result = dao.halfInsertPayInfo(dto);
+				if(result > 0) {
+					resp.sendRedirect(cp + "/");
+					return;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

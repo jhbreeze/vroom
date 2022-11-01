@@ -7,17 +7,19 @@ public class PaymentDTO {
 	private int cusNum;
 	private int tTotNum;
 	private int tTotPrice;
-	private String tPayDay;
 	private int tPayPrice;
 	private int tDisPrice;
 	private int tDetailCodeEnd;
 	private int tDetailCodeSta;
 	private String tBoardDate;
 	private List<Integer> tFee;
-	private List<String> tPassinger;
+	private List<String> tPassenger;
 	private String tSeat;
 	private String tHoNum;
 	private List<String> tSeatNum;
+	private String name;
+	private String tel;
+	private String email;
 	
 	public int getCusNum() {
 		return cusNum;
@@ -36,12 +38,6 @@ public class PaymentDTO {
 	}
 	public void settTotPrice(int tTotPrice) {
 		this.tTotPrice = tTotPrice;
-	}
-	public String gettPayDay() {
-		return tPayDay;
-	}
-	public void settPayDay(String tPayDay) {
-		this.tPayDay = tPayDay;
 	}
 	public int gettPayPrice() {
 		return tPayPrice;
@@ -79,11 +75,11 @@ public class PaymentDTO {
 	public void settFee(List<Integer> tFee) {
 		this.tFee = tFee;
 	}
-	public List<String> gettPassinger() {
-		return tPassinger;
+	public List<String> gettPassenger() {
+		return tPassenger;
 	}
-	public void settPassinger(List<String> tPassinger) {
-		this.tPassinger = tPassinger;
+	public void settPassenger(List<String> tPassinger) {
+		this.tPassenger = tPassinger;
 	}
 	public String gettSeat() {
 		return tSeat;
@@ -102,5 +98,23 @@ public class PaymentDTO {
 	}
 	public void settSeatNum(List<String> tSeatNum) {
 		this.tSeatNum = tSeatNum;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

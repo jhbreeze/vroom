@@ -974,7 +974,33 @@ public class ReserveTrainDAO {
 			
 		try {
 			conn.setAutoCommit(false);
+			
+			int cusNum = dto.getCusNum();
+			
+			if(cusNum == 0) {
+				sql = "SELECT customer_seq.NEXTVAL FROM dual";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					cusNum = rs.getInt(1);
+				}
+				pstmt.close();
+				pstmt = null;
+				rs.close();
 				
+				sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES(?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cusNum);
+				pstmt.setString(2, dto.getName());
+				pstmt.setString(3, dto.getTel());
+				pstmt.setString(4, dto.getEmail());
+				
+				result += pstmt.executeUpdate();
+					
+				pstmt.close();
+				pstmt = null;
+			}
+			
 			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -982,53 +1008,76 @@ public class ReserveTrainDAO {
 				tTkNumSeq = rs.getInt(1);
 			}
 			pstmt.close();
-			pstmt = null;
-				
+			
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
-					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
-					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
-				
-			pstmt.setInt(1, dto.getCusNum());
-			pstmt.setInt(2, dto.gettTotNum());
-			pstmt.setInt(3, dto.gettTotPrice());
-			pstmt.setString(4, dto.gettPayDay());
+			
+			pstmt.setInt(1, tTkNumSeq);
+			pstmt.setInt(2, cusNum);
+			pstmt.setInt(3, dto.gettTotNum());
+			pstmt.setInt(4, dto.gettTotPrice());
 			pstmt.setInt(5, dto.gettPayPrice());
-			pstmt.setInt(5, dto.gettDisPrice());
-			pstmt.setInt(5, dto.gettDetailCodeEnd());
 			pstmt.setInt(6, dto.gettDetailCodeSta());
-			pstmt.setString(7, dto.gettBoardDate());
-				
+			pstmt.setInt(7, dto.gettDetailCodeEnd());
+			pstmt.setString(8, dto.gettBoardDate());
+			
 			result += pstmt.executeUpdate();
 				
 			pstmt.close();
-			pstmt = null;
 			
-			String tNum;
-			Date now = new Date(System.currentTimeMillis());
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			tNum = sdf.format(now);
-			int randomInt = (int)Math.random()*1000;
-			tNum += randomInt;
 			
-			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
-					+ "	VALUES("+ tNum +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
-			for(int i=0; i<dto.gettPassinger().size(); i++) {
+			List<String> tPassenger = dto.gettPassenger();
+			List<Integer> tFee = dto.gettFee();
+			List<String> tSeatNum = dto.gettSeatNum();
+			
+			System.out.println("승객수 : " + tPassenger.size());
+			
+			
+			
+			for(int i=0; i<tPassenger.size(); i++) {
+				String tNum;
+				Date now = new Date(System.currentTimeMillis());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+				tNum = sdf.format(now);
+				int randomInt = (int)Math.random()*1000;
+				tNum += randomInt;
+				
+				System.out.println(i+"--------");
+				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(1, dto.gettFee().get(i));
-				pstmt.setString(2, dto.gettPassinger().get(i));
-				pstmt.setString(3, dto.gettSeat());
-				pstmt.setString(4, dto.gettHoNum());
-				pstmt.setString(5, dto.gettSeatNum().get(i));
+				pstmt.setString(1, tNum);
+				pstmt.setInt(2, tTkNumSeq);
+				pstmt.setInt(3, tFee.get(i));
+				pstmt.setString(4, tPassenger.get(i));
+				pstmt.setString(5, dto.gettSeat());
+				pstmt.setString(6, dto.gettHoNum());
+				pstmt.setString(7, tSeatNum.get(i));
+				
+				System.out.println("실행 - "+i);
+				System.out.println(tNum);
+				System.out.println(tTkNumSeq);
+				System.out.println(tFee.get(i));
+				System.out.println(tPassenger.get(i));
+				System.out.println(dto.gettSeat());
+				System.out.println(dto.gettHoNum());
+				System.out.println(tSeatNum.get(i));
+				
+				result += pstmt.executeUpdate();
+				
+				pstmt.close();
 			}
+			System.out.println("실행됨");
 			conn.commit();
 		} catch (Exception e) {
 			try {
 				conn.rollback();
 			} catch (Exception e2) {
 			}
+			e.printStackTrace();
 		} finally {
 			if(rs != null) {
 				try {
@@ -1042,6 +1091,11 @@ public class ReserveTrainDAO {
 				} catch (Exception e2) {
 				}
 			}
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e2) {
+			}
+			
 		}
 		return result;
 	}
@@ -1055,6 +1109,32 @@ public class ReserveTrainDAO {
 			
 		try {
 			conn.setAutoCommit(false);
+			
+			int cusNum = staDto.getCusNum();
+			
+			if(cusNum == 0) {
+				sql = "SELECT customer_seq.NEXTVAL FROM dual";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					cusNum = rs.getInt(1);
+				}
+				pstmt.close();
+				pstmt = null;
+				rs.close();
+				
+				sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES(?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cusNum);
+				pstmt.setString(2, staDto.getName());
+				pstmt.setString(3, staDto.getTel());
+				pstmt.setString(4, staDto.getEmail());
+				
+				result += pstmt.executeUpdate();
+					
+				pstmt.close();
+				pstmt = null;
+			}
 				
 			// ---------------- 가는날
 			
@@ -1067,22 +1147,22 @@ public class ReserveTrainDAO {
 			pstmt.close();
 			rs.close();
 			pstmt = null;
+			rs.close();
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
 					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
-					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, SYSDATE, "
+					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, staDto.getCusNum());
+			pstmt.setInt(1, cusNum);
 			pstmt.setInt(2, staDto.gettTotNum());
 			pstmt.setInt(3, staDto.gettTotPrice());
-			pstmt.setString(4, staDto.gettPayDay());
-			pstmt.setInt(5, staDto.gettPayPrice());
+			pstmt.setInt(4, staDto.gettPayPrice());
 			pstmt.setInt(5, staDto.gettDisPrice());
-			pstmt.setInt(5, staDto.gettDetailCodeEnd());
-			pstmt.setInt(6, staDto.gettDetailCodeSta());
-			pstmt.setString(7, staDto.gettBoardDate());
+			pstmt.setInt(6, staDto.gettDetailCodeEnd());
+			pstmt.setInt(7, staDto.gettDetailCodeSta());
+			pstmt.setString(8, staDto.gettBoardDate());
 				
 			result += pstmt.executeUpdate();
 				
@@ -1098,11 +1178,11 @@ public class ReserveTrainDAO {
 			
 			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
 					+ "	VALUES("+ tNum +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
-			for(int i=0; i<staDto.gettPassinger().size(); i++) {
+			for(int i=0; i<staDto.gettPassenger().size(); i++) {
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setInt(1, staDto.gettFee().get(i));
-				pstmt.setString(2, staDto.gettPassinger().get(i));
+				pstmt.setString(2, staDto.gettPassenger().get(i));
 				pstmt.setString(3, staDto.gettSeat());
 				pstmt.setString(4, staDto.gettHoNum());
 				pstmt.setString(5, staDto.gettSeatNum().get(i));
@@ -1123,22 +1203,22 @@ public class ReserveTrainDAO {
 			}
 			pstmt.close();
 			pstmt = null;
+			rs.close();
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
 					+ "	tPayPrice, tDisPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, ?, "
+					+ "	VALUES( "+ tTkNumSeq +" , ?, ?, ?, SYSDATE, "
 					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, endDto.getCusNum());
+			pstmt.setInt(1, cusNum);
 			pstmt.setInt(2, endDto.gettTotNum());
 			pstmt.setInt(3, endDto.gettTotPrice());
-			pstmt.setString(4, endDto.gettPayDay());
-			pstmt.setInt(5, endDto.gettPayPrice());
+			pstmt.setInt(4, endDto.gettPayPrice());
 			pstmt.setInt(5, endDto.gettDisPrice());
-			pstmt.setInt(5, endDto.gettDetailCodeEnd());
-			pstmt.setInt(6, endDto.gettDetailCodeSta());
-			pstmt.setString(7, endDto.gettBoardDate());
+			pstmt.setInt(6, endDto.gettDetailCodeEnd());
+			pstmt.setInt(7, endDto.gettDetailCodeSta());
+			pstmt.setString(8, endDto.gettBoardDate());
 				
 			result += pstmt.executeUpdate();
 				
@@ -1154,11 +1234,11 @@ public class ReserveTrainDAO {
 			
 			sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
 					+ "	VALUES("+ tNum2 +", "+ tTkNumSeq +", ?, ?, ?, ?, ?)";
-			for(int i=0; i<staDto.gettPassinger().size(); i++) {
+			for(int i=0; i<staDto.gettPassenger().size(); i++) {
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setInt(1, endDto.gettFee().get(i));
-				pstmt.setString(2, endDto.gettPassinger().get(i));
+				pstmt.setString(2, endDto.gettPassenger().get(i));
 				pstmt.setString(3, endDto.gettSeat());
 				pstmt.setString(4, endDto.gettHoNum());
 				pstmt.setString(5, endDto.gettSeatNum().get(i));
@@ -1175,6 +1255,7 @@ public class ReserveTrainDAO {
 				conn.rollback();
 			} catch (Exception e2) {
 			}
+			e.printStackTrace();
 		} finally {
 			if(rs != null) {
 				try {
@@ -1188,8 +1269,12 @@ public class ReserveTrainDAO {
 				} catch (Exception e2) {
 				}
 			}
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e2) {
+			}
+			
 		}
-		
 		
 		return result;
 	}

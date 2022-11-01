@@ -11,15 +11,15 @@
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 <style type="text/css">
 main { 
-	position: relative; top: -55px; background: white;
+	position: relative; top: -35px; background: white;
 }
-.container { min-height: 480px; }
+.container { min-height: 600px; }
 .ticket-1, .ticket-2, .ticket-3, .ticket-4 { 
 	width: 500px; box-shadow: 0px 0px 8px rgb(72, 92, 161, 0.3); min-height: 50px; 
 	border-radius: 10px; margin: 0 auto; margin-top: 20px; padding: 20px 30px 20px 30px;
 }
 #check-title { 
-	font-size: 25px; font-weight: 600; width: 500px; margin: 0 auto;
+	font-size: 25px; font-weight: 700; width: 500px; margin: 0 auto;
 }
 #ticket-info { margin: 0 auto; width: 500px; }
 .date { color: #0E6EFD; }
@@ -41,7 +41,7 @@ $(function(){
 	if(cycle==='half'){
 		$(".ticket-2").hide();
 		$(".ticket-4").hide();
-		let grade = $("input[name=selGrade]").val();
+		let grade = $("input[name=staGrade]").val();
 		if(grade==='premium'){
 			$("#grade-1").text('특실');
 			$("#grade-3").text('특실요금 적용');
@@ -81,6 +81,16 @@ $(function(){
 		$(".ticket-count").text('어른  '+adult+'매, '+'  아이  '+child+'매');
 	}
 	
+});
+
+$(function(){
+	$("#next-btn").click(function(){
+		let url = "${pageContext.request.contextPath}/reservetrain/beforePayment.do?";
+		let query = $("form[name=hiddenForm]").serialize();
+		alert(query);
+		
+		location.href= url + query;
+	});
 });
 
 </script>
@@ -135,48 +145,52 @@ $(function(){
 				<div class="info6  d-flex justify-content-end"><span class="cost">${endtotalCost}</span><span class="won">&nbsp;원</span></div>
 			</div>
 			<div class="d-flex justify-content-center">
-				<button class="btn btn-primary btn-pay">결제하기</button>
+				<button class="btn btn-primary btn-pay" id="next-btn">다음단계</button>
 			</div>
 		</div>
 	</div>
 </main>
 
 
-<form name="hiddenForm">
-	<input type="hidden" name="tDiscern" value="${tDiscern}">
+<form name="hiddenForm" method="post">
 	<input type="hidden" name="statDiscern" value="${statDiscern}">
 	<input type="hidden" name="endtDiscern" value="${endtDiscern}">
+	
 	<input type="hidden" name="cycle" value="${cycle}">
+	
 	<input type="hidden" name="adultCount" value="${adultCount}">
 	<input type="hidden" name="childCount" value="${childCount}">
+	
 	<input type="hidden" name="staDate" value="${staDate}">
 	<input type="hidden" name="endDate" value="${endDate}">
-	<input type="hidden" name="tStaTime" value="${tStaTime}">
-	<input type="hidden" name="tEndTime" value="${tEndTime}">
+	
 	<input type="hidden" name="deptStaDateTime" value="${deptStaDateTime}">
 	<input type="hidden" name="deptEndDateTime" value="${deptEndDateTime}">
 	<input type="hidden" name="destStaDateTime" value="${destStaDateTime}">
 	<input type="hidden" name="destEndDateTime" value="${destEndDateTime}">
-	<input type="hidden" name="tOperCode" value="${tOperCode}">
-	<input type="hidden" name="deptOperCode" value="${deptOperCode}">
-	<input type="hidden" name="destOperCode" value="${destOperCode}">
+	
 	<input type="hidden" name="statDetailCode" value="${statDetailCode}">
 	<input type="hidden" name="endtDetailCode" value="${endtDetailCode}">
 	<input type="hidden" name="depstatDetailCode" value="${depstatDetailCode}">
 	<input type="hidden" name="desstatDetailCode" value="${desstatDetailCode}">
 	<input type="hidden" name="dependtDetailCode" value="${dependtDetailCode}">
 	<input type="hidden" name="desendtDetailCode" value="${desendtDetailCode}">
-	<input type="hidden" name="selSeats" value="${selSeats}">
 	<input type="hidden" name="staSeats" value="${staSeats}">
 	<input type="hidden" name="endSeats" value="${endSeats}">
 	
-	<input type="hidden" name="selTHoNum" value="${selTHoNum}">
 	<input type="hidden" name="staTHoNum" value="${staTHoNum}">
 	<input type="hidden" name="endTHoNum" value="${endTHoNum}">
 	
-	<input type="hidden" name="selGrade" value="${selGrade}">
 	<input type="hidden" name="staGrade" value="${staGrade}">
 	<input type="hidden" name="endGrade" value="${endGrade}">
+	
+	<input type="hidden" name="staadultCost" value="${staadultCost}">
+	<input type="hidden" name="stachildCost" value="${stachildCost}">
+	<input type="hidden" name="endadultCost" value="${endadultCost}">
+	<input type="hidden" name="endchildCost" value="${endchildCost}">
+	<input type="hidden" name="statotalCost" value="${statotalCost}">
+	<input type="hidden" name="endtotalCost" value="${endtotalCost}">
+	
 </form>
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
