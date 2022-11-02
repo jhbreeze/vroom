@@ -1016,7 +1016,7 @@ public class ReserveTrainDAO {
 					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, Integer.parseInt(tTkNumList));
+			pstmt.setString(1, tTkNumList);
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, dto.gettTotNum());
 			pstmt.setInt(4, dto.gettTotPrice());
@@ -1037,7 +1037,7 @@ public class ReserveTrainDAO {
 						+ "	VALUES(tTkNum_seq.NEXTVAL, ?, ?, ?, ?, ?, ?)";
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(1, Integer.parseInt(tTkNumList));
+				pstmt.setString(1, tTkNumList);
 				pstmt.setInt(2, tFee.get(i));
 				pstmt.setString(3, tPassenger.get(i));
 				pstmt.setString(4, dto.gettSeat());
@@ -1145,7 +1145,7 @@ public class ReserveTrainDAO {
 					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, Integer.parseInt(tNumList.get(0)));
+			pstmt.setString(1, tNumList.get(0));
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, staDto.gettTotNum());
 			pstmt.setInt(4, staDto.gettTotPrice());
@@ -1166,7 +1166,7 @@ public class ReserveTrainDAO {
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(1, Integer.parseInt(tNumList.get(0)));
+				pstmt.setString(1, tNumList.get(0));
 				pstmt.setInt(2, tFee.get(i));
 				pstmt.setString(3, tPassenger.get(i));
 				pstmt.setString(4, staDto.gettSeat());
@@ -1190,7 +1190,7 @@ public class ReserveTrainDAO {
 					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setInt(1, Integer.parseInt(tNumList.get(1)));
+			pstmt.setString(1, tNumList.get(1));
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, endDto.gettTotNum());
 			pstmt.setInt(4, endDto.gettTotPrice());
@@ -1211,7 +1211,7 @@ public class ReserveTrainDAO {
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setInt(2, Integer.parseInt(tNumList.get(1)));
+				pstmt.setString(2, tNumList.get(1));
 				pstmt.setInt(3, tFee2.get(i));
 				pstmt.setString(4, tPassenger2.get(i));
 				pstmt.setString(5, endDto.gettSeat());
