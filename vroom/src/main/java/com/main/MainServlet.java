@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.event.EventDAO;
-import com.event.EventDTO;
 import com.notice.NoticeDAO;
 import com.notice.NoticeDTO;
 import com.util.MyServlet;
@@ -33,11 +32,12 @@ public class MainServlet extends MyServlet {
 		
 		if(uri.indexOf("main.do") != -1) {
 			main(req, resp);
-			list(req, resp);
 		}
 	}
 	protected void main(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		NoticeDAO dao = new NoticeDAO();
+		EventDAO dao1 = new EventDAO();
+		
 		MyUtil util = new MyUtilBootstrap();
 
 		String cp = req.getContextPath();
@@ -135,85 +135,6 @@ public class MainServlet extends MyServlet {
 
 		forward(req, resp, "/WEB-INF/views/main/main.jsp");
 	}
-	
-	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		EventDAO dao = new EventDAO();
-		MyUtil util = new MyUtilBootstrap();
-
-		String cp = req.getContextPath();
-
-		try {
-			String page = req.getParameter("page");
-			int current_page = 1;
-			if (page != null) {
-				current_page = Integer.parseInt(page);
-			}
-
-			String condition = req.getParameter("condition");
-			String keyword = req.getParameter("keyword");
-			if (condition == null) {
-				condition = "all";
-				keyword = "";
-			}
-
-			if (req.getMethod().equalsIgnoreCase("GET")) {
-				keyword = URLDecoder.decode(keyword, "utf-8");
-			}
-
-			int dataCount;
-			if (keyword.length() == 0) {
-				dataCount = dao.dataCount();
-			} else {
-				dataCount = dao.dataCount(condition, keyword);
-			}
-
-			int size = 8;
-			int total_page = util.pageCount(dataCount, size);
-			if (current_page > total_page) {
-				current_page = total_page;
-			}
-
-			int offset = (current_page - 1) * size;
-			if (offset < 0)
-				offset = 0;
-
-			List<EventDTO> list = null;
-			if (keyword.length() == 0) {
-				list = dao.listEvent(offset, size);
-			} else {
-				list = dao.listEvent(offset, size, condition, keyword);
-			}
-
-			String query = "";
-			if (keyword.length() != 0) {
-				query = "condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "utf-8");
-			}
-
-			String listUrl = cp + "/event/list.do";
-			String articleUrl = cp + "/event/article.do?page=" + current_page;
-			if (query.length() != 0) {
-				listUrl += "?" + query;
-				articleUrl += "&" + query;
-			}
-			String paging = util.paging(current_page, total_page, listUrl);
-
-			req.setAttribute("list", list);
-			req.setAttribute("page", current_page);
-			req.setAttribute("total_page", total_page);
-			req.setAttribute("dataCount", dataCount);
-			req.setAttribute("size", size);
-			req.setAttribute("articleUrl", articleUrl);
-			req.setAttribute("paging", paging);
-			req.setAttribute("condition", condition);
-			req.setAttribute("keyword", keyword);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		forward(req, resp, "/WEB-INF/views/event/list.jsp");
-	}
-	
 
 }
 

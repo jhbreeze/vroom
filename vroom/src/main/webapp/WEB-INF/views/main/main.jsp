@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>부릉부릉 메인</title>
+<title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/static_mainHeader.jsp"/>
 
 <script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -78,6 +78,25 @@ main {
 .container {
 	min-width: 900px;
 }
+.backImage{
+background-image: url( "${pageContext.request.contextPath}/resources/images/rail.png" );
+background-size: 100px;
+background-repeat: repeat-x;
+background-position: top;
+-webkit-transform: skew(0deg, -10deg);  
+-moz-transform: skew(0deg, -10deg);  
+-ms-transform: skew(0deg, -10deg);  
+-o-transform: skew(0deg, -10deg);  
+transform: skew(0deg, -10deg);
+}
+.backImage .content{
+-webkit-transform: skew(0deg, 10deg);  
+-moz-transform: skew(0deg, 10deg);  
+-ms-transform: skew(0deg, 10deg);  
+-o-transform: skew(0deg, 10deg);  
+transform: skew(0deg, 10deg);
+}
+
 </style>
 <script type="text/javascript">
 
@@ -855,133 +874,136 @@ $(function(){
 	</div>
 </div>
 	<main>
-		<!-- 캐러셀 -->
-		<div class="container">
-			<div class="body-container">
-				<div class="row">
-					<div id="carouselExampleControls1" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+		<div class="backImage">
+			<!-- 캐러셀 -->
+			<div class="content">
+				<div class="container">
+					<div class="body-container">
+						<div class="row">
+							<div id="carouselExampleControls1" class="carousel slide"
+								data-bs-ride="carousel" style="width: 30%">
+								<div class="carousel-inner">
+									<div class="carousel-item active">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+								</div>
+								<button class="carousel-control-prev" type="button"
+									data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Previous</span>
+								</button>
+								<button class="carousel-control-next" type="button"
+									data-bs-target="#carouselExampleControls1" data-bs-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Next</span>
+								</button>
 							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+							<div style="width: 5%"></div>
+							<div id="carouselExampleControls2" class="carousel slide"
+								data-bs-ride="carousel" style="width: 30%">
+								<div class="carousel-inner">
+									<div class="carousel-item active">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+								</div>
+								<button class="carousel-control-prev" type="button"
+									data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Previous</span>
+								</button>
+								<button class="carousel-control-next" type="button"
+									data-bs-target="#carouselExampleControls2" data-bs-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Next</span>
+								</button>
 							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+							<div style="width: 5%"></div>
+							<div id="carouselExampleControls3" class="carousel slide"
+								data-bs-ride="carousel" style="width: 30%">
+								<div class="carousel-inner">
+									<div class="carousel-item active">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+									<div class="carousel-item">
+										<img
+											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+											class="d-block w-100" alt="...">
+									</div>
+								</div>
+								<button class="carousel-control-prev" type="button"
+									data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Previous</span>
+								</button>
+								<button class="carousel-control-next" type="button"
+									data-bs-target="#carouselExampleControls3" data-bs-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Next</span>
+								</button>
 							</div>
 						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls1" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-					<div style="width: 5%"></div>
-					<div id="carouselExampleControls2" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+						<br> <br>
+						<div style="">
+							<div>
+								<h4>공지사항</h4>
 							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls2" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-					<div style="width: 5%"></div>
-					<div id="carouselExampleControls3" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+							<br>
+							<div class="body-main">
+								<form name="listForm" method="post">
+									<table class="table">
+										<tbody>
+											<c:forEach var="dto" items="${list}" varStatus="status">
+												<tr>
+													<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
+													<td scope="row" class="text-center sort-td"><div
+															class="sort">${dto.category}</div></td>
+													<td class="left"><a
+														href="${articleUrl}&boardNum=${dto.boardNum}"
+														class="text-reset text-decoration-none">${dto.boSubject}</a>
+														<c:if test="${dto.gap<1}">
+															<img
+																src="${pageContext.request.contextPath}/resources/images/train.gif"
+																width="5%">
+														</c:if></td>
+													<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</form>
 							</div>
 						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls3" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-				</div>
-				<br>
-				<br>
-				<div style="">
-					<div>
-						<h4>공지사항</h4>
-					</div>
-					<br>
-					<div class="body-main">
-						<form name="listForm" method="post">
-							<table class="table">
-								<tbody>
-									<c:forEach var="dto" items="${list}" varStatus="status">
-										<tr>
-											<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
-											<td scope="row" class="text-center sort-td"><div
-													class="sort">${dto.category}</div></td>
-											<td class="left"><a
-												href="${articleUrl}&boardNum=${dto.boardNum}"
-												class="text-reset text-decoration-none">${dto.boSubject}</a>
-												<c:if test="${dto.gap<1}">
-													<img
-														src="${pageContext.request.contextPath}/resources/images/train.gif"
-														width="5%">
-												</c:if></td>
-											<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</form>
 					</div>
 				</div>
 			</div>
