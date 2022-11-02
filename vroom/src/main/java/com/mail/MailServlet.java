@@ -34,7 +34,6 @@ public class MailServlet extends MyServlet {
 		String content="";
 		StringBuilder sb = new StringBuilder();
 		String reserveNum = req.getParameter("reserveNum");
-		sb.append("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title></title><link rel=\"icon\" href=\"data:;base64,iVBORw0KGgo=\"></head><body>");
 		sb.append("<table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width: 100%; background-color: #fff;\">");
 		sb.append("<tbody><tr><td><div style=\"margin: 0 auto; max-width: 720px; background-color: #fff; font-family: Malgun Gothic, Dotum, Helvetica, 'Apple SD Gothic Neo', Sans-serif;\">");
 		sb.append("<table cellpadding=\"0\" cellspacing=\"0\"style=\"width: 100%; margin: 0 auto; background-color: #fff; text-align: left; letter-spacing: -0.8px;\">");
@@ -54,7 +53,6 @@ public class MailServlet extends MyServlet {
 		sb.append("<tr><td height=\"23\"></td></tr><tr><td style=\"font-weight: 400; font-size: 12px; font-family: 'Noto Sans KR'; color: #888; line-height: 20px; letter-spacing: -0.8px;\">본 메일은 발신전용으로 회신이되지 않습니다.<br> 문의사항은 부릉 고객센터(<a href=\"tel:18119997\" name=\"ANCHOR4083\" style=\"font-weight: 700; text-decoration: underline;\" target=\"_blank\" rel=\"noreferrer noopener\"><font color=\"#888\">1121-0909</font></a>)를 이용해 주시기 바랍니다.");
 		sb.append("</td></tr></tbody></table></td><td width=\"16\"></td></tr></tbody></table></div></td></tr></tbody></table>");
 		content = sb.toString();
-		
 		
 		String url = cp + "/mail/complete.do";
 		

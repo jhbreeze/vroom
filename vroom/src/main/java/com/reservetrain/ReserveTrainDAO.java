@@ -751,7 +751,7 @@ public class ReserveTrainDAO {
 					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
 					+ "    WHERE ((tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
 					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?)) "
-					+ "    AND TO_CHAR(tBoardDate, 'YYYY-MM-DD') = ?) ";
+					+ "    AND TO_CHAR(tBoardDate, 'YYYY-MM-DD') = ? AND tDisPrice IS NULL) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, tHoNum);
 			pstmt.setInt(2, staDetailCode);
@@ -800,7 +800,7 @@ public class ReserveTrainDAO {
 					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
 					+ "    WHERE (tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
 					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?) "
-					+ "    AND tBoardDate = TO_DATE( ? , 'YYYY-MM-DD')) ";
+					+ "    AND tBoardDate = TO_DATE( ? , 'YYYY-MM-DD') AND tDisPrice IS NULL) ";
 			for(String thoNum : hochaList) {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, thoNum);
