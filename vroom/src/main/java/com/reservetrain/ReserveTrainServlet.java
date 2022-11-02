@@ -862,7 +862,6 @@ public class ReserveTrainServlet extends MyServlet{
 					return;
 				}
 			}
-
 			if(cycle.equals("full")) {
 				// 여기서부터 왕복 2번째 부분
 				dto2.settTotNum(Integer.parseInt(req.getParameter("adultCount"))+Integer.parseInt(req.getParameter("childCount")));
