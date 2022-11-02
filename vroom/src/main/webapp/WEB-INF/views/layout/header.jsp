@@ -6,7 +6,7 @@
 <div class="header">
 
 	<div class="header-top">
-		<a id="logo" href="${pageContext.request.contextPath}/"><img id="img-logo" src="${pageContext.request.contextPath}/resources/images/vroom.png" title="로고" width="100"></a>
+		<a id="logo" href="${pageContext.request.contextPath}/"><img id="img-logo" src="${pageContext.request.contextPath}/resources/images/vroomg_new_mint.png" title="로고" width="100"></a>
 		<div class="header-top">
 			<div class="header-right">
 	            <c:if test="${empty sessionScope.member}">

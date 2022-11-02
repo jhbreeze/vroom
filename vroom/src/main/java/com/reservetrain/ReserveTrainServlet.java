@@ -770,7 +770,6 @@ public class ReserveTrainServlet extends MyServlet{
 		String cycle = reserveInfo.getCycle();
 		PaymentDTO dto = new PaymentDTO();
 		PaymentDTO dto2 = new PaymentDTO();
-		String cp = req.getContextPath();
 		
 		try {
 			int cusNum;
@@ -853,10 +852,13 @@ public class ReserveTrainServlet extends MyServlet{
 			dto.settSeatNum(tSeatNum);
 			
 			// 편도 인서트
+			String tTkNumList;
 			if (cycle.equals("half")) {
-				int result = dao.halfInsertPayInfo(dto);
-				if (result > 0) {
-					resp.sendRedirect(cp + "/reservetrain/completereserve.do");
+				tTkNumList = dao.halfInsertPayInfo(dto);
+				if (tTkNumList != null) {
+					String reserveNum = tTkNumList;
+					req.setAttribute("reserveNum", reserveNum);
+					forward(req, resp, "/WEB-INF/views/reservetrain/mailsend.jsp");
 					return;
 				}
 			}
@@ -927,10 +929,13 @@ public class ReserveTrainServlet extends MyServlet{
 				dto2.settSeatNum(tSeatNum2);
 				
 				// 왕복 인서트
+				List<Integer> tTkNumList2 = new ArrayList<>();
 				if(cycle.equals("full")) {
-					int result = dao.fullInsertPayInfo(dto, dto2);
-					if(result > 0) {
-						resp.sendRedirect(cp + "/reservetrain/completereserve.do");
+					tTkNumList2 = dao.fullInsertPayInfo(dto, dto2);
+					if(tTkNumList2.get(2) > 0) {
+						String reserveNum = tTkNumList2.get(0) + ", " + tTkNumList2.get(1);
+						req.setAttribute("reserveNum", reserveNum);
+						forward(req, resp, "/WEB-INF/views/reservetrain/mailsend.jsp");
 						return;
 					}
 				}
@@ -943,6 +948,7 @@ public class ReserveTrainServlet extends MyServlet{
 	}
 	
 	protected void completereserve(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		forward(req, resp, "/WEB-INF/views/mail/complete.jsp");
 		return;
 	}

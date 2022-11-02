@@ -31,10 +31,9 @@ main {
 	<div class="container body-container">
 		<div id="complete-window">
 		    <div class="body-main mx-auto">
-				예매가 완료되었습니다.<br>
-				예매 정보는 기재하신 메일로 발송됩니다.
+				${message}<br>
 		    </div>
-		    <button class="btn btn-primary">확인</button>
+		    <button class="btn btn-primary" onclick="location.href=${pageContext.request.contextPath}/">확인</button>
 	    </div>
 	</div>
 </main>
