@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VROONG</title>
+<title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
 
 <style type="text/css">
@@ -26,10 +26,18 @@ main {
 .tth { width: 20%; }
 
 
+.myRow { margin : 20px; align-items: center; }
+
 </style>
 
 <script type="text/javascript">
+function deleteOK(){
+	if(confirm("회원을 탈퇴하시겠습니까 ? ")) {
+		location.href="${pageContext.request.contextPath}/member/pwd.do?mode=delete";
+	}
 
+
+}
 </script>
 </head>
 <body>
@@ -45,48 +53,40 @@ main {
 			</div>
 
 			<div class="body-container d-flex">
-				<div class="list-group" align="center">
+				<div class="list-group" style="width: 20%">
 					<a href="#" class="list-group-item list-group-item-action active"
 						aria-current="true">회원정보 확인</a>
 					<a href="${pageContext.request.contextPath}/reserve/list.do"
 						class="list-group-item list-group-item-action">예매내역 확인</a> 
-					<a href="#" class="list-group-item list-group-item-action">1:1 문의내역</a>
 				</div>
 
-				<div class="myTable ms-5">
-						<table class="table table-bordered">
-							<tbody class="text-center">
-								<tr>
-									<th class="table-primary text-center tth" >아이디</th>
-									<td>${sessionScope.member.userId}</td>
-								</tr>
-								
-								<tr>
-									<th class="table-primary text-center tth">회원명</th>
-									<td colspan="3">${sessionScope.member.userName}</td>
-								</tr>
-									
-								<tr>
-									<th class="table-primary text-center tth">생년월일</th>
-									<td colspan="3">${sessionScope.member.birth}</td>
-								</tr>
-
-								<tr>
-									<th class="table-primary text-center tth">전화번호</th>
-									<td colspan="3">${sessionScope.member.tel}</td>
-								</tr>
-
-								<tr>
-									<th class="table-primary text-center tth">이메일</th>
-									<td colspan="3">${sessionScope.member.email}</td>
-								</tr>
-							</tbody>
-						</table>
-						<div align="right"> 
-							<button class="btn btn-primary"
+				<div class="myTable ms-5 ">
+						<div class="d-flex myRow">
+							<div class="me-3 fw-bold" >🔹 아이디</div>
+							<div class="ms-3"><input class="form-control" readonly="readonly" value="${sessionScope.member.userId}" style="border-radius: 10px;"></div>
+						</div>
+						<div class="d-flex myRow">
+							<div class="me-3 fw-bold">🔹 회원명</div>
+							<div class="ms-3"><input class="form-control" readonly="readonly" value="${sessionScope.member.userName}" style="border-radius: 10px;"></div>
+						</div>
+						<div class="d-flex myRow">
+							<div ><label class="me-2 fw-bold" for="userId">🔹 생년월일</label></div>
+							<div class="ms-3"><input class="form-control" readonly="readonly" value="${sessionScope.member.birth}" style="border-radius: 10px;"></div>
+						</div>
+						<div class="d-flex myRow">
+							<div ><label class="me-2 fw-bold" for="userId">🔹 전화번호</label></div>
+							<div class="ms-3"><input class="form-control" readonly="readonly" value="${sessionScope.member.tel}" style="border-radius: 10px;"></div>
+						</div>
+						<div class="d-flex myRow">
+							<div ><label class="me-3 fw-bold" for="userId">🔹 이메일</label></div>
+							<div class="ms-3"><input class="form-control" readonly="readonly" value="${sessionScope.member.email}" style="border-radius: 10px;"></div>
+						</div>
+						
+						<div class="myRow mt-5 ms-5"> 
+							<button class="btn btn-primary me-4"
 								onclick="location.href='${pageContext.request.contextPath}/member/pwd.do?mode=update';">
 								정보 수정</button>
-							<button class="btn btn-primary delete" onclick="location.href='${pageContext.request.contextPath}/member/pwd.do?mode=delete';">회원 탈퇴</button>	
+							<button class="btn btn-primary delete" onclick="deleteOK();">회원 탈퇴</button>	
 						</div>	
 					</div>
 				</div>

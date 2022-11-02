@@ -87,10 +87,10 @@ public class MemberServlet extends MyServlet {
 			
 			session.setAttribute("member", info);
 			
-			if (reserveBusInfo != null) {			
+			if (reserveBusInfo != null && session.getAttribute("reserve") == "버스") {			
 				resp.sendRedirect(cp+"/busreserve/busreservelist.do");
 				return;
-			} else if(reserveTrainInfo != null) {
+			} else if(reserveTrainInfo != null && session.getAttribute("reserve") == "기차") {
 				resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 				return;
 			}  else { 
@@ -244,9 +244,12 @@ public class MemberServlet extends MyServlet {
 				
 				session.removeAttribute("member");
 				session.invalidate();
-				req.setAttribute("message", "탈퇴가 처리되었습니다.");
 				
-				resp.sendRedirect(cp + "/");
+				resp.setContentType("text/html; charset=UTF-8");
+				PrintWriter out = resp.getWriter();
+	            out.println("<script>alert('탈퇴가 처리되었습니다.'); location.href='${pageContext.request.contextPath}/main.do'; </script>");
+	            out.flush();
+	            
 				return;
 			}
 				
@@ -336,10 +339,10 @@ public class MemberServlet extends MyServlet {
 		
 		String cp = req.getContextPath();
 		
-		if (reserveBusInfo != null) {			
+		if (reserveBusInfo != null && session.getAttribute("reserve") == "버스") {			
 			resp.sendRedirect(cp+"/busreserve/busreservelist.do");
 			return;
-		} else if(reserveTrainInfo != null) {
+		} else if(reserveTrainInfo != null && session.getAttribute("reserve") == "기차") {
 			resp.sendRedirect(cp+"/reservetrain/trainsteptwo.do");
 			return;
 		} else {
