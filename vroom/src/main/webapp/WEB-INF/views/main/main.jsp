@@ -78,24 +78,6 @@ main {
 .container {
 	min-width: 900px;
 }
-.backImage{
-background-image: url( "${pageContext.request.contextPath}/resources/images/rail.png" );
-background-size: 100px;
-background-repeat: repeat-x;
-background-position: top;
--webkit-transform: skew(0deg, -10deg);  
--moz-transform: skew(0deg, -10deg);  
--ms-transform: skew(0deg, -10deg);  
--o-transform: skew(0deg, -10deg);  
-transform: skew(0deg, -10deg);
-}
-.backImage .content{
--webkit-transform: skew(0deg, 10deg);  
--moz-transform: skew(0deg, 10deg);  
--ms-transform: skew(0deg, 10deg);  
--o-transform: skew(0deg, 10deg);  
-transform: skew(0deg, 10deg);
-}
 
 </style>
 <script type="text/javascript">
@@ -874,136 +856,132 @@ $(function(){
 	</div>
 </div>
 	<main>
-		<div class="backImage">
-			<!-- 캐러셀 -->
-			<div class="content">
-				<div class="container">
-					<div class="body-container">
-						<div class="row">
-							<div id="carouselExampleControls1" class="carousel slide"
-								data-bs-ride="carousel" style="width: 30%">
-								<div class="carousel-inner">
-									<div class="carousel-item active">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-								</div>
-								<button class="carousel-control-prev" type="button"
-									data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
-									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Previous</span>
-								</button>
-								<button class="carousel-control-next" type="button"
-									data-bs-target="#carouselExampleControls1" data-bs-slide="next">
-									<span class="carousel-control-next-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Next</span>
-								</button>
+		<!-- 캐러셀 -->
+		<div class="container">
+			<div class="body-container">
+				<div class="row">
+					<div id="carouselExampleControls1" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
 							</div>
-							<div style="width: 5%"></div>
-							<div id="carouselExampleControls2" class="carousel slide"
-								data-bs-ride="carousel" style="width: 30%">
-								<div class="carousel-inner">
-									<div class="carousel-item active">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-								</div>
-								<button class="carousel-control-prev" type="button"
-									data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
-									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Previous</span>
-								</button>
-								<button class="carousel-control-next" type="button"
-									data-bs-target="#carouselExampleControls2" data-bs-slide="next">
-									<span class="carousel-control-next-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Next</span>
-								</button>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
 							</div>
-							<div style="width: 5%"></div>
-							<div id="carouselExampleControls3" class="carousel slide"
-								data-bs-ride="carousel" style="width: 30%">
-								<div class="carousel-inner">
-									<div class="carousel-item active">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-									<div class="carousel-item">
-										<img
-											src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-											class="d-block w-100" alt="...">
-									</div>
-								</div>
-								<button class="carousel-control-prev" type="button"
-									data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
-									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Previous</span>
-								</button>
-								<button class="carousel-control-next" type="button"
-									data-bs-target="#carouselExampleControls3" data-bs-slide="next">
-									<span class="carousel-control-next-icon" aria-hidden="true"></span>
-									<span class="visually-hidden">Next</span>
-								</button>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
 							</div>
 						</div>
-						<br> <br>
-						<div style="">
-							<div>
-								<h4>공지사항</h4>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls1" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+					<div style="width: 5%"></div>
+					<div id="carouselExampleControls2" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
 							</div>
-							<br>
-							<div class="body-main">
-								<form name="listForm" method="post">
-									<table class="table">
-										<tbody>
-											<c:forEach var="dto" items="${list}" varStatus="status">
-												<tr>
-													<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
-													<td scope="row" class="text-center sort-td"><div
-															class="sort">${dto.category}</div></td>
-													<td class="left"><a
-														href="${articleUrl}&boardNum=${dto.boardNum}"
-														class="text-reset text-decoration-none">${dto.boSubject}</a>
-														<c:if test="${dto.gap<1}">
-															<img
-																src="${pageContext.request.contextPath}/resources/images/train.gif"
-																width="5%">
-														</c:if></td>
-													<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
-												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
-								</form>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
 							</div>
 						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls2" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+					<div style="width: 5%"></div>
+					<div id="carouselExampleControls3" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls3" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+				<br> <br>
+				<div style="">
+					<div>
+						<h4>공지사항</h4>
+					</div>
+					<br>
+					<div class="body-main">
+						<form name="listForm" method="post">
+							<table class="table">
+								<tbody>
+									<c:forEach var="dto" items="${list}" varStatus="status">
+										<tr>
+											<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
+											<td scope="row" class="text-center sort-td"><div
+													class="sort">${dto.category}</div></td>
+											<td class="left"><a
+												href="${articleUrl}&boardNum=${dto.boardNum}"
+												class="text-reset text-decoration-none">${dto.boSubject}</a>
+												<c:if test="${dto.gap<1}">
+													<img
+														src="${pageContext.request.contextPath}/resources/images/train.gif"
+														width="5%">
+												</c:if></td>
+											<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -1011,279 +989,316 @@ $(function(){
 	</main>
 
 	<script type="text/javascript">
+		function calendar(y, m, mode) {
+			let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
+			y = date.getFullYear();
+			m = date.getMonth() + 1;
 
-function calendar(y, m, mode) {
-	let date = new Date(y, m-1, 1); // y년 m월 1일의 Date 객체 생성
-	y = date.getFullYear();
-	m = date.getMonth() + 1;
-	
-	let w = date.getDay(); // 요일 (0~6, 일~토)
-	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
-	
-	// 시스템 오늘 날짜
-	let now = new Date();
-	let ny = now.getFullYear();
-	let nm = now.getMonth()+1;
-	let nd = now.getDate();
-	
-	let out = '<div id="calendarLayout">';
-	out += '<div class="subject">';
-	out += '<span class="lr" onclick="calendar('+y+','+(m-1)+')">&lt;</span>&nbsp;&nbsp;';
-	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
-	out += '<span onclick="calendar('+y+','+(m+1)+')">&gt;</span>';
-	out += '</div>';
-	
-	out += '<table class="table td-border">';
-	out += '<tr>';
-	for(let i=0; i<week.length; i++){
-		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">' + week[i] + '</td>';
-	}
-	out += '</tr>';
-	
-	// 무조건 6주로 만들기
-	let row = 1; // 주 수
-	
-	// 1일 앞부분 : 이전달
-	let preDate = new Date(y, m-1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
-	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
-	let pDay = pLastDay - w;
-	
-	
-	out += '<tr>';
-	for(let i=0; i<w; i++){
-		let y2 = y;
-		let m2 = m-1;
-		if(nm===1){
-			y2 = y - 1;
-			m2 = 12;
-		}
-		let date = new Date(y2, m2, pDay-1);
-		let w = date.getDay();
-		let week = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-		out += '<td class="gray">'+(++pDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y2+'.'+m2+'.'+pDay+'</span>'+'</td>';
-	}
-	
-	let cls;
-	let lastDay = (new Date(y, m, 0)).getDate();
-	for(let i=1; i<=lastDay; i++){
-		
-		cls = y===ny && m===nm && i===nd ? ' today ' : '';
-		
-		let date = new Date(y, m, i);
-		let w2 = date.getDay();
-		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-		
-		out += '<td class="'+cls+' clsClass">'+ i +'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y+'.'+m+'.'+i+'</span>'+'</td>';
-		if(i !== lastDay && ++w % 7 ===0) {
-			row++;
-			out += '</tr><tr>';
-		}
-	}
-	// 마지막 날짜 뒷부분
-	let nDay = 0;
-	for(let i=w%7; i<6; i++){
-		let y3 = ny;
-		let m3 = nm+1;
-		if(nm===12){
-			y3 = ny + 1;
-			m3 = 1;
-		}
-		let date = new Date(y3, m3, nDay+1);
-		let w2 = date.getDay();
-		let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-		out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+nDay+'</span>'+'</td>';
-	}
-	out += '</tr>';
-	// 한달은 최대 6주
-	for(let i=row; i<6; i++){
-		out += '<tr>';
-		for(let j=0; j<7; j++){
-			let y3 = ny;
-			let m3 = nm+1;
-			if(nm===12){
-				y3 = ny + 1;
-				m3 = 1;
+			let w = date.getDay(); // 요일 (0~6, 일~토)
+			let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+			// 시스템 오늘 날짜
+			let now = new Date();
+			let ny = now.getFullYear();
+			let nm = now.getMonth() + 1;
+			let nd = now.getDate();
+
+			let out = '<div id="calendarLayout">';
+			out += '<div class="subject">';
+			out += '<span class="lr" onclick="calendar(' + y + ',' + (m - 1)
+					+ ')">&lt;</span>&nbsp;&nbsp;';
+			out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+			out += '<span onclick="calendar(' + y + ',' + (m + 1)
+					+ ')">&gt;</span>';
+			out += '</div>';
+
+			out += '<table class="table td-border">';
+			out += '<tr>';
+			for (let i = 0; i < week.length; i++) {
+				out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
+						+ week[i] + '</td>';
 			}
-			let date = new Date(y3, m3, nDay+1);
-			let w2 = date.getDay();
-			let week2 = [' 일',' 월',' 화',' 수',' 목',' 금',' 토'];
-			out += '<td class="gray">'+(++nDay)+'<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'+y3+'.'+m3+'.'+nDay+'</span>'+'</td>';
-		}
-		out += '</tr>';
-	}
-	
-	out += '</table></div>';
-	
-	
-	let selector = "#depDate";
-	if(mode === "des") {
-		selector = "#desDate";
-	}
-	document.querySelector(selector).innerHTML = out;
-}
-$(function(){
-	let now = new Date();
-	let y = now.getFullYear();
-	let m = now.getMonth() + 1;
-	let d = now.getDate();
-	
-	$("#busstaDate").attr("data-year", y);
-	$("#busstaDate").attr("data-month", m);
-	$("#busstaDate").attr("data-date", d);
-	
-	$("#busendDate").attr("data-year", y);
-	$("#busendDate").attr("data-month", m);
-	$("#busendDate").attr("data-date", d);
-	
-	let w = now.getDay(); // 요일 (0~6, 일~토)
-	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
-	
-	let today = y+"."+m+"."+d+" "+week[w];
-	
-	$("#busstaDate").text(today);
-	$("#busendDate").text(today);
-	
-});
+			out += '</tr>';
 
-$(function(){
-	let now = new Date();
-	let y = now.getFullYear();
-	let m = now.getMonth() + 1;
-	let d = now.getDate();
-	
-	$("#staDate").attr("data-year", y);
-	$("#staDate").attr("data-month", m);
-	$("#staDate").attr("data-date", d);
-	
-	$("#endDate").attr("data-year", y);
-	$("#endDate").attr("data-month", m);
-	$("#endDate").attr("data-date", d);
-	
-	let w = now.getDay(); // 요일 (0~6, 일~토)
-	let week = ['일','월','화','수','목','금','토']; // 자바스크립트에서 배열의 초기값을 줄 때
-	
-	let today = y+"."+m+"."+d+" "+week[w];
-	
-	$("#staDate").text(today);
-	$("#endDate").text(today);
-});
+			// 무조건 6주로 만들기
+			let row = 1; // 주 수
 
-$(function(){
-	$(".btn-busstaDate").click(function(){
-		let y = $("#busstaDate").attr("data-year");
-		let m = $("#busstaDate").attr("data-month");
-		let d = $("#busstaDate").attr("data-date");
-		
-		calendar(y, m, "dep");
-		
-		$("#myDialogModal33").modal("show");
-		
-		$("#calendarLayout td").click(function(){
-			let selectTr = $(this).parent().find("td").index(this);
-			let week = ['일','월','화','수','목','금','토'];
-			let selectDate = $(this).children().text();
-			selectDate = selectDate + " " + week[selectTr];
-			
-			$("#busstaDate").text(selectDate);
-			$("#myDialogModal33").modal("hide");
-		});
-	});
-	$(".btn-busendDate").click(function(){
-		let y = $("#busendDate").attr("data-year");
-		let m = $("#busendDate").attr("data-month");
-		let d = $("#busendDate").attr("data-date");
-		
-		calendar(y, m, "des");
-		
-		$("#myDialogModal44").modal("show");
-		
-		$("#calendarLayout td").click(function(){
-			let selectTr = $(this).parent().find("td").index(this);
-			let week = ['일','월','화','수','목','금','토'];
-			let selectDate = $(this).children().text();
-			selectDate = selectDate + " " + week[selectTr];
-			
-			$("#busendDate").text(selectDate);
-			$("#myDialogModal44").modal("hide");
-		});
-	});
-});
+			// 1일 앞부분 : 이전달
+			let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+			let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+			let pDay = pLastDay - w;
 
-$(function(){
-	$(".btn-staDate").click(function(){
-		let y = $("#staDate").attr("data-year");
-		let m = $("#staDate").attr("data-month");
-		let d = $("#staDate").attr("data-date");
-		
-		calendar(y, m, "dep");
-		
-		$("#myDialogModal3").modal("show");
-		
-		$("#calendarLayout td").click(function(){
-			let selectTr = $(this).parent().find("td").index(this);
-			let week = ['일','월','화','수','목','금','토'];
-			let selectDate = $(this).children().text();
-			selectDate = selectDate + " " + week[selectTr];
-			
-			$("#staDate").text(selectDate);
-			let select2 = selectDate.substring(0, selectDate.length-2);
-			let select = select2.split(".");
-			$("#staDate").attr("data-year", select[0]);
-			$("#staDate").attr("data-month", select[1]);
-			$("#staDate").attr("data-date", select[2]);
-			
-			if(!compareDate()){
-				$("#endDate").text(selectDate);
-				$("#endDate").attr("data-year", select[0]);
-				$("#endDate").attr("data-month", select[1]);
-				$("#endDate").attr("data-date", select[2]);
+			out += '<tr>';
+			for (let i = 0; i < w; i++) {
+				let y2 = y;
+				let m2 = m - 1;
+				if (nm === 1) {
+					y2 = y - 1;
+					m2 = 12;
+				}
+				let date = new Date(y2, m2, pDay - 1);
+				let w = date.getDay();
+				let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+				out += '<td class="gray">'
+						+ (++pDay)
+						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+						+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
 			}
-			$("#myDialogModal3").modal("hide");
-		});
-		function compareDate(){
-			let sy = $("#staDate").attr("data-year");
-			let sm = $("#staDate").attr("data-month");
-			let sd = $("#staDate").attr("data-date");
-			
-			let ey = $("#endDate").attr("data-year");
-			let em = $("#endDate").attr("data-month");
-			let ed = $("#endDate").attr("data-date");
-			
-			if(ey>=sy&&em>=sy&&ed>=sd){
-				return false;
+
+			let cls;
+			let lastDay = (new Date(y, m, 0)).getDate();
+			for (let i = 1; i <= lastDay; i++) {
+
+				cls = y === ny && m === nm && i === nd ? ' today ' : '';
+
+				let date = new Date(y, m, i);
+				let w2 = date.getDay();
+				let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+
+				out += '<td class="'+cls+' clsClass">'
+						+ i
+						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+						+ y + '.' + m + '.' + i + '</span>' + '</td>';
+				if (i !== lastDay && ++w % 7 === 0) {
+					row++;
+					out += '</tr><tr>';
+				}
 			}
-			return true;
+			// 마지막 날짜 뒷부분
+			let nDay = 0;
+			for (let i = w % 7; i < 6; i++) {
+				let y3 = ny;
+				let m3 = nm + 1;
+				if (nm === 12) {
+					y3 = ny + 1;
+					m3 = 1;
+				}
+				let date = new Date(y3, m3, nDay + 1);
+				let w2 = date.getDay();
+				let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+				out += '<td class="gray">'
+						+ (++nDay)
+						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+						+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+			}
+			out += '</tr>';
+			// 한달은 최대 6주
+			for (let i = row; i < 6; i++) {
+				out += '<tr>';
+				for (let j = 0; j < 7; j++) {
+					let y3 = ny;
+					let m3 = nm + 1;
+					if (nm === 12) {
+						y3 = ny + 1;
+						m3 = 1;
+					}
+					let date = new Date(y3, m3, nDay + 1);
+					let w2 = date.getDay();
+					let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+					out += '<td class="gray">'
+							+ (++nDay)
+							+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+							+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+				}
+				out += '</tr>';
+			}
+
+			out += '</table></div>';
+
+			let selector = "#depDate";
+			if (mode === "des") {
+				selector = "#desDate";
+			}
+			document.querySelector(selector).innerHTML = out;
 		}
-	});
-	$(".btn-endDate").click(function(){
-		let y = $("#endDate").attr("data-year");
-		let m = $("#endDate").attr("data-month");
-		let d = $("#endDate").attr("data-date");
-		
-		calendar(y, m, "des");
-		
-		$("#myDialogModal3").modal("show");
-		
-		$("#calendarLayout td").click(function(){
-			let selectTr = $(this).parent().find("td").index(this);
-			let week = ['일','월','화','수','목','금','토'];
-			let selectDate = $(this).children().text();
-			selectDate = selectDate + " " + week[selectTr];
-			
-			let select2 = selectDate.substring(0, selectDate.length-2);
-			let select = select2.split(".");
-			$("#endDate").text(selectDate);
-			$("#endDate").attr("data-year", select[0]);
-			$("#endDate").attr("data-month", select[1]);
-			$("#endDate").attr("data-date", select[2]);
-			$("#myDialogModal3").modal("hide");
+		$(function() {
+			let now = new Date();
+			let y = now.getFullYear();
+			let m = now.getMonth() + 1;
+			let d = now.getDate();
+
+			$("#busstaDate").attr("data-year", y);
+			$("#busstaDate").attr("data-month", m);
+			$("#busstaDate").attr("data-date", d);
+
+			$("#busendDate").attr("data-year", y);
+			$("#busendDate").attr("data-month", m);
+			$("#busendDate").attr("data-date", d);
+
+			let w = now.getDay(); // 요일 (0~6, 일~토)
+			let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+			let today = y + "." + m + "." + d + " " + week[w];
+
+			$("#busstaDate").text(today);
+			$("#busendDate").text(today);
+
 		});
-	});
-});
 
-// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
+		$(function() {
+			let now = new Date();
+			let y = now.getFullYear();
+			let m = now.getMonth() + 1;
+			let d = now.getDate();
 
-</script>
+			$("#staDate").attr("data-year", y);
+			$("#staDate").attr("data-month", m);
+			$("#staDate").attr("data-date", d);
+
+			$("#endDate").attr("data-year", y);
+			$("#endDate").attr("data-month", m);
+			$("#endDate").attr("data-date", d);
+
+			let w = now.getDay(); // 요일 (0~6, 일~토)
+			let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+			let today = y + "." + m + "." + d + " " + week[w];
+
+			$("#staDate").text(today);
+			$("#endDate").text(today);
+		});
+
+		$(function() {
+			$(".btn-busstaDate").click(function() {
+				let y = $("#busstaDate").attr("data-year");
+				let m = $("#busstaDate").attr("data-month");
+				let d = $("#busstaDate").attr("data-date");
+
+				calendar(y, m, "dep");
+
+				$("#myDialogModal33").modal("show");
+
+				$("#calendarLayout td").click(function() {
+					let selectTr = $(this).parent().find("td").index(this);
+					let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+					let selectDate = $(this).children().text();
+					selectDate = selectDate + " " + week[selectTr];
+
+					$("#busstaDate").text(selectDate);
+					$("#myDialogModal33").modal("hide");
+				});
+			});
+			$(".btn-busendDate").click(function() {
+				let y = $("#busendDate").attr("data-year");
+				let m = $("#busendDate").attr("data-month");
+				let d = $("#busendDate").attr("data-date");
+
+				calendar(y, m, "des");
+
+				$("#myDialogModal44").modal("show");
+
+				$("#calendarLayout td").click(function() {
+					let selectTr = $(this).parent().find("td").index(this);
+					let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+					let selectDate = $(this).children().text();
+					selectDate = selectDate + " " + week[selectTr];
+
+					$("#busendDate").text(selectDate);
+					$("#myDialogModal44").modal("hide");
+				});
+			});
+		});
+
+		$(function() {
+			$(".btn-staDate").click(
+					function() {
+						let y = $("#staDate").attr("data-year");
+						let m = $("#staDate").attr("data-month");
+						let d = $("#staDate").attr("data-date");
+
+						calendar(y, m, "dep");
+
+						$("#myDialogModal3").modal("show");
+
+						$("#calendarLayout td")
+								.click(
+										function() {
+											let selectTr = $(this).parent()
+													.find("td").index(this);
+											let week = [ '일', '월', '화', '수',
+													'목', '금', '토' ];
+											let selectDate = $(this).children()
+													.text();
+											selectDate = selectDate + " "
+													+ week[selectTr];
+
+											$("#staDate").text(selectDate);
+											let select2 = selectDate.substring(
+													0, selectDate.length - 2);
+											let select = select2.split(".");
+											$("#staDate").attr("data-year",
+													select[0]);
+											$("#staDate").attr("data-month",
+													select[1]);
+											$("#staDate").attr("data-date",
+													select[2]);
+
+											if (!compareDate()) {
+												$("#endDate").text(selectDate);
+												$("#endDate").attr("data-year",
+														select[0]);
+												$("#endDate")
+														.attr("data-month",
+																select[1]);
+												$("#endDate").attr("data-date",
+														select[2]);
+											}
+											$("#myDialogModal3").modal("hide");
+										});
+						function compareDate() {
+							let sy = $("#staDate").attr("data-year");
+							let sm = $("#staDate").attr("data-month");
+							let sd = $("#staDate").attr("data-date");
+
+							let ey = $("#endDate").attr("data-year");
+							let em = $("#endDate").attr("data-month");
+							let ed = $("#endDate").attr("data-date");
+
+							if (ey >= sy && em >= sy && ed >= sd) {
+								return false;
+							}
+							return true;
+						}
+					});
+			$(".btn-endDate").click(
+					function() {
+						let y = $("#endDate").attr("data-year");
+						let m = $("#endDate").attr("data-month");
+						let d = $("#endDate").attr("data-date");
+
+						calendar(y, m, "des");
+
+						$("#myDialogModal3").modal("show");
+
+						$("#calendarLayout td")
+								.click(
+										function() {
+											let selectTr = $(this).parent()
+													.find("td").index(this);
+											let week = [ '일', '월', '화', '수',
+													'목', '금', '토' ];
+											let selectDate = $(this).children()
+													.text();
+											selectDate = selectDate + " "
+													+ week[selectTr];
+
+											let select2 = selectDate.substring(
+													0, selectDate.length - 2);
+											let select = select2.split(".");
+											$("#endDate").text(selectDate);
+											$("#endDate").attr("data-year",
+													select[0]);
+											$("#endDate").attr("data-month",
+													select[1]);
+											$("#endDate").attr("data-date",
+													select[2]);
+											$("#myDialogModal3").modal("hide");
+										});
+					});
+		});
+
+		// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
+	</script>
 
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>

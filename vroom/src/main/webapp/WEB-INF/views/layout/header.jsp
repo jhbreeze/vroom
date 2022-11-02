@@ -45,7 +45,7 @@
 					<li><a href="#" class="main-menu-a">고객관리</a>
 						<ul class="sub-menu">
 							<li><a href="${pageContext.request.contextPath}/manage/member.do" aria-label="subemnu">회원정보 조회</a></li>
-							<li><a href="${pageContext.request.contextPath}/sales/reserve.do" aria-label="subemnu">예매내역 조회</a></li>
+							<li><a href="${pageContext.request.contextPath}/maintain/reserve.do" aria-label="subemnu">예매내역 조회</a></li>
 						</ul>
 					</li>
 		
