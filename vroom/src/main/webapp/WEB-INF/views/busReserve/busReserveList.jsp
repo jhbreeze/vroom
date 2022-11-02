@@ -66,7 +66,7 @@ min-height: 60px;
 
 .buslist_title{
 min-height: 30px;
-min-width: 110px;
+min-width: 130px;
 padding: 0px 3px;
 }
 #list-group{
@@ -104,7 +104,7 @@ min-width: 100px;
 }
 #buslist{
 display: flex;
-width:700px;
+width:860px;
 justify-content:space-between;
 align-items:center;
 min-height: 60px;
@@ -115,7 +115,7 @@ min-height: 60px;
 }
 .fblock2{
 	margin-left:10px;
-    width: 800px;
+    width: 900px;
     height: 720px;
 	padding: 20px;
     background: white;
@@ -125,7 +125,7 @@ min-height: 60px;
 }
 #fblock2_title{
 	padding: 10px 16px;
-	width: 700px;
+	width: 860px;
 	position: relative;
 	z-index: 1;
 }
@@ -186,39 +186,11 @@ $(function(){
 	calendar(y, m, d);
 });
 
-$(function(){//리스트 버스 정보 query에 담아 seat로 이동  좌석을 마다 어떤 좌석인지 구분해야함->좌석선택시에 modal창으로 각 좌석별 정보받고 왕복페이지(좌석정보있어야 함) req 2.날짜랑 운행버스 먼저 정하고 다음으로 넘어감?
-	$("body").on("click", "#reserveBtn", function(){
-	url="${pageContext.request.contextPath}/busreserve/busreserveseat.do";
-	query ="";
-	location.href= url + query;
-	});
-});
 //편도 왕복 구분 방식?
 $(function(){
 	let cycle = $("input[name=Bcycle]").attr("data-cycle");
 });
 
-function ajaxFun(url, method, query, dataType, fn) {
-	$.ajax({
-		type:method,
-		url:url,
-		data:query,
-		dataType:dataType,
-		success:function(data) {
-			fn(data);
-		},
-		beforeSend:function(jqXHR){
-			jqXHR.setRequestHeader("AJAX", true);
-		},
-		error:function(jqXHR) {
-			if(jqXHR.status === 400) {
-				alert("요청 처리가 실패 했습니다");
-				return false;
-			}
-			console.log(jqXHR.responseText);
-		}
-	});
-}
 </script>
 </head>
 <body>
@@ -231,7 +203,7 @@ function ajaxFun(url, method, query, dataType, fn) {
 	<div class="container gx-10 d-flex justify-content-center ">
 	    <div class="d-flex justify-content-center">
 		    <div class="fblock1  text-light " style="border-radius: 30px; padding:20px;">
-		    	<div class="h-20 p-3 text-center fs-5">${busendDate}</div>
+		    	<div class="h-20 p-3 text-center fs-5 fw-bold">${busendDate}</div>
 		    	<div class="h-15 text-center fblock1_1">
 	    			<div class="fblock1_icon bg-light text-primary p-10 m-2 text-center fw-bold">출발</div>
 	    			<div class="text-center fs-4 fw-bold">${depbStationName}</div>
@@ -243,19 +215,15 @@ function ajaxFun(url, method, query, dataType, fn) {
 		    	<div class="row h-10 p-10 m-2 fblock1_1 fw-bold">${bTotalTimeString}</div>
 		    	<div class="row h-10 p-10 m-2 fblock1_1  text-start fs-5 fw-bold">요금정보</div>
 		    	<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
-		    	<c:if test="${dto.bType eq '일반'}">
-			    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2" >일반</div><div class="col fblock1_3">${dto.dto.bFee}원</div></div>
-			    </c:if>
-			    </c:forEach>
-			    <c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
-			    <c:if test="${dto.bType eq '우등'}">
-			    	<div class="row h-10 p-10 m-2 fblock1_2 text-center" style=""><div class="col fblock1_2">우등</div><div class="col fblock1_3">${dto.bFee}원</div></div>
-			    </c:if>
-			    </c:forEach>
-			    <c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
-			    <c:if test="${dto.bType eq '프리미엄'}">
-			    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2">프리미엄</div><div class="col fblock1_3">${dto.bFee}원</div></div>
-		    	</c:if>
+			    	<c:if test="${dto.bType eq '일반'}">
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold" >일반</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+				    </c:if>
+				    <c:if test="${dto.bType eq '우등'}">
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center" style=""><div class="col fblock1_2 fw-bold">우등</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+				    </c:if>
+				    <c:if test="${dto.bType eq '프리미엄'}">
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold">프리미엄</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+			    	</c:if>
 		    	</c:forEach>
 		    </div>
 	    </div>
@@ -273,19 +241,18 @@ function ajaxFun(url, method, query, dataType, fn) {
 					<div class="buslist_title col-2 fw-bold fs-5 text-center ">잔여석</div>
 					<div class="buslist_title col-2 fw-bold fs-5 text-center "></div>
 				</div>
-				<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
 				<div class="list-group list-group-flush border-bottom buslistgroup" id="list-group" >
+				<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
 					<a class=" list-group-item row" id="buslist" >
 						<div class="buslist col-2 fw-bold fs-6 text-center">${dto.bFirstStaTime}</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center ">${dto.bName}</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center">${dto.bType}</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center ">${dto.bFee}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center ">?석/전체${seatNum}석</div>
+						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;">?석/전체${dto.seatNum}석</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center "><button type="button" id="reserveBtn">예매하기</button></div>
 					</a>
-					
-			    </div>
 			    </c:forEach>
+			    </div>
 			</div>
 	    </div>
 	</div>

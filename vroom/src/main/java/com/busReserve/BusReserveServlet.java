@@ -26,25 +26,25 @@ public class BusReserveServlet extends MyServlet {
 		
 		String uri = req.getRequestURI();
 		
-		if(uri.indexOf("busreservelist.do")!=-1) {
+		
+		if (uri.indexOf("businsertlist.do")!=-1) {
+			busInsertList(req,resp);
+		} else if (uri.indexOf("buslistbefore.do")!=-1) {
+			busListBefore(req,resp);
+		}else if(uri.indexOf("busreservelist.do")!=-1) {
 			busReserveList(req,resp);
-		} else if (uri.indexOf("busreserveseat.do")!=-1) {
+		}  else if (uri.indexOf("busreserveseat.do")!=-1) {
 			busReserveSeat(req,resp);
 		}else if (uri.indexOf("busreserveseat2.do")!=-1) {
 			busReserveSeat2(req,resp);
-		} else if (uri.indexOf("businsertlist.do")!=-1) {
-			businsertlist(req,resp);
-		} else if (uri.indexOf("buslistbefore.do")!=-1) {
-			buslistbefore(req,resp);
-		}else if (uri.indexOf("buslistforward.do")!=-1) {
-			buslistforward(req,resp);
 		}
 	}
 
-	private void businsertlist(HttpServletRequest req, HttpServletResponse resp) {
+	private void busInsertList(HttpServletRequest req, HttpServletResponse resp) {
 		BusReserveDAO dao = new BusReserveDAO();
 		try {
 			List<BusReserveDTO> depList = dao.getDepStationList();
+			
 			if(req.getParameter("depbStationCode") == null) {
 				JSONObject job = new JSONObject();
 				JSONArray jarr = new JSONArray();
@@ -90,17 +90,8 @@ public class BusReserveServlet extends MyServlet {
 
 	}
 
-	private void busReserveSeat(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/busReserve/busReserveSeat.jsp");
-	}
-	private void busReserveSeat2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/busReserve/busReserveSeat2.jsp");
-	}
 	
-	protected void busReserveList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/busReserve/busReserveList.jsp");
-	}
-	private void buslistbefore(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	private void busListBefore(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
@@ -116,18 +107,96 @@ public class BusReserveServlet extends MyServlet {
 		reserveInfo.setBusstaDate(req.getParameter("busstaDate"));
 		reserveInfo.setBusendDate(req.getParameter("busendDate"));
 		reserveInfo.setBgrade(req.getParameter("bgrade"));
+		
 		System.out.print(reserveInfo);
 		session.setAttribute("reserveBusInfo", reserveInfo);
+		session.setAttribute("reserve", "버스");
 		if(info == null) {
 			forward(req, resp, "/WEB-INF/views/member/login.jsp");
 		} else {
 			busReserveList(req, resp);
 		}
 	}
-	protected void buslistforward(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/busReserve/busReserveListajax.jsp");
+
+	protected void busReserveList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		BusReserveDAO dao = new BusReserveDAO();
+		String bTotalTimeString;
+		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		
+
+		
+		try {
+			
+			String bcycle = reserveInfo.getBcycle();
+			String depbStationName = reserveInfo.getDepbStationName();
+			String desbStationName = reserveInfo.getDesbStationName();
+			int depbStationCode = reserveInfo.getDepbStationCode();
+			int desbStationCode = reserveInfo.getDesbStationCode();
+			int depbRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
+			int desbRouteDetailCode = dao.getbRouteDetailCode(desbStationCode, depbStationCode);
+			int takeTime = dao.getBTakeTime(depbRouteDetailCode);
+			int bRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
+			int bRouteCode = dao.getRouteCode(depbStationCode, desbStationCode);
+			String busstaDate = reserveInfo.getBusstaDate();
+			String busendDate = null;
+			if(bcycle.equals("full")) {
+				busendDate = reserveInfo.getBusendDate();
+			}
+			bTotalTimeString = bTakeTime(depbStationCode, desbStationCode);
+			
+			req.setAttribute("bcycle", bcycle);
+			req.setAttribute("busstaDate", busstaDate);
+			req.setAttribute("busendDate", busendDate);
+			req.setAttribute("depbStationName", depbStationName);
+			req.setAttribute("desbStationName", desbStationName);
+			req.setAttribute("btakeTime", takeTime);
+			req.setAttribute("bTotalTimeString",bTotalTimeString);
+			List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
+			req.setAttribute("bRouteInfoList", bRouteInfoList);	
+			req.setAttribute("bRouteDetailCode",bRouteDetailCode);
+			req.setAttribute("bRouteCode",bRouteCode);
+			
+			/*
+			 String hORf2 = req.getParameter("hORf"); // 없으면 null
+			if(hORf2==null||hORf2.equals("1")) {//편도 or 왕복 가는날
+				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
+				req.setAttribute("bRouteInfoList", bRouteInfoList);	
+			} else if(hORf2.equals("2")) {
+				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(desbRouteDetailCode) ;
+				req.setAttribute("bRouteInfoList", bRouteInfoList);	
+			}
+			*/
+			
+			forward(req, resp, "/WEB-INF/views/busReserve/busReserveList.jsp");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	protected String bTakeTime(int depbStationCode, int desbStationCode) {
+		BusReserveDAO dao = new BusReserveDAO();
+		int bRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
+		
+		int bTakeTime = dao.getBTakeTime(bRouteDetailCode);
+		String bTotalTimeString;
+		String a = (bTakeTime/60)+"";//문자열변환
+		String b = (bTakeTime%60)+"";
+		if(Integer.parseInt(a)<10) {
+			a = "0"+a;
+		}
+		bTotalTimeString = a+"시간"+b+"분 소요";
+		
+		return  bTotalTimeString;
+	}
+
+	
+	private void busReserveSeat(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		forward(req, resp, "/WEB-INF/views/busReserve/busReserveSeat.jsp");
 	}
 	
-	
+	private void busReserveSeat2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		forward(req, resp, "/WEB-INF/views/busReserve/busReserveSeat2.jsp");
+	}
 }
 

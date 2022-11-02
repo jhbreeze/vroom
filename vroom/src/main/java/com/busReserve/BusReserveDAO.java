@@ -126,7 +126,9 @@ public List<BusReserveDTO> getDepStationList() {
 				
 				rs = pstmt.executeQuery();
 		
-				RouteCode = rs.getInt("bRouteCode");
+				if(rs.next()) {
+					RouteCode = rs.getInt("bRouteCode");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -222,7 +224,7 @@ public List<BusReserveDTO> getDepStationList() {
 		ResultSet rs = null;
 		BusReserveDTO dto = null;
 		try {
-			sql="bRouteDetailCodeSta,bRouteDetailCodeEnd,bs.bStationName, b.bNumId , brd.bRouteCode, bDistance,bTakeTime, bf.bDiv, bOperCode, TO_CHAR(bFirstStaTime,'HH24:MI') bFirstStaTime, TO_CHAR(bEndStaTime,'HH24:MI')bEndStaTime, bName, bType, bFee,bKidsale, bOldsale, seatNum,bri.bDiscern "
+			sql=" SELECT  bRouteDetailCodeSta,bRouteDetailCodeEnd,bs.bStationName, b.bNumId , brd.bRouteCode, bDistance,bTakeTime, bf.bDiv, bOperCode, TO_CHAR(bFirstStaTime,'HH24:MI') bFirstStaTime, TO_CHAR(bEndStaTime,'HH24:MI')bEndStaTime, bName, bType, bFee,bKidsale, bOldsale, seatNum,bri.bDiscern "
 					+ " FROM busRouteDetail brd"
 					+ " LEFT OUTER JOIN busStation bs on brd.bStationCode = bs.bStationCode"
 					+ " LEFT OUTER JOIN busRoute br on brd.bRouteCode = br.bRouteCode"
@@ -262,6 +264,7 @@ public List<BusReserveDTO> getDepStationList() {
 			}			
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if(rs != null) {
 				try {

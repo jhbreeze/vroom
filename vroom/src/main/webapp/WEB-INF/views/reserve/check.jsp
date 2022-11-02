@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>spring</title>
+<title>VROONG</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
 
 <style type="text/css">
@@ -33,24 +33,33 @@ main {
 function sendOk() {
 	const f = document.checkForm;
 
-	let str = f.reserveNum.value;
+	let str = f.reserveNum.value.trim();
 	if (!str) {
 		alert("예매번호를 입력하세요. ");
 		f.reserveNum.focus();
 		return;
 	}
 	
-	str = f.userEmail.value;
+	str = f.userEmail.value.trim();
 	if (!str) {
 		alert("이메일을 입력하세요. ");
 		f.userEmail.focus();
 		return;
 	}
-
-
-	f.action = "${pageContext.request.contextPath}/reserve/list.do}";
+	
+	
+	str = f.reserveNum.value;
+	if (!/^\d+$/.test(str)) {
+		alert("예매번호를 다시 입력해주세요.")
+		f.reserveNum.focus();
+		return;
+	}
+	
+	f.action = "${pageContext.request.contextPath}/reserve/check_ok.do";
 	f.submit();
 }
+
+
 
 </script>
 </head>
