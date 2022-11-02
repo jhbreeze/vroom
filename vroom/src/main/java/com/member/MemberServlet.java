@@ -46,8 +46,11 @@ public class MemberServlet extends MyServlet {
 			userIdCheck(req, resp);
 		} else if(uri.indexOf("nomemReserve.do") != -1) {
 			nomemReserve(req, resp);
+		} else if(uri.indexOf("check.do") != -1) {
+			check(req, resp);
 		}
 	}
+
 
 	private void loginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = "/WEB-INF/views/member/login.jsp";
@@ -348,5 +351,11 @@ public class MemberServlet extends MyServlet {
 		} else {
 			forward(req, resp, "/WEB-INF/views/main/main.jsp");
 		}
+	}
+	
+
+	private void check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 비회원 예매조회 정보 입력창
+			forward(req, resp, "/WEB-INF/views/reserve/check.jsp");
 	}
 }

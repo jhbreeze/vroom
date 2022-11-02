@@ -153,7 +153,7 @@ function sendLogin() {
 							<div class="col-12 m-2">
 								<button type="button"
 									class="btn btn-primary btn-control btn-lg mx-auto fw-bold"
-									onclick="location.href='${pageContext.request.contextPath}/reserve/check.do';">&nbsp;비회원 조회&nbsp;</button>
+									onclick="location.href='${pageContext.request.contextPath}/member/check.do';">&nbsp;비회원 조회&nbsp;</button>
 							</div>
 						</div>
 					</div>

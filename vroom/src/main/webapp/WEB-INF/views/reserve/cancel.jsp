@@ -18,14 +18,15 @@ main {
 .box-container { border: 1px solid gray; width: 300px; height:200px;  }
 
 .h3 { margin-left: 300px;}
+.cancleTitle { margin-left: 265px; }
 
-.textReserve  { width: 650px; height: 40px;}
+.textReserve  { width: 640px; height: 40px; border-radius: 5px; border-width: 1px;}
+.textPassword { width: 640px; height: 40px; border-radius: 5px;border-width: 1px;}
 
-.textPassword { width: 650px; height: 40px;}
 .cancelReserve { margin-left: 10px; }
 
 h2 { font-weight: bold; }
-.titleReserve { font-weight: bold;}
+.titleReserve { font-weight: bold; font-size: 20px;}
 
 
 </style>
@@ -39,14 +40,14 @@ h2 { font-weight: bold; }
 
 	<main>
 		<div class="container body-container">
-			<h2>예매취소</h2>
+			<h2 class="cancleTitle">예매취소</h2>
 
 			<br> <br>
 			<div class="cancelReserve">
 				<div class="reserveNumber">
 					<label class="titleReserve">예매번호</label>
 					<br>
-					<input type="text" class="textReserve">
+					<input class="textReserve" type="text" >
 				</div>
 				<br>
 				<div class="password">

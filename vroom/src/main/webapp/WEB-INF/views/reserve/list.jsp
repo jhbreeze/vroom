@@ -1,7 +1,9 @@
+<%@page import="com.reserve.ReserveDTO"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +24,7 @@ main {
 .ticketBoxFourth { top:40px; position:absolute; width: 100px; margin-left: 780px; height: 100px; }
 
 
-.ticket1 { width: 1100px; height: 500px;}
+.ticket1 { width: 1100px; height: 600px;}
 
 .titleName { font-weight: bold; }
 
@@ -41,23 +43,44 @@ h2 { font-size: 30px;}
 .textStaition {font-weight: bold; color: #0E6EFD; font-size: 24px; }
 .textTrasnport { margin-top: -15px; color: #848484; font-size: 15px; }
 .textDate { margin-top: 33px; font-size: 14px; font-weight:bold; }
+.textDateBUS { margin-top: 45px; font-size: 14px; font-weight:bold; } 
+
+.textStaitionBUS {font-weight: bold; color: #0E6EFD; font-size: 17px; }
+
 
 .infoRightMemberTitle  { margin-bottom:5px; margin-left: 140px; top: 20px; width: 40px; height: 20px; display: inline-block; margin-top: 35px; color: #0E6EFD; font-weight: bold;}
 .infoRightMemberInput { margin-bottom:5px; display: inline-block; margin-left: 230px; color: #0E6EFD; font-weight: bold;}
 .infoRightMemberShow { margin-bottom:5px; display: inline-block; font-weight: bold; color: #6E6E6E;}
 
 .infoRightHochaTitle {  margin-bottom:5px; display: inline-block; margin-left: 140px; color: #0E6EFD; font-weight: bold;}
-.infoRightHochaGrade { margin-bottom:5px; display: inline-block; margin-left: 185px; font-weight: bold;color: #6E6E6E; }
+.infoRightHochaGrade { margin-bottom:5px; display: inline-block; margin-left: 135px; font-weight: bold;color: #6E6E6E; }
 .infoRightHochaInput { margin-bottom:5px; display: inline-block; color: #0E6EFD; font-weight: bold; }
 .infoRightHochaShow { margin-bottom:5px; display: inline-block; font-weight: bold; color: #6E6E6E;}
+.infoRightHochaGradeBUS { margin-bottom:5px; display: inline-block; margin-left: 245px; font-weight: bold;color: #6E6E6E; }
 
 .infoRightSeatTitle { margin-bottom:5px; display: inline-block; margin-left: 140px; color: #0E6EFD; font-weight: bold; }
-.infoRightSeatShow { margin-bottom:5px; display: inline-block;  margin-left: 238px; font-weight: bold; color: #6E6E6E; }
+.infoRightSeatShow { margin-bottom:5px; display: inline-block;  margin-left: 0px; font-weight: bold; color: #6E6E6E; }
+
+.infoRight2 {}
+.infoRight3 {}
 
 .ticketBoxFourthCircle { color: white; font-size: 40px; }
 
 
 </style>
+<script type="text/javascript">
+
+$(function() {
+	console.log(${reserveBusList});
+});
+
+$(function(){
+	console.log(${reserveTrainList2});
+})
+
+</script>
+
+
 </head>
 <body>
 <header>
@@ -72,172 +95,94 @@ h2 { font-size: 30px;}
 					<label class="searchDate2">&nbsp;승차일자 검색 :&nbsp;</label>
 				</div>
 				<div class="inputDateSearch">
-					<form action="">
-						<input type="date"></input>
-						<button type="button" class="btn btn-primary"
-							style="height: 35px; width: 100px; margin-left: 10px;">조회하기</button>
+					<form name="dateSearchForm" action="${pageContext.request.contextPath}/reserve/list.do" method="POST">
+						<input type="date" name="date" value=""></input>
+						<button type="button" class="btn btn-primary" style="height: 35px; width: 100px; margin-left: 10px;" onclick="searchDate();">조회하기</button>
 					</form>
 				</div>
 			</div>
 			<br>
 			<div class="ticket1" style="overflow-y: scroll;">
-
-				<div class="ticketBoxBack">
-					<div class="ticketBoxFirst">
-						<div class="infoLeft">
-							<p class="textStaition">${dto.tDetailCodeSta} → ${dto.tDetailCodeEnd}</p>
-							<p class="textTrasnport">KTX&nbsp;${dto.tHoNum }</p>
-							<p class="textDate">${dto.tBoardDate} | ${dto.tStaTime} → ${dto.tEndStaTime}</p>
+				<c:forEach var="dto" items="${reserveTrainList}" varStatus="status">
+						<div class="ticketBoxBack">
+							<div class="ticketBoxFirst">
+								<div class="infoLeft">
+									<p class="textStaition">${dto.tStationNameSta} → ${dto.tStationNameEnd}</p>
+									<p class="textTrasnport">KTX&nbsp;${dto.tNumId}</p>
+									<p class="textDate">${dto.tBoardDate} | ${dto.tStaTime} → ${dto.countTime}</p>
+								</div>
+							</div>
+							<div class="ticketBoxSecond">
+								<div class="infoRight">
+									<div class="infoRight1">
+										<p class="infoRightMemberTitle">인원&nbsp;</p>
+										<p class="infoRightMemberInput">${dto.tTotNum}</p>
+										<p class="infoRightMemberShow">명</p>
+									</div>
+									<div class="infoRight2">
+										<p class="infoRightHochaTitle">호차</p>
+										<p class="infoRightHochaGrade">${dto.tSeat}</p>
+										<p class="infoRightHochaInput">${dto.tHoNum }</p>
+										<p class="infoRightHochaShow">호차</p>
+									</div>
+									<div class="infoRight3">
+										<p class="infoRightSeatTitle">좌석</p>
+										<p class="infoRightSeatShow">${dto.tSeatNum}</p>
+									</div>
+								</div>
+							</div>
+							<div class="ticketBoxThird">
+								<form action="">
+									<button type="button" class="btn btn-primary"
+										style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
+								</form>
+							</div>
+							<div class="ticketBoxFourth">
+								<p class="ticketBoxFourthCircle">●</p>
+							</div>
 						</div>
-					</div>
-					<div class="ticketBoxSecond">
-						<div class="infoRight">
-							<div class="infoRight1">
-								<p class="infoRightMemberTitle">인원&nbsp;</p>
-								<p class="infoRightMemberInput">?</p>
-								<p class="infoRightMemberShow">명</p>
-							</div>
-							<div class="infoRight2">
-								<p class="infoRightHochaTitle">호차</p>
-								<p class="infoRightHochaGrade">등급</p>
-								<p class="infoRightHochaInput">?</p>
-								<p class="infoRightHochaShow">호차</p>
-							</div>
-							<div class="infoRight3">
-								<p class="infoRightSeatTitle">좌석</p>
-								<p class="infoRightSeatShow">10A</p>
-							</div>
-						</div>
-					</div>
-					<div class="ticketBoxThird">
-						<form action="">
-							<button type="button" class="btn btn-primary"
-								style="height: 50px; width: 140px;">예매 취소</button>
-						</form>
-					</div>
-					<div class="ticketBoxFourth">
-						<p class="ticketBoxFourthCircle">●</p>
-					</div>
-				</div>
-				<br>
+						<br>
+				</c:forEach>
 				
-				<div class="ticketBoxBack">
-					<div class="ticketBoxFirst">
-						<div class="infoLeft">
-							<p class="textStaition">출발지 → 도착지</p>
-							<p class="textTrasnport">운송수단&nbsp;호차번호</p>
-							<p class="textDate">날짜.요일 | 출발시간 → 도착시간</p>
-						</div>
-					</div>
-					<div class="ticketBoxSecond">
-						<div class="infoRight">
-							<div class="infoRight1">
-								<p class="infoRightMemberTitle">인원&nbsp;</p>
-								<p class="infoRightMemberInput">?</p>
-								<p class="infoRightMemberShow">명</p>
+				<c:forEach var="dto" items="${reserveBusList}" varStatus="status">
+						<div class="ticketBoxBack">
+							<div class="ticketBoxFirst">
+								<div class="infoLeft">
+									<p class="textStaitionBUS">${dto.bStationNameSta} → ${dto.bStationNameEnd}</p>
+									<p class="textTrasnport">${dto.bName}&nbsp;${dto.bTotNum}</p>
+									<p class="textDateBUS">${dto.bBoardDate} | ${dto.bFirstStaTime} → ${dto.bEndStaTime}</p>
+								</div>
 							</div>
-							<div class="infoRight2">
-								<p class="infoRightHochaTitle">호차</p>
-								<p class="infoRightHochaGrade">등급</p>
-								<p class="infoRightHochaInput">?</p>
-								<p class="infoRightHochaShow">호차</p>
+							<div class="ticketBoxSecond">
+								<div class="infoRight">
+									<div class="infoRight1">
+										<p class="infoRightMemberTitle">인원&nbsp;</p>
+										<p class="infoRightMemberInput">${dto.bTotNum}</p>
+										<p class="infoRightMemberShow">명</p>
+									</div>
+									<div class="infoRight2">
+										<p class="infoRightHochaTitle">구분</p>
+										<p class="infoRightHochaGradeBUS">${dto.bType}</p>
+										<p class="infoRightHochaInput"></p>
+										<p class="infoRightHochaShow"></p>
+									</div>
+									<div class="infoRight3">
+										<p class="infoRightSeatTitle">좌석</p>
+										<p class="infoRightSeatShow">${dto.bSeatNum}</p>
+									</div>
+								</div>
 							</div>
-							<div class="infoRight3">
-								<p class="infoRightSeatTitle">좌석</p>
-								<p class="infoRightSeatShow">10A</p>
+							<div class="ticketBoxThird">
+								<form action="">
+									<button type="button" class="btn btn-primary" style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
+								</form>
 							</div>
-						</div>
-					</div>
-					<div class="ticketBoxThird">
-						<form action="">
-							<button type="button" class="btn btn-primary"
-								style="height: 50px; width: 140px;">예매 취소</button>
-						</form>
-					</div>
-					<div class="ticketBoxFourth">
-						<p class="ticketBoxFourthCircle">●</p>
-					</div>
-				</div>
-				<br>
-				
-				<div class="ticketBoxBack">
-					<div class="ticketBoxFirst">
-						<div class="infoLeft">
-							<p class="textStaition">출발지 → 도착지</p>
-							<p class="textTrasnport">운송수단&nbsp;호차번호</p>
-							<p class="textDate">날짜.요일 | 출발시간 → 도착시간</p>
-						</div>
-					</div>
-					<div class="ticketBoxSecond">
-						<div class="infoRight">
-							<div class="infoRight1">
-								<p class="infoRightMemberTitle">인원&nbsp;</p>
-								<p class="infoRightMemberInput">?</p>
-								<p class="infoRightMemberShow">명</p>
-							</div>
-							<div class="infoRight2">
-								<p class="infoRightHochaTitle">호차</p>
-								<p class="infoRightHochaGrade">등급</p>
-								<p class="infoRightHochaInput">?</p>
-								<p class="infoRightHochaShow">호차</p>
-							</div>
-							<div class="infoRight3">
-								<p class="infoRightSeatTitle">좌석</p>
-								<p class="infoRightSeatShow">10A</p>
+							<div class="ticketBoxFourth">
+								<p class="ticketBoxFourthCircle">●</p>
 							</div>
 						</div>
-					</div>
-					<div class="ticketBoxThird">
-						<form action="">
-							<button type="button" class="btn btn-primary"
-								style="height: 50px; width: 140px;">예매 취소</button>
-						</form>
-					</div>
-					<div class="ticketBoxFourth">
-						<p class="ticketBoxFourthCircle">●</p>
-					</div>
-				</div>
-				<br>
-				
-				<div class="ticketBoxBack">
-					<div class="ticketBoxFirst">
-						<div class="infoLeft">
-							<p class="textStaition">출발지 → 도착지</p>
-							<p class="textTrasnport">운송수단&nbsp;호차번호</p>
-							<p class="textDate">날짜.요일 | 출발시간 → 도착시간</p>
-						</div>
-					</div>
-					<div class="ticketBoxSecond">
-						<div class="infoRight">
-							<div class="infoRight1">
-								<p class="infoRightMemberTitle">인원&nbsp;</p>
-								<p class="infoRightMemberInput">?</p>
-								<p class="infoRightMemberShow">명</p>
-							</div>
-							<div class="infoRight2">
-								<p class="infoRightHochaTitle">호차</p>
-								<p class="infoRightHochaGrade">등급</p>
-								<p class="infoRightHochaInput">?</p>
-								<p class="infoRightHochaShow">호차</p>
-							</div>
-							<div class="infoRight3">
-								<p class="infoRightSeatTitle">좌석</p>
-								<p class="infoRightSeatShow">10A</p>
-							</div>
-						</div>
-					</div>
-					<div class="ticketBoxThird">
-						<form action="">
-							<button type="button" class="btn btn-primary"
-								style="height: 50px; width: 140px;">예매 취소</button>
-						</form>
-					</div>
-					<div class="ticketBoxFourth">
-						<p class="ticketBoxFourthCircle">●</p>
-					</div>
-				</div>
-				<br>
-				
+						<br>
+				</c:forEach>
 			</div>
 		</div>
 	</main>
