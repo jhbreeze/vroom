@@ -63,6 +63,7 @@ tr:hover {
 	border: none;
 	border-radius: 30px;
 }
+
 .btn:active, .btn:focus, .btn:hover {
 	background-color: #0E6EFD;
 	color: #eee;
@@ -162,9 +163,7 @@ tr:hover {
 					</form>
 
 					<div class="row board-list-footer">
-						<div class="col">
-							<button type="button" class="btn btn-light"></button>
-						</div>
+						<div class="col"></div>
 						<div class="col"></div>
 						<div class="col-6 text-center">
 							<form class="row" name="searchForm" action="" method="post">

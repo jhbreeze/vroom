@@ -347,6 +347,7 @@ public class EventServlet extends MyUploadServlet {
 
 			req.setAttribute("dto", dto);
 			req.setAttribute("page", page);
+			req.setAttribute("size", size);
 
 			req.setAttribute("mode", "update");
 

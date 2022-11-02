@@ -14,9 +14,9 @@
 <script type="text/javascript" src="https://code.jquery.com/ui/1.8.8/i18n/jquery.ui.datepicker-ko.js"></script>
 <style type="text/css">
 main { 
-	position: relative; top: -55px; background: white;
+	position: relative; top: -300px; background: white;
 }
-.body-container { min-height: 900px; margin-top: 100px; }
+.body-container { min-height: 700px; margin-top: 100px; }
 .reserve-container { 
 	background: #fff; width: 700px; height: 280px;
 	position: relative; top: -400px; z-index: 100;  
@@ -44,6 +44,7 @@ main {
 .select-destination { margin-top: 10px; display: flex; width: 100%; }
 .select-date { margin-top: 10px; display: flex; width: 45%; }
 .select-date2 { margin-top: 10px; display: flex; width: 52.5%;}
+.select-date3 { margin-top: 10px; display: flex; width: 52.5%;}
 .small-text { font-size: 14px; text-align: left; }
 .middle-hilight-text { font-weight: 600; color: #4971FF; font-size: 18px; text-align: left; }
 .btn { color: #767676; border: none; }
@@ -73,6 +74,10 @@ main {
 #buschangeButton { background: #0E6EFD; color: white; position: absolute; }
 #changeButton:hover { background: #0D5ED7; cursor: pointer; }
 #buschangeButton:hover { background: #0D5ED7; cursor: pointer; }
+
+.container {
+	min-width: 900px;
+}
 </style>
 <script type="text/javascript">
 
@@ -135,12 +140,12 @@ function busselectDes(){
 }
 
 $(function(){
-	$(".select-date2").hide();
+	$(".select-date3").hide();
 	$("#full").click(function(){
-		$(".select-date2").show();
+		$(".select-date3").show();
 	});
 	$("#half").click(function(){
-		$(".select-date2").hide();
+		$(".select-date3").hide();
 	});
 });
 $(function(){
@@ -625,7 +630,7 @@ $(function(){
 						  	<div class="small-text">가는날</div>
 						  	<div class="middle-hilight-text" id="staDate"></div>
 					 	 </button>
-						<button type="button" class="btn select-date2 position-relative btn-endDate">
+						<button type="button" class="btn select-date3 position-relative btn2-endDate">
 						  	<div class="small-text" style="text-align: right;">오는날</div>
 						  	<div class="middle-hilight-text" style="text-align: right;" id="endDate"></div>
 					 	 </button>
@@ -648,8 +653,9 @@ $(function(){
 			</div>
 		</div>
 	</div>
+	
 
-<!-- 기차 모달창 -->
+	<!-- 기차 모달창 -->
 <div class="modal fade" id="myDialogModal" tabindex="-1" 
 		aria-labelledby="myDialogModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
@@ -848,12 +854,141 @@ $(function(){
 		</div>
 	</div>
 </div>
-<main>
-	<div class="container body-container">
-	</div>
-</main>
+	<main>
+		<!-- 캐러셀 -->
+		<div class="container">
+			<div class="body-container">
+				<div class="row">
+					<div id="carouselExampleControls1" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls1" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+					<div style="width: 5%"></div>
+					<div id="carouselExampleControls2" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls2" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+					<div style="width: 5%"></div>
+					<div id="carouselExampleControls3" class="carousel slide"
+						data-bs-ride="carousel" style="width: 30%">
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+							<div class="carousel-item">
+								<img
+									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
+									class="d-block w-100" alt="...">
+							</div>
+						</div>
+						<button class="carousel-control-prev" type="button"
+							data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button"
+							data-bs-target="#carouselExampleControls3" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</div>
+				<br>
+				<br>
+				<div style="">
+					<div>
+						<h4>공지사항</h4>
+					</div>
+					<br>
+					<div class="body-main">
+						<form name="listForm" method="post">
+							<table class="table">
+								<tbody>
+									<c:forEach var="dto" items="${list}" varStatus="status">
+										<tr>
+											<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
+											<td scope="row" class="text-center sort-td"><div
+													class="sort">${dto.category}</div></td>
+											<td class="left"><a
+												href="${articleUrl}&boardNum=${dto.boardNum}"
+												class="text-reset text-decoration-none">${dto.boSubject}</a>
+												<c:if test="${dto.gap<1}">
+													<img
+														src="${pageContext.request.contextPath}/resources/images/train.gif"
+														width="5%">
+												</c:if></td>
+											<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function calendar(y, m, mode) {
 	let date = new Date(y, m-1, 1); // y년 m월 1일의 Date 객체 생성
