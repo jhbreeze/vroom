@@ -32,25 +32,23 @@ public class ReserveServlet extends MyServlet{
 		if(info == null) {
 			resp.sendRedirect(cp +"/member/login.do");
 			return;
-		}
+		} 
 		
 		if(uri.indexOf("list.do")!=-1) {
 			// 예매내역 리스트
 			list(req,resp);
+		} else if (uri.indexOf("Check") !=-1) {
+			// 예매 조회 완료
+			checkForm(req,resp);
 		} else if (uri.indexOf("cancel.do")!=-1) {
-			// 예매 취소 
+									// 예매 취소 
 			cancle(req,resp);
 		} else if (uri.indexOf("cancel_ok.do")!=-1) {
-			// 예매 취소 완료
+									// 예매 취소 완료
 			cancleSubmit(req,resp);
 		}
 	}
-	
-	private void check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
-	
-	}
-	
+
 
 	private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 회원 기차 예매내역 리스트
@@ -102,17 +100,89 @@ public class ReserveServlet extends MyServlet{
 	
 	}
 	
+	
+	public void nonList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
+		// 비회원 버스,기차 예매리스트
+		ReserveDAO dao = new ReserveDAO();
+		
+		// String cp = req.getContextPath();
+		
+		try {
+			
+			String tel = null;
+			String bTkNum = null;
+			String tTkNum = null;
+			
+			List<ReserveDTO> NonReserveBusList = dao.nonMemberTReserve(tel, bTkNum);
+			List<ReserveDTO> NonReserveTrainlist = dao.nonMemberBReserve(tel, tTkNum);
+			
+			req.setAttribute("reserveTrainList", NonReserveTrainlist);
+			req.setAttribute("reserveBusList", NonReserveBusList);		
+			
+		} catch (Exception e) {
+		}
+	}
 
-	// 비회원 기차 예매 게시물 가져오기
 	
-	// 비회원 버스 예매 게시물 가져오기
+	/*
+	private void check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 비회원 예매 조회 페이지 
+		ReserveDAO dao = new ReserveDAO();
+		
+		try {
+			
+		
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String msg = " 예매번호 또는 전화번호가 존재하지 않습니다. " 
+		
+		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
+	}
+	*/
+
+	private void checkForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	// 비회원 예매 조회 완료
+		
+		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
+	}
 	
 	
+	
+	private void nomemcheckForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 비회원 예매조회 입력부분 을 예매리스트에서 하기 
+		ReserveDAO dao = new ReserveDAO(); 
+		
+		String tel;
+		int tTkNum, bTkNum; 
+		
+		
+		try {
+			ReserveDTO dto = new ReserveDTO();
+			
+			dto.setTel(req.getParameter("tel"));
+			dto.settTkNum(req.getParameter("tTkNum"));
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		   
+
+		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
+	}
+	
+
+	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//
+		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
+	}
+
 	
 	private void cancle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 예매 취소(DB에서 삭제)
-		
-		
 		forward(req, resp, "/WEB-INF/views/reserve/cancel.jsp");
 	}
 	
@@ -124,25 +194,11 @@ public class ReserveServlet extends MyServlet{
 		resp.sendRedirect( cp +  "/reserve/list.do?");
 	}
 	
-	
 	private void cancleSubmitNonMember(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
-		// 
+		// 취소 멤버
 	
 	}
 
-	private void nomemcheckForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//
-		
-		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
-	}
-	
-
-	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//
-		
-		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
-	}
-	
 
 }
 
