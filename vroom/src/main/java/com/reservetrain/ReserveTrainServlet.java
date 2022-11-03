@@ -869,7 +869,7 @@ public class ReserveTrainServlet extends MyServlet{
 				dto2.settPayPrice(Integer.parseInt(req.getParameter("endtotalCost").replace(",", "")));
 				dto2.settDetailCodeSta(Integer.parseInt(req.getParameter("dependtDetailCode")));
 				dto2.settDetailCodeEnd(Integer.parseInt(req.getParameter("desendtDetailCode")));
-				dto2.settHoNum(req.getParameter("ebdTHoNum"));
+				dto2.settHoNum(req.getParameter("endTHoNum"));
 				
 				String endDate = req.getParameter("endDate");
 				endDate = endDate.substring(0, endDate.length()-2);
