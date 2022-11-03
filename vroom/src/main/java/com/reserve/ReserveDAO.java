@@ -205,6 +205,7 @@ public class ReserveDAO {
 			while (rs.next()) {
 				ReserveDTO dto = new ReserveDTO();
 				// 여기부터 다시 한것임
+				dto.setbTkNum(rs.getString("bTkNum")); // 추가함
 				dto.setbSeatNum(rs.getString("bSeatNum"));
 				dto.setbNumId(rs.getInt("bNumId"));
 				dto.setbType(rs.getString("bType"));
@@ -217,10 +218,10 @@ public class ReserveDAO {
 				dto.setbStationNameEnd(rs.getString("bStationNameEnd"));	
 				dto.setbTotNum(rs.getInt("bTotNum"));
 				dto.setbBoardDate(rs.getString("bBoardDate"));
+
 				
 				
 				/*
-				dto.setbTkNum(rs.getInt("bTkNum"));
 				dto.setbRouteDetailCodeSta(rs.getInt("bRouteDetailCodeSta"));
 				dto.setbRouteDetailCodeEnd(rs.getInt("bRouteDetailCodeEnd"));
 				dto.setbStationName(rs.getString("bStationName"));
@@ -518,8 +519,48 @@ public class ReserveDAO {
 	
 		// 탑승날짜 select 해서 불러오기 여기에다가 WHERE 
 		
+		
+		// 기차 운임요금 
+		public int tPayPrice(ReserveDTO dto) throws SQLException {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql; 
+
+			try {
+				sql = " SELECT tPayPrice FROM trainTk WHERE tTkNum = ? "; 
+				
+				pstmt = conn.prepareStatement(sql); 
+				pstmt.setString(1, dto.gettTkNum());
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt("tPayPrice");
+				}
+				
+				System.out.println(result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e2) {
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e2) {
+					}
+				}
+			}
+			return result;
+		}
+		
 		// 예매취소(기차)
-		public void cancelReservet(ReserveDTO dto) throws SQLException {
+		public void cancelReservet(ReserveDTO dto, int tPayPrice) throws SQLException {
 			PreparedStatement pstmt = null;
 			String sql;
 
@@ -539,7 +580,7 @@ public class ReserveDAO {
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, dto.gettTkNum());
-				pstmt.setInt(2, 30000); // 임의로 넣음
+				pstmt.setInt(2, tPayPrice); // 임의로 넣음
 
 				pstmt.executeUpdate();
 				conn.commit();
@@ -566,9 +607,48 @@ public class ReserveDAO {
 			}
 
 		}
+		
+		// 버스 운임요금
+		public int bPayPrice(ReserveDTO dto) throws SQLException {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql; 
+
+			try {
+				sql = " SELECT bPayPrice FROM busTK WHERE bTkNum = ? "; 
+				
+				pstmt = conn.prepareStatement(sql); 
+				pstmt.setString(1, dto.getbTkNum());
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt("bPayPrice");
+				}
+				
+				System.out.println(result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e2) {
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e2) {
+					}
+				}
+			}
+			return result;
+		}
 
 		// 에매취소(버스)
-		public void cancelReserveb(ReserveDTO dto) throws SQLException {
+		public void cancelReserveb(ReserveDTO dto, int bPayPrice) throws SQLException {
 			PreparedStatement pstmt = null;
 			String sql;
 
@@ -588,7 +668,7 @@ public class ReserveDAO {
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, dto.getbTkNum());
-				pstmt.setInt(2, 30000); // 임의로 넣음
+				pstmt.setInt(2, bPayPrice); 
 
 				pstmt.executeUpdate();
 				conn.commit();
