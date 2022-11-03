@@ -23,23 +23,13 @@ public class ReserveServlet extends MyServlet{
 		req.setCharacterEncoding("utf-8");
 		String uri = req.getRequestURI();
 		
-		
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		String cp = req.getContextPath();
-		
-		// 로그인 안되어있으면 메인으로 돌아가기
-		if(info == null) {
-			resp.sendRedirect(cp +"/member/login.do");
-			return;
-		} 
-		
+	
 		if(uri.indexOf("list.do")!=-1) {
 			// 예매내역 리스트
 			list(req,resp);
-		} else if (uri.indexOf("Check") !=-1) {
-			// 예매 조회 완료
-			checkForm(req,resp);
+		} else if (uri.indexOf("check_ok.do") !=-1) {
+			// 비회원 예매 조회 완료
+			checkForm(req,resp); 
 		} else if (uri.indexOf("cancel.do")!=-1) {
 									// 예매 취소 
 			cancle(req,resp);
@@ -82,10 +72,10 @@ public class ReserveServlet extends MyServlet{
 				
 				dto.settTaketimeCount(result);
 			}
-			
+	
 			List<ReserveDTO> reserveBusList = dao.memberBReserve(userId);
 			
-			System.out.println(reserveBusList.size());
+			// System.out.println(reserveBusList.size());
 			req.setAttribute("reserveTrainList", reserveTrainList);
 			req.setAttribute("reserveBusList", reserveBusList);			
 			
@@ -100,9 +90,9 @@ public class ReserveServlet extends MyServlet{
 	
 	}
 	
-	
-	public void nonList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
-		// 비회원 버스,기차 예매리스트
+	private void checkForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	// 비회원 예매 조회 완료
+		
 		ReserveDAO dao = new ReserveDAO();
 		
 		// String cp = req.getContextPath();
@@ -110,49 +100,45 @@ public class ReserveServlet extends MyServlet{
 		try {
 			
 			String tel = null;
-			String bTkNum = null;
-			String tTkNum = null;
+			String reserveNum = null;
 			
-			List<ReserveDTO> NonReserveBusList = dao.nonMemberTReserve(tel, bTkNum);
-			List<ReserveDTO> NonReserveTrainlist = dao.nonMemberBReserve(tel, tTkNum);
 			
+			reserveNum = req.getParameter("reserveNum");
+			tel = req.getParameter("tel");
+			
+			List<ReserveDTO> NonReserveTrainlist = dao.nonMemberTReserve(tel, reserveNum);
+
+			int result;
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+			for (ReserveDTO dto : NonReserveTrainlist) {
+				result = dao.tTaketimeCount(dto.gettDetailCodeSta(), dto.gettDetailCodeEnd());
+				Date date = sdf.parse(dto.gettStaTime());
+				Date date2 = new Date(date.getTime() + result * 60 * 1000);
+
+				dto.settStaTime(dto.gettStaTime().substring(11, dto.gettStaTime().length() - 3));
+				dto.setCountTime(sdf2.format(date2));
+
+				dto.settTaketimeCount(result);
+			}
+
+			List<ReserveDTO> NonReserveBusList = dao.nonMemberBReserve(tel, reserveNum);
+
 			req.setAttribute("reserveTrainList", NonReserveTrainlist);
-			req.setAttribute("reserveBusList", NonReserveBusList);		
-			
+			req.setAttribute("reserveBusList", NonReserveBusList);
+
+			forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 		} catch (Exception e) {
 		}
 	}
-
-	
-	/*
-	private void check(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 비회원 예매 조회 페이지 
-		ReserveDAO dao = new ReserveDAO();
-		
-		try {
-			
-		
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		String msg = " 예매번호 또는 전화번호가 존재하지 않습니다. " 
-		
-		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
-	}
-	*/
-
-	private void checkForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	// 비회원 예매 조회 완료
-		
-		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
-	}
 	
 	
 	
+	
+	/*	( 여기는 필요없음. 나중에 지울 예정 )  
 	private void nomemcheckForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 비회원 예매조회 입력부분 을 예매리스트에서 하기 
+		// 비회원 예매조회 입력부분 을 예매리스트에서 하기  
 		ReserveDAO dao = new ReserveDAO(); 
 		
 		String tel;
@@ -169,12 +155,11 @@ public class ReserveServlet extends MyServlet{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		   
-
 		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
 	}
 	
-
+	 */
+	
 	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//
 		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");

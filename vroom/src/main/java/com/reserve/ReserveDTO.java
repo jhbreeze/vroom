@@ -24,8 +24,13 @@ public class ReserveDTO {
 	private String userId;
 
 	
+	// 시간계산
 	private int tTaketimeCount;
 	private String countTime;
+	
+	// 운임
+	private int tFee;
+	private int bFee;
 	
 	// 임시
 	private String tFirstStaTime; 
@@ -55,8 +60,6 @@ public class ReserveDTO {
 	private String bStationName; 
 	
 	
-
-
 	// 임시
 	private String day;
 	private String date;
@@ -335,6 +338,18 @@ public class ReserveDTO {
 	}
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+	public int gettFee() {
+		return tFee;
+	}
+	public void settFee(int tFee) {
+		this.tFee = tFee;
+	}
+	public int getbFee() {
+		return bFee;
+	}
+	public void setbFee(int bFee) {
+		this.bFee = bFee;
 	}
 	
 	

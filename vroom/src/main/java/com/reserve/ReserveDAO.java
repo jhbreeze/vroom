@@ -44,9 +44,9 @@ public class ReserveDAO {
 				+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " 
 			    + "	  	) " 
 				+ "	  SELECT tt.tTkNum, m.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, "
-				+ "	  tDetailCodeEnd, t1.tStationName tStationNameEnd, "
-				+ "	        tDetailCodeSta, t2.tStationName tStationNameSta, "
-				+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate"
+				+ "	  tDetailCodeEnd, t2.tStationName tStationNameEnd, "  
+				+ "	        tDetailCodeSta, t1.tStationName tStationNameSta, "  
+				+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" 
 				+ "	  	FROM trainTk tt "
 				+ "		JOIN tb t2 ON tt.tDetailCodeEnd = t2.tDetailCode "
 				+ "		JOIN tb t1 ON tt.tDetailCodeSta = t1.tDetailCode "
@@ -118,7 +118,7 @@ public class ReserveDAO {
 		try {
 			sql = " SELECT SUM(tTakeTime) tTakeTime"
 				+ " FROM trainDetail " 
-				+ "	WHERE tdetailCode >=? AND tdetailCode <=? "; 
+				+ "	WHERE tdetailCode > ? AND tdetailCode <=? "; 
 			
 			pstmt = conn.prepareStatement(sql); 
 			
@@ -218,6 +218,7 @@ public class ReserveDAO {
 				dto.setbTotNum(rs.getInt("bTotNum"));
 				dto.setbBoardDate(rs.getString("bBoardDate"));
 				
+				
 				/*
 				dto.setbTkNum(rs.getInt("bTkNum"));
 				dto.setbRouteDetailCodeSta(rs.getInt("bRouteDetailCodeSta"));
@@ -251,7 +252,7 @@ public class ReserveDAO {
 	
 	
 	// [비회원] 버스 예매내역 리스트
-		public List<ReserveDTO> nonMemberBReserve(String tel, String tTkNum) {
+		public List<ReserveDTO> nonMemberBReserve(String tel, String bTkNum) {
 			List<ReserveDTO> list = new ArrayList<>();
 			PreparedStatement pstmt = null;
 			String sql;
@@ -267,10 +268,10 @@ public class ReserveDAO {
 						 + " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
 						 + " 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime, "
 						 + "	br.bRouteDetailCodeSta, br.bRouteDetailCodeEnd, " 
-						 + "    bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd " 
+						 + "    bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd , tel " 
 						 + "    FROM BusTk bt " 
 						 + "    JOIN ( " 
-						 + " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum " 
+						 + "	SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum " 
 						 + "    FROM busTkDetail " 
 						 + "    GROUP BY bTkNum, bNumId " 
 						 + "	) bd ON bt.bTkNum = bd.bTkNum " 
@@ -281,15 +282,15 @@ public class ReserveDAO {
 						 + "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd " 
 						 + "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode " 
 						 + "	JOIN customer c ON c.cusNum = bt.cusNum " 
-						 + " 	JOIN member1 m ON m.cusNum = c.cusNum " 
-						 + "	WHERE tel = ? AND WHERE = bTkNum ? ";
+						// + " 	JOIN member1 m ON m.cusNum = c.cusNum " 
+						 + "	WHERE tel = ? AND bt.bTkNum = ? ";
 				
 				
 						pstmt = conn.prepareStatement(sql);
 			
 
 						pstmt.setString(1, tel);
-						pstmt.setString(2, tTkNum);
+						pstmt.setString(2, bTkNum);
 						
 						rs = pstmt.executeQuery();
 				
@@ -303,13 +304,14 @@ public class ReserveDAO {
 					dto.setbBoardDate(rs.getString("bBoardDate"));
 					dto.setbSeatNum(rs.getString("bSeatNum"));
 					dto.setbName(rs.getString("bName"));
-					dto.setbFirstStaTime(rs.getString("FirstStaTime"));
+					dto.setbType(rs.getString("bType"));
+					dto.setbFirstStaTime(rs.getString("bFirstStaTime"));
 					dto.setbEndStaTime(rs.getString("bEndStaTime")); 
 					dto.setbRouteDetailCodeSta(rs.getInt("bRouteDetailCodeSta"));
 					dto.setbRouteDetailCodeEnd(rs.getInt("bRouteDetailCodeEnd"));
-					dto.setbStationName(rs.getString("bStationName"));
 					dto.setbStationNameEnd(rs.getString("bStationNameEnd"));
 					dto.setbStationNameSta(rs.getString("bStationNameSta"));
+					
 					
 					
 					list.add(dto);
@@ -338,8 +340,8 @@ public class ReserveDAO {
 		}
 		
 		
-		// 비회원 기차예매내역 리스트
-		public List<ReserveDTO> nonMemberTReserve(String tel, String bTkNum) {
+		// [비회원] 기차예매내역 리스트
+		public List<ReserveDTO> nonMemberTReserve(String tel, String tTkNum) {
 			List<ReserveDTO> list = new ArrayList<>();
 			PreparedStatement pstmt = null;
 			String sql;
@@ -347,30 +349,31 @@ public class ReserveDAO {
 
 			try {
 
-				sql = "	WITH tb AS ( "
-						+ "	   SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
-						+ "	  	   FROM trainDetail td "
-						+ "	  	   JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
-						+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " 
-						+ "	  	) "
-						+ "	  SELECT tt.tTkNum, m.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, "
-						+ "	  tDetailCodeEnd, t1.tStationName tStationNameEnd, "
-						+ "	        tDetailCodeSta, t2.tStationName tStationNameSta, "
-						+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" 
-						+ "	  	FROM trainTk tt "
-						+ "		JOIN tb t2 ON tt.tDetailCodeEnd = t2.tDetailCode "
-						+ "		JOIN tb t1 ON tt.tDetailCodeSta = t1.tDetailCode "
-						+ " JOIN (  "
-						+ "	    SELECT tSeat, tHoNum, tTkNum, LISTAGG(tSeatNum, ',') WITHIN GROUP(ORDER BY tSeatNum) tSeatNum "
-						+ "		FROM trainTkDetail  " + "		GROUP BY tSeat, tTkNum, tHoNum  "
-						+ "	) tdt ON tdt.tTkNum = tt.tTkNum  " + "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
-						+ "	  	JOIN member1 m ON m.cusNum = tt.cusNum "
-						+ "	  	WHERE tel = ? AND WHERE = tTkNum ? ";
-
+				
+			sql = " WITH tb AS ( "
+				+ "		SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
+				+ "				FROM trainDetail td  " 
+				+ "				JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
+				+ "				 JOIN trainStation ts ON tr.tStationCode = ts.tStationCode   "
+				+ "				)  "
+				+ "				SELECT tt.tTkNum, c.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, " 
+				+ "				tDetailCodeEnd, t2.tStationName tStationNameEnd,  "
+				+ "				tDetailCodeSta, t1.tStationName tStationNameSta,  "
+				+ "				TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate, tel "
+				+ "				FROM trainTk tt  "
+				+ "				JOIN tb t2 ON tt.tDetailCodeEnd = t2.tDetailCode  "
+				+ "				JOIN tb t1 ON tt.tDetailCodeSta = t1.tDetailCode  "
+				+ "				JOIN (   "
+				+ "				SELECT tSeat, tHoNum, tTkNum, LISTAGG(tSeatNum, ',') WITHIN GROUP(ORDER BY tSeatNum) tSeatNum  "
+				+ "				FROM trainTkDetail 	GROUP BY tSeat, tTkNum, tHoNum   "
+				+ "				) tdt ON tdt.tTkNum = tt.tTkNum   	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum  "
+				+ "				JOIN customer c ON c.cusNum = tt.cusNum  "
+				+ "				WHERE tel = ? AND tt.tTkNum = ? " ; 
+				
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, tel);
-				pstmt.setString(2, bTkNum);
+				pstmt.setString(2, tTkNum);
 
 				rs = pstmt.executeQuery();
 
@@ -389,7 +392,8 @@ public class ReserveDAO {
 					dto.settDetailCodeSta(rs.getInt("tDetailCodeSta"));
 					dto.settStationNameSta(rs.getString("tStationNameSta"));
 					dto.settBoardDate(rs.getString("tBoardDate"));
-
+					
+					
 					list.add(dto);
 
 				}
@@ -511,4 +515,7 @@ public class ReserveDAO {
 			}
 			return dto;
 		}
-	}
+	
+		// 탑승날짜 select 해서 불러오기 여기에다가 WHERE 
+
+}
