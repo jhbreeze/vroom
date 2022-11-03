@@ -16,6 +16,7 @@
 main { 
 	position: relative; top: -300px; background: white;
 }
+.header { z-index: 101; }
 .body-container { min-height: 700px; margin-top: 100px; }
 .reserve-container { 
 	background: #fff; width: 700px; height: 280px;
@@ -85,7 +86,10 @@ main {
 .carousel-control-prev{
     color: #0E6EFD;
 }
-
+.blue-box2 {
+	background: #0E6EFD; top: 0; left: 0; z-index: -1;
+	width: 100%; height: 600px; position: absolute;
+}
 </style>
 <script type="text/javascript">
 
@@ -942,7 +946,7 @@ $(function(){
 			</div>
 		</div>
 	</main>
-
+<div class="blue-box2"></div>
 <script type="text/javascript">
 
 		$(function() {
