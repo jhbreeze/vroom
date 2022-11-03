@@ -563,30 +563,30 @@ $(function(){
 				</div>
 				<div class="row row-cols-3 text-dark second-row">
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-busdeparture position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11">
+					  	<button type="button" class="btn select-busdeparture position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11" style="overflow: scroll; height: 80px;">
 					  		<div class="small-text">출발지</div>
-					  		<div class="middle-hilight-text" id="busdeparture" data-busdeparture="">선택</div>
+					  		<div class="middle-hilight-text" id="busdeparture" data-busdeparture="" style="line-height: 20px;">선택</div>
 					  	</button>
 					</div>
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-busdestination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22">
+					  	<button type="button" class="btn select-busdestination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22" style="overflow: scroll; height: 80px;">
 						  	<div class="small-text">도착지</div>
-						  	<div class="middle-hilight-text" id="busdestination" data-busdestination="">선택</div>
+						  	<div class="middle-hilight-text" id="busdestination" data-busdestination="" style="line-height: 20px;">선택</div>
 					  	</button>
 					</div>
-					<div class="col-6" style="margin: 2px; width: 49%">
-						<button type="button" class="btn select-date position-relative btn-staDate">
+					<div class="col-6" style="margin: 2px; width: 49%; height: 84px;">
+						<button type="button" class="btn select-date position-relative btn-busstaDate">
 						  	<div class="small-text">가는날</div>
 						  	<div class="middle-hilight-text" id="busstaDate"></div>
 					 	 </button>
-						<button type="button" class="btn select-date2 position-relative btn-endDate">
+						<button type="button" class="btn select-date2 position-relative btn-busendDate">
 						  	<div class="small-text" style="text-align: right;">오는날</div>
 						  	<div class="middle-hilight-text" style="text-align: right;" id="busendDate"></div>
 					 	 </button>
 					</div>
 				</div>
 				<div class="row row-cols-3 text-dark text-center third-row level-container">
-					<div class="col-6 level-container" style="margin: 2px; width: 48.75%; padding: 16px 12px;">
+					<div class="col-6 level-container" style="margin: 2px; width: 48.75%; padding: 16px 12px; margin-top: 1px;">
 						<div class="small-text">등급</div>
 					 	<section class="plan cf">
 							<input type="radio" name="busradio1" id="busall" value="all" checked><label class="free-label four col" for="busall">전체</label>
@@ -596,7 +596,7 @@ $(function(){
 							
 						</section>
 					</div>
-					<div class="col-6" style="margin: 2px; width: 48.75%">
+					<div class="col-6" style="margin: 2px; width: 318.5px;">
 						<button type="button" class="btn btn-primary final-button busSend" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
 					</div>
 				</div>
@@ -653,7 +653,7 @@ $(function(){
 							<input type="radio" name="radio1" id="basic" value="basic"><label class="basic-label four col" for="basic">일반</label>
 						</section>
 					</div>
-					<div class="col-6" style="margin: 2px; width: 48.75%">
+					<div class="col-6" style="margin: 2px; width: 318.5px;">
 						<button type="button" class="btn btn-primary final-button trainSend" style="font-size: 18px; font-weight: 600">조&nbsp;&nbsp;회</button>
 					</div>
 				</div>
@@ -832,7 +832,7 @@ $(function(){
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-        		<div id="depDate">
+        		<div id="bus-depDate">
         			
         		</div>
 			</div>
@@ -852,7 +852,7 @@ $(function(){
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-        		<div id="desDate">
+        		<div id="bus-desDate">
         			
         		</div>
 			</div>
@@ -943,129 +943,8 @@ $(function(){
 		</div>
 	</main>
 
-	<script type="text/javascript">
-		function calendar(y, m, mode) {
-			let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
-			y = date.getFullYear();
-			m = date.getMonth() + 1;
+<script type="text/javascript">
 
-			let w = date.getDay(); // 요일 (0~6, 일~토)
-			let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
-
-			// 시스템 오늘 날짜
-			let now = new Date();
-			let ny = now.getFullYear();
-			let nm = now.getMonth() + 1;
-			let nd = now.getDate();
-
-			let out = '<div id="calendarLayout">';
-			out += '<div class="subject">';
-			out += '<span class="lr" onclick="calendar(' + y + ',' + (m - 1)
-					+ ')">&lt;</span>&nbsp;&nbsp;';
-			out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
-			out += '<span onclick="calendar(' + y + ',' + (m + 1)
-					+ ')">&gt;</span>';
-			out += '</div>';
-
-			out += '<table class="table td-border">';
-			out += '<tr>';
-			for (let i = 0; i < week.length; i++) {
-				out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
-						+ week[i] + '</td>';
-			}
-			out += '</tr>';
-
-			// 무조건 6주로 만들기
-			let row = 1; // 주 수
-
-			// 1일 앞부분 : 이전달
-			let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
-			let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
-			let pDay = pLastDay - w;
-
-			out += '<tr>';
-			for (let i = 0; i < w; i++) {
-				let y2 = y;
-				let m2 = m - 1;
-				if (nm === 1) {
-					y2 = y - 1;
-					m2 = 12;
-				}
-				let date = new Date(y2, m2, pDay - 1);
-				let w = date.getDay();
-				let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
-				out += '<td class="gray">'
-						+ (++pDay)
-						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
-						+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
-			}
-
-			let cls;
-			let lastDay = (new Date(y, m, 0)).getDate();
-			for (let i = 1; i <= lastDay; i++) {
-
-				cls = y === ny && m === nm && i === nd ? ' today ' : '';
-
-				let date = new Date(y, m, i);
-				let w2 = date.getDay();
-				let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
-
-				out += '<td class="'+cls+' clsClass">'
-						+ i
-						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
-						+ y + '.' + m + '.' + i + '</span>' + '</td>';
-				if (i !== lastDay && ++w % 7 === 0) {
-					row++;
-					out += '</tr><tr>';
-				}
-			}
-			// 마지막 날짜 뒷부분
-			let nDay = 0;
-			for (let i = w % 7; i < 6; i++) {
-				let y3 = ny;
-				let m3 = nm + 1;
-				if (nm === 12) {
-					y3 = ny + 1;
-					m3 = 1;
-				}
-				let date = new Date(y3, m3, nDay + 1);
-				let w2 = date.getDay();
-				let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
-				out += '<td class="gray">'
-						+ (++nDay)
-						+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
-						+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
-			}
-			out += '</tr>';
-			// 한달은 최대 6주
-			for (let i = row; i < 6; i++) {
-				out += '<tr>';
-				for (let j = 0; j < 7; j++) {
-					let y3 = ny;
-					let m3 = nm + 1;
-					if (nm === 12) {
-						y3 = ny + 1;
-						m3 = 1;
-					}
-					let date = new Date(y3, m3, nDay + 1);
-					let w2 = date.getDay();
-					let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
-					out += '<td class="gray">'
-							+ (++nDay)
-							+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
-							+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
-				}
-				out += '</tr>';
-			}
-
-			out += '</table></div>';
-
-			let selector = "#depDate";
-			if (mode === "des") {
-				selector = "#desDate";
-			}
-			document.querySelector(selector).innerHTML = out;
-		}
 		$(function() {
 			let now = new Date();
 			let y = now.getFullYear();
@@ -1115,145 +994,787 @@ $(function(){
 
 		$(function() {
 			$(".btn-busstaDate").click(function() {
+				let now = new Date();
+				let y5 = now.getFullYear();
+				let m5 = now.getMonth() + 1;
+				let d5 = now.getDate();
+				
+				let max = new Date(y5, m5-1, d5+10);
+				
+				let staDate = $("#busstaDate").text();
+				let staDate2 = staDate.substring(0, staDate.length-2);
+				let staArr = staDate2.split(".");
+				
 				let y = $("#busstaDate").attr("data-year");
 				let m = $("#busstaDate").attr("data-month");
 				let d = $("#busstaDate").attr("data-date");
 
-				calendar(y, m, "dep");
-
+				calendar3(y, m);
+				
+				$("td").each(function(index, item){
+					let selDate = $(this).children().text();
+					let selArr = selDate.split(".");
+					let sel = new Date(selArr[0], selArr[1]-1, Number(selArr[2])+1);
+					if(sel < now || sel >= max) {
+						$(this).css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
+						$(this).addClass("cntClick");
+					}
+				});
+				
 				$("#myDialogModal33").modal("show");
 
-				$("#calendarLayout td").click(function() {
-					let selectTr = $(this).parent().find("td").index(this);
-					let week = [ '일', '월', '화', '수', '목', '금', '토' ];
-					let selectDate = $(this).children().text();
-					selectDate = selectDate + " " + week[selectTr];
-
-					$("#busstaDate").text(selectDate);
-					$("#myDialogModal33").modal("hide");
+				$("#calendarLayout3 td").click(function() {
+					if($(this).hasClass('cntClick')){
+						alert("해당 날짜는 선택하실 수 없습니다.");
+					} else {
+						let selectTr = $(this).parent().find("td").index(this);
+						let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+						let selectDate = $(this).children().text();
+						selectDate = selectDate + " " + week[selectTr];
+	
+						$("#busstaDate").text(selectDate);
+						let select2 = selectDate.substring(0, selectDate.length - 2);
+						let select = select2.split(".");
+						$("#busstaDate").attr("data-year",select[0]);
+						$("#busstaDate").attr("data-month",select[1]);
+						$("#busstaDate").attr("data-date",select[2]);
+						
+						if (!compareDate()) {
+							$("#busendDate").text(selectDate);
+							$("#busendDate").attr("data-year",select[0]);
+							$("#busendDate").attr("data-month",select[1]);
+							$("#busendDate").attr("data-date",select[2]);
+						}
+						$("#myDialogModal33").modal("hide");
+					}
 				});
+					
+				function compareDate() {
+					let sy = $("#busstaDate").attr("data-year");
+					let sm = $("#busstaDate").attr("data-month");
+					let sd = $("#busstaDate").attr("data-date");
+					
+					let selDate = new Date(sy, sm-1, sd);
+	
+					let ey = $("#busendDate").attr("data-year");
+					let em = $("#busendDate").attr("data-month");
+					let ed = $("#busendDate").attr("data-date");
+					
+					let endDate = new Date(ey, em-1, ed);
+	
+					if (selDate < endDate) {
+						return true;
+					} else {
+						return false;
+					}
+				}
 			});
 			$(".btn-busendDate").click(function() {
+				let now = new Date();
+				let y5 = now.getFullYear();
+				let m5 = now.getMonth() + 1;
+				let d5 = now.getDate();
+					
+				let max = new Date(y5, m5-1, d5+10);
+					
+				let endDate = $("#busendDate").text();
+				let endDate2 = endDate.substring(0, endDate.length-2);
+				let endArr = endDate2.split(".");
+				
 				let y = $("#busendDate").attr("data-year");
 				let m = $("#busendDate").attr("data-month");
 				let d = $("#busendDate").attr("data-date");
 
-				calendar(y, m, "des");
+				calendar4(y, m);
+				
+				$("td").each(function(index, item){
+					let selDate = $(this).children().text();
+					let selArr = selDate.split(".");
+					let sel = new Date(selArr[0], selArr[1]-1, Number(selArr[2])+1);
+					if(sel < now || sel >= max) {
+						$(this).css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
+						$(this).addClass("cntClick");
+					}
+				});
 
 				$("#myDialogModal44").modal("show");
 
-				$("#calendarLayout td").click(function() {
-					let selectTr = $(this).parent().find("td").index(this);
-					let week = [ '일', '월', '화', '수', '목', '금', '토' ];
-					let selectDate = $(this).children().text();
-					selectDate = selectDate + " " + week[selectTr];
-
-					$("#busendDate").text(selectDate);
-					$("#myDialogModal44").modal("hide");
+				$("#calendarLayout4 td").click(function() {
+					if($(this).hasClass('cntClick')){
+						alert("해당 날짜는 선택하실 수 없습니다.");
+					} else {
+						let selectTr = $(this).parent().find("td").index(this);
+						let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+						let selectDate = $(this).children().text();
+						selectDate = selectDate + " " + week[selectTr];
+	
+						$("#busendDate").text(selectDate);
+						let select2 = selectDate.substring(0, selectDate.length - 2);
+						let select = select2.split(".");
+						$("#busendDate").attr("data-year", select[0]);
+						$("#busendDate").attr("data-month", select[1]);
+						$("#busendDate").attr("data-date", select[2]);
+						$("#myDialogModal44").modal("hide");
+						
+						if (!compareDate()) {
+							$("#busstaDate").text(selectDate);
+							$("#busstaDate").attr("data-year",select[0]);
+							$("#busstaDate").attr("data-month",select[1]);
+							$("#busstaDate").attr("data-date",select[2]);
+						}
+						$("#myDialogModal33").modal("hide");
+					}
 				});
+				function compareDate() {
+					let ey = $("#busendDate").attr("data-year");
+					let em = $("#busendDate").attr("data-month");
+					let ed = $("#busendDate").attr("data-date");
+					
+					let endDate = new Date(ey, em-1, ed);
+	
+					let sy = $("#busstaDate").attr("data-year");
+					let sm = $("#busstaDate").attr("data-month");
+					let sd = $("#busstaDate").attr("data-date");
+					
+					let staDate = new Date(sy, sm-1, sd);
+	
+					if (staDate < endDate) {
+						return true;
+					} else {
+						return false;
+					}
+				}
 			});
+			
 		});
 
 		$(function() {
-			$(".btn-staDate").click(
-					function() {
-						let y = $("#staDate").attr("data-year");
-						let m = $("#staDate").attr("data-month");
-						let d = $("#staDate").attr("data-date");
+			$(".btn-staDate").click(function() {
+				let now = new Date();
+				let y5 = now.getFullYear();
+				let m5 = now.getMonth() + 1;
+				let d5 = now.getDate();
+				
+				let max = new Date(y5, m5-1, d5+10);
+				
+				let staDate = $("#staDate").text();
+				let staDate2 = staDate.substring(0, staDate.length-2);
+				let staArr = staDate2.split(".");
+				
+					
+				let y = $("#staDate").attr("data-year");
+				let m = $("#staDate").attr("data-month");
+				let d = $("#staDate").attr("data-date");
 
-						calendar(y, m, "dep");
+				calendar1(y, m);
+				
+				$("td").each(function(index, item){
+					let selDate = $(this).children().text();
+					let selArr = selDate.split(".");
+					let sel = new Date(selArr[0], selArr[1]-1, Number(selArr[2])+1);
+					if(sel < now || sel >= max) {
+						$(this).css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
+						$(this).addClass("cntClick");
+					}
+				});
+				$("#myDialogModal3").modal("show");
 
-						$("#myDialogModal3").modal("show");
-
-						$("#calendarLayout td")
-								.click(
-										function() {
-											let selectTr = $(this).parent()
-													.find("td").index(this);
-											let week = [ '일', '월', '화', '수',
-													'목', '금', '토' ];
-											let selectDate = $(this).children()
-													.text();
-											selectDate = selectDate + " "
-													+ week[selectTr];
-
-											$("#staDate").text(selectDate);
-											let select2 = selectDate.substring(
-													0, selectDate.length - 2);
-											let select = select2.split(".");
-											$("#staDate").attr("data-year",
-													select[0]);
-											$("#staDate").attr("data-month",
-													select[1]);
-											$("#staDate").attr("data-date",
-													select[2]);
-
-											if (!compareDate()) {
-												$("#endDate").text(selectDate);
-												$("#endDate").attr("data-year",
-														select[0]);
-												$("#endDate")
-														.attr("data-month",
-																select[1]);
-												$("#endDate").attr("data-date",
-														select[2]);
-											}
-											$("#myDialogModal3").modal("hide");
-										});
-						function compareDate() {
-							let sy = $("#staDate").attr("data-year");
-							let sm = $("#staDate").attr("data-month");
-							let sd = $("#staDate").attr("data-date");
-
-							let ey = $("#endDate").attr("data-year");
-							let em = $("#endDate").attr("data-month");
-							let ed = $("#endDate").attr("data-date");
-
-							if (ey >= sy && em >= sy && ed >= sd) {
-								return false;
-							}
-							return true;
+				$("#calendarLayout1 td").click(function() {
+					if($(this).hasClass('cntClick')){
+						alert("해당 날짜는 선택하실 수 없습니다.");
+					} else {
+						let selectTr = $(this).parent().find("td").index(this);
+						let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+						let selectDate = $(this).children().text();
+						selectDate = selectDate + " " + week[selectTr];
+		
+						$("#staDate").text(selectDate);
+						let select2 = selectDate.substring(0, selectDate.length - 2);
+						let select = select2.split(".");
+						$("#staDate").attr("data-year",select[0]);
+						$("#staDate").attr("data-month",select[1]);
+						$("#staDate").attr("data-date",select[2]);
+	
+						if (!compareDate()) {
+							$("#endDate").text(selectDate);
+							$("#endDate").attr("data-year",select[0]);
+							$("#endDate").attr("data-month",select[1]);
+							$("#endDate").attr("data-date",select[2]);
 						}
-					});
-			$(".btn-endDate").click(
-					function() {
-						let y = $("#endDate").attr("data-year");
-						let m = $("#endDate").attr("data-month");
-						let d = $("#endDate").attr("data-date");
+						$("#myDialogModal3").modal("hide");
+					}				
+				});
+						
+				function compareDate() {
+					let sy = $("#staDate").attr("data-year");
+					let sm = $("#staDate").attr("data-month");
+					let sd = $("#staDate").attr("data-date");
 
-						calendar(y, m, "des");
+					let ey = $("#endDate").attr("data-year");
+					let em = $("#endDate").attr("data-month");
+					let ed = $("#endDate").attr("data-date");
 
-						$("#myDialogModal3").modal("show");
+					if (ey >= sy && em >= sy && ed >= sd) {
+						return true;
+					}
+					return false;
+				}
+			});
+			$(".btn2-endDate").click( function() {
+				let now = new Date();
+				let y5 = now.getFullYear();
+				let m5 = now.getMonth() + 1;
+				let d5 = now.getDate();
+					
+				let max = new Date(y5, m5-1, d5+10);
+					
+				let endDate = $("#endDate").text();
+				let endDate2 = endDate.substring(0, endDate.length-2);
+				let endArr = endDate2.split(".");
+					
+				let y = $("#endDate").attr("data-year");
+				let m = $("#endDate").attr("data-month");
+				let d = $("#endDate").attr("data-date");
 
-						$("#calendarLayout td")
-								.click(
-										function() {
-											let selectTr = $(this).parent()
-													.find("td").index(this);
-											let week = [ '일', '월', '화', '수',
-													'목', '금', '토' ];
-											let selectDate = $(this).children()
-													.text();
-											selectDate = selectDate + " "
-													+ week[selectTr];
+				calendar2(y, m);
+					
+				$("td").each(function(index, item){
+					let selDate = $(this).children().text();
+					let selArr = selDate.split(".");
+					let sel = new Date(selArr[0], selArr[1]-1, Number(selArr[2])+1);
+					if(sel < now || sel >= max) {
+						$(this).css({"background":"#e2e2e2", "color":"#ccc", "cursor": "default"});
+						$(this).addClass("cntClick");
+					}
+				});
 
-											let select2 = selectDate.substring(
-													0, selectDate.length - 2);
-											let select = select2.split(".");
-											$("#endDate").text(selectDate);
-											$("#endDate").attr("data-year",
-													select[0]);
-											$("#endDate").attr("data-month",
-													select[1]);
-											$("#endDate").attr("data-date",
-													select[2]);
-											$("#myDialogModal3").modal("hide");
-										});
-					});
+				$("#myDialogModal4").modal("show");
+
+				$("#calendarLayout2 td").click( function() {
+					if($(this).hasClass('cntClick')){
+						alert("해당 날짜는 선택하실 수 없습니다.");
+					} else {
+						let selectTr = $(this).parent().find("td").index(this);
+						let week = [ '일', '월', '화', '수', '목', '금', '토' ];
+						let selectDate = $(this).children().text();
+						selectDate = selectDate + " " + week[selectTr];
+						
+						$("#endDate").text(selectDate);
+						let select2 = selectDate.substring(0, selectDate.length - 2);
+						let select = select2.split(".");
+						$("#endDate").attr("data-year", select[0]);
+						$("#endDate").attr("data-month", select[1]);
+						$("#endDate").attr("data-date", select[2]);
+						$("#myDialogModal4").modal("hide");
+						
+						if (!compareDate()) {
+							$("#staDate").text(selectDate);
+							$("#staDate").attr("data-year",select[0]);
+							$("#staDate").attr("data-month",select[1]);
+							$("#staDate").attr("data-date",select[2]);
+						}
+						$("#myDialogModal4").modal("hide");
+
+					}
+				});
+				function compareDate() {
+					let ey = $("#endDate").attr("data-year");
+					let em = $("#endDate").attr("data-month");
+					let ed = $("#endDate").attr("data-date");
+					
+					let endDate = new Date(ey, em-1, ed);
+	
+					let sy = $("#staDate").attr("data-year");
+					let sm = $("#staDate").attr("data-month");
+					let sd = $("#staDate").attr("data-date");
+					
+					let staDate = new Date(sy, sm-1, sd);
+	
+					if (staDate < endDate) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+
+			});
 		});
 
-		// 오늘 날짜 이전과 오늘부터 10일 이후는 선택 못 하도록 막음(아직 안 됨)
-	</script>
+
+// ================캘린더
+
+function calendar1(y, m) {
+	let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
+	y = date.getFullYear();
+	m = date.getMonth() + 1;
+
+	let w = date.getDay(); // 요일 (0~6, 일~토)
+	let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+	// 시스템 오늘 날짜
+	let now = new Date();
+	let ny = now.getFullYear();
+	let nm = now.getMonth() + 1;
+	let nd = now.getDate();
+
+	let out = '<div id="calendarLayout1">';
+	out += '<div class="subject">';
+	out += '<span class="lr" onclick="calendar1(' + y + ',' + (m - 1) + ')">&lt;</span>&nbsp;&nbsp;';
+	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+	out += '<span onclick="calendar1(' + y + ',' + (m + 1) +')">&gt;</span>';
+	out += '</div>';
+
+	out += '<table class="table td-border">';
+	out += '<tr>';
+	for (let i = 0; i < week.length; i++) {
+		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
+				+ week[i] + '</td>';
+	}
+	out += '</tr>';
+
+	// 무조건 6주로 만들기
+	let row = 1; // 주 수
+
+	// 1일 앞부분 : 이전달
+	let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+	let pDay = pLastDay - w;
+
+	out += '<tr>';
+	for (let i = 0; i < w; i++) {
+		let y2 = y;
+		let m2 = m - 1;
+		if (nm === 1) {
+			y2 = y - 1;
+			m2 = 12;
+		}
+		let date = new Date(y2, m2, pDay - 1);
+		let w = date.getDay();
+		let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++pDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
+	}
+
+	let cls;
+	let lastDay = (new Date(y, m, 0)).getDate();
+	for (let i = 1; i <= lastDay; i++) {
+
+		cls = y === ny && m === nm && i === nd ? ' today ' : '';
+
+		let date = new Date(y, m, i);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+
+		out += '<td class="'+cls+' clsClass">'
+				+ i
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y + '.' + m + '.' + i + '</span>' + '</td>';
+		if (i !== lastDay && ++w % 7 === 0) {
+			row++;
+			out += '</tr><tr>';
+		}
+	}
+	// 마지막 날짜 뒷부분
+	let nDay = 0;
+	for (let i = w % 7; i < 6; i++) {
+		let y3 = ny;
+		let m3 = nm + 1;
+		if (nm === 12) {
+			y3 = ny + 1;
+			m3 = 1;
+		}
+		let date = new Date(y3, m3, nDay + 1);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++nDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+	}
+	out += '</tr>';
+	// 한달은 최대 6주
+	for (let i = row; i < 6; i++) {
+		out += '<tr>';
+		for (let j = 0; j < 7; j++) {
+			let y3 = ny;
+			let m3 = nm + 1;
+			if (nm === 12) {
+				y3 = ny + 1;
+				m3 = 1;
+			}
+			let date = new Date(y3, m3, nDay + 1);
+			let w2 = date.getDay();
+			let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+			out += '<td class="gray">'
+					+ (++nDay)
+					+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+					+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+		}
+		out += '</tr>';
+	}
+	
+	out += '</table></div>';
+
+	let selector = "#depDate";
+	document.querySelector(selector).innerHTML = out;
+}
+
+function calendar2(y, m) {
+	let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
+	y = date.getFullYear();
+	m = date.getMonth() + 1;
+
+	let w = date.getDay(); // 요일 (0~6, 일~토)
+	let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+	// 시스템 오늘 날짜
+	let now = new Date();
+	let ny = now.getFullYear();
+	let nm = now.getMonth() + 1;
+	let nd = now.getDate();
+
+	let out = '<div id="calendarLayout2">';
+	out += '<div class="subject">';
+	out += '<span class="lr" onclick="calendar2(' + y + ',' + (m - 1) + ')">&lt;</span>&nbsp;&nbsp;';
+	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+	out += '<span onclick="calendar2(' + y + ',' + (m + 1) +')">&gt;</span>';
+	out += '</div>';
+
+	out += '<table class="table td-border">';
+	out += '<tr>';
+	for (let i = 0; i < week.length; i++) {
+		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
+				+ week[i] + '</td>';
+	}
+	out += '</tr>';
+
+	// 무조건 6주로 만들기
+	let row = 1; // 주 수
+
+	// 1일 앞부분 : 이전달
+	let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+	let pDay = pLastDay - w;
+
+	out += '<tr>';
+	for (let i = 0; i < w; i++) {
+		let y2 = y;
+		let m2 = m - 1;
+		if (nm === 1) {
+			y2 = y - 1;
+			m2 = 12;
+		}
+		let date = new Date(y2, m2, pDay - 1);
+		let w = date.getDay();
+		let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++pDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
+	}
+
+	let cls;
+	let lastDay = (new Date(y, m, 0)).getDate();
+	for (let i = 1; i <= lastDay; i++) {
+
+		cls = y === ny && m === nm && i === nd ? ' today ' : '';
+
+		let date = new Date(y, m, i);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+
+		out += '<td class="'+cls+' clsClass">'
+				+ i
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y + '.' + m + '.' + i + '</span>' + '</td>';
+		if (i !== lastDay && ++w % 7 === 0) {
+			row++;
+			out += '</tr><tr>';
+		}
+	}
+	// 마지막 날짜 뒷부분
+	let nDay = 0;
+	for (let i = w % 7; i < 6; i++) {
+		let y3 = ny;
+		let m3 = nm + 1;
+		if (nm === 12) {
+			y3 = ny + 1;
+			m3 = 1;
+		}
+		let date = new Date(y3, m3, nDay + 1);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++nDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+	}
+	out += '</tr>';
+	// 한달은 최대 6주
+	for (let i = row; i < 6; i++) {
+		out += '<tr>';
+		for (let j = 0; j < 7; j++) {
+			let y3 = ny;
+			let m3 = nm + 1;
+			if (nm === 12) {
+				y3 = ny + 1;
+				m3 = 1;
+			}
+			let date = new Date(y3, m3, nDay + 1);
+			let w2 = date.getDay();
+			let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+			out += '<td class="gray">'
+					+ (++nDay)
+					+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+					+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+		}
+		out += '</tr>';
+	}
+
+	out += '</table></div>';
+
+	let selector = "#desDate";
+	document.querySelector(selector).innerHTML = out;
+}
+
+function calendar3(y, m, mode) {
+	let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
+	y = date.getFullYear();
+	m = date.getMonth() + 1;
+
+	let w = date.getDay(); // 요일 (0~6, 일~토)
+	let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+	// 시스템 오늘 날짜
+	let now = new Date();
+	let ny = now.getFullYear();
+	let nm = now.getMonth() + 1;
+	let nd = now.getDate();
+
+	let out = '<div id="calendarLayout3">';
+	out += '<div class="subject">';
+	out += '<span class="lr" onclick="calendar3(' + y + ',' + (m - 1) + ')">&lt;</span>&nbsp;&nbsp;';
+	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+	out += '<span onclick="calendar3(' + y + ',' + (m + 1) +')">&gt;</span>';
+	out += '</div>';
+
+	out += '<table class="table td-border">';
+	out += '<tr>';
+	for (let i = 0; i < week.length; i++) {
+		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
+				+ week[i] + '</td>';
+	}
+	out += '</tr>';
+
+	// 무조건 6주로 만들기
+	let row = 1; // 주 수
+
+	// 1일 앞부분 : 이전달
+	let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+	let pDay = pLastDay - w;
+
+	out += '<tr>';
+	for (let i = 0; i < w; i++) {
+		let y2 = y;
+		let m2 = m - 1;
+		if (nm === 1) {
+			y2 = y - 1;
+			m2 = 12;
+		}
+		let date = new Date(y2, m2, pDay - 1);
+		let w = date.getDay();
+		let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++pDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
+	}
+
+	let cls;
+	let lastDay = (new Date(y, m, 0)).getDate();
+	for (let i = 1; i <= lastDay; i++) {
+
+		cls = y === ny && m === nm && i === nd ? ' today ' : '';
+
+		let date = new Date(y, m, i);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+
+		out += '<td class="'+cls+' clsClass">'
+				+ i
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y + '.' + m + '.' + i + '</span>' + '</td>';
+		if (i !== lastDay && ++w % 7 === 0) {
+			row++;
+			out += '</tr><tr>';
+		}
+	}
+	// 마지막 날짜 뒷부분
+	let nDay = 0;
+	for (let i = w % 7; i < 6; i++) {
+		let y3 = ny;
+		let m3 = nm + 1;
+		if (nm === 12) {
+			y3 = ny + 1;
+			m3 = 1;
+		}
+		let date = new Date(y3, m3, nDay + 1);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++nDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+	}
+	out += '</tr>';
+	// 한달은 최대 6주
+	for (let i = row; i < 6; i++) {
+		out += '<tr>';
+		for (let j = 0; j < 7; j++) {
+			let y3 = ny;
+			let m3 = nm + 1;
+			if (nm === 12) {
+				y3 = ny + 1;
+				m3 = 1;
+			}
+			let date = new Date(y3, m3, nDay + 1);
+			let w2 = date.getDay();
+			let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+			out += '<td class="gray">'
+					+ (++nDay)
+					+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+					+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+		}
+		out += '</tr>';
+	}
+
+	out += '</table></div>';
+
+	let selector = "#bus-depDate";
+	document.querySelector(selector).innerHTML = out;
+}
+
+function calendar4(y, m) {
+	let date = new Date(y, m - 1, 1); // y년 m월 1일의 Date 객체 생성
+	y = date.getFullYear();
+	m = date.getMonth() + 1;
+
+	let w = date.getDay(); // 요일 (0~6, 일~토)
+	let week = [ '일', '월', '화', '수', '목', '금', '토' ]; // 자바스크립트에서 배열의 초기값을 줄 때
+
+	// 시스템 오늘 날짜
+	let now = new Date();
+	let ny = now.getFullYear();
+	let nm = now.getMonth() + 1;
+	let nd = now.getDate();
+
+	let out = '<div id="calendarLayout4">';
+	out += '<div class="subject">';
+	out += '<span class="lr" onclick="calendar4(' + y + ',' + (m - 1) + ')">&lt;</span>&nbsp;&nbsp;';
+	out += '<label>' + y + '년 ' + m + '월</label>&nbsp;&nbsp;';
+	out += '<span onclick="calendar4(' + y + ',' + (m + 1) +')">&gt;</span>';
+	out += '</div>';
+
+	out += '<table class="table td-border">';
+	out += '<tr>';
+	for (let i = 0; i < week.length; i++) {
+		out += '<td style="background: #0E6EFD; color: white; border: 1px solid #0E6EFD">'
+				+ week[i] + '</td>';
+	}
+	out += '</tr>';
+
+	// 무조건 6주로 만들기
+	let row = 1; // 주 수
+
+	// 1일 앞부분 : 이전달
+	let preDate = new Date(y, m - 1, 0); // 이전달의 마지막 날짜로 Date 객체 생성
+	let pLastDay = preDate.getDate(); // 이전달의 마지막 날짜
+	let pDay = pLastDay - w;
+
+	out += '<tr>';
+	for (let i = 0; i < w; i++) {
+		let y2 = y;
+		let m2 = m - 1;
+		if (nm === 1) {
+			y2 = y - 1;
+			m2 = 12;
+		}
+		let date = new Date(y2, m2, pDay - 1);
+		let w = date.getDay();
+		let week = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++pDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y2 + '.' + m2 + '.' + pDay + '</span>' + '</td>';
+	}
+
+	let cls;
+	let lastDay = (new Date(y, m, 0)).getDate();
+	for (let i = 1; i <= lastDay; i++) {
+
+		cls = y === ny && m === nm && i === nd ? ' today ' : '';
+
+		let date = new Date(y, m, i);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+
+		out += '<td class="'+cls+' clsClass">'
+				+ i
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y + '.' + m + '.' + i + '</span>' + '</td>';
+		if (i !== lastDay && ++w % 7 === 0) {
+			row++;
+			out += '</tr><tr>';
+		}
+	}
+	// 마지막 날짜 뒷부분
+	let nDay = 0;
+	for (let i = w % 7; i < 6; i++) {
+		let y3 = ny;
+		let m3 = nm + 1;
+		if (nm === 12) {
+			y3 = ny + 1;
+			m3 = 1;
+		}
+		let date = new Date(y3, m3, nDay + 1);
+		let w2 = date.getDay();
+		let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+		out += '<td class="gray">'
+				+ (++nDay)
+				+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+				+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+	}
+	out += '</tr>';
+	// 한달은 최대 6주
+	for (let i = row; i < 6; i++) {
+		out += '<tr>';
+		for (let j = 0; j < 7; j++) {
+			let y3 = ny;
+			let m3 = nm + 1;
+			if (nm === 12) {
+				y3 = ny + 1;
+				m3 = 1;
+			}
+			let date = new Date(y3, m3, nDay + 1);
+			let w2 = date.getDay();
+			let week2 = [ ' 일', ' 월', ' 화', ' 수', ' 목', ' 금', ' 토' ];
+			out += '<td class="gray">'
+					+ (++nDay)
+					+ '<span class="hidden-cal" style="visibility: hidden; font-size: 0px;">'
+					+ y3 + '.' + m3 + '.' + nDay + '</span>' + '</td>';
+		}
+		out += '</tr>';
+	}
+
+	out += '</table></div>';
+
+	let selector = "#bus-desDate";
+	document.querySelector(selector).innerHTML = out;
+}
+</script>
 
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>

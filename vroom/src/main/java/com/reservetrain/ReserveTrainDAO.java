@@ -113,7 +113,7 @@ public class ReserveTrainDAO {
 					+ "        FROM trainRouteDetail "
 					+ "        WHERE tStationCode IN (?, ?)) "
 					+ "    GROUP BY tRouteCode "
-					+ "    HAVING COUNT(*) >= 2)) ";
+					+ "    HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY) ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1, tDeptStationCode);
@@ -189,7 +189,7 @@ public class ReserveTrainDAO {
 					+ "                            FROM trainRouteDetail "
 					+ "                            WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "                WHERE ranking = 1)))) "
 					+ "        AND tRouteDetailCode >= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
@@ -200,7 +200,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "        AND tRouteDetailCode <= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
 					+ "            WHERE tStationCode = ? "
@@ -210,7 +210,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "    ORDER BY tDetailCode)";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -286,7 +286,7 @@ public class ReserveTrainDAO {
 					+ "                            FROM trainRouteDetail "
 					+ "                            WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "                WHERE ranking = 1)))) "
 					+ "        AND tRouteDetailCode >= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
@@ -297,7 +297,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "        AND tRouteDetailCode <= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
 					+ "            WHERE tStationCode = ? "
@@ -307,7 +307,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "    ORDER BY tDetailCode) "
 					+ "WHERE tRouteDetailCode = ( "
 					+ "    SELECT tRouteDetailCode FROM trainRouteDetail "
@@ -318,7 +318,7 @@ public class ReserveTrainDAO {
 					+ "            FROM trainRouteDetail "
 					+ "            WHERE tStationCode IN (?, ?)) "
 					+ "        GROUP BY tRouteCode "
-					+ "        HAVING COUNT(*) >= 2))) ";
+					+ "        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) ";
 			pstmt = conn.prepareStatement(sql);
 			
 			if(tDiscern.equals("하행")) {
@@ -398,7 +398,7 @@ public class ReserveTrainDAO {
 					+ "                            FROM trainRouteDetail "
 					+ "                            WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "                WHERE ranking = 1)))) "
 					+ "        AND tRouteDetailCode >= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
@@ -409,7 +409,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "        AND tRouteDetailCode <= ( "
 					+ "            SELECT tRouteDetailCode FROM trainRouteDetail "
 					+ "            WHERE tStationCode = ? "
@@ -419,7 +419,7 @@ public class ReserveTrainDAO {
 					+ "                        FROM trainRouteDetail "
 					+ "                        WHERE tStationCode IN (?, ?)) "
 					+ "                        GROUP BY tRouteCode "
-					+ "                        HAVING COUNT(*) >= 2))) "
+					+ "                        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "    ORDER BY tDetailCode) "
 					+ "WHERE tRouteDetailCode = ( "
 					+ "    SELECT tRouteDetailCode FROM trainRouteDetail "
@@ -430,7 +430,7 @@ public class ReserveTrainDAO {
 					+ "            FROM trainRouteDetail "
 					+ "            WHERE tStationCode IN (?, ?)) "
 					+ "        GROUP BY tRouteCode "
-					+ "        HAVING COUNT(*) >= 2))) ";
+					+ "        HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) ";
 			
 			pstmt = conn.prepareStatement(sql);
 			if(tDiscern.equals("하행")) {
@@ -509,7 +509,7 @@ public class ReserveTrainDAO {
 					+ "                    FROM trainRouteDetail "
 					+ "                    WHERE tStationCode IN (?, ?)) "
 					+ "                GROUP BY tRouteCode "
-					+ "                HAVING COUNT(*) >= 2))) "
+					+ "                HAVING COUNT(*) >= 2)FETCH FIRST 1 ROWS ONLY)) "
 					+ "        WHERE ranking = 1)))";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, tDeptStationCode);

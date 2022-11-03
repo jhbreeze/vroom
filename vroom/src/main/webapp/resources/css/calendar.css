@@ -9,24 +9,24 @@
 .td-border td { border: 1px solid #ced4da; }
 
 /* layout */
-#calendarLayout {
+#calendarLayout1, #calendarLayout2, #calendarLayout3, #calendarLayout4 {
 	width: 280px;
 	margin: 30px auto;
 }
-#calendarLayout .subject{
+#calendarLayout1 .subject, #calendarLayout2 .subject, #calendarLayout3 .subject, #calendarLayout4 .subject{
 	height: 37px;
 	line-height: 37px;
 	text-align: center;
 	font-weight: 600;
 }
 
-#calendarLayout table td { text-align: center; }
-#calendarLayout table td:nth-child(7n+1) { color: orange; }
-#calendarLayout table td:nth-child(7n) { color: #0E6EFD; }
-#calendarLayout table td.gray { color: #ccc; }
-#calendarLayout table td.today { font-weight:700; background: #E6FFFF; }
+#calendarLayout1 table td, #calendarLayout2 table td, #calendarLayout3 table td, #calendarLayout4 table td { text-align: center; }
+#calendarLayout1 table td:nth-child(7n+1), #calendarLayout2 table td:nth-child(7n+1), #calendarLayout3 table td:nth-child(7n+1), #calendarLayout4 table td:nth-child(7n+1) { color: orange; }
+#calendarLayout1 table td:nth-child(7n), #calendarLayout2 table td:nth-child(7n), #calendarLayout3 table td:nth-child(7n), #calendarLayout4 table td:nth-child(7n) { color: #0E6EFD; }
+#calendarLayout1 table td.gray, #calendarLayout2 table td.gray, #calendarLayout3 table td.gray, #calendarLayout4 table td.gray { color: #ccc; }
+#calendarLayout1 table td.today, #calendarLayout2 table td.today, #calendarLayout3 table td.today ,#calendarLayout4 table td.today { font-weight:700; background: #E6FFFF; }
 
-#calendarLayout .footer { height: 25px; line-height: 25px;
+#calendarLayout1 .footer, #calendarLayout2 .footer, #calendarLayout3 .footer, #calendarLayout4 .footer { height: 25px; line-height: 25px;
 	text-align: right; font-size: 12px; }
 
 .subject>span:hover, .footer>span:hover { color: tomato; }
