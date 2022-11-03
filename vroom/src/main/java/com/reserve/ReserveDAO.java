@@ -517,5 +517,102 @@ public class ReserveDAO {
 		}
 	
 		// 탑승날짜 select 해서 불러오기 여기에다가 WHERE 
+		
+		// 예매취소(기차)
+		public void cancelReservet(ReserveDTO dto) throws SQLException {
+			PreparedStatement pstmt = null;
+			String sql;
+
+			try {
+				conn.setAutoCommit(false);
+
+				sql = " UPDATE trainTk set tDisPrice = 0 WHERE tTkNum = ? ";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString(1, dto.gettTkNum());
+
+				pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+
+				sql = " INSERT INTO trainRefund(tTkNum, tRefDate, tRefPrice, tRefFee) VALUES(?, SYSDATE, ?, 0)";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString(1, dto.gettTkNum());
+				pstmt.setInt(2, 30000); // 임의로 넣음
+
+				pstmt.executeUpdate();
+				conn.commit();
+
+			} catch (SQLException e) {
+				try {
+					conn.rollback();
+				} catch (SQLException e2) {
+				}
+				e.printStackTrace();
+				throw e;
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+					}
+				}
+
+				try {
+					conn.setAutoCommit(true);
+				} catch (SQLException e2) {
+				}
+			}
+
+		}
+
+		// 에매취소(버스)
+		public void cancelReserveb(ReserveDTO dto) throws SQLException {
+			PreparedStatement pstmt = null;
+			String sql;
+
+			try {
+				conn.setAutoCommit(false);
+
+				sql = " UPDATE busTk set bDisPrice = 0 WHERE bTkNum = ? ";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString(1, dto.getbTkNum());
+
+				pstmt.executeUpdate();
+				pstmt.close();
+				pstmt = null;
+
+				sql = " INSERT INTO busRefund(bTkNum, bRefDate, bRefPrice, bRefFee) VALUES(?, SYSDATE, ?, 0)";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString(1, dto.getbTkNum());
+				pstmt.setInt(2, 30000); // 임의로 넣음
+
+				pstmt.executeUpdate();
+				conn.commit();
+
+			} catch (SQLException e) {
+				try {
+					conn.rollback();
+				} catch (SQLException e2) {
+				}
+				e.printStackTrace();
+				throw e;
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+					}
+				}
+
+				try {
+					conn.setAutoCommit(true);
+				} catch (SQLException e2) {
+				}
+			}
+		}
 
 }

@@ -1,6 +1,7 @@
 package com.reserve;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.JSONObject;
 
 import com.member.SessionInfo;
 import com.util.MyServlet;
@@ -30,13 +33,11 @@ public class ReserveServlet extends MyServlet{
 		} else if (uri.indexOf("check_ok.do") !=-1) {
 			// 비회원 예매 조회 완료
 			checkForm(req,resp); 
-		} else if (uri.indexOf("cancel.do")!=-1) {
-									// 예매 취소 
-			cancle(req,resp);
-		} else if (uri.indexOf("cancel_ok.do")!=-1) {
-									// 예매 취소 완료
-			cancleSubmit(req,resp);
-		}
+		} else if (uri.indexOf("traincancel.do")!=-1) {
+			traincancle(req,resp);
+		} else if (uri.indexOf("buscancel.do")!=-1) {
+			buscancel(req,resp);
+		} 
 	}
 
 
@@ -166,24 +167,56 @@ public class ReserveServlet extends MyServlet{
 	}
 
 	
-	private void cancle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 예매 취소(DB에서 삭제)
-		forward(req, resp, "/WEB-INF/views/reserve/cancel.jsp");
-	}
-	
-	private void cancleSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 회원 예매 취소 완료
-		String cp = req.getContextPath(); 
-	
-		// 리다이렉트
-		resp.sendRedirect( cp +  "/reserve/list.do?");
-	}
-	
-	private void cancleSubmitNonMember(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
-		// 취소 멤버
-	
+	private void traincancle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ReserveDAO dao = new ReserveDAO();
+
+		String state = "false";
+
+		try {
+			ReserveDTO dto = new ReserveDTO();
+			dto.settTkNum(req.getParameter("tTkNum"));
+			dao.cancelReservet(dto);
+
+			state = "true";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+
+		return;
+
 	}
 
+	private void buscancel(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ReserveDAO dao = new ReserveDAO();
+
+		String state = "false";
+
+		try {
+			ReserveDTO dto = new ReserveDTO();
+			dto.setbTkNum(req.getParameter("bTkNum"));
+			dao.cancelReserveb(dto);
+
+			state = "true";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		JSONObject job = new JSONObject();
+		job.put("state", state);
+
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+
+		return;
+	}
 
 }
 

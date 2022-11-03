@@ -83,6 +83,82 @@ $(function(){
 	console.log(${reserveTrainList2})
 })
 
+
+$(function() {
+	$(".cancel-btn").click(function() {
+		if(! confirm("해당 예매내역을 취소하시겠습니까?")) {
+			return false;
+		}
+		
+		let tTkNum = $(this).attr("data-tTkNum");
+	 	
+		let url = "${pageContext.request.contextPath}/reserve/traincancel.do";
+		let query = "tTkNum="+tTkNum ;
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : query,
+			dataType : "json",
+			success : function(data) {
+				alert("예매 취소가 완료되었습니다.");
+			},
+			beforeSend : function(jqXHR) {
+				jqXHR.setRequestHeader("AJAX", true);
+			},
+			error : function(jqXHR) {
+				if (jqXHR.status === 403) {
+					login();
+					return false;
+				} else if (jqXHR.status === 400) {
+					alert("요청 처리가 실패했습니다.");
+					return false;
+				}
+
+				console.log(jqXHR.responseText);
+			}
+		})
+	
+	});
+	
+	$(".cancel-btn2").click(function() {
+		if(! confirm("해당 예매내역을 취소하시겠습니까?")) {
+			return false;
+		}
+		
+	 	let bTkNum = $(this).attr("data-bTkNum");
+	 	
+		let url = "${pageContext.request.contextPath}/reserve/buscancel.do";
+		let query = "bTkNum="+bTkNum ;
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : query,
+			dataType : "json",
+			success : function(data) {
+				alert("예매 취소가 완료되었습니다.");
+			},
+			beforeSend : function(jqXHR) {
+				jqXHR.setRequestHeader("AJAX", true);
+			},
+			error : function(jqXHR) {
+				if (jqXHR.status === 403) {
+					login();
+					return false;
+				} else if (jqXHR.status === 400) {
+					alert("요청 처리가 실패했습니다.");
+					return false;
+				}
+
+				console.log(jqXHR.responseText);
+			}
+		})
+		
+	});
+	
+});
+
 </script>
 
 
@@ -137,10 +213,9 @@ $(function(){
 								</div>
 							</div>
 							<div class="ticketBoxThird">
-								<form action="">
-									<button type="button" class="btn btn-primary"
-										style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
-								</form>
+									<button type="button" class="btn btn-primary cancel-btn"
+										style="height: 50px; width: 140px;" data-tTkNum="${dto.tTkNum}">예매 취소</button>
+
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
@@ -176,9 +251,8 @@ $(function(){
 								</div>
 							</div>
 							<div class="ticketBoxThird">
-								<form action="">
-									<button type="button" class="btn btn-primary" style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
-								</form>
+								<button type="button" class="btn btn-primary cancel-btn2" 
+									style="height: 50px; width: 140px;" data-bTkNum="${dto.bTkNum}" >예매 취소</button> 
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>

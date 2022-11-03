@@ -230,19 +230,22 @@ public class MemberServlet extends MyServlet {
 			
 			String userPwd = req.getParameter("userPwd");
 			String mode = req.getParameter("mode");
+			
 			if (!dto.getUserPwd().equals(userPwd)) {
-				if (mode.equals("update")) {
-					req.setAttribute("title", "정보 수정");
-				} else {
-					req.setAttribute("title", "회원 탈퇴");
-				}
 				req.setAttribute("mode", mode);
 				req.setAttribute("message", "비밀번호가 일치하지 않습니다.");
 				forward(req, resp, "/WEB-INF/views/member/pwd.jsp");
 				return;
 			}
 			
-			if(mode.equals("delete")) {
+			if (mode.equals("update")) {
+				req.setAttribute("title", "정보수정");
+				req.setAttribute("dto", dto);
+				req.setAttribute("mode", "update");
+				forward(req, resp, "/WEB-INF/views/member/member.jsp");
+				return;
+				
+			} else {
 				dao.deleteMember(info.getUserId(), info.getCusNum());
 				
 				session.removeAttribute("member");
@@ -250,17 +253,11 @@ public class MemberServlet extends MyServlet {
 				
 				resp.setContentType("text/html; charset=UTF-8");
 				PrintWriter out = resp.getWriter();
-	            out.println("<script>alert('탈퇴가 처리되었습니다.'); location.href='${pageContext.request.contextPath}/main.do'; </script>");
-	            out.flush();
-	            
+				out.println("<script>alert('탈퇴가 처리되었습니다.'); location.href='"+cp+"/main.do'; </script>");
+				
+				
 				return;
 			}
-				
-			req.setAttribute("title", "정보수정");
-			req.setAttribute("dto", dto);
-			req.setAttribute("mode", "update");
-			forward(req, resp, "/WEB-INF/views/member/member.jsp");
-			return;
 			
 		} catch (Exception e) {
 			e.printStackTrace();

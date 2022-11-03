@@ -26,9 +26,6 @@ public class ManageServlet extends MyServlet {
 		
 		if(uri.indexOf("member.do")!=-1) {
 			list(req,resp);
-		} else if (uri.indexOf("")!=-1) {
-		} else if (uri.indexOf("")!=-1) {
-		} else if (uri.indexOf("")!=-1) {
 		}
 	}
 
