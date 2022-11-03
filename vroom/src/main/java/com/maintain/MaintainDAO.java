@@ -25,7 +25,7 @@ public class MaintainDAO {
 					+ "	  	   JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
 					+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " 
 					+ "	  	) "
-					+ "	  SELECT tt.tTkNum, tt.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, c.name, "
+					+ "	  SELECT tt.tTkNum, tt.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, c.name, tt.tDisPrice, m.userId, "
 					+ "	  tDetailCodeEnd, t1.tStationName tStationNameEnd, "
 					+ "	        tDetailCodeSta, t2.tStationName tStationNameSta, "
 					+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" 
@@ -39,6 +39,7 @@ public class MaintainDAO {
 					+ "	) tdt ON tdt.tTkNum = tt.tTkNum  " 
 					+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
 					+ "   LEFT OUTER  JOIN customer c ON tt.cusNum = c.cusNum "
+					+ "   LEFT OUTER JOIN member1 m ON c.cusNum = m.cusNum "
 					+ " ORDER BY tt.tboarddate DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
@@ -67,6 +68,7 @@ public class MaintainDAO {
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setName(rs.getString("name"));
 				dto.settTotNum(rs.getInt("tTotNum"));
+				dto.setUserId(rs.getString("userId"));
 				
 				list.add(dto);
 

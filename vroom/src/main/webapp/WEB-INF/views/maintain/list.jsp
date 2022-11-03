@@ -130,10 +130,10 @@ tr:hover {
 					<thead>
 						<tr>
 						    <th>구분</th>
+						    <th>고객번호</th>
 							<th>이름</th>
 							<th>출발역</th>
 							<th>도착역</th>
-							<th>고객번호</th>
 							<th>기차예매번호</th>
 							<th>총예매수</th>
 							<th>날짜</th>
@@ -145,17 +145,16 @@ tr:hover {
 					<tbody>
 						<c:forEach var="dto" items="${list}" varStatus="status">
 							<tr>
-							    <td>${dto.name}</td>
+							    <td>${dto.userId.length() > 0 ? "회원" : "비회원"}</td>
+							    <td>${dto.cusNum}</td>
 								<td>${dto.name}</td>
 								<td>${dto.tStationNameSta}</td>
 								<td>${dto.tStationNameEnd}</td>
-								<td>${dto.cusNum}</td>
 								<td>${dto.tTkNum}</td>
 								<td>${dto.tTotNum}</td>
 								<td>${dto.tBoardDate}</td>
 								<td>${dto.tStaTime}</td>
 								<td>${dto.countTime}</td>
-								
 							</tr>
 
 						</c:forEach>
