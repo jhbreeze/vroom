@@ -9,7 +9,7 @@ public class ReserveDTO {
 	private int tTakeTime;
 	private String tStationName; 
 	private int tStationCode; 
-	private int tTkNum;
+	private String tTkNum;
 	private int cusNum;
 	private int tTotNum; 
 	private String tSeat;
@@ -36,12 +36,13 @@ public class ReserveDTO {
 	private int tDestStationCode;
 	private String tDiscern;	
 	
-	
+	// 비회원
+	private String tel;
 	
 	
 	// 버스 예매 (최종)
 	private int bNumId;
-	private int bTkNum; 	
+	private String bTkNum; 	
 	private int bTotNum;
 	private String bBoardDate;
 	private String bSeatNum;
@@ -101,11 +102,11 @@ public class ReserveDTO {
 	public void settStationCode(int tStationCode) {
 		this.tStationCode = tStationCode;
 	}
-	public int gettTkNum() {
+	public String gettTkNum() {
 		return tTkNum;
 	}
-	public void settTkNum(int tTkNum) {
-		this.tTkNum = tTkNum;
+	public void settTkNum(String string) {
+		this.tTkNum = string;
 	}
 	public int getCusNum() {
 		return cusNum;
@@ -281,10 +282,10 @@ public class ReserveDTO {
 	public void setbEndStaTime(String bEndStaTime) {
 		this.bEndStaTime = bEndStaTime;
 	}
-	public int getbTkNum() {
+	public String getbTkNum() {
 		return bTkNum;
 	}
-	public void setbTkNum(int bTkNum) {
+	public void setbTkNum(String bTkNum) {
 		this.bTkNum = bTkNum;
 	}
 	public int getbRouteDetailCodeSta() {
@@ -328,6 +329,12 @@ public class ReserveDTO {
 	}
 	public void setbStationName(String bStationName) {
 		this.bStationName = bStationName;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 	
 	
