@@ -130,11 +130,13 @@ tr:hover {
 					<thead>
 						<tr>
 							<th>구분</th>
+						    <th>고객번호</th>
+							<th>이름</th>
 							<th>출발역</th>
 							<th>도착역</th>
-							<th>고객번호</th>
 							<th>기차예매번호</th>
 							<th>총예매수</th>
+							<th>날짜</th>
 							<th>출발시간</th>
 							<th>도착시간</th>
 						</tr>
@@ -143,65 +145,39 @@ tr:hover {
 					<tbody>
 						<c:forEach var="dto" items="${list}" varStatus="status">
 							<tr>
-								<td>기차</td>
-								<td>${dto.tStationNameSta}</td>
+								<td>${dto.userId.length() > 0 ? "회원" : "비회원"}</td>
+							    <td>${dto.cusNum}</td>
+								<td>${dto.name}</td>
 								<td>${dto.tStationNameEnd}</td>
-								<td></td>
+								<td>${dto.tStationNameSta}</td>
 								<td>${dto.tTkNum}</td>
-								<td></td>
+								<td>${dto.tTotNum}</td>
+								<td>${dto.tBoardDate}</td>
 								<td>${dto.tStaTime}</td>
 								<td>${dto.countTime}</td>
-								
 							</tr>
 
 						</c:forEach>
 					</tbody>
 				</table>
-				<form name="pwdForm" method="post">
-					<div class="modal fade" id="exampleModal" tabindex="-1"
-						aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">패스워드를 입력하세요</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal"
-										aria-label="Close"></button>
-								</div>
-								<div class="modal-body">
-									<input type="hidden" name="qnaNum"> <input
-										type="hidden" name="page" value="${page}"> <input
-										type="text" name="qnaPwd" value="${dto.qnaPwd}">
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-bs-dismiss="modal">취소</button>
-									<button type="button" class="btn btn-primary"
-										onclick="insertBoard();">입력</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-
+				
 				<div class="row board-list-footer">
 					<div class="col"></div>
 					<div class="col"></div>
 					<div class="col-6 text-center">
 						<form class="row" name="searchForm"
-							action="${pageContext.request.contextPath}/qna/list.do"
+							action="${pageContext.request.contextPath}/maintain/reserve.do"
 							method="post">
 							<div class="col-auto p-1">
 								<select name="condition" class="form-select">
-									<option value="all"
-										${condition=="all"?"selected='selected'":""}>제목+내용</option>
 									<option value="name"
-										${condition=="name"?"selected='selected'":""}>작성자</option>
-									<option value="qnaRegDate"
-										${condition=="qnaRegDate"?"selected='selected'":""}>등록일</option>
-									<option value="qnaSubject"
-										${condition=="qnaSubject"?"selected='selected'":""}>제목</option>
-									<option value="qnaContent"
-										${condition=="qnaContent"?"selected='selected'":""}>내용</option>
+										${condition=="name"?"selected='selected'":""}>이름</option>
+									<option value="tboarddate"
+										${condition=="tboarddate"?"selected='selected'":""}>탑승날짜</option>
+									<option value="cusNum"
+										${condition=="cusNum"?"selected='selected'":""}>고객번호</option>
+									<option value="tStationNameEnd"
+										${condition=="tStationNameEnd"?"selected='selected'":""}>탑승역</option>
 								</select>
 							</div>
 							<div class="col-auto p-1">
@@ -215,16 +191,6 @@ tr:hover {
 						</form>
 					</div>
 					<div class="col text-end">
-						<c:choose>
-							<c:when test="${sessionScope.member.userId == dto.userId}">
-								<button type="button" class="btn btn-light"
-									onclick="location.href='${pageContext.request.contextPath}/qna/write2.do';">글올리기</button>
-							</c:when>
-							<c:otherwise>
-								<button type="button" class="btn btn-light"
-									onclick="location.href='${pageContext.request.contextPath}/qna/write.do';">글올리기</button>
-							</c:otherwise>
-						</c:choose>
 					</div>
 				</div>
 

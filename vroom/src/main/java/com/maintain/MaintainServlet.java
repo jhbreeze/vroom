@@ -76,7 +76,7 @@ public class MaintainServlet extends MyServlet {
 				dataCount = dao.tDataCount(condition, keyword);
 			}
 			
-			int size = 5;
+			int size = 10;
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
@@ -134,6 +134,8 @@ public class MaintainServlet extends MyServlet {
 	}
 	
 	protected void list2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		MaintainDAO dao = new MaintainDAO();
+		MyUtil util = new MyUtilBootstrap();
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
@@ -146,14 +148,83 @@ public class MaintainServlet extends MyServlet {
 		
 
 		try {
+			String page = req.getParameter("page");
+			int current_page = 1;
+			if (page != null) {
+				current_page = Integer.parseInt(page);
+			}
 
+			String condition = req.getParameter("condition");
+			String keyword = req.getParameter("keyword");
+			if (condition == null) {
+				condition = "all";
+				keyword = "";
+			}
+
+			if (req.getMethod().equalsIgnoreCase("GET")) {
+				keyword = URLDecoder.decode(keyword, "utf-8");
+			}
+			int dataCount;
+			if(keyword.length() == 0) {
+				dataCount = dao.tDataCount2();
+			} else {
+				dataCount = dao.tDataCount2(condition, keyword);
+			}
 			
-			forward(req, resp, "/WEB-INF/views/maintain/list2.jsp");
-
-			return;
+			int size = 10;
+			int total_page = util.pageCount(dataCount, size);
+			if (current_page > total_page) {
+				current_page = total_page;
+			}		
+			
+			int offset = (current_page - 1) * size;
+			if (offset < 0)
+				offset = 0;
+			
+			List<MainTainDTO> list = null;
+			if(keyword.length() == 0) {
+				list = dao.TReserveList2(offset, size);
+			} else {
+				list = dao.TReserveList2(offset, size, condition, keyword);
+			}
+			
+			String query = "";
+			if (keyword.length() != 0) {
+				query = "condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "utf-8");
+			}
+			
+			String listUrl = cp + "/maintain/reserve2.do";
+			if (query.length() != 0) {
+				listUrl += "?" + query;
+			}
+			String paging = util.paging(current_page, total_page, listUrl);
+			int result;
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+			for(MainTainDTO dto : list) {
+				result = dao.tTaketimeCount(dto.gettDetailCodeSta(), dto.gettDetailCodeEnd());
+				Date date = sdf.parse(dto.gettStaTime());
+				Date date2 = new Date(date.getTime()+result*60*1000);
+				
+				dto.settStaTime(dto.gettStaTime().substring(11, dto.gettStaTime().length()-3));
+				dto.setCountTime(sdf2.format(date2));
+				
+				dto.settTaketimeCount(result);
+			}
+			req.setAttribute("list", list);
+			req.setAttribute("page", current_page);
+			req.setAttribute("total_page", total_page);
+			req.setAttribute("dataCount", dataCount);
+			req.setAttribute("size", size);
+			req.setAttribute("paging", paging);
+			req.setAttribute("condition", condition);
+			req.setAttribute("keyword", keyword);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		forward(req, resp, "/WEB-INF/views/maintain/list2.jsp");
 
 	}
 	
