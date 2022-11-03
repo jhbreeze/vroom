@@ -16,7 +16,13 @@
 main { 
 	position: relative; top: -300px; background: white;
 }
-.header { z-index: 101; }
+
+.fake-box {
+	background: white; width: 100%; height: 50px; 
+	border-radius: 100px 100px 0 0;
+	margin-top: 450px;
+}
+
 .body-container { min-height: 700px; margin-top: 100px; }
 .reserve-container { 
 	background: #fff; width: 700px; height: 280px;
@@ -543,6 +549,7 @@ $(function(){
 <header>
 	<jsp:include page="/WEB-INF/views/layout/header.jsp"></jsp:include>
 </header>
+	<div class="fake-box2"></div>
 	<div class="mb-2 pt-3 reserve-container">
 		<ul class="nav nav-pills justify-content-center tab-button" id="myTab" role="tablist">
 			<li class="nav-item" role="presentation">

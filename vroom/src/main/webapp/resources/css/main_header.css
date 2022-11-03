@@ -83,13 +83,6 @@ a:hover, a:active { cursor:pointer; }
 }
 .main-menu-a:hover:after{ width: 68%; opacity: 1; }
 
-.fake-box {
-	background: white; width: 100%; height: 50px; 
-	border-radius: 100px 100px 0 0;
-	margin-top: 450px;
-}
-
-
 #img-logo {
 	-webkit-filter: brightness(0) invert(1); filter: brightness(0) invert(1);
 }
