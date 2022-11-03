@@ -187,10 +187,36 @@ $(function(){
 });
 
 //편도 왕복 구분 방식?
-$(function(){
-	let cycle = $("input[name=Bcycle]").attr("data-cycle");
-});
 
+$(function() {
+    $('.fblock2 input[type="button"]').click(function() {
+    	let bFirstStaTime=$(this).parent().siblings('#bFirstStaTime').text();
+    	let bEndStaTime=$(this).parent().siblings('#bEndStaTime').text();
+    	let bName= $(this).parent().siblings('#bName').text();
+    	let bType=$(this).parent().siblings('#bType').text();
+    	let bFee=$(this).parent().siblings('#bFee').text();
+    	let  seatNum=$(this).parent().siblings('#seatNum').attr("data-seatNum");
+		
+    	let bcycle = $("form[name=hiddenForm] input[name=bcycle]").attr("data-bcycle");
+    	let busstaDate= $("form[name=hiddenForm] input[name=busstaDate]").attr("data-busstaDate");
+    	let busendDate= $("form[name=hiddenForm] input[name=busendDate]").attr("data-busendDate");
+    	let depbStationName= $("form[name=hiddenForm] input[name=depbStationName]").attr("data-depbStationName");
+    	let desbStationName= $("form[name=hiddenForm] input[name=desbStationName]").attr("data-desbStationName");
+    	let btakeTime= $("form[name=hiddenForm] input[name=btakeTime]").attr("data-btakeTime");
+    	let bTotalTimeString= $("form[name=hiddenForm] input[name=bTotalTimeString]").attr("data-bTotalTimeString");
+    	let bRouteDetailCode= $("form[name=hiddenForm] input[name=bRouteDetailCode]").attr("data-bRouteDetailCode");
+    	let bRouteCode= $("form[name=hiddenForm] input[name=bRouteCode]").attr("data-bRouteCode");
+    	
+    	let out = "${pageContext.request.contextPath}/busreserve/busreserveseat.do?";
+    	out += "bFirstStaTime="+bFirstStaTime+"&bEndStaTime="+bEndStaTime+"&bName="+bName+"&bType="+bType+"&bFee="+bFee+"&seatNum="+seatNum;
+    	out += "&bcycle="+bcycle+"&busstaDate="+busstaDate+"&busendDate="+busendDate+"&depbStationName="+depbStationName;
+    	out += "&desbStationName="+desbStationName+"&btakeTime="+btakeTime+"&bTotalTimeString="+bTotalTimeString;
+    	out += "&bRouteDetailCode="+bRouteDetailCode+"&bRouteCode="+bRouteCode;
+    	
+    	location.href = out;
+    });
+    
+});
 </script>
 </head>
 <body>
@@ -216,13 +242,13 @@ $(function(){
 		    	<div class="row h-10 p-10 m-2 fblock1_1  text-start fs-5 fw-bold">요금정보</div>
 		    	<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
 			    	<c:if test="${dto.bType eq '일반'}">
-				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold" >일반</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold" >일반</div><div class="col fblock1_3 fw-bold" data-bFee="${dto.bFee}">${dto.bFee}원</div></div>
 				    </c:if>
 				    <c:if test="${dto.bType eq '우등'}">
-				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center" style=""><div class="col fblock1_2 fw-bold">우등</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center" style=""><div class="col fblock1_2 fw-bold">우등</div><div class="col fblock1_3 fw-bold" data-bFee="${dto.bFee}">${dto.bFee}원</div></div>
 				    </c:if>
 				    <c:if test="${dto.bType eq '프리미엄'}">
-				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold">프리미엄</div><div class="col fblock1_3 fw-bold">${dto.bFee}원</div></div>
+				    	<div class="row h-10 p-10 m-2 fblock1_2 text-center"><div class="col fblock1_2 fw-bold">프리미엄</div><div class="col fblock1_3 fw-bold" data-bFee="${dto.bFee}">${dto.bFee}원</div></div>
 			    	</c:if>
 		    	</c:forEach>
 		    </div>
@@ -244,12 +270,15 @@ $(function(){
 				<div class="list-group list-group-flush border-bottom buslistgroup" id="list-group" >
 				<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
 					<a class=" list-group-item row" id="buslist" >
-						<div class="buslist col-2 fw-bold fs-6 text-center">${dto.bFirstStaTime}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center ">${dto.bName}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center">${dto.bType}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center ">${dto.bFee}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;">?석/전체${dto.seatNum}석</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center "><button type="button" id="reserveBtn">예매하기</button></div>
+						<div class="buslist col-2 fw-bold fs-6  text-center" id="bFirstStaTime" >${dto.bFirstStaTime}</div>
+						<div style="display: none;" id="bEndStaTime" >${dto.bEndStaTime}</div>
+						<div style="display: none;" id="bRouteDetailCode" >${dto.bRouteDetailCode}</div>
+						<div style="display: none;" id="bRouteCode" >${dto.bRouteCode}</div>
+						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bName"  >${dto.bName}</div>
+						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bType" >${dto.bType}</div>
+						<div  class="buslist col-2 fw-bold fs-6  text-center " id="bFee" >${dto.bFee}</div>
+						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;" id="seatNum" data-seatNum="${dto.seatNum}">?석/전체${dto.seatNum}석</div>
+						<div class="buslist col-2 fw-bold fs-6  text-center "><input type="button" id="reserveBtn" value="예매하기"></div>
 					</a>
 			    </c:forEach>
 			    </div>
@@ -258,18 +287,15 @@ $(function(){
 	</div>
 </main>
 <form name="hiddenForm">
-	<input type="hidden" name="cycle" data-cycle="${cycle}">
-	<input type="hidden" name="hORf" data-halffull="1">
-	<input type="hidden" name="staDate" data-staDate="">
-	<input type="hidden" name="endDate" data-endDate="">
-	<input type="hidden" name="stabDiscern" data-statDiscern="">
-	<input type="hidden" name="endbDiscern" data-endtDiscern="">
-	<input type="hidden" name="depbStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 출발시간이 저장됨. -->
-	<input type="hidden" name="depbEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 도착시간이 저장됨. -->
-	<input type="hidden" name="desbStaDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
-	<input type="hidden" name="desbEndDateTime" data-date=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 출발시간이 저장됨. -->
-	<input type="hidden" name="depbOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 가는날 운행코드가 저장됨. -->
-	<input type="hidden" name="desbOperCode" data-tOperCode=""> <!-- 왕복일 경우, 여기에 hidden으로 선택한 오는날 운행코드가 저장됨. -->
+	<input type="hidden" name="bcycle" data-bcycle="${bcycle}">
+	<input type="hidden" name="busstaDate" data-busstaDate="${busstaDate}">
+	<input type="hidden" name="busendDate" data-busendDate="${busendDate}">
+	<input type="hidden" name="depbStationName" data-depbStationName="${depbStationName}">
+	<input type="hidden" name="desbStationName" data-desbStationName="${desbStationName}">
+	<input type="hidden" name="btakeTime" data-btakeTime="${btakeTime}">
+	<input type="hidden" name="bTotalTimeString" data-bTotalTimeString="${bTotalTimeString}">
+	<input type="hidden" name="bRouteDetailCode" data-bRouteDetailCode="${bRouteDetailCode}">
+	<input type="hidden" name="bRouteCode" data-bRouteCode="${bRouteCode}">
 </form>
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
