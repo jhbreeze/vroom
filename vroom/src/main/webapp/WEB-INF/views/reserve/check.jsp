@@ -40,20 +40,20 @@ function sendOk() {
 		return;
 	}
 	
-	str = f.userEmail.value.trim();
-	if (!str) {
-		alert("이메일을 입력하세요. ");
-		f.userEmail.focus();
-		return;
-	}
-	
-	
 	str = f.reserveNum.value;
 	if (!/^\d+$/.test(str)) {
 		alert("예매번호를 다시 입력해주세요.")
 		f.reserveNum.focus();
 		return;
 	}
+	
+	str = f.tel.value.trim();
+	if (!str) {
+		alert(" 전화번호를 입력하세요. ");
+		f.tel.focus();
+		return;
+	}
+	
 	
 	f.action = "${pageContext.request.contextPath}/reserve/check_ok.do";
 	f.submit();
@@ -87,9 +87,9 @@ function sendOk() {
 								</div>
 
 								<div class="d-grid mb-3">
-									<label class="mb-2 fw-bold">이메일</label>
+									<label class="mb-2 fw-bold">전화번호</label>
 									<div class="d-grid">
-										<input type="text" name="userEmail" class="form-control form-control-lg" placeholder="이메일을 입력해주세요">
+										<input type="text" name="tel" class="form-control form-control-lg" placeholder="전화번호를 입력해주세요">
 									</div>
 								</div>
 

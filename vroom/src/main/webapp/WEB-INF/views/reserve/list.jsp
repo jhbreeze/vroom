@@ -53,16 +53,21 @@ h2 { font-size: 30px;}
 .infoRightMemberShow { margin-bottom:5px; display: inline-block; font-weight: bold; color: #6E6E6E;}
 
 .infoRightHochaTitle {  margin-bottom:5px; display: inline-block; margin-left: 140px; color: #0E6EFD; font-weight: bold;}
-.infoRightHochaGrade { margin-bottom:5px; display: inline-block; margin-left: 135px; font-weight: bold;color: #6E6E6E; }
+.infoRightHochaGrade { margin-bottom:5px; display: inline-block; margin-left: 150px; font-weight: bold;color: #6E6E6E; }
 .infoRightHochaInput { margin-bottom:5px; display: inline-block; color: #0E6EFD; font-weight: bold; }
 .infoRightHochaShow { margin-bottom:5px; display: inline-block; font-weight: bold; color: #6E6E6E;}
-.infoRightHochaGradeBUS { margin-bottom:5px; display: inline-block; margin-left: 245px; font-weight: bold;color: #6E6E6E; }
+.infoRightHochaGradeBUS { margin-bottom:5px; float:right; display: inline-block; font-weight: bold;color: #6E6E6E; }
+
 
 .infoRightSeatTitle { margin-bottom:5px; display: inline-block; margin-left: 140px; color: #0E6EFD; font-weight: bold; }
-.infoRightSeatShow { margin-bottom:5px; display: inline-block;  margin-left: 0px; font-weight: bold; color: #6E6E6E; }
+.infoRightSeatShow { margin-bottom:5px; display: inline-block;  font-weight: bold; color: #6E6E6E; float: right; }
 
-.infoRight2 {}
-.infoRight3 {}
+.infoRightSeatShowB { margin-bottom:5px; display: inline-block;  font-weight: bold; color: #6E6E6E; float: right; }
+
+.infoRight22 { height: 28px; width: 445px; }
+.infoRight3 { width: 445px; }
+
+
 
 .ticketBoxFourthCircle { color: white; font-size: 40px; }
 
@@ -71,12 +76,88 @@ h2 { font-size: 30px;}
 <script type="text/javascript">
 
 $(function() {
-	console.log(${reserveBusList});
-});
+	console.log(${reserveBusList2})
+})
 
 $(function(){
-	console.log(${reserveTrainList2});
+	console.log(${reserveTrainList2})
 })
+
+
+$(function() {
+	$(".cancel-btn").click(function() {
+		if(! confirm("해당 예매내역을 취소하시겠습니까?")) {
+			return false;
+		}
+		
+		let tTkNum = $(this).attr("data-tTkNum");
+	 	
+		let url = "${pageContext.request.contextPath}/reserve/traincancel.do";
+		let query = "tTkNum="+tTkNum ;
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : query,
+			dataType : "json",
+			success : function(data) {
+				alert("예매 취소가 완료되었습니다.");
+			},
+			beforeSend : function(jqXHR) {
+				jqXHR.setRequestHeader("AJAX", true);
+			},
+			error : function(jqXHR) {
+				if (jqXHR.status === 403) {
+					login();
+					return false;
+				} else if (jqXHR.status === 400) {
+					alert("요청 처리가 실패했습니다.");
+					return false;
+				}
+
+				console.log(jqXHR.responseText);
+			}
+		})
+	
+	});
+	
+	$(".cancel-btn2").click(function() {
+		if(! confirm("해당 예매내역을 취소하시겠습니까?")) {
+			return false;
+		}
+		
+	 	let bTkNum = $(this).attr("data-bTkNum");
+	 	
+		let url = "${pageContext.request.contextPath}/reserve/buscancel.do";
+		let query = "bTkNum="+bTkNum ;
+		
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : query,
+			dataType : "json",
+			success : function(data) {
+				alert("예매 취소가 완료되었습니다.");
+			},
+			beforeSend : function(jqXHR) {
+				jqXHR.setRequestHeader("AJAX", true);
+			},
+			error : function(jqXHR) {
+				if (jqXHR.status === 403) {
+					login();
+					return false;
+				} else if (jqXHR.status === 400) {
+					alert("요청 처리가 실패했습니다.");
+					return false;
+				}
+
+				console.log(jqXHR.responseText);
+			}
+		})
+		
+	});
+	
+});
 
 </script>
 
@@ -107,7 +188,7 @@ $(function(){
 						<div class="ticketBoxBack">
 							<div class="ticketBoxFirst">
 								<div class="infoLeft">
-									<p class="textStaition">${dto.tStationNameSta} → ${dto.tStationNameEnd}</p>
+									<p class="textStaition">${dto.tStationNameSta} →  ${dto.tStationNameEnd}</p>
 									<p class="textTrasnport">KTX&nbsp;${dto.tNumId}</p>
 									<p class="textDate">${dto.tBoardDate} | ${dto.tStaTime} → ${dto.countTime}</p>
 								</div>
@@ -132,10 +213,9 @@ $(function(){
 								</div>
 							</div>
 							<div class="ticketBoxThird">
-								<form action="">
-									<button type="button" class="btn btn-primary"
-										style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
-								</form>
+									<button type="button" class="btn btn-primary cancel-btn"
+										style="height: 50px; width: 140px;" data-tTkNum="${dto.tTkNum}">예매 취소</button>
+
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
@@ -160,11 +240,9 @@ $(function(){
 										<p class="infoRightMemberInput">${dto.bTotNum}</p>
 										<p class="infoRightMemberShow">명</p>
 									</div>
-									<div class="infoRight2">
+									<div class="infoRight22">
 										<p class="infoRightHochaTitle">구분</p>
 										<p class="infoRightHochaGradeBUS">${dto.bType}</p>
-										<p class="infoRightHochaInput"></p>
-										<p class="infoRightHochaShow"></p>
 									</div>
 									<div class="infoRight3">
 										<p class="infoRightSeatTitle">좌석</p>
@@ -173,9 +251,8 @@ $(function(){
 								</div>
 							</div>
 							<div class="ticketBoxThird">
-								<form action="">
-									<button type="button" class="btn btn-primary" style="height: 50px; width: 140px;" onclick="location.href='${pageContext.request.contextPath}/reserve/cancel.do';">예매 취소</button>
-								</form>
+								<button type="button" class="btn btn-primary cancel-btn2" 
+									style="height: 50px; width: 140px;" data-bTkNum="${dto.bTkNum}" >예매 취소</button> 
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
