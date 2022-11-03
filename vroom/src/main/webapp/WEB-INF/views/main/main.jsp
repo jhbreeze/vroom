@@ -77,6 +77,13 @@ main {
 
 .container {
 	min-width: 900px;
+	width: 80%;
+	margin: 0 auto;
+	margin-top: 80px;
+}
+
+.carousel-control-prev{
+    color: #0E6EFD;
 }
 
 </style>
@@ -857,101 +864,49 @@ $(function(){
 </div>
 	<main>
 		<!-- 캐러셀 -->
+		
 		<div class="container">
 			<div class="body-container">
 				<div class="row">
-					<div id="carouselExampleControls1" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
+					<div id="carouselImageCaptions" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="첫번째 이미지"></button>
+				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="1" aria-current="true" aria-label="두번째 이미지"></button>
+				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="2" aria-current="true" aria-label="세번째 이미지"></button>
+			</div>
+			
+			<div class="carousel-inner">
+					<c:forEach var="dto" items="${eventList}" varStatus="status">
+						
+						<c:if test="${status.index % 3 == 0}">
+							<c:set var="active" value="${status.index==0 ?'active':''}"/>
+							<c:out value="<div class='carousel-item  ${active}'>" escapeXml="false"/>
+								<c:out value="<div class='row '>" escapeXml="false"/>
+						</c:if>
+						
+							<div class="col-4 p-4">
+							<a href="${articleUrl2}&eveNum=${dto.eveNum}"
+									title="${dto.eveTitle}" class="text"><img class="img-fluid img-thumbnail w-100 h-100 image"
+									src="${pageContext.request.contextPath}/uploads/photo/${dto.imageFilename}"></a>
 							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls1" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-					<div style="width: 5%"></div>
-					<div id="carouselExampleControls2" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls2" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls2" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
-					<div style="width: 5%"></div>
-					<div id="carouselExampleControls3" class="carousel slide"
-						data-bs-ride="carousel" style="width: 30%">
-						<div class="carousel-inner">
-							<div class="carousel-item active">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-							<div class="carousel-item">
-								<img
-									src="${pageContext.request.contextPath}/resources/images/add_photo.png"
-									class="d-block w-100" alt="...">
-							</div>
-						</div>
-						<button class="carousel-control-prev" type="button"
-							data-bs-target="#carouselExampleControls3" data-bs-slide="prev">
-							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Previous</span>
-						</button>
-						<button class="carousel-control-next" type="button"
-							data-bs-target="#carouselExampleControls3" data-bs-slide="next">
-							<span class="carousel-control-next-icon" aria-hidden="true"></span>
-							<span class="visually-hidden">Next</span>
-						</button>
-					</div>
+						<c:if test="${status.count % 3 == 0 || status.last }">
+								<c:out value="</div>" escapeXml="false"/>
+							<c:out value="</div>" escapeXml="false"/>
+						</c:if>
+						
+					</c:forEach>
+
+			</div>
+			
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>					
+		</div>	
 				</div>
 				<br> <br>
 				<div style="">

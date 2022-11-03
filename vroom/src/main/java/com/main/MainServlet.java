@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.event.EventDAO;
+import com.event.EventDTO;
 import com.notice.NoticeDAO;
 import com.notice.NoticeDTO;
 import com.util.MyServlet;
@@ -108,7 +109,7 @@ public class MainServlet extends MyServlet {
 
 			String query = "";
 			String listUrl;
-			String articleUrl;
+			String articleUrl, articleUrl2;
 
 			listUrl = cp + "/notice/list.do?size=" + size;
 			articleUrl = cp + "/notice/article.do?page=" + current_page + "&size=" + size;
@@ -118,9 +119,20 @@ public class MainServlet extends MyServlet {
 				listUrl += "&" + query;
 				articleUrl += "&" + query;
 			}
+			
+			// 이벤트
+			List<EventDTO> eventList = dao1.listEvent(offset, size);
+			articleUrl2 = cp + "/event/article.do?page=" +current_page;
+			if(query.length() != 0) {
+				articleUrl2 += "&" +query;
+			}
+			
+			int dataCount2;
+			dataCount2 = dao1.dataCount();
 
 			String paging = util.paging(current_page, total_page, listUrl);
 			req.setAttribute("list", list);
+			req.setAttribute("eventList", eventList);
 			req.setAttribute("listNotice", listNotice);
 			req.setAttribute("articleUrl", articleUrl);
 			req.setAttribute("dataCount", dataCount);
@@ -130,6 +142,8 @@ public class MainServlet extends MyServlet {
 			req.setAttribute("paging", paging);
 			req.setAttribute("condition", condition);
 			req.setAttribute("keyword", keyword);
+			req.setAttribute("articleUrl2", articleUrl2);
+			req.setAttribute("dataCount2", dataCount2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

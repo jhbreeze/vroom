@@ -25,7 +25,7 @@ public class MaintainDAO {
 					+ "	  	   JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
 					+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " 
 					+ "	  	) "
-					+ "	  SELECT tt.tTkNum, m.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, c.name, "
+					+ "	  SELECT tt.tTkNum, tt.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, c.name, "
 					+ "	  tDetailCodeEnd, t1.tStationName tStationNameEnd, "
 					+ "	        tDetailCodeSta, t2.tStationName tStationNameSta, "
 					+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" 
@@ -38,8 +38,8 @@ public class MaintainDAO {
 					+ "		GROUP BY tSeat, tTkNum, tHoNum  "
 					+ "	) tdt ON tdt.tTkNum = tt.tTkNum  " 
 					+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
-					+ "	  	JOIN member1 m ON m.cusNum = tt.cusNum " 
-					+ "     JOIN customer c ON m.cusNum = c.cusNum "
+					+ "   LEFT OUTER  JOIN customer c ON tt.cusNum = c.cusNum "
+					+ " ORDER BY tt.tboarddate DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -66,6 +66,7 @@ public class MaintainDAO {
 				dto.settBoardDate(rs.getString("tBoardDate"));
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setName(rs.getString("name"));
+				dto.settTotNum(rs.getInt("tTotNum"));
 				
 				list.add(dto);
 
@@ -98,7 +99,7 @@ public class MaintainDAO {
 
 		try {
 			sql = "	WITH tb AS ( "
-					+ "	   SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
+					+ "	   SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, TO_CHAR(td.tStaTime, 'HH24:MI')td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
 					+ "	  	   FROM trainDetail td "
 					+ "	  	   JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
 					+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " 
@@ -116,7 +117,7 @@ public class MaintainDAO {
 					+ "		GROUP BY tSeat, tTkNum, tHoNum  "
 					+ "	) tdt ON tdt.tTkNum = tt.tTkNum  " 
 					+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
-					+ "	  	JOIN member1 m ON m.cusNum = tt.cusNum " ;
+					+ "	 	JOIN member1 m ON m.cusNum = tt.cusNum " ;
 			if (condition.equals("all")) {
 				sql += " WHERE INSTR(tTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
 			} else if (condition.equals("tStaTime")) {

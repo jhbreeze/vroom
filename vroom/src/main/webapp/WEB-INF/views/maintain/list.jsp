@@ -129,6 +129,7 @@ tr:hover {
 				<table class="table board-list">
 					<thead>
 						<tr>
+						    <th>구분</th>
 							<th>이름</th>
 							<th>출발역</th>
 							<th>도착역</th>
@@ -144,12 +145,13 @@ tr:hover {
 					<tbody>
 						<c:forEach var="dto" items="${list}" varStatus="status">
 							<tr>
+							    <td>${dto.name}</td>
 								<td>${dto.name}</td>
 								<td>${dto.tStationNameSta}</td>
 								<td>${dto.tStationNameEnd}</td>
 								<td>${dto.cusNum}</td>
 								<td>${dto.tTkNum}</td>
-								<td></td>
+								<td>${dto.tTotNum}</td>
 								<td>${dto.tBoardDate}</td>
 								<td>${dto.tStaTime}</td>
 								<td>${dto.countTime}</td>
