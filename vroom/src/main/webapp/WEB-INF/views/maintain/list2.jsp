@@ -166,7 +166,7 @@ tr:hover {
 					<div class="col"></div>
 					<div class="col-6 text-center">
 						<form class="row" name="searchForm"
-							action="${pageContext.request.contextPath}/maintain/reserve.do"
+							action="${pageContext.request.contextPath}/maintain/reserve2.do"
 							method="post">
 							<div class="col-auto p-1">
 								<select name="condition" class="form-select">

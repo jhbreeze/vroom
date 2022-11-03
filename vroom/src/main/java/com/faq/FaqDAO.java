@@ -205,16 +205,33 @@ public class FaqDAO {
 
 	public void deleteFaq(long faqNum, String userId) throws SQLException {
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 		
 		try {
-			if(userId.equals("admin")) {
-				sql = " DELETE FROM faq WHERE faqNum = ? ";
+			if (!userId.equals("admin")) {
+				sql = " SELECT faqNum FROM faq WHERE faqNum = ? AND userId = ? ";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setLong(1, faqNum);
+				pstmt.setString(2, userId);
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if (rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
 
-				pstmt.executeUpdate();
+				if (!b) {
+					return;
+				}
 			}
+
+			sql = " DELETE FROM faq WHERE faqNum = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, faqNum);
+
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -222,6 +239,12 @@ public class FaqDAO {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
 				} catch (Exception e2) {
 				}
 			}

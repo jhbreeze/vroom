@@ -35,3 +35,7 @@ border-radius: 30px;
 		</tr>
 	</c:forEach>
 </table>
+
+<div class="page-navigation">
+	${paging}
+</div>		

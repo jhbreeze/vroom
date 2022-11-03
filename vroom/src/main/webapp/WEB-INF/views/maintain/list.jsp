@@ -172,12 +172,12 @@ tr:hover {
 								<select name="condition" class="form-select">
 									<option value="name"
 										${condition=="name"?"selected='selected'":""}>이름</option>
-									<option value="tboarddate"
-										${condition=="tboarddate"?"selected='selected'":""}>탑승날짜</option>
+									<option value="tBoardDate"
+										${condition=="tBoardDate"?"selected='selected'":""}>탑승날짜</option>
 									<option value="cusNum"
 										${condition=="cusNum"?"selected='selected'":""}>고객번호</option>
-									<option value="tStationNameEnd"
-										${condition=="tStationNameEnd"?"selected='selected'":""}>탑승역</option>
+									<option value="tStationName"
+										${condition=="tStationName"?"selected='selected'":""}>탑승역</option>
 								</select>
 							</div>
 							<div class="col-auto p-1">

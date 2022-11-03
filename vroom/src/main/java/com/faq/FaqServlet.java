@@ -107,7 +107,12 @@ public class FaqServlet extends MyServlet {
 		FaqDAO dao = new FaqDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		
 		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
@@ -136,7 +141,12 @@ public class FaqServlet extends MyServlet {
 		FaqDAO dao = new FaqDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		
 		String cp = req.getContextPath();
 		
@@ -167,7 +177,12 @@ public class FaqServlet extends MyServlet {
 
 	protected void deleteList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		
 		String cp = req.getContextPath();
 		

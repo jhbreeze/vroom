@@ -122,15 +122,15 @@ public class MaintainDAO {
 					+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
 					+ "   LEFT OUTER JOIN customer c ON tt.cusNum = c.cusNum "
 					+ "   LEFT OUTER JOIN member1 m ON c.cusNum = m.cusNum ";
-			if (condition.equals("all")) {
-				sql += " WHERE tDisPrice IS NULL AND INSTR(name, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("tboarddate")) {
+			if (condition.equals("name")) {
+				sql += " WHERE tDisPrice IS NULL AND INSTR(name, ?) >= 1 ";
+			} else if (condition.equals("tBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE tDisPrice IS NULL AND TO_CHAR(tboarddate, 'YYYYMMDD') = ? ";
+				sql += " WHERE tDisPrice IS NULL AND TO_CHAR(tBoardDate, 'YYYYMMDD') = ? ";
 			} else if(condition.equals("cusNum")) {
-				sql += " WHERE tDisPrice IS NULL AND cusNum  = ? ";
-			} else {
-				sql += " WHERE tDisPrice IS NULL AND INSTR(" + condition + ", ?) >= 1 ";
+				sql += " WHERE tDisPrice IS NULL AND TO_CHAR(tt.cusNum)  = ? ";
+			} else if(condition.equals("tStationName")){
+				sql += " WHERE tDisPrice IS NULL AND INSTR(t1.tStationName, ?) >= 1 ";
 			}
 			sql += " ORDER BY tt.tboarddate DESC ";
 			sql += " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
@@ -237,16 +237,20 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = " SELECT NVL(COUNT(*),0) FROM trainTk tk LEFT OUTER JOIN customer c ON tk.cusNum = c.cusNum ";
-			if (condition.equals("all")) {
-				sql += " WHERE tDisPrice IS null AND INSTR(tTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("tStaTime")) {
+			sql = " SELECT NVL(COUNT(*),0) FROM trainTk tk LEFT OUTER JOIN customer c ON tk.cusNum = c.cusNum "
+					+ " LEFT OUTER JOIN trainDetail td ON tk.tDetailCodeEnd = td.tDetailCode "
+					+ " LEFT OUTER JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode "
+					+ " LEFT OUTER JOIN trainStation ts ON tr.tStationCode = ts.tStationCode "
+					+ " LEFT OUTER JOIN customer c ON tk.cusNum = c.cusNum ";
+			if (condition.equals("name")) {
+				sql += " WHERE tDisPrice IS null AND INSTR(c.name, ?) >= 1 ";
+			} else if (condition.equals("tBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE tDisPrice IS null AND TO_CHAR(tStaTime, 'YYYYMMDD') = ? ";
+				sql += " WHERE tDisPrice IS null AND TO_CHAR(tBoardDate, 'YYYYMMDD') = ? ";
 			} else if(condition.equals("cusNum")) {
-				sql += " WHERE tDisPrice IS null AND cusNum  = ? ";
-			} else {
-				sql += " WHERE tDisPrice IS null AND INSTR(" + condition + ", ?) >= 1";
+				sql += " WHERE tDisPrice IS null AND TO_CHAR(tk.cusNum)  = ? ";
+			} else if(condition.equals("tStationName")){
+				sql += " WHERE tDisPrice IS NULL AND INSTR(ts.tStationName, ?) >= 1 ";
 			}
 			pstmt = conn.prepareStatement(sql);
 			
@@ -391,15 +395,15 @@ public class MaintainDAO {
 					+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
 					+ "   LEFT OUTER JOIN customer c ON tt.cusNum = c.cusNum "
 					+ "   LEFT OUTER JOIN member1 m ON c.cusNum = m.cusNum ";
-			if (condition.equals("all")) {
-				sql += " WHERE tDisPrice = 0 AND INSTR(name, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("tboarddate")) {
+			if (condition.equals("name")) {
+				sql += " WHERE tDisPrice = 0 AND INSTR(name, ?) >= 1 ";
+			} else if (condition.equals("tBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tboarddate, 'YYYYMMDD') = ? ";
+				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tBoardDate, 'YYYYMMDD') = ? ";
 			} else if(condition.equals("cusNum")) {
-				sql += " WHERE tDisPrice = 0 AND cusNum  = ? ";
-			} else {
-				sql += " WHERE tDisPrice = 0 AND INSTR(" + condition + ", ?) >= 1 ";
+				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tt.cusNum)  = ? ";
+			} else if(condition.equals("tStationName")){
+				sql += " WHERE tDisPrice = 0 AND INSTR(t1.tStationName, ?) >= 1 ";
 			}
 			sql += " ORDER BY tt.tboarddate DESC ";
 			sql += " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
@@ -506,16 +510,20 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = " SELECT NVL(COUNT(*),0) FROM trainTk";
-			if (condition.equals("all")) {
-				sql += " WHERE tDisPrice = 0 AND INSTR(tTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("tStaTime")) {
+			sql = " SELECT NVL(COUNT(*),0) FROM trainTk tk LEFT OUTER JOIN customer c ON tk.cusNum = c.cusNum "
+					+ " LEFT OUTER JOIN trainDetail td ON tk.tDetailCodeEnd = td.tDetailCode "
+					+ " LEFT OUTER JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode "
+					+ " LEFT OUTER JOIN trainStation ts ON tr.tStationCode = ts.tStationCode "
+					+ " LEFT OUTER JOIN customer c ON tk.cusNum = c.cusNum ";
+			if (condition.equals("name")) {
+				sql += " WHERE tDisPrice = 0 AND INSTR(c.name, ?) >= 1 ";
+			} else if (condition.equals("tBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tStaTime, 'YYYYMMDD') = ? ";
+				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tBoardDate, 'YYYYMMDD') = ? ";
 			} else if(condition.equals("cusNum")) {
-				sql += " WHERE tDisPrice = 0 AND cusNum  = ? ";
-			} else {
-				sql += " WHERE tDisPrice = 0 AND INSTR(" + condition + ", ?) >= 1 ";
+				sql += " WHERE tDisPrice = 0 AND TO_CHAR(tk.cusNum)  = ? ";
+			} else if(condition.equals("tStationName")){
+				sql += " WHERE tDisPrice = 0 AND INSTR(ts.tStationName, ?) >= 1 ";
 			}
 			pstmt = conn.prepareStatement(sql);
 			
@@ -558,7 +566,7 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  "
+			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate, c.name, m.userId,  "
 					+ "    bd.bSeatNum, bd.bNumId,  " 
 					+ "    b.bType, b.bName, "
 					+ " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
@@ -570,16 +578,16 @@ public class MaintainDAO {
 					+ " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum "
 					+ "    FROM busTkDetail " 
 					+ "    GROUP BY bTkNum, bNumId " + "	) bd ON bt.bTkNum = bd.bTkNum "
-					+ "	JOIN bus b ON b.bNumId = bd.bNumId "
-					+ "	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
-					+ "	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
-					+ "	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
-					+ "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
-					+ "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
-					+ "	JOIN customer c ON c.cusNum = bt.cusNum " 
-					+ " 	JOIN member1 m ON m.cusNum = c.cusNum "
-					+ " WHERE bDisPrice IS null "
-			        + " ORDER BY bTkNum DESC "
+					+ "	LEFT OUTER JOIN bus b ON b.bNumId = bd.bNumId "
+					+ "	LEFT OUTER JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
+					+ "	LEFT OUTER JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
+					+ "	LEFT OUTER JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
+					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
+					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum "
+					+ " WHERE bDisPrice IS NULL "
+			        + " ORDER BY bBoardDate DESC "
 			        + " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -606,6 +614,9 @@ public class MaintainDAO {
 				dto.setbBoardDate(rs.getString("bBoardDate"));
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setbTkNum(rs.getBigDecimal("bTkNum"));
+				dto.setName(rs.getString("name"));
+				dto.setbBoardDate(rs.getString("bBoardDate"));
+				dto.setUserId(rs.getString("userId"));
 
 				list.add(dto);
 
@@ -638,8 +649,9 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  "
-					+ "    bd.bSeatNum, bd.bNumId,  " + "    b.bType, b.bName, "
+			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate, c.name, m.userId, "
+					+ "    bd.bSeatNum, bd.bNumId,  " 
+					+ "    b.bType, b.bName, "
 					+ " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
 					+ " 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime, "
 					+ "	br.bRouteDetailCodeSta, br.bRouteDetailCodeEnd, "
@@ -647,23 +659,25 @@ public class MaintainDAO {
 					+ "    JOIN ( "
 					+ " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum "
 					+ "    FROM busTkDetail " + "    GROUP BY bTkNum, bNumId " + "	) bd ON bt.bTkNum = bd.bTkNum "
-					+ "	JOIN bus b ON b.bNumId = bd.bNumId "
-					+ "	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
-					+ "	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
-					+ "	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
-					+ "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
-					+ "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
-					+ "	JOIN customer c ON c.cusNum = bt.cusNum " 
-					+ " 	JOIN member1 m ON m.cusNum = c.cusNum ";
-					if (condition.equals("all")) {
-						sql += " WHERE tDisPrice IS null AND INSTR(bTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-					} else if (condition.equals("bFirstStaTime")) {
+					+ " LEFT OUTER JOIN bus b ON b.bNumId = bd.bNumId "
+					+ "	LEFT OUTER JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
+					+ "	LEFT OUTER JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
+					+ "	LEFT OUTER JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
+					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
+					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum ";
+					if (condition.equals("name")) {
+						sql += " WHERE bDisPrice IS null AND INSTR(c.name, ?) >= 1 ";
+					} else if (condition.equals("bBoardDate")) {
 						keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-						sql += " WHERE tDisPrice IS null AND TO_CHAR(bFirstStaTime, 'YYYYMMDD') = ? ";
-					} else {
-						sql += " WHERE tDisPrice IS null AND INSTR(" + condition + ", ?) >= 1 ";
+						sql += " WHERE bDisPrice IS null AND TO_CHAR(bBoardDate, 'YYYYMMDD') = ? ";
+					} else if(condition.equals("cusNum")){
+						sql += " WHERE bDisPrice IS null AND TO_CHAR(bt.cusNum) = ? ";
+					} else if(condition.equals("bStationName")){
+						sql += " WHERE bDisPrice IS NULL AND INSTR(bs2.bStationName, ?) >= 1 ";
 					}
-					sql+= " ORDER BY bTkNum DESC ";
+					sql+= " ORDER BY bBoardDate DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -698,6 +712,9 @@ public class MaintainDAO {
 				dto.setbBoardDate(rs.getString("bBoardDate"));
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setbTkNum(rs.getBigDecimal("bTkNum"));
+				dto.setName(rs.getString("name"));
+				dto.setbBoardDate(rs.getString("bBoardDate"));
+				dto.setUserId(rs.getString("userId"));
 
 				list.add(dto);
 
@@ -768,17 +785,27 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = " SELECT NVL(COUNT(*),0) FROM busTk";
-			// sql += " WHERE bDisPrice = 0 ";
-			if (condition.equals("all")) {
-				sql += " WHERE INSTR(bTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("bFirstStaTime")) {
+			sql = " SELECT NVL(COUNT(*),0) FROM busTk bt "
+					+ " JOIN customer c ON bt.cusNum = c.cusNum "
+					+ " JOIN busRouteInfo bi ON bt.bOperCode = bi.bOperCode "
+					+ " JOIN busRouteDetail bd ON bi.bRouteDetailCodeEnd = bd.bRouteDetailCode "
+			        + " JOIN busStation bs ON bd.bStationCode = bs.bStationCode ";
+			if (condition.equals("name")) {
+				sql += " WHERE bDisPrice IS NULL AND INSTR(c.name, ?) >= 1 ";
+			} else if (condition.equals("bBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE TO_CHAR(bFirstStaTime, 'YYYYMMDD') = ? ";
-			} else {
-				sql += " WHERE INSTR(" + condition + ", ?) >= 1 ";
+				sql += " WHERE bDisPrice IS NULL AND TO_CHAR(bBoardDate, 'YYYYMMDD') = ? ";
+			} else if(condition.equals("cusNum")) {
+				sql += " WHERE bDisPrice IS null AND TO_CHAR(bt.cusNum)  = ? ";
+			} else if(condition.equals("bStationName")){
+				sql += " WHERE bDisPrice IS NULL AND INSTR(bs.bStationName, ?) >= 1 ";
 			}
-			pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, keyword);
+			if (condition.equals("all")) {
+				pstmt.setString(2, keyword);
+			}
 
 			rs = pstmt.executeQuery();
 
@@ -813,7 +840,7 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  "
+			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate, c.name, m.userId,  "
 					+ "    bd.bSeatNum, bd.bNumId,  " 
 					+ "    b.bType, b.bName, "
 					+ " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
@@ -825,16 +852,16 @@ public class MaintainDAO {
 					+ " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum "
 					+ "    FROM busTkDetail " 
 					+ "    GROUP BY bTkNum, bNumId " + "	) bd ON bt.bTkNum = bd.bTkNum "
-					+ "	JOIN bus b ON b.bNumId = bd.bNumId "
-					+ "	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
-					+ "	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
-					+ "	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
-					+ "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
-					+ "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
-					+ "	JOIN customer c ON c.cusNum = bt.cusNum " 
-					+ " 	JOIN member1 m ON m.cusNum = c.cusNum "
+					+ "	LEFT OUTER JOIN bus b ON b.bNumId = bd.bNumId "
+					+ "	LEFT OUTER JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
+					+ "	LEFT OUTER JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
+					+ "	LEFT OUTER JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
+					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
+					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum "
 					+ " WHERE bDisPrice = 0 "
-			        + " ORDER BY bTkNum DESC "
+			        + " ORDER BY bBoardDate DESC "
 			        + " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -861,6 +888,9 @@ public class MaintainDAO {
 				dto.setbBoardDate(rs.getString("bBoardDate"));
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setbTkNum(rs.getBigDecimal("bTkNum"));
+				dto.setName(rs.getString("name"));
+				dto.setbBoardDate(rs.getString("bBoardDate"));
+				dto.setUserId(rs.getString("userId"));
 
 				list.add(dto);
 
@@ -893,7 +923,7 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  "
+			sql =  "  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate, c.name, m.userId, "
 					+ "    bd.bSeatNum, bd.bNumId,  " + "    b.bType, b.bName, "
 					+ " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
 					+ " 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime, "
@@ -902,23 +932,25 @@ public class MaintainDAO {
 					+ "    JOIN ( "
 					+ " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum "
 					+ "    FROM busTkDetail " + "    GROUP BY bTkNum, bNumId " + "	) bd ON bt.bTkNum = bd.bTkNum "
-					+ "	JOIN bus b ON b.bNumId = bd.bNumId "
-					+ "	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
-					+ "	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
-					+ "	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
-					+ "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
-					+ "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
-					+ "	JOIN customer c ON c.cusNum = bt.cusNum " 
-					+ " 	JOIN member1 m ON m.cusNum = c.cusNum ";
-					if (condition.equals("all")) {
-						sql += " WHERE tDisPrice = 0 AND INSTR(bTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-					} else if (condition.equals("bFirstStaTime")) {
-						keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-						sql += " WHERE tDisPrice = 0 AND TO_CHAR(bFirstStaTime, 'YYYYMMDD') = ? ";
-					} else {
-						sql += " WHERE tDisPrice = 0 AND INSTR(" + condition + ", ?) >= 1 ";
-					}
-					sql+= " ORDER BY bTkNum DESC ";
+					+ " LEFT OUTER JOIN bus b ON b.bNumId = bd.bNumId "
+					+ "	LEFT OUTER JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta "
+					+ "	LEFT OUTER JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
+					+ "	LEFT OUTER JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd "
+					+ "	LEFT OUTER JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode "
+					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
+					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum ";
+			if (condition.equals("name")) {
+				sql += " WHERE bDisPrice = 0 AND INSTR(c.name, ?) >= 1 ";
+			} else if (condition.equals("bBoardDate")) {
+				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
+				sql += " WHERE bDisPrice = 0 AND TO_CHAR(bBoardDate, 'YYYYMMDD') = ? ";
+			} else if(condition.equals("cusNum")){
+				sql += " WHERE bDisPrice = 0 AND TO_CHAR(bt.cusNum) = ? ";
+			} else if(condition.equals("bStationName")){
+				sql += " WHERE bDisPrice = 0 AND INSTR(bs2.bStationName, ?) >= 1 ";
+			}
+					sql+= " ORDER BY bBoardDate DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -953,6 +985,9 @@ public class MaintainDAO {
 				dto.setbBoardDate(rs.getString("bBoardDate"));
 				dto.setCusNum(rs.getInt("cusNum"));
 				dto.setbTkNum(rs.getBigDecimal("bTkNum"));
+				dto.setName(rs.getString("name"));
+				dto.setbBoardDate(rs.getString("bBoardDate"));
+				dto.setUserId(rs.getString("userId"));
 
 				list.add(dto);
 
@@ -1022,16 +1057,27 @@ public class MaintainDAO {
 		String sql;
 
 		try {
-			sql = " SELECT NVL(COUNT(*),0) FROM busTk";
-			if (condition.equals("all")) {
-				sql += " WHERE tDisPrice = 0 AND INSTR(bTkNum, ?) >= 1 OR INSTR(cusNum, ?) >= 1 ";
-			} else if (condition.equals("bFirstStaTime")) {
+			sql = " SELECT NVL(COUNT(*),0) FROM busTk bt "
+					+ " LEFT OUTER JOIN customer c ON bt.cusNum = c.cusNum "
+					+ " LEFT OUTER JOIN busRouteInfo bi ON bt.bOperCode = bi.bOperCode "
+					+ " LEFT OUTER JOIN busRouteDetail bd ON bi.bRouteDetailCodeEnd = bd.bRouteDetailCode "
+			        + " LEFT OUTER JOIN busStation bs ON bd.bStationCode = bs.bStationCode ";
+			if (condition.equals("name")) {
+				sql += " WHERE bDisPrice = 0 AND INSTR(c.name, ?) >= 1 ";
+			} else if (condition.equals("bBoardDate")) {
 				keyword = keyword.replaceAll("(\\-|\\/|\\.)", "");
-				sql += " WHERE tDisPrice = 0 AND TO_CHAR(bFirstStaTime, 'YYYYMMDD') = ? ";
-			} else {
-				sql += " WHERE tDisPrice = 0 AND INSTR(" + condition + ", ?) >= 1 ";
+				sql += " WHERE bDisPrice = 0 AND TO_CHAR(bBoardDate, 'YYYYMMDD') = ? ";
+			} else if(condition.equals("cusNum")) {
+				sql += " WHERE bDisPrice = 0 AND TO_CHAR(bt.cusNum)  = ? ";
+			} else if(condition.equals("bStationName")){
+				sql += " WHERE bDisPrice = 0 AND INSTR(bs.bStationName, ?) >= 1 ";
 			}
-			pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, keyword);
+			if (condition.equals("all")) {
+				pstmt.setString(2, keyword);
+			}
 
 			rs = pstmt.executeQuery();
 

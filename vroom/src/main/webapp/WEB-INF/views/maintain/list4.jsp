@@ -152,7 +152,7 @@ tr:hover {
 								<td>${dto.bStationNameSta}</td>
 								<td>${dto.bTkNum}</td>
 								<td>${dto.bTotNum}</td>
-								<td>${dto.tBoardDate}</td>
+								<td>${dto.bBoardDate}</td>
 								<td>${dto.bFirstStaTime}</td>
 								<td>${dto.bEndStaTime}</td>
 							</tr>
@@ -166,18 +166,18 @@ tr:hover {
 					<div class="col"></div>
 					<div class="col-6 text-center">
 						<form class="row" name="searchForm"
-							action="${pageContext.request.contextPath}/maintain/reserve.do"
+							action="${pageContext.request.contextPath}/maintain/reserve4.do"
 							method="post">
 							<div class="col-auto p-1">
 								<select name="condition" class="form-select">
 									<option value="name"
 										${condition=="name"?"selected='selected'":""}>이름</option>
-									<option value="tboarddate"
-										${condition=="tboarddate"?"selected='selected'":""}>탑승날짜</option>
+									<option value="bBoardDate"
+										${condition=="bBoardDate"?"selected='selected'":""}>탑승날짜</option>
 									<option value="cusNum"
 										${condition=="cusNum"?"selected='selected'":""}>고객번호</option>
-									<option value="tStationNameEnd"
-										${condition=="tStationNameEnd"?"selected='selected'":""}>탑승역</option>
+									<option value="bStationName"
+										${condition=="bStationName"?"selected='selected'":""}>탑승역</option>
 								</select>
 							</div>
 							<div class="col-auto p-1">

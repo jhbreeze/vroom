@@ -391,9 +391,27 @@ public class QnADAO {
 
 	public void deleteQna1(long qnaNum, String userId) throws SQLException {
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 
 		try {
+			if (!userId.equals("admin")) {
+				sql = " SELECT qnaNum FROM qna WHERE qnaNum = ? AND userId = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, qnaNum);
+				pstmt.setString(2, userId);
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if (rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
+
+				if (!b) {
+					return;
+				}
+			}
 			if (userId.equals("admin")) {
 				sql = " DELETE FROM qna WHERE qnaNum = ? ";
 				pstmt = conn.prepareStatement(sql);
@@ -417,6 +435,12 @@ public class QnADAO {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
 				} catch (Exception e2) {
 				}
 			}
@@ -604,6 +628,12 @@ public class QnADAO {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
 				} catch (Exception e2) {
 				}
 			}

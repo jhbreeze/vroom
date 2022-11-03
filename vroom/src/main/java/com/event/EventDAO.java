@@ -507,24 +507,34 @@ public class EventDAO {
 	
 	public void deleteEvent(long eveNum, String userId) throws SQLException {
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 
 		try {
-			if (userId.equals("admin")) {
-				sql = "DELETE FROM event WHERE eveNum=?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setLong(1, eveNum);
-				
-				pstmt.executeUpdate();
-			} else {
-				sql = "DELETE FROM event WHERE eveNum=? AND userId=?";
+
+			if (!userId.equals("admin")) {
+				sql = " SELECT eveNum FROM event WHERE eveNum = ? AND userId = ? ";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setLong(1, eveNum);
 				pstmt.setString(2, userId);
-				
-				pstmt.executeUpdate();
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if (rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
+
+				if (!b) {
+					return;
+				}
 			}
 
+			sql = "DELETE FROM event WHERE eveNum=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, eveNum);
+
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
@@ -532,6 +542,12 @@ public class EventDAO {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
 				} catch (SQLException e) {
 				}
 			}
@@ -545,7 +561,7 @@ public class EventDAO {
 		String sql;
 		
 		try {
-			sql = " SELECT r.replyNum, r.userId, name, r.eveNum, evReplyContent, evReplyDate "
+			sql = " SELECT r.replyNum, r.userId, SUBSTR(name,1,1)||NVL(LPAD('*', LENGTH(name)-2,'*'),'*') ||SUBSTR(name,-1,1) name, r.eveNum, evReplyContent, evReplyDate "
 					+ " FROM eventReply r "
 					+ " JOIN member1 m ON r.userId = m.userId "
 					+ " JOIN customer c ON m.cusNum = c.cusNum "
@@ -692,6 +708,12 @@ public class EventDAO {
 			if(pstmt != null) {
 				try {
 					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(rs != null) {
+				try {
+					rs.close();
 				} catch (Exception e2) {
 				}
 			}

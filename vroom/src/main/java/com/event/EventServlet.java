@@ -236,6 +236,14 @@ public class EventServlet extends MyUploadServlet {
 
 	protected void writeSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 
 		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
@@ -326,6 +334,11 @@ public class EventServlet extends MyUploadServlet {
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+
 		String cp = req.getContextPath();
 
 		String page = req.getParameter("page");
@@ -362,6 +375,14 @@ public class EventServlet extends MyUploadServlet {
 
 	protected void updateSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 
 		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
@@ -405,7 +426,11 @@ public class EventServlet extends MyUploadServlet {
 
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
+		
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		String cp = req.getContextPath();
 
 		String page = req.getParameter("page");
@@ -453,6 +478,11 @@ public class EventServlet extends MyUploadServlet {
 
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 
 		String state = "false";
 		try {
@@ -529,6 +559,11 @@ public class EventServlet extends MyUploadServlet {
 		
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 		String state = "false";
 		
 		try {

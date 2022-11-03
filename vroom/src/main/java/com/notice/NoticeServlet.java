@@ -43,9 +43,7 @@ public class NoticeServlet extends MyServlet {
 			updateSubmit(req, resp);
 		} else if (uri.indexOf("delete.do") != -1) {
 			delete(req, resp);
-		} else if (uri.indexOf("deleteList.do") != -1) {
-			deleteList(req, resp);
-		}
+		} 
 	}
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -365,8 +363,13 @@ public class NoticeServlet extends MyServlet {
 				resp.sendRedirect(cp + "/notice/list.do?" + query);
 				return;
 			}
+			
+			if (!info.getUserId().equals("admin")) {
+				resp.sendRedirect(cp + "/event/list.do?" + query);
+				return;
+			}
 
-			dao.deleteNotice(boardNum);
+			dao.deleteNotice(boardNum, info.getUserId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -374,42 +377,4 @@ public class NoticeServlet extends MyServlet {
 		resp.sendRedirect(cp + "/notice/list.do?" + query);
 	}
 
-	protected void deleteList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		String cp = req.getContextPath();
-
-		if (!info.getUserId().equals("admin")) {
-			resp.sendRedirect(cp + "/notice/list.do");
-			return;
-		}
-
-		String page = req.getParameter("page");
-		String size = req.getParameter("size");
-		String query = "size=" + size + "&page=" + page;
-
-		String condition = req.getParameter("condition");
-		String keyword = req.getParameter("keyword");
-
-		try {
-			if (keyword != null && keyword.length() != 0) {
-				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
-			}
-
-			String[] nn = req.getParameterValues("boardNums");
-			long boardNums[] = null;
-			boardNums = new long[nn.length];
-			for (int i = 0; i < nn.length; i++) {
-				boardNums[i] = Long.parseLong(nn[i]);
-			}
-
-			NoticeDAO dao = new NoticeDAO();
-
-			dao.deletetNoticeList(boardNums);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		resp.sendRedirect(cp + "/notice/list.do?" + query);
-	}
 }

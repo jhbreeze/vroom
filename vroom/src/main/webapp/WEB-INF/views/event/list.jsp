@@ -176,12 +176,12 @@ a {
 								<select name="condition" class="form-select">
 									<option value="all"
 										${condition=="all"?"selected='selected='selected'":""}>제목+내용</option>
-									<option value="reg_date"
-										${condition=="reg_date"?"selected='selected'":""}>등록일</option>
-									<option value="subject"
-										${condition=="subject"?"selected='selected'":""}>제목</option>
-									<option value="content"
-										${condition=="content"?"selected='selected'":""}>내용</option>
+									<option value="eveRegDate"
+										${condition=="eveRegDate"?"selected='selected'":""}>등록일</option>
+									<option value="eveTitle"
+										${condition=="eveTitle"?"selected='selected'":""}>제목</option>
+									<option value="eveCont"
+										${condition=="eveCont"?"selected='selected'":""}>내용</option>
 								</select>
 							</div>
 							<div class="col-auto p-1">

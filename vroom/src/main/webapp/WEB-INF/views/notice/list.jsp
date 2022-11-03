@@ -166,14 +166,13 @@ tr:hover {
 						<div class="col"></div>
 						<div class="col"></div>
 						<div class="col-6 text-center">
-							<form class="row" name="searchForm" action="" method="post">
+							<form class="row" name="searchForm" action="${pageContext.request.contextPath}/notice/list.do" method="post">
 								<div class="col-auto p-1">
 									<select name="condition" class="form-select form-select-sm">
-										<option value="all">제목+내용</option>
-										<option value="userName">작성자</option>
-										<option value="reg_date">등록일</option>
-										<option value="subject">제목</option>
-										<option value="content">내용</option>
+										<option value="all" ${condition=="all"?"selected='selected'":""}>제목+내용</option>
+										<option value="boDate" ${condition=="boDate"?"selected='selected'":""}>등록일</option>
+										<option value="boSubject" ${condition=="boSubject"?"selected='selected'":""}>제목</option>
+										<option value="boCont" ${condition=="boCont"?"selected='selected'":""}>내용</option>
 									</select>
 								</div>
 								<div class="col-auto p-1">

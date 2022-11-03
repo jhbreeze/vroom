@@ -10,8 +10,7 @@ color: white;
 </style>
 
 <div class="reply-info">
-	<span class="reply-count">답변 ${replyCount}개</span> <span>[목록,
-		${pageNo}/${total_page} 페이지]</span>
+	<span class="reply-count">답변 ${replyCount}개</span>
 </div>
 
 <table class='table table-borderless reply-list'>

@@ -146,6 +146,7 @@ public class QnAServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
+
 		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			resp.sendRedirect(cp + "/qna/list.do");
@@ -156,10 +157,10 @@ public class QnAServlet extends MyServlet {
 			QnADTO dto = new QnADTO();
 
 			if(info==null) {
-				
+				forward(req, resp, "/WEB-INF/views/member/login.jsp");
+				return;
 			} else {
 				dto.setUserId(info.getUserId());
-				
 			}
 
 			dto.setQnaSubject(req.getParameter("qnaSubject"));
@@ -208,6 +209,14 @@ public class QnAServlet extends MyServlet {
 		QnADAO dao = new QnADAO();
 
 		String cp = req.getContextPath();
+		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 
 		String page = req.getParameter("page");
 		String query = "page=" + page;
@@ -301,6 +310,11 @@ public class QnAServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
+
 		String cp = req.getContextPath();
 
 		String page = req.getParameter("page");
@@ -379,6 +393,11 @@ public class QnAServlet extends MyServlet {
 
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
+
+		if (info == null) {
+			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+			return;
+		}
 
 		String state = "false";
 		try {

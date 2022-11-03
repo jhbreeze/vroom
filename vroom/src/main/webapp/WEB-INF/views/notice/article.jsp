@@ -10,7 +10,7 @@
 <title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
 <script type="text/javascript">
-	<c:if test="${sessionScope.member.userId==dto.userId || sessionScope.member.userId=='admin'}">
+	<c:if test="${sessionScope.member.userId=='admin'}">
 	function deleteBoard() {
 			let query = "boardNum=${dto.boardNum}&${query}";
 			let url = "${pageContext.request.contextPath}/notice/delete.do?"

@@ -535,11 +535,30 @@ public class NoticeDAO {
 		}
 	}
 	
-	public void deleteNotice(long boardNum) throws SQLException {
+	public void deleteNotice(long boardNum, String userId) throws SQLException {
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		String sql;
 
 		try {
+			if (!userId.equals("admin")) {
+				sql = " SELECT boardNum FROM notice WHERE boardNum = ? AND userId = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, boardNum);
+				pstmt.setString(2, userId);
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if (rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
+
+				if (!b) {
+					return;
+				}
+			}
+			
 			sql = "DELETE FROM board WHERE boardNum = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
@@ -557,40 +576,14 @@ public class NoticeDAO {
 				} catch (SQLException e) {
 				}
 			}
-		}
-
-	}
-	
-	public void deletetNoticeList(long[] boardNums) throws SQLException {
-		PreparedStatement pstmt = null;
-		String sql;
-		
-		try {
-			sql = " DELETE FROM board WHERE boardNum IN (";
-			for (int i =0; i<boardNums.length; i++) {
-				sql +="?,";
-			}
-			sql = sql.substring(0, sql.length()-1)+")";
-			
-			pstmt = conn.prepareStatement(sql);
-			
-			for(int i = 0; i<boardNums.length;i++) {
-				pstmt.setLong(i+1, boardNums[i]);
-			}
-			
-			pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			if(pstmt != null) {
+			if (rs != null) {
 				try {
-					pstmt.close();
-				} catch (Exception e2) {
+					rs.close();
+				} catch (SQLException e) {
 				}
 			}
 		}
+
 	}
 	
 }
