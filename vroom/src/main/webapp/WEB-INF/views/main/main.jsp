@@ -17,10 +17,10 @@ main {
 	position: relative; top: -300px; background: white;
 }
 
-.fake-box {
+.fake-box2 {
 	background: white; width: 100%; height: 50px; 
 	border-radius: 100px 100px 0 0;
-	margin-top: 450px;
+	margin-top: 450px; position: relative;
 }
 
 .body-container { min-height: 700px; margin-top: 100px; }
