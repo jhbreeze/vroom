@@ -751,7 +751,7 @@ public class ReserveTrainDAO {
 					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
 					+ "    WHERE ((tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
 					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?)) "
-					+ "    AND TO_CHAR(tBoardDate, 'YYYY-MM-DD') = ?) ";
+					+ "    AND TO_CHAR(tBoardDate, 'YYYY-MM-DD') = ? AND tDisPrice IS NULL) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, tHoNum);
 			pstmt.setInt(2, staDetailCode);
@@ -800,7 +800,7 @@ public class ReserveTrainDAO {
 					+ "    tTkNum IN ( SELECT tTkNum FROM trainTk "
 					+ "    WHERE (tDetailCodeSta >= ? AND tDetailCodeSta <= ?) "
 					+ "    OR (tDetailCodeSta < ? AND tDetailCodeEnd > ?) "
-					+ "    AND tBoardDate = TO_DATE( ? , 'YYYY-MM-DD')) ";
+					+ "    AND tBoardDate = TO_DATE( ? , 'YYYY-MM-DD') AND tDisPrice IS NULL) ";
 			for(String thoNum : hochaList) {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, thoNum);
@@ -1077,9 +1077,9 @@ public class ReserveTrainDAO {
 		return tTkNumList;
 	}
 	
-	public List<Integer> fullInsertPayInfo(PaymentDTO staDto, PaymentDTO endDto) {
-		int result = 0;
-		List<Integer> tTkNumList = new ArrayList<>();
+	public List<String> fullInsertPayInfo(PaymentDTO staDto, PaymentDTO endDto) {
+		System.out.println("실행중 - 2");
+		List<String> tTkNumList = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -1099,6 +1099,7 @@ public class ReserveTrainDAO {
 				pstmt.close();
 				pstmt = null;
 				rs.close();
+				System.out.println("실행중 - 2.1");
 				
 				sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES(?, ?, ?, ?)";
 				pstmt = conn.prepareStatement(sql);
@@ -1107,10 +1108,11 @@ public class ReserveTrainDAO {
 				pstmt.setString(3, staDto.getTel());
 				pstmt.setString(4, staDto.getEmail());
 				
-				result += pstmt.executeUpdate();
+				pstmt.executeUpdate();
 					
 				pstmt.close();
 				pstmt = null;
+				System.out.println("실행중 - 2.2");
 			}
 			
 			// ---------------- 가는날
@@ -1126,8 +1128,9 @@ public class ReserveTrainDAO {
 			int[] randomArr = new int[2];
 			tNum = sdf.format(now);
 			
+			System.out.println("실행중 - 2.3");
 			for (int i = 0; i < 2; i++) {
-				randomArr[i]= (int)Math.random()*1000;
+				randomArr[i]= (int)(Math.random()*1000);
 				for(int j = 0; j < i; j++) {
 					if(randomArr[i] == randomArr[j]) {
 						i--;
@@ -1136,13 +1139,14 @@ public class ReserveTrainDAO {
 				}
 			}
 			for(int i=0; i<2; i++) {
-				tNumList.add(tNum+randomArr[i]);
+				tTkNumList.add(tNum+randomArr[i]);
 			}
+			System.out.println("실행중 - 2.4");
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
 					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
 					+ "	VALUES( ?, ?, ?, ?, SYSDATE, "
-					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
+					+ "	?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
 			pstmt.setString(1, tNumList.get(0));
@@ -1154,11 +1158,11 @@ public class ReserveTrainDAO {
 			pstmt.setInt(7, staDto.gettDetailCodeSta());
 			pstmt.setString(8, staDto.gettBoardDate());
 				
-			result += pstmt.executeUpdate();
+			pstmt.executeUpdate();
 				
 			pstmt.close();
 			pstmt = null;
-			
+			System.out.println("실행중 - 2.5");
 			for(int i=0; i<staDto.gettPassenger().size(); i++) {
 				
 				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
@@ -1173,12 +1177,12 @@ public class ReserveTrainDAO {
 				pstmt.setString(5, staDto.gettHoNum());
 				pstmt.setString(6, tSeatNum.get(i));;
 				
-				result += pstmt.executeUpdate();
+				pstmt.executeUpdate();
 				
 				pstmt.close();
 				pstmt = null;
 			}
-			
+			System.out.println("실행중 - 3");
 			// ---------------- 오는날
 			List<String> tPassenger2 = endDto.gettPassenger();
 			List<Integer> tFee2 = endDto.gettFee();
@@ -1187,7 +1191,7 @@ public class ReserveTrainDAO {
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
 					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
 					+ "	VALUES( ?, ?, ?, ?, SYSDATE, "
-					+ "	?, ?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'));";
+					+ "	?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
 			pstmt.setString(1, tNumList.get(1));
@@ -1195,11 +1199,11 @@ public class ReserveTrainDAO {
 			pstmt.setInt(3, endDto.gettTotNum());
 			pstmt.setInt(4, endDto.gettTotPrice());
 			pstmt.setInt(5, endDto.gettPayPrice());
-			pstmt.setInt(7, endDto.gettDetailCodeEnd());
-			pstmt.setInt(8, endDto.gettDetailCodeSta());
-			pstmt.setString(9, endDto.gettBoardDate());
+			pstmt.setInt(6, endDto.gettDetailCodeEnd());
+			pstmt.setInt(7, endDto.gettDetailCodeSta());
+			pstmt.setString(8, endDto.gettBoardDate());
 				
-			result += pstmt.executeUpdate();
+			pstmt.executeUpdate();
 				
 			pstmt.close();
 			pstmt = null;
@@ -1211,19 +1215,17 @@ public class ReserveTrainDAO {
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setString(2, tNumList.get(1));
-				pstmt.setInt(3, tFee2.get(i));
-				pstmt.setString(4, tPassenger2.get(i));
-				pstmt.setString(5, endDto.gettSeat());
-				pstmt.setString(6, endDto.gettHoNum());
-				pstmt.setString(7, tSeatNum2.get(i));
+				pstmt.setString(1, tNumList.get(1));
+				pstmt.setInt(2, tFee2.get(i));
+				pstmt.setString(3, tPassenger2.get(i));
+				pstmt.setString(4, endDto.gettSeat());
+				pstmt.setString(5, endDto.gettHoNum());
+				pstmt.setString(6, tSeatNum2.get(i));
 				
-				result += pstmt.executeUpdate();
+				pstmt.executeUpdate();
 				
 				pstmt.close();
 				pstmt = null;
-				
-				tTkNumList.add(result);
 			}
 			
 			conn.commit();

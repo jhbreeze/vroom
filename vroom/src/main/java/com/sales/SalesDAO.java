@@ -11,85 +11,45 @@ import com.util.DBConn;
 public class SalesDAO {
 	private Connection conn = DBConn.getConnection();
 	
-	public List<SalesDTO> TReserveList(int offset, int size) {
-		List<SalesDTO> list = new ArrayList<>();
-		PreparedStatement pstmt = null;
-		String sql;
-		ResultSet rs = null;
-
-		try {
-			sql = "	WITH tb AS ( "
-					+ "	   SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
-					+ "	  	   FROM trainDetail td "
-					+ "	  	   JOIN trainRouteDetail tr ON td.tRouteDetailCode = tr.tRouteDetailCode  "
-					+ "	  	   JOIN trainStation ts ON tr.tStationCode = ts.tStationCode  " + "	  	) "
-					+ "	  SELECT tt.tTkNum, m.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, "
-					+ "	  tDetailCodeEnd, t1.tStationName tStationNameEnd, "
-					+ "	        tDetailCodeSta, t2.tStationName tStationNameSta, "
-					+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" + "	  	FROM trainTk tt "
-					+ "	  	JOIN tb t1 ON tt.tDetailCodeEnd = t1.tDetailCode "
-					+ "	  	JOIN tb t2 ON tt.tDetailCodeSta = t2.tDetailCode " + " JOIN (  "
-					+ "	    SELECT tSeat, tHoNum, tTkNum, LISTAGG(tSeatNum, ',') WITHIN GROUP(ORDER BY tSeatNum) tSeatNum "
-					+ "		FROM trainTkDetail  " + "		GROUP BY tSeat, tTkNum, tHoNum  "
-					+ "	) tdt ON tdt.tTkNum = tt.tTkNum  " + "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
-					+ "	  	JOIN member1 m ON m.cusNum = tt.cusNum "
-					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
-
-			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, offset);
-			pstmt.setInt(2, size);
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				SalesDTO dto = new SalesDTO();
-
-				dto.settTkNum(rs.getInt("tTkNum"));
-				dto.settTotNum(rs.getInt("tTotNum"));
-				dto.settSeatNum(rs.getString("tSeatNum"));
-				dto.settSeat(rs.getString("tSeat"));
-				dto.settStaTime(rs.getString("tStaTime"));
-				dto.settHoNum(rs.getString("tHoNum"));
-				dto.settNumId(rs.getInt("tNumId"));
-				dto.settDetailCodeEnd(rs.getInt("tDetailCodeEnd"));
-				dto.settStationNameEnd(rs.getString("tStationNameEnd"));
-				dto.settDetailCodeSta(rs.getInt("tDetailCodeSta"));
-				dto.settStationNameSta(rs.getString("tStationNameSta"));
-				dto.settBoardDate(rs.getString("tBoardDate"));
-
-				list.add(dto);
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				} catch (Exception e2) {
-				}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (Exception e2) {
-				}
-			}
-		}
-		
-		return list;
-	}
-	
-	public int dataCount() {
+	// 기차데이터 개수 셈
+	public int dataCountTrain(String year, String month, String date, String mode) {
 		int result = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
+		String form;
+		String form2;
+		String searchDate;
+		String bORr;
 		
 		try {
-			sql = " SELECT NVL(COUNT(*),0) FROM trainTk";
+			if(month.equals("00")) {
+				searchDate = year;
+				form = "'YYYY'";
+				form2 = "'YYYY-MM-DD'";
+			} else if(date.equals("00")) {
+				searchDate = year + month;
+				form = "'YYYYMM'";
+				form2 = "'YYYY-MM-DD'";
+			} else {
+				searchDate = year + month + date;
+				form = "'YYYYMMDD'";
+				form2 = "'YYYY-MM-DD HH24:MI:SS'";
+			}
+			
+			if(mode.equals("환불내역")) {
+				bORr = " = 0 ";
+			} else {
+				bORr = " IS NULL ";
+			}
+			
+			sql = " SELECT COUNT(*) FROM (SELECT tPayDay FROM ( "
+					+ " SELECT TO_CHAR(tPayDay, "+form2+") tPayDay FROM trainTk "
+					+ " WHERE tDisPrice "+bORr+" AND TO_CHAR(tPayDay, "+form+")= ? ) "
+					+ " GROUP BY tPayDay) ";
 			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, searchDate);
 			
 			rs = pstmt.executeQuery();
 			
@@ -100,13 +60,81 @@ public class SalesDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(rs != null) {
+			if (rs != null) {
 				try {
 					rs.close();
 				} catch (Exception e2) {
 				}
 			}
-			if(pstmt != null) {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
+		return result;
+	}
+	
+	// 기차데이터 리스트
+	public List<SalesDTO> listSalesTrain(String year, String month, String date, String mode) {
+		List<SalesDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		String form;
+		String form2;
+		String searchDate;
+		String bORr;
+		
+		try {
+			if(month.equals("00")) {
+				searchDate = year;
+				form = "'YYYY'";
+				form2 = "'YYYY-MM-DD'";
+			} else if(date.equals("00")) {
+				searchDate = year + month;
+				form = "'YYYYMM'";
+				form2 = "'YYYY-MM-DD'";
+			} else {
+				searchDate = year + month + date;
+				form = "'YYYYMMDD'";
+				form2 = "'YYYY-MM-DD HH24:MI:SS'";
+			}
+			
+			if(mode.equals("환불내역")) {
+				bORr = " = 0 ";
+			} else {
+				bORr = " IS NULL ";
+			}
+			
+			sql = " SELECT TO_CHAR(tPayDay, "+form2+"), TO_CHAR(NVL(SUM(tPayPrice),0),'999,999,999')  "
+					+ " FROM trainTk "
+					+ " WHERE tDisPrice "+bORr+" AND TO_CHAR(tPayDay, "+form+")= ? "
+					+ " GROUP BY ROLLUP(TO_CHAR(tPayDay, "+form2+")) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchDate);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				SalesDTO dto = new SalesDTO();
+				dto.setPayDay(rs.getString(1));
+				dto.setPayPrice(rs.getString(2));
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (Exception e2) {
@@ -114,7 +142,135 @@ public class SalesDAO {
 			}
 		}
 		
+		return list;
+	}
+	
+	// 버스데이터 개수 셈
+	public int dataCountBus(String year, String month, String date, String mode) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		String form;
+		String form2;
+		String searchDate;
+		String bORr;
+
+		try {
+			if (month.equals("00")) {
+				searchDate = year;
+				form = "'YYYY'";
+				form2 = "'YYYY-MM-DD'";
+			} else if (date.equals("00")) {
+				searchDate = year + month;
+				form = "'YYYYMM'";
+				form2 = "'YYYY-MM-DD'";
+			} else {
+				searchDate = year + month + date;
+				form = "'YYYYMMDD'";
+				form2 = "'YYYY-MM-DD HH24:MI:SS'";
+			}
+
+			if (mode.equals("환불내역")) {
+				bORr = " = 0 ";
+			} else {
+				bORr = " IS NULL ";
+			}
+
+			sql = " SELECT COUNT(*) FROM (SELECT tPayDay FROM ( " + " SELECT TO_CHAR(tPayDay, " + form2
+					+ ") tPayDay FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(tPayDay, " + form + ")= ? "
+					+ " GROUP BY tPayDay)) ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchDate);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
 		return result;
 	}
 
+	// 버스데이터 리스트
+	public List<SalesDTO> listSalesBus(String year, String month, String date, String mode) {
+		List<SalesDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+		String form;
+		String form2;
+		String searchDate;
+		String bORr;
+
+		try {
+			if (month.equals("00")) {
+				searchDate = year;
+				form = "'YYYY'";
+				form2 = "'YYYY-MM-DD'";
+			} else if (date.equals("00")) {
+				searchDate = year + month;
+				form = "'YYYYMM'";
+				form2 = "'YYYY-MM-DD'";
+			} else {
+				searchDate = year + month + date;
+				form = "'YYYYMMDD'";
+				form2 = "'YYYY-MM-DD HH24:MI:SS'";
+			}
+
+			if (mode.equals("환불내역")) {
+				bORr = " = 0 ";
+			} else {
+				bORr = " IS NULL ";
+			}
+
+			sql = " SELECT TO_CHAR(tPayDay, " + form2 + "), TO_CHAR(NVL(SUM(tPayPrice),0),'999,999,999')  "
+					+ " FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(tPayDay, " + form + ")= ? "
+					+ " GROUP BY ROLLUP(TO_CHAR(tPayDay, " + form2 + ")) ";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchDate);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				SalesDTO dto = new SalesDTO();
+				dto.setPayDay(rs.getString(1));
+				dto.setPayPrice(rs.getString(2));
+				list.add(dto);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
+		return list;
+	}
 }

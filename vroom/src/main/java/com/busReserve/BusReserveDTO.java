@@ -28,15 +28,10 @@ public class BusReserveDTO {
 	private String bDiscern;
 	private int bRouteDetailCodeSta;
 	private int bRouteDetailCodeEnd;
-	private int busRouteDetailCode;
+	private int bRouteDetailCode;
 	private int bOrder;
 	private int bDistance;
 	private int bTakeTime;
-	private String bRouteName;
-	private int bRouteCode;
-	private int bFeeCode;
-	private String bDiv;
-	//일반 우등 프리미엄
 	
 	public int getbTotPrice() {
 		return bTotPrice;
@@ -44,29 +39,17 @@ public class BusReserveDTO {
 	public void setbTotPrice(int bTotPrice) {
 		this.bTotPrice = bTotPrice;
 	}
-	public String getbPayDay() {
-		return bPayDay;
+	public int getbStationCode() {
+		return bStationCode;
 	}
-	public void setbPayDay(String bPayDay) {
-		this.bPayDay = bPayDay;
+	public void setbStationCode(int bStationCode) {
+		this.bStationCode = bStationCode;
 	}
 	public String getbStationName() {
 		return bStationName;
 	}
 	public void setbStationName(String bStationName) {
 		this.bStationName = bStationName;
-	}
-	public int getbFeeCode() {
-		return bFeeCode;
-	}
-	public void setbFeeCode(int bFeeCode) {
-		this.bFeeCode = bFeeCode;
-	}
-	public String getbDiv() {
-		return bDiv;
-	}
-	public void setbDiv(String bDiv) {
-		this.bDiv = bDiv;
 	}
 	public int getbTkNum() {
 		return bTkNum;
@@ -86,7 +69,12 @@ public class BusReserveDTO {
 	public void setbTotNum(int bTotNum) {
 		this.bTotNum = bTotNum;
 	}
-	
+	public String getbPayDay() {
+		return bPayDay;
+	}
+	public void setbPayDay(String bPayDay) {
+		this.bPayDay = bPayDay;
+	}
 	public long getbPayPrice() {
 		return bPayPrice;
 	}
@@ -111,7 +99,7 @@ public class BusReserveDTO {
 	public void setbBoardString(String bBoardString) {
 		this.bBoardString = bBoardString;
 	}
-	public long getbNum() {
+	public int getbNum() {
 		return bNum;
 	}
 	public void setbNum(int bNum) {
@@ -201,11 +189,11 @@ public class BusReserveDTO {
 	public void setbRouteDetailCodeEnd(int bRouteDetailCodeEnd) {
 		this.bRouteDetailCodeEnd = bRouteDetailCodeEnd;
 	}
-	public int getBusRouteDetailCode() {
-		return busRouteDetailCode;
+	public int getbRouteDetailCode() {
+		return bRouteDetailCode;
 	}
-	public void setBusRouteDetailCode(int busRouteDetailCode) {
-		this.busRouteDetailCode = busRouteDetailCode;
+	public void setbRouteDetailCode(int bRouteDetailCode) {
+		this.bRouteDetailCode = bRouteDetailCode;
 	}
 	public int getbOrder() {
 		return bOrder;
@@ -225,24 +213,36 @@ public class BusReserveDTO {
 	public void setbTakeTime(int bTakeTime) {
 		this.bTakeTime = bTakeTime;
 	}
-	public int getbRouteCode() {
-		return bRouteCode;
-	}
-	public void setbRouteCode(int bRouteCode) {
-		this.bRouteCode = bRouteCode;
-	}
-	public int getbStationCode() {
-		return bStationCode;
-	}
-	public void setbStationCode(int bStationCode) {
-		this.bStationCode = bStationCode;
-	}
-	
 	public String getbRouteName() {
 		return bRouteName;
 	}
 	public void setbRouteName(String bRouteName) {
 		this.bRouteName = bRouteName;
 	}
+	public int getbRouteCode() {
+		return bRouteCode;
+	}
+	public void setbRouteCode(int bRouteCode) {
+		this.bRouteCode = bRouteCode;
+	}
+	public int getbFeeCode() {
+		return bFeeCode;
+	}
+	public void setbFeeCode(int bFeeCode) {
+		this.bFeeCode = bFeeCode;
+	}
+	public String getbDiv() {
+		return bDiv;
+	}
+	public void setbDiv(String bDiv) {
+		this.bDiv = bDiv;
+	}
+	private String bRouteName;
+	private int bRouteCode;
+	private int bFeeCode;
+	private String bDiv;
+	//일반 우등 프리미엄
+	
+
 }
 

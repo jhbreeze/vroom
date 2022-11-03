@@ -3,9 +3,12 @@ package com.busReserve;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.reservetrain.PaymentDTO;
 import com.util.DBConn;
 
 public class BusReserveDAO {
@@ -349,6 +352,155 @@ public List<BusReserveDTO> getDepStationList() {
 		}
 		return bDistance;
 	}
+	
+	
+	
+	
+	
+	
+	
+	//////////// 버스예매 
+	public int halfInsertPayInfo(PaymentDTO dto) {
+		int result = 0;
+		int tTkNumSeq = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+			
+		try {
+			conn.setAutoCommit(false);
+			
+			List<String> tPassenger = dto.gettPassenger();
+			List<Integer> tFee = dto.gettFee();
+			List<String> tSeatNum = dto.gettSeatNum();
+			
+			System.out.println("승객수 : " + tPassenger.size());
+			
+			
+			
+			for(int i=0; i<tPassenger.size(); i++) {
+				String tNum;
+				Date now = new Date(System.currentTimeMillis());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+				tNum = sdf.format(now);
+				int randomInt = (int)Math.random()*1000;
+				tNum += randomInt;
+				
+				System.out.println(i+"--------");
+				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
+						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, tNum);
+				pstmt.setInt(2, tTkNumSeq);
+				pstmt.setInt(3, tFee.get(i));
+				pstmt.setString(4, tPassenger.get(i));
+				pstmt.setString(5, dto.gettSeat());
+				pstmt.setString(6, dto.gettHoNum());
+				pstmt.setString(7, tSeatNum.get(i));
+				
+				System.out.println("실행 - "+i);
+				System.out.println(tNum);
+				System.out.println(tTkNumSeq);
+				System.out.println(tFee.get(i));
+				System.out.println(tPassenger.get(i));
+				System.out.println(dto.gettSeat());
+				System.out.println(dto.gettHoNum());
+				System.out.println(tSeatNum.get(i));
+				
+				result += pstmt.executeUpdate();
+				
+				pstmt.close();
+			}
+			System.out.println("실행됨");
+			///////////
+			
+			
+			
+			int cusNum = dto.getCusNum();
+			
+			if(cusNum == 0) {
+				sql = "SELECT customer_seq.NEXTVAL FROM dual";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					cusNum = rs.getInt(1);
+				}
+				pstmt.close();
+				pstmt = null;
+				rs.close();
+				
+				sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES(?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cusNum);
+				pstmt.setString(2, dto.getName());
+				pstmt.setString(3, dto.getTel());
+				pstmt.setString(4, dto.getEmail());
+				
+				result += pstmt.executeUpdate();
+					
+				pstmt.close();
+				pstmt = null;
+			}
+			
+			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				tTkNumSeq = rs.getInt(1);
+			}
+			pstmt.close();
+			
+			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
+					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, tTkNumSeq);
+			pstmt.setInt(2, cusNum);
+			pstmt.setInt(3, dto.gettTotNum());
+			pstmt.setInt(4, dto.gettTotPrice());
+			pstmt.setInt(5, dto.gettPayPrice());
+			pstmt.setInt(6, dto.gettDetailCodeSta());
+			pstmt.setInt(7, dto.gettDetailCodeEnd());
+			pstmt.setString(8, dto.gettBoardDate());
+			
+			result += pstmt.executeUpdate();
+				
+			pstmt.close();
+			
+			
+			
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+			}
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e2) {
+			}
+			
+		}
+		return result;
+	}
+	
+	
 	
 	
 	
