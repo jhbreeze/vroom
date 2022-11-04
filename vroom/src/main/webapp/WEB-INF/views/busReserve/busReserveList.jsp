@@ -195,7 +195,15 @@ $(function() {
     	let bName= $(this).parent().siblings('#bName').text();
     	let bType=$(this).parent().siblings('#bType').text();
     	let bFee=$(this).parent().siblings('#bFee').text();
-    	let  seatNum=$(this).parent().siblings('#seatNum').attr("data-seatNum");
+    	let seatNum=$(this).parent().siblings('#seatNum').attr("data-seatNum");
+		let bOperCode=$(this).parent().siblings('#bOperCode').text();
+		let bNumId=$(this).parent().siblings('#bNumId').text();
+		let reservedSeat=$(this).parent().siblings('#reservedSeat').text();
+		let bDistance=$(this).parent().siblings('#bDistance').text();
+		let bTakeTime=$(this).parent().siblings('#bTakeTime').text();
+		let bDiv=$(this).parent().siblings('#bDiv').text();
+		let bKidsale=$(this).parent().siblings('#bKidsale').text();
+		let bOldsale=$(this).parent().siblings('#bOldsale').text();
 		
     	let bcycle = $("form[name=hiddenForm] input[name=bcycle]").attr("data-bcycle");
     	let busstaDate= $("form[name=hiddenForm] input[name=busstaDate]").attr("data-busstaDate");
@@ -206,12 +214,15 @@ $(function() {
     	let bTotalTimeString= $("form[name=hiddenForm] input[name=bTotalTimeString]").attr("data-bTotalTimeString");
     	let bRouteDetailCode= $("form[name=hiddenForm] input[name=bRouteDetailCode]").attr("data-bRouteDetailCode");
     	let bRouteCode= $("form[name=hiddenForm] input[name=bRouteCode]").attr("data-bRouteCode");
+    	let bBoardDate1= $("form[name=hiddenForm] input[name=bBoardDate1]").attr("data-bBoardDate1");
     	
     	let out = "${pageContext.request.contextPath}/busreserve/busreserveseat.do?";
     	out += "bFirstStaTime="+bFirstStaTime+"&bEndStaTime="+bEndStaTime+"&bName="+bName+"&bType="+bType+"&bFee="+bFee+"&seatNum="+seatNum;
     	out += "&bcycle="+bcycle+"&busstaDate="+busstaDate+"&busendDate="+busendDate+"&depbStationName="+depbStationName;
     	out += "&desbStationName="+desbStationName+"&btakeTime="+btakeTime+"&bTotalTimeString="+bTotalTimeString;
-    	out += "&bRouteDetailCode="+bRouteDetailCode+"&bRouteCode="+bRouteCode;
+    	out += "&bRouteDetailCode="+bRouteDetailCode+"&bRouteCode="+bRouteCode+"&bOperCode="+bOperCode+"&bNumId="+bNumId+"&bBoardDate1="+bBoardDate1
+    	out +="&reservedSeat="+reservedSeat+"&bDistance="+bDistance+"&bTakeTime="+bTakeTime+"&bDiv="+bDiv+"&bKidsale="+bKidsale;
+    	out +="&bOldsale="+bOldsale+"&seatNum="+seatNum;
     	
     	location.href = out;
     });
@@ -274,10 +285,19 @@ $(function() {
 						<div style="display: none;" id="bEndStaTime" >${dto.bEndStaTime}</div>
 						<div style="display: none;" id="bRouteDetailCode" >${dto.bRouteDetailCode}</div>
 						<div style="display: none;" id="bRouteCode" >${dto.bRouteCode}</div>
+						<div style="display: none;" id="bOperCode" >${dto.bOperCode}</div>
+						<div style="display: none;" id="bNumId" >${dto.bNumId}</div>
+						<div style="display: none;" id="reservedSeat" >${dto.reservedSeat}</div>
+						<div style="display: none;" id="bDistance" >${dto.bDistance}</div>
+						<div style="display: none;" id="bTakeTime" >${dto.bTakeTime}</div>
+						<div style="display: none;" id="bDiv" >${dto.bDiv}</div>
+						<div style="display: none;" id="bKidsale" >${dto.bKidsale}</div>
+						<div style="display: none;" id="bOldsale" >${dto.bOldsale}</div>
 						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bName"  >${dto.bName}</div>
 						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bType" >${dto.bType}</div>
 						<div  class="buslist col-2 fw-bold fs-6  text-center " id="bFee" >${dto.bFee}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;" id="seatNum" data-seatNum="${dto.seatNum}">?석/전체${dto.seatNum}석</div>
+						
+						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;" id="seatNum" data-seatNum="${dto.seatNum}">${dto.seatNum-dto.reservedSeat}석/전체${dto.seatNum}석</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center "><input type="button" id="reserveBtn" value="예매하기"></div>
 					</a>
 			    </c:forEach>
@@ -287,6 +307,7 @@ $(function() {
 	</div>
 </main>
 <form name="hiddenForm">
+	<input type="hidden" name="bBoardDate1" data-bBoardDate1="${bBoardDate1}">
 	<input type="hidden" name="bcycle" data-bcycle="${bcycle}">
 	<input type="hidden" name="busstaDate" data-busstaDate="${busstaDate}">
 	<input type="hidden" name="busendDate" data-busendDate="${busendDate}">
