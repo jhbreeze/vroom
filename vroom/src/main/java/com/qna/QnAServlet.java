@@ -146,8 +146,8 @@ public class QnAServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		SessionInfo info = (SessionInfo) session.getAttribute("member");
 
-
 		String cp = req.getContextPath();
+
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			resp.sendRedirect(cp + "/qna/list.do");
 			return;
@@ -156,7 +156,7 @@ public class QnAServlet extends MyServlet {
 		try {
 			QnADTO dto = new QnADTO();
 
-			if(info==null) {
+			if(info==null || !info.getUserId().equals("admin")) {
 				forward(req, resp, "/WEB-INF/views/member/login.jsp");
 				return;
 			} else {
@@ -352,7 +352,8 @@ public class QnAServlet extends MyServlet {
 
 		resp.sendRedirect(cp + "/qna/list.do?" + query);
 	}
-	protected void delete2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	
+    protected void delete2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		QnADAO dao = new QnADAO();
 		String cp = req.getContextPath();
 

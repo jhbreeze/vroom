@@ -102,8 +102,8 @@ tr:hover {
 	<main>
 		<div class="container">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>예매내역 조회</h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">예매 내역 조회</div>
 				</div>
 				<ul class="nav nav-tabs">
 					<li class="nav-item"><a class="nav-link" aria-current="page"

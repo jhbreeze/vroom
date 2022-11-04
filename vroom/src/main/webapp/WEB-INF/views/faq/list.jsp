@@ -136,6 +136,15 @@ a {
 background: #0E6EFD;
 color: white;
 }
+.backColor{
+background: #0E6EFD;
+
+color: white;
+}
+
+#bord{
+border-radius: 10px;
+}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -153,8 +162,8 @@ color: white;
 	<main>
 		<div class="container ">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>자주하는 질문</h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">자주하는 질문</div>
 				</div>
 
 				<div class="reply">
@@ -169,13 +178,13 @@ color: white;
 
 							<table class="table write-form  mt-5">
 								<tr>
-									<td class="col-sm-2" scope="row" id='header'>제
+									<td class="col-sm-2" scope="row">제
 										목</td>
 									<td><input type="text" name="faqSubject"
 										class="form-control" value="${dto.faqSubject}"></td>
 								</tr>
 								<tr>
-									<td class="col-sm-2" scope="row" id='header2'>내
+									<td class="col-sm-2" scope="row" >내
 										용</td>
 									<td><textarea class='form-control' name="faqContent">${dto.faqContent}</textarea>
 									</td>
@@ -212,7 +221,7 @@ color: white;
 										value="${dto.faqNum}">
 								</c:if>
 								<h2 class="accordion-header" id="flush-heading-${status.index}">
-									<button class="accordion-button collapsed "
+									<button class="accordion-button collapsed backColor" id="bord";
 										type="button" data-bs-toggle="collapse"
 										data-bs-target="#flush-collapse-${status.index}"
 										aria-expanded="false"

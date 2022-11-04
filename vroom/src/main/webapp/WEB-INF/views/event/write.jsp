@@ -158,9 +158,10 @@ main {
 	<main>
 		<div class="container">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>이벤트</h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">이벤트</div>
 				</div>
+
 
 				<div class="body-main mx-auto">
 					<form name="eventForm" method="post" enctype="multipart/form-data">

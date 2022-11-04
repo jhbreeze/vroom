@@ -120,9 +120,10 @@ a {
 	<main>
 		<div class="container">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>이벤트</h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">이벤트</div>
 				</div>
+
 				<ul class="nav nav-tabs">
 					<li class="nav-item"><a class="nav-link" aria-current="page"
 						href="list.do?page=1">진행중인 이벤트</a></li>

@@ -238,7 +238,6 @@ public class NoticeDAO {
 		return list;
 	}
 	
-	
 	public List<NoticeDTO> listNotice(int offset, int size, String condition, String keyword) {
 		List<NoticeDTO> list = new ArrayList<NoticeDTO>();
 		PreparedStatement pstmt = null;
@@ -553,8 +552,6 @@ public class NoticeDAO {
 		}
 		return dto;
 	}
-	
-	
 	
 	public void updatetNotice(NoticeDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;

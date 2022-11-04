@@ -197,8 +197,8 @@ a {
 	<main>
 		<div class="container">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">
 						<c:choose>
 							<c:when test="${dto.event ==1 }">
 					이벤트(종료)
@@ -207,7 +207,7 @@ a {
 					이벤트
 					</c:otherwise>
 						</c:choose>
-					</h2>
+					</div>
 				</div>
 
 

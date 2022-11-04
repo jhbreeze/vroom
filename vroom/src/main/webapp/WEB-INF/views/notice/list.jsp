@@ -113,8 +113,8 @@ tr:hover {
 	<main>
 		<div class="container">
 			<div class="body-container">
-				<div class="body-title">
-					<h2>공지사항</h2>
+				<div class="body-title mb-4">
+					<div class="fs-4 fw-bolder">공지사항</div>
 				</div>
 
 				<div class="body-main">
