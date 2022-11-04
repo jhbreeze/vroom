@@ -67,7 +67,7 @@ h2 { font-size: 30px;}
 .infoRight22 { height: 28px; width: 445px; }
 .infoRight3 { width: 445px; }
 
-
+.infoRightSeatTitle-1 { display: inline-block; float: right; }
 
 .ticketBoxFourthCircle { color: white; font-size: 40px; }
 
@@ -171,17 +171,7 @@ $(function() {
 		<div class="container body-container">
 			<h2 class="titleName">예매내역 조회</h2>
 			<br>
-			<div class="searchDate">
-				<div class="titleDateSearch">
-					<label class="searchDate2">&nbsp;승차일자 검색 :&nbsp;</label>
-				</div>
-				<div class="inputDateSearch">
-					<form name="dateSearchForm" action="${pageContext.request.contextPath}/reserve/list.do" method="POST">
-						<input type="date" name="date" value=""></input>
-						<button type="button" class="btn btn-primary" style="height: 35px; width: 100px; margin-left: 10px;" onclick="searchDate();">조회하기</button>
-					</form>
-				</div>
-			</div>
+			<hr>
 			<br>
 			<div class="ticket1" style="overflow-y: scroll;">
 				<c:forEach var="dto" items="${reserveTrainList}" varStatus="status">
@@ -246,7 +236,9 @@ $(function() {
 									</div>
 									<div class="infoRight3">
 										<p class="infoRightSeatTitle">좌석</p>
-										<p class="infoRightSeatShow">${dto.bSeatNum}</p>
+											<div class="infoRightSeatTitle-1">
+												<p class="infoRightSeatShow">${dto.bSeatNum}</p>
+											</div>	
 									</div>
 								</div>
 							</div>
@@ -260,6 +252,18 @@ $(function() {
 						</div>
 						<br>
 				</c:forEach>
+				
+				<c:if test="${not empty  message}">
+			        <div class="row justify-content-md-center mt-5">
+			            <div class="col-md-8">
+			                <div class="border bg-light mt-5 p-4">
+				                <div class="d-grid p-3">
+									<p class="text-center">${message}</p>
+				                </div>
+			                </div>
+			            </div>
+			        </div>
+				</c:if>
 			</div>
 		</div>
 	</main>

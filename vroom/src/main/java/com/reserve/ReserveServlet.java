@@ -80,7 +80,9 @@ public class ReserveServlet extends MyServlet{
 			req.setAttribute("reserveTrainList", reserveTrainList);
 			req.setAttribute("reserveBusList", reserveBusList);			
 			
-			
+			if(reserveTrainList.size() == 0 && reserveBusList.size() == 0) {
+				req.setAttribute("message", "등록된 정보가 없습니다.");
+			}			
 
 			forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 			
@@ -128,6 +130,13 @@ public class ReserveServlet extends MyServlet{
 
 			req.setAttribute("reserveTrainList", NonReserveTrainlist);
 			req.setAttribute("reserveBusList", NonReserveBusList);
+			
+			// 메시지 띄우기
+			if(NonReserveTrainlist.size() == 0 && NonReserveBusList.size() == 0) {
+				req.setAttribute("message", "등록된 정보가 없습니다.");
+				forward(req, resp, "/WEB-INF/views/reserve/check.jsp");
+				return;
+			}
 
 			forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 		} catch (Exception e) {
@@ -161,10 +170,12 @@ public class ReserveServlet extends MyServlet{
 	
 	 */
 	
+	/*
 	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//
 		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 	}
+	 */
 
 	
 	private void traincancel(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -225,4 +236,5 @@ public class ReserveServlet extends MyServlet{
 	}
 
 }
+
 

@@ -54,6 +54,23 @@ function sendOk() {
 		return;
 	}
 	
+	/*
+	let str = f.reserveNum.value.trim();
+	if ( str !== f.reserveNum.valuetrim) {
+		alert("예매번호 혹은 전화번호가 존재하지 않습니다. ");
+		f.reserveNum.focus();
+		return;
+	}
+	
+	let str =  f.tel.value.trim();
+	if ( str !== f.tel.valuetrim) {
+		alert("예매번호 혹은 전화번호가 존재하지 않습니다. ");
+		f.tel.focus();
+		return;
+	}
+		
+	*/	
+	
 	
 	f.action = "${pageContext.request.contextPath}/reserve/check_ok.do";
 	f.submit();
@@ -102,7 +119,6 @@ function sendOk() {
 								</div>
 							</form>
 						</div>
-
 					</div>
 				</div>
 
