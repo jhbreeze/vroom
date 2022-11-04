@@ -71,7 +71,7 @@ function sendOk() {
 	            <div class="col-md-7">
 	                <div class="mt-5 pb-2">
 	                    <form name="pwdForm" method="post" class="row g-3">
-	                        <h3 class="text-center fw-bold">🔹 비밀번호 확인 🔹</h3>
+	                        <h3 class="text-center fw-bold">비밀번호 확인</h3>
 	                        
 			                <div class="d-grid">
 								<p class="form-control-plaintext text-center mb-3">본인확인을 위해 비밀번호를 입력해주세요.</p>

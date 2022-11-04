@@ -49,7 +49,7 @@ function deleteOK(){
 	<main>
 		<div class="container">
 			<div class="body-title mb-5">
-				<div class="fs-4 fw-bolder">🔉&nbsp;마이페이지</div>
+				<div class="fs-4 fw-bolder">마이페이지</div>
 			</div>
 
 			<div class="body-container d-flex">

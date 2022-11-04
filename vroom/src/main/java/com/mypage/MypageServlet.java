@@ -26,9 +26,7 @@ public class MypageServlet extends MyServlet {
 	}
 
 	private void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		forward(req, resp, "/WEB-INF/views/mypage/mypage.jsp");
-		
 	}
 
 	

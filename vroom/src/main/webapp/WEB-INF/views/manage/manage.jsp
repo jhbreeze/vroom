@@ -40,7 +40,7 @@ function searchList(){
 	<main>
 		<div class="container body-container">
 			<div class="body-title mb-4">
-				<div class="fs-4 fw-bolder">🙍‍♂️&nbsp;회원정보조회</div>
+				<div class="fs-4 fw-bolder">회원정보조회</div>
 			</div>
 
 			<div class="mb-3">

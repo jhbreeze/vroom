@@ -217,7 +217,7 @@ $(function(){
 		<div class="container">
 			<div class="body-container">
 				<div class="body-title mb-5">
-					<div class="fs-4 fw-bolder">👋&nbsp;${title}</div>
+					<div class="fs-4 fw-bolder">${title}</div>
 				</div>
 				<div class="box ">
 					<form name="memberForm" method="post">

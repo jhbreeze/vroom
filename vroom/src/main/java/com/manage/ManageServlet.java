@@ -9,7 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.member.SessionInfo;
 import com.util.MyServlet;
 import com.util.MyUtil;
 import com.util.MyUtilBootstrap;
@@ -34,7 +36,15 @@ public class ManageServlet extends MyServlet {
 		ManageDAO dao = new ManageDAO();
 		MyUtil util = new MyUtilBootstrap();
 		
+		HttpSession session = req.getSession();
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
 		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
 		
 		try {
 			String page = req.getParameter("page");

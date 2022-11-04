@@ -4,10 +4,8 @@ public class ManageDTO {
 	private int cusNum;
 	private String userName;
 	private String userId;
-	private String userPwd;
 	private String email;
 	private String tel;
-	private int enabled;
 	private String mod_date;
 	private String reg_date;
 	private String birth;
@@ -30,12 +28,6 @@ public class ManageDTO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getUserPwd() {
-		return userPwd;
-	}
-	public void setUserPwd(String userPwd) {
-		this.userPwd = userPwd;
-	}
 	public String getEmail() {
 		return email;
 	}
@@ -47,12 +39,6 @@ public class ManageDTO {
 	}
 	public void setTel(String tel) {
 		this.tel = tel;
-	}
-	public int getEnabled() {
-		return enabled;
-	}
-	public void setEnabled(int enabled) {
-		this.enabled = enabled;
 	}
 	public String getMod_date() {
 		return mod_date;
