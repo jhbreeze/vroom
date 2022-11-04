@@ -1,12 +1,20 @@
 package com.busReserve;
 
-
 public class BusReserveDTO {
 	private int bTotPrice;
 	private int bStationCode;
 	private String bStationName;
 	private int bTkNum;
+	
 	private int cusNum;
+	private int bseatTotNum;
+	private	int reservedSeat;//예약된 좌석-> 1개
+	private String bBoardDate;
+	private String bPassenger;
+	private String name;
+	private String tel;
+	private String email;
+	
 	private int bTotNum;
 	private String bPayDay;
 	private long bPayPrice;
@@ -16,7 +24,7 @@ public class BusReserveDTO {
 	private int bNum;
 	private long bFee;
 	private String bPassinger;
-	private String bSeatNum;
+	private int bSeatNum;//좌석번호
 	private int bNumId;
 	private String bType;
 	private String bName;
@@ -33,6 +41,48 @@ public class BusReserveDTO {
 	private int bDistance;
 	private int bTakeTime;
 	
+	public int getReservedSeat() {
+		return reservedSeat;
+	}
+	public void setReservedSeat(int reservedSeat) {
+		this.reservedSeat = reservedSeat;
+	}
+	public int getBseatTotNum() {
+		return bseatTotNum;
+	}
+	public void setBseatTotNum(int bseatTotNum) {
+		this.bseatTotNum = bseatTotNum;
+	}
+	public String getbBoardDate() {
+		return bBoardDate;
+	}
+	public void setbBoardDate(String bBoardDate) {
+		this.bBoardDate = bBoardDate;
+	}
+	public String getbPassenger() {
+		return bPassenger;
+	}
+	public void setbPassenger(String bPassenger) {
+		this.bPassenger = bPassenger;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public int getbTotPrice() {
 		return bTotPrice;
 	}
@@ -117,10 +167,10 @@ public class BusReserveDTO {
 	public void setbPassinger(String bPassinger) {
 		this.bPassinger = bPassinger;
 	}
-	public String getbSeatNum() {
+	public int getbSeatNum() {
 		return bSeatNum;
 	}
-	public void setbSeatNum(String bSeatNum) {
+	public void setbSeatNum(int bSeatNum) {
 		this.bSeatNum = bSeatNum;
 	}
 	public int getbNumId() {

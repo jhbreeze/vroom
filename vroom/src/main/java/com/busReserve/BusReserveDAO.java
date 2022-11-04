@@ -3,12 +3,9 @@ package com.busReserve;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.reservetrain.PaymentDTO;
 import com.util.DBConn;
 
 public class BusReserveDAO {
@@ -227,15 +224,16 @@ public List<BusReserveDTO> getDepStationList() {
 		ResultSet rs = null;
 		BusReserveDTO dto = null;
 		try {
-			sql=" SELECT  bRouteDetailCodeSta,bRouteDetailCodeEnd,bs.bStationName, b.bNumId , brd.bRouteCode, bDistance,bTakeTime, bf.bDiv, bOperCode, TO_CHAR(bFirstStaTime,'HH24:MI') bFirstStaTime, TO_CHAR(bEndStaTime,'HH24:MI')bEndStaTime, bName, bType, bFee,bKidsale, bOldsale, seatNum,bri.bDiscern "
+			sql=" SELECT bRouteDetailCodeSta, reservedSeat,bRouteDetailCodeEnd,bs.bStationName, b.bNumId , brd.bRouteCode, bDistance,bTakeTime, bf.bDiv, bOperCode, TO_CHAR(bFirstStaTime,'HH24:MI') bFirstStaTime, TO_CHAR(bEndStaTime,'HH24:MI')bEndStaTime, bName, bType, bFee,bKidsale, bOldsale, seatNum,bri.bDiscern"
 					+ " FROM busRouteDetail brd"
 					+ " LEFT OUTER JOIN busStation bs on brd.bStationCode = bs.bStationCode"
 					+ " LEFT OUTER JOIN busRoute br on brd.bRouteCode = br.bRouteCode"
 					+ " LEFT OUTER JOIN busFee bf on br.bRouteCode = bf.bRouteCode"
-					+ " LEFT OUTER JOIN busRouteInfo bri on bri.bRouteDetailCodeSta = brd.bRouteDetailCode"
-					+ " LEFT OUTER JOIN bus b on bri.bNumId = b.bNumId WHERE b.bNumId IN "
-					+ " ( SELECT bNumId FROM busRouteInfo WHERE bri.bRouteDetailCodeSta= ?)"
-					+ " AND bf.bDiv = b.bType";
+					+ " LEFT OUTER JOIN busRouteInfo bri on  brd.bRouteDetailCode= bri.bRouteDetailCodeSta"
+					+ " LEFT OUTER JOIN bus b on bri.bNumId = b.bNumId "
+					+ " LEFT OUTER JOIN  (SELECT COUNT(*) reservedSeat, bNumId  FROM bustkDetail group by bNumId) btd on b.bNumId=btd.bNumId"
+					+ " WHERE b.bNumId IN ("
+					+ " SELECT bNumId FROM busRouteInfo WHERE bri.bRouteDetailCodeSta= ?) and bf.bDiv = b.bType";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bRouteDetailCode);
@@ -245,6 +243,7 @@ public List<BusReserveDTO> getDepStationList() {
 			while(rs.next()) {
 				dto = new BusReserveDTO();
 				dto.setbRouteDetailCodeSta(rs.getInt("bRouteDetailCodeSta"));
+				dto.setReservedSeat(rs.getInt("reservedSeat"));
 				dto.setbRouteDetailCodeEnd(rs.getInt("bRouteDetailCodeEnd"));
 				dto.setbStationName(rs.getString("bStationName"));
 				dto.setbNumId(rs.getInt("bNumId"));
@@ -353,28 +352,65 @@ public List<BusReserveDTO> getDepStationList() {
 		return bDistance;
 	}
 	
-	
-	
-	
-	
-	
+	//예약된 좌석
+	public List<String> getReservedSeats(int bNumId, int bOperCode, String bBoardDate){
+		List<String> reservedSeat = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		String sql;
+		ResultSet rs = null;
+		
+		try {
+			sql = "SELECT bSeatNum FROM busTkDetail WHERE bNumId = ? AND "
+					+ " BTkNum IN ( SELECT bTkNum FROM busTk WHERE (bOperCode =?)"
+					+ " AND TO_CHAR(bBoardDate, 'YYYY-MM-DD') = ?) ";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bNumId);
+			pstmt.setInt(2, bOperCode);
+			pstmt.setString(3, bBoardDate);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				reservedSeat.add(rs.getString("bSeatNum"));
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return reservedSeat;
+	}
+	// seat.do->버스예약 정보 받아서 db에 저장
 	
 	//////////// 버스예매 
-	public int halfInsertPayInfo(PaymentDTO dto) {
+	/*public int halfInsertPayInfo(PaymentDTO dto) {
 		int result = 0;
-		int tTkNumSeq = 0;
+		int bTkNumSeq = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql;
+		String sql;np
 			
 		try {
 			conn.setAutoCommit(false);
 			
-			List<String> tPassenger = dto.gettPassenger();
-			List<Integer> tFee = dto.gettFee();
-			List<String> tSeatNum = dto.gettSeatNum();
+			List<String> bPassenger = dto.getbPassenger();
+			List<Integer> bFee = dto.getbFee();
+			List<String> bSeatNum = dto.getbSeatNum();
 			
-			System.out.println("승객수 : " + tPassenger.size());
+			System.out.println("승객수 : " + bPassenger.size());
 			
 			
 			
@@ -413,7 +449,7 @@ public List<BusReserveDTO> getDepStationList() {
 				pstmt.close();
 			}
 			System.out.println("실행됨");
-			///////////
+
 			
 			
 			
@@ -499,7 +535,7 @@ public List<BusReserveDTO> getDepStationList() {
 		}
 		return result;
 	}
-	
+	*/
 	
 	
 	
