@@ -146,7 +146,46 @@ function sendOk() {
 			</div>
 	</main>
 	
+<form name="hiddenForm" method="post">
+	<!-- bDisCern, bNumId 빠진거 같아요 ? 확신은 없음... -->
+	<input type="hidden" name="bcycle" value="${bcycle}">
 	
+	<input type="hidden" name="bNor" value="${bNor}">
+	<input type="hidden" name="bOld" value="${bOld}">
+	<input type="hidden" name="bEle" value="${bEle}">
+	
+	<input type="hidden" name="busstaDate" value="${busstaDate}">
+	<input type="hidden" name="busendDate" value="${busendDate}">
+	
+	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
+	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
+	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
+	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
+	
+	<input type="hidden" name="bSeatNum" value="${bSeatNum}">
+	<input type="hidden" name="bSeatNum" value="${bSeatNum}">
+	
+	<input type="hidden" name="bName" value="${bName}">
+	<input type="hidden" name="bType" value="${bType}">
+	
+	<input type="hidden" name="bNorFee" value="${bNorFee}">
+	<input type="hidden" name="bOldFee" value="${bOldFee}">
+	<input type="hidden" name="bEleFee" value="${bEleFee}">
+	<input type="hidden" name="bNorFee" value="${bNorFee}">
+	<input type="hidden" name="bOldFee" value="${bOldFee}">
+	<input type="hidden" name="bEleFee" value="${bEleFee}">
+	
+	<input type="hidden" name="totFee" value="${totFee}">
+	
+	<input type="hidden" name="bRouteCode" value="${bRouteCode}">
+	<input type="hidden" name="bRouteCode" value="${bRouteCode}">
+	
+	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
+	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
+	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
+	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
+	
+</form>
 
 	<footer>
 		<jsp:include page="/WEB-INF/views/layout/footer.jsp" />
@@ -169,9 +208,9 @@ function sendOk() {
 	let money;
 
 	if ( $('input[name="cycle"]').val() == "half" ) {
-		money = $('input[name="bFee"]').val(); 
+		money = $('input[name="totFee"]').val(); 
 	} else {
-		money = $('input[name="bFee"]').val() + $('input[name="bFee"]').val() 
+		money = $('input[name="totFee"]').val() + $('input[name="bFee"]').val() 
 	}		
 	
 	function requestPay() {
