@@ -25,8 +25,10 @@ main {
 </header>
 
 <form name="hiddenForm">
-	<input name="reserveNum" value="${reserveNum}">
+	<input type="hidden" name="reserveNum" value="${reserveNum}">
 </form>
+
+<div> 예매 진행중입니다 </div>
 
 
 <script type="text/javascript">
