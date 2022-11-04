@@ -216,6 +216,61 @@ public class EventDAO {
 
 		return list;
 	}
+	
+	public List<EventDTO> listEvent2(int offset, int size) {
+		List<EventDTO> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql;
+
+		try {
+			sql = " SELECT eveNum, eveTitle, TO_CHAR(eveRegDate, 'YYYY-MM-DD') eveRegDate, imageFilename, event "
+		            + " FROM event e "
+					+ " JOIN member1 m ON e.userId = m.userId " 
+					+ " WHERE event = 0 "
+		            + " ORDER BY eveNum DESC "
+					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
+
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, size);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				EventDTO dto = new EventDTO();
+
+				dto.setEveNum(rs.getLong("eveNum"));
+				dto.setEveTitle(rs.getString("eveTitle"));
+				dto.setEveRegDate(rs.getString("eveRegDate"));
+				dto.setImageFilename(rs.getString("imageFilename"));
+				dto.setEvent(rs.getLong("event"));
+
+				list.add(dto);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+
+		return list;
+	}
 
 	public List<EventDTO> listEvent(int offset, int size, String condition, String keyword) {
 		List<EventDTO> list = new ArrayList<>();
