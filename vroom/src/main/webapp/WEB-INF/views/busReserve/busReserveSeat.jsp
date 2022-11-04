@@ -380,7 +380,7 @@ color:  #0d6efd;
 <script type="text/javascript">
 	let bFee= "${bFee}";
 	let seatNum = "${seatNum}";
-	let seatTotNum=0;
+	
 	let bNor=0;
 	let bNorFee=0;
 	let bEle=0;
@@ -389,8 +389,8 @@ color:  #0d6efd;
 	let bOldFee=0;
 	let totFee=0;
 	let bgrade = "${bType}";
-	let breSeatNum = 0;
-	$("#fblock2-3-3-1").text(seatTotNum);
+	let reSeatCount = 0;
+	let seatTotNum = 0;
 	totFee= bNorFee+ bEleFee+bOldFee;
 
 	if (bgrade=="일반") {//우등
@@ -405,6 +405,8 @@ color:  #0d6efd;
 			height:"262px"
 		});
 	} 
+	
+	$("#fblock2-3-3-1").text(seatTotNum);
 function fseatTotCount(seatNor,seatEle,seatOld){
 	seatTotNum=seatNor+ seatEle+ seatOld;
 		return seatTotNum;
@@ -417,7 +419,7 @@ function countNor(type){
 	let f2 = document.getElementById("fblock2-3-2-1-1");
 	bNor =parseInt( $("#fblock2-1-1-3").text());
 	if(type ==='+'){
-		bNor = bNor+1; 
+		bNor = bNor+1;
 	} else if( type === '-'){
 		if(bNor>=1){
 			bNor =bNor-1;
@@ -428,10 +430,9 @@ function countNor(type){
 	}
 	$("#fblock2-1-1-3").text(bNor);
 	bNorFee=Math.round(bNor*bFee / 10) * 10;
-	fseatTotCount(bNor,bEle,bOld);
-	ftotFee(bNorFee,bEleFee, bOldFee);
+	seatTotNum =fseatTotCount(bNor,bEle,bOld);
+	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
 	$("#fblock2-3-3-1").text(totFee);
-	nNorFee = $("#fblock2-3-2-1-2").text(Math.round(bNor*bFee / 10) * 10);
 	$("#fblock2-3-2-1-2").text(Math.round(bNor*bFee / 10) * 10 +"원");
 	f2.innerText = "일반"+ bNor + "명";
 }
@@ -451,10 +452,9 @@ function countEle(type){
 	}
 	$("#fblock2-1-3-3").text(bEle);
 	bEleFee=Math.round(bEle*bFee*0.5 / 10) * 10;
-	fseatTotCount(bNor,bEle,bOld);
-	ftotFee(bNorFee,bEleFee, bOldFee);
+	seatTotNum =fseatTotCount(bNor,bEle,bOld);
+	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
 	$("#fblock2-3-3-1").text(totFee);
-	bEleFee = $("#fblock2-3-2-2-2").text(Math.round(bEle*bFee*0.5 / 10) * 10);
 	$("#fblock2-3-2-2-2").text(Math.round(bEle*bFee*0.5 / 10) * 10 +"원");
 	f2.innerText = "초등생"+ bEle + "명";
 }
@@ -462,7 +462,7 @@ function countMid(type){
 	let f2 = document.getElementById("fblock2-3-2-3-1");
 	bOld = parseInt($("#fblock2-1-5-3").text());
 	if(type ==='+'){
-		bOld = bOld+1; 
+		bOld = bOld+1;
 	} else if( type === '-'){
 		if(bOld>=1){
 			bOld = bOld-1;
@@ -473,55 +473,48 @@ function countMid(type){
 	}
 	$("#fblock2-1-5-3").text(bOld);
 	bOldFee = Math.round(bOld*bFee*0.7 / 10) * 10;
-	fseatTotCount(bNor,bEle,bOld);
-	ftotFee(bNorFee,bEleFee, bOldFee);
+	seatTotNum =fseatTotCount(bNor,bEle,bOld);
+	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
 	$("#fblock2-3-3-1").text(totFee);
-	bOldFee=$("#fblock2-3-2-3-2").text(Math.round(bOld*bFee*0.7 / 10) * 10);
 	$("#fblock2-3-2-3-2").text(Math.round(bOld*bFee*0.7 / 10) * 10 +"원");
 	f2.innerText = "중고등생"+ bOld + "명";
 }	
 $(function() {
-	bNor= $(".bNor").attr("data-num");
-	bEle= $(".bEle").attr("data-num");
-	bOld= $(".bOld").attr("data-num");
-	let tot= $(".tot").attr("data-num");
-	
-	bNorFee= $(".bNorFee").attr("data-num");
-	bEleFee= $(".bEleFee").attr("data-num");
-	bOldFee= $(".bOldFee").attr("data-num");
-	totFee= $(".totFee").attr("data-num");
 	
 	let f = document.getElementById("fblock2-3-1-1");
-	let seatArr = [];
+	let reSeatArr =[];
+	
 	$(".btn-init").click(function(){
-		seatArr = [];
+		reSeatArr = [];
 		resetBtn();                                                                                                                                                                                                                                                                                                                                          
 	});
+	
 	$("form[name=seatForm] input:checkbox").on('click', function() {
 		let chk_id = $(this).attr("id");
 		let num = parseInt($(this).attr("data-num"));
-
 		
-	    if ( $(this).prop('checked') ) {
-	    	breSeatNum++;
-	    	if(breSeatNum>(bNor+bEle+bOld)){
-				alert("선택가능한 좌석수를 초과하였습니다.");
+	    if ($(this).prop('checked')) {
+	    	reSeatCount++;
+	    	if(reSeatCount>(bNor+bEle+bOld)){
+				alert("선택가능한 좌석수를 초과하였습니다.다시 선택해주세요");
 				$(this).prop("checked", false);
+				resetBtn();
+				$("form[name=seatForm] input:checkbox").prop("checked", false);
 				return;
 			}
-	    	seatArr.push(num);
+	    	reSeatArr.push(num);
 	    } else {
-	    	breSeatNum--;
-	    	let idx = seatArr.indexOf(num);
-	    	if(idx > -1) seatArr.splice(idx, 1);
+	    	reSeatCount--;
+	    	let idx = reSeatArr.indexOf(num);
+	    	if(idx > -1) reSeatArr.splice(idx, 1);
 	    }
 	    
-	    seatArr.sort(function(a, b){
+	    reSeatArr.sort(function(a, b){
 	    	return a-b;
 	    });
 	    
 	    let s = "";
-	    for(let item of seatArr) {
+	    for(let item of reSeatArr) {
 	    	s += item + "번 ";
 	    }
 	    
@@ -529,48 +522,47 @@ $(function() {
 	});
 	
 	
-    $('.fblock2-2 input[type="button"]').click(function() {
+    $('#fblock2-3-3 input[type="button"]').click(function() {
     	/*
     	
-	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum -->
+	
 	<input type="hidden" name="bRouteInfoList" value="${bRouteInfoList}">
 	bNorFee bEleFee bOldFee totFee(+원붙어있음) -> data-로 변경
 	bNor, bEle, bOld b
     	*/
-    	let bFirstStaTime=$(this).parent().siblings('#bFirsbtStaTime').text();
-    	let bEndStaTime=$(this).parent().siblings('#bEndStaTime').text();
-    	let bName= $(this).parent().siblings('#bName').text();
-    	let bType=$(this).parent().siblings('#bType').text();
-    	let bFee=$(this).parent().siblings('#bFee').text();//수정 bFee를 일반 초등학생, 중고등생으로 구분하여 전송
     	
-    	let seatNum=$(this).parent().siblings('#seatNum').attr("data-seatNum");
-		let bSeatNum=$(this).parent().siblings('#bSeatNum').attr("data-bSeatNum");//수정요함
-    	let bcycle = $("form[name=hiddenForm] input[name=bcycle]").attr("data-bcycle");
-    	let busstaDate= $("form[name=hiddenForm] input[name=busstaDate]").attr("data-busstaDate");
-    	let busendDate= $("form[name=hiddenForm] input[name=busendDate]").attr("data-busendDate");
-    	let depbStationName= $("form[name=hiddenForm] input[name=depbStationName]").attr("data-depbStationName");
-    	let desbStationName= $("form[name=hiddenForm] input[name=desbStationName]").attr("data-desbStationName");
-    	let btakeTime= $("form[name=hiddenForm] input[name=btakeTime]").attr("data-btakeTime");
-    	let bTotalTimeString= $("form[name=hiddenForm] input[name=bTotalTimeString]").attr("data-bTotalTimeString");
-    	let bRouteDetailCode= $("form[name=hiddenForm] input[name=bRouteDetailCode]").attr("data-bRouteDetailCode");
-    	let bRouteCode= $("form[name=hiddenForm] input[name=bRouteCode]").attr("data-bRouteCode");
-    	let bNor = $(".bNor").attr("data-num");
-    	let bNorFee = $(".bNorFee").attr("data-num");
-    	let bEle = $(".bEle").attr("data-num");
-    	let bEleFee = $(".bEleFee").attr("data-num");
-    	let bOld = $(".bOld").attr("data-num");
-    	let bOldFee = $(".bOldFee").attr("data-num");
-    	let totFee = $(".totFee").attr("data-num");
+    	//수정 bFee를 일반 초등학생, 중고등생으로 구분하여 전송
+    	
+    	
+		let bName = $("form[name=hiddenForm] input[name=bName]").val();
+		let bType = $("form[name=hiddenForm] input[name=bType]").val();
+		let bFee = $("form[name=hiddenForm] input[name=bFee]").val();
+		let bFirstStaTime = $("form[name=hiddenForm] input[name=bFirstStaTime]").val();
+		let bEndStaTime = $("form[name=hiddenForm] input[name=bEndStaTime]").val();
+    	let bcycle = $("form[name=hiddenForm] input[name=bcycle]").val();
+    	let busstaDate= $("form[name=hiddenForm] input[name=busstaDate]").val();
+    	let busendDate= $("form[name=hiddenForm] input[name=busendDate]").val();
+    	let depbStationName= $("form[name=hiddenForm] input[name=depbStationName]").val();
+    	let desbStationName= $("form[name=hiddenForm] input[name=desbStationName]").val();
+    	let btakeTime= $("form[name=hiddenForm] input[name=btakeTime]").val();
+    	let bTotalTimeString= $("form[name=hiddenForm] input[name=bTotalTimeString]").val();
+    	let bRouteDetailCode= $("form[name=hiddenForm] input[name=bRouteDetailCode]").val();
+    	let bRouteCode= $("form[name=hiddenForm] input[name=bRouteCode]").val();
+
+    	
     	let reserveSeatNum= "${seatNum-reservedSeat}";//잔여석수
+    	let bNumId = "${bNumId}";
+    	let bOperCode = "${bOperCode}";
+    	let busBoardDate ="${busBoardDate}";
     	
-    	let out = "${pageContext.request.contextPath}/busreserve/busPay.do?";
+    	let out = "${pageContext.request.contextPath}/busreserve/buspay.do?";
     	out += "bFirstStaTime="+bFirstStaTime+"&bEndStaTime="+bEndStaTime+"&bName="+bName+"&bType="+bType+"&bFee="+bFee+"&seatNum="+seatNum;
     	out += "&bcycle="+bcycle+"&busstaDate="+busstaDate+"&busendDate="+busendDate+"&depbStationName="+depbStationName;
     	out += "&desbStationName="+desbStationName+"&btakeTime="+btakeTime+"&bTotalTimeString="+bTotalTimeString;
     	out += "&bRouteDetailCode="+bRouteDetailCode+"&bRouteCode="+bRouteCode;
     	out += "&bNor="+bNor+"&bNorFee="+bNorFee+"&bEle="+bEle+"&bEleFee="+bEleFee+"&bOld="+bOld;
-    	out += "&bOldFee="+bOldFee+"&totFee="+totFee+"&seatTotNum="+seatTotNum;
-
+    	out += "&bOldFee="+bOldFee+"&totFee="+totFee+"&seatTotNum="+seatTotNum+"&bNumId="+bNumId+"&bOperCode="+bOperCode+"&busBoardDate="+busBoardDate;
+    	out += "&reSeatArr="+reSeatArr;
     	
     	location.href = out;
     });
@@ -588,7 +580,6 @@ function resetBtn(){
 	let f10 = document.getElementById("fblock2-3-2-3-1");
 	let f11 = document.getElementById("fblock2-3-2-3-2");
 	let f12 = document.getElementById("fblock2-3-3-1");
-
 		
 	f2.innerText=0;
 	f3.innerText=0;
@@ -600,11 +591,26 @@ function resetBtn(){
 	f9.innerText="0원";
 	f10.innerText="중고등생0명";
 	f11.innerText="0원";
-	f12.innerText="0원";
+	f12.innerText="원";
+	
+	 bFee= "${bFee}";
+	seatNum = "${seatNum}";
+	seatTotNum=0;
+	bNor=0;
+	bNorFee=0;
+	bEle=0;
+	bEleFee=0;
+	bOld=0;
+	bOldFee=0;
+	totFee=0;
+	bgrade = "${bType}";
+	reSeatCount = 0;
+	reSeatArr =[];
 }
 </script>
 
 <script type="text/javascript">
+
 function login() {
 	location.href="${pageContext.request.contextPath}/member/login.do";
 }
@@ -637,28 +643,29 @@ function ajaxFun(url, method, query, dataType, fn) {
 
 $(function(){
 	reserveSeatList();
+	
+	function reserveSeatList() {
+		let bNumId = "${bNumId}";
+		let bOperCode = "${bOperCode}";
+		let busBoardDate = "${busBoardDate}";
+		
+		let url = "${pageContext.request.contextPath}/busreserve/reserveSeatList.do";
+		let query = "bNumId="+bNumId+"&bOperCode="+bOperCode+"&busBoardDate="+busBoardDate;
+		alert(busBoardDate+"의 예매를 선택하셨습니다.")
+		const fn = function(data){
+			for(let item of data.reservedList){
+				$(".busSeat").each(function(){
+					if($(this).attr("data-num") == item) {
+						$(this).prop("disabled", true);
+						$(this).next("label").addClass("disabled");
+					}
+				});
+			}
+		};
+		ajaxFun(url, "get", query, "json", fn);
+	}
 });
 
-function reserveSeatList() {
-	let bNumId = "${bNumId}";
-	let bOperCode = "${bOperCode}";
-	let busBoardDate = "${busBoardDate}";
-	
-	let url = "${pageContext.request.contextPath}/busreserve/reserveSeatList.do";
-	let query = "bNumId="+bNumId+"&bOperCode="+bOperCode+"&busBoardDate="+busBoardDate;
-	alert(busBoardDate+"의 예매를 선택하셨습니다.")
-	const fn = function(data){
-		for(let item of data.reservedList){
-			$(".busSeat").each(function(){
-				if($(this).attr("data-num") == item) {
-					$(this).prop("disabled", true);
-					$(this).next("label").addClass("disabled");
-				}
-			});
-		}
-	};
-	ajaxFun(url, "get", query, "json", fn);
-}
 
 </script>
 
@@ -748,7 +755,7 @@ function reserveSeatList() {
 							</div>
 							
 							<div class="seats">
-								<c:set var="seatNum" value="1"/>
+								<c:set var="bSeatNum" value="1"/>
 								<c:forEach var="a" begin="1" end="${rows}" varStatus="statue1">
 									<div class="seats-row">
 										<c:forEach var="b" begin="1" end="${cols}" varStatus="status2">
@@ -758,9 +765,9 @@ function reserveSeatList() {
 													<label class="btn btn-outline-primary seatBtn" for="notSeat" style="border:none; visibility: hidden;"></label>
 												</c:when>
 												<c:otherwise>
-													<input type="checkbox" id="seat-${seatNum}" class="btn-check busSeat" data-num="${seatNum}">
-													<label class="btn btn-outline-primary seatBtn" for="seat-${seatNum}" style="border:none;">${seatNum}</label>
-													<c:set var="seatNum" value="${seatNum+1}"/>
+													<input type="checkbox" id="seat-${bSeatNum}" class="btn-check busSeat" data-num="${bSeatNum}">
+													<label class="btn btn-outline-primary seatBtn" for="seat-${bSeatNum}" style="border:none;">${bSeatNum}</label>
+													<c:set var="bSeatNum" value="${bSeatNum+1}"/>
 												</c:otherwise>
 											</c:choose>
 										</c:forEach>
@@ -771,26 +778,26 @@ function reserveSeatList() {
 							
 						</div>
 						<div id="fblock2-3">
-							    <div id="fblock2-3-1">
-								      <span id="fblock2-3-1-title">선택좌석</span>
-								      <span id="fblock2-3-1-1" class="bseatNum"></span>
+						    <div id="fblock2-3-1">
+							      <span id="fblock2-3-1-title">선택좌석</span>
+							      <span id="fblock2-3-1-1" class="seatNum"></span>
+							</div>
+							<hr id="fblock2-line">
+							<div id="fblock2-3-2">
+								<div id="fblock2-3-2-title">탑승인원 및 요금</div>
+								<div id="fblock2-3-2-1">
+									<span id="fblock2-3-2-1-1" class="bNor" data-num="">일반0명</span>
+									<span id="fblock2-3-2-1-2" class="bNorFee" data-num="">0원</span>
 								</div>
-								<hr id="fblock2-line">
-								<div id="fblock2-3-2">
-									<div id="fblock2-3-2-title">탑승인원 및 요금</div>
-									<div id="fblock2-3-2-1">
-										<span id="fblock2-3-2-1-1" class="bNor" data-num="">일반0명</span>
-										<span id="fblock2-3-2-1-2" class="bNorFee" data-num="">0원</span>
-									</div>
-									<div id="fblock2-3-2-2">
-										<span id="fblock2-3-2-2-1" class="bEle" data-num="">초등생0명</span>
-										<span id="fblock2-3-2-2-2" class="bEleFee" data-num="">0원</span>
-									</div>
-									<div id="fblock2-3-2-3">
-										<span id="fblock2-3-2-3-1" class="bOld" data-num="">중고등생0명</span>
-										<span id="fblock2-3-2-3-2" class="bOldFee" data-num="">0명</span>
-									</div>
+								<div id="fblock2-3-2-2">
+									<span id="fblock2-3-2-2-1" class="bEle" data-num="">초등생0명</span>
+									<span id="fblock2-3-2-2-2" class="bEleFee" data-num="">0원</span>
 								</div>
+								<div id="fblock2-3-2-3">
+									<span id="fblock2-3-2-3-1" class="bOld" data-num="">중고등생0명</span>
+									<span id="fblock2-3-2-3-2" class="bOldFee" data-num="">0명</span>
+								</div>
+							</div>
 							<hr id=" fblock2-line">
 							<div id="fblock2-3-3">
 								<div id="fblock2-3-3-title">총결제금액</div>
@@ -804,29 +811,12 @@ function reserveSeatList() {
 			</form>
 		</div>
 	</main>
-//
-						<div class="buslist col-2 fw-bold fs-6  text-center" id="bFirstStaTime" >${dto.bFirstStaTime}</div>
-						<div style="display: none;" id="bEndStaTime" >${dto.bEndStaTime}</div>
-						<div style="display: none;" id="bRouteDetailCode" >${dto.bRouteDetailCode}</div>
-						<div style="display: none;" id="bRouteCode" >${dto.bRouteCode}</div>
-						<div style="display: none;" id="bOperCode" >${dto.bOperCode}</div>
-						<div style="display: none;" id="bNumId" >${dto.bNumId}</div>
-						<div style="display: none;" id="reservedSeat" >${dto.reservedSeat}</div>
-						<div style="display: none;" id="bDistance" >${dto.bDistance}</div>
-						<div style="display: none;" id="bTakeTime" >${dto.bTakeTime}</div>
-						<div style="display: none;" id="bDiv" >${dto.bDiv}</div>
-						<div style="display: none;" id="bKidsale" >${dto.bKidsale}</div>
-						<div style="display: none;" id="bOldsale" >${dto.bOldsale}</div>
-						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bName"  >${dto.bName}</div>
-						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bType" >${dto.bType}</div>
-						<div  class="buslist col-2 fw-bold fs-6  text-center " id="bFee" >${dto.bFee}</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;" id="seatNum" data-seatNum="${dto.seatNum}">${dto.seatNum - reservedSeats}석/전체${dto.seatNum}석</div>
-						<div class="buslist col-2 fw-bold fs-6  text-center "><input type="button" id="reserveBtn" value="예매하기"></div>
 
-//
 
 	<form name="hiddenForm">
+	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum, reSeatNum 예약좌석번호 -->
 	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum -->
+	<!--    reserveSeatNum잔여석, reSeatCount예약된좌석수 -->
 	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
 	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
 	<input type="hidden" name="bName" value="${bName}">

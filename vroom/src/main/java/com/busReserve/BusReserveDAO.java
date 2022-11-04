@@ -3,7 +3,9 @@ package com.busReserve;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.util.DBConn;
@@ -352,7 +354,7 @@ public List<BusReserveDTO> getDepStationList() {
 		return bDistance;
 	}
 	
-	//예약된 좌석
+	//예약된 좌석 리스트
 	public List<String> getReservedSeats(int bNumId, int bOperCode, String bBoardDate){
 		List<String> reservedSeat = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -393,69 +395,29 @@ public List<BusReserveDTO> getDepStationList() {
 		}
 		return reservedSeat;
 	}
-	// seat.do->버스예약 정보 받아서 db에 저장
+	// seat.do->버스예약 정보 받아서 db에 저장x ->예매-> 예매자 정보 페이지 입력후 db에 정보 입력해야함
 	
-	//////////// 버스예매 
-	/*public int halfInsertPayInfo(PaymentDTO dto) {
-		int result = 0;
+	// 버스예매 
+	public String InsertPayInfo(BusReserveDTO dto) {
+		String result = "";
 		int bTkNumSeq = 0;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql;np
+		String sql;
 			
 		try {
 			conn.setAutoCommit(false);
 			
 			List<String> bPassenger = dto.getbPassenger();
-			List<Integer> bFee = dto.getbFee();
+			List<Long> bFee = dto.getbFeefinal();
 			List<String> bSeatNum = dto.getbSeatNum();
 			
 			System.out.println("승객수 : " + bPassenger.size());
 			
-			
-			
-			for(int i=0; i<tPassenger.size(); i++) {
-				String tNum;
-				Date now = new Date(System.currentTimeMillis());
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-				tNum = sdf.format(now);
-				int randomInt = (int)Math.random()*1000;
-				tNum += randomInt;
-				
-				System.out.println(i+"--------");
-				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
-						+ "	VALUES(?, ?, ?, ?, ?, ?, ?)";
-				pstmt = conn.prepareStatement(sql);
-				
-				pstmt.setString(1, tNum);
-				pstmt.setInt(2, tTkNumSeq);
-				pstmt.setInt(3, tFee.get(i));
-				pstmt.setString(4, tPassenger.get(i));
-				pstmt.setString(5, dto.gettSeat());
-				pstmt.setString(6, dto.gettHoNum());
-				pstmt.setString(7, tSeatNum.get(i));
-				
-				System.out.println("실행 - "+i);
-				System.out.println(tNum);
-				System.out.println(tTkNumSeq);
-				System.out.println(tFee.get(i));
-				System.out.println(tPassenger.get(i));
-				System.out.println(dto.gettSeat());
-				System.out.println(dto.gettHoNum());
-				System.out.println(tSeatNum.get(i));
-				
-				result += pstmt.executeUpdate();
-				
-				pstmt.close();
-			}
-			System.out.println("실행됨");
-
-			
-			
-			
 			int cusNum = dto.getCusNum();
 			
 			if(cusNum == 0) {
+				//customer 시퀀스로customer
 				sql = "SELECT customer_seq.NEXTVAL FROM dual";
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
@@ -479,33 +441,68 @@ public List<BusReserveDTO> getDepStationList() {
 				pstmt = null;
 			}
 			
-			sql = "SELECT tTkNum_seq.NEXTVAL FROM dual";
+			sql = "SELECT bTkNum_seq.NEXTVAL FROM dual";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				tTkNumSeq = rs.getInt(1);
+				bTkNumSeq = rs.getInt(1);
 			}
+			
 			pstmt.close();
 			
-			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
-					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
-					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
+			//busTk
+			sql = "INSERT INTO busTk(bTkNum, cusNum, bTotNum, bTotPrice, bPayDay, "
+					+ "	bPayPrice, bOperCode, bBoardDate) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, tTkNumSeq);
+			pstmt.setInt(1, bTkNumSeq);
 			pstmt.setInt(2, cusNum);
-			pstmt.setInt(3, dto.gettTotNum());
-			pstmt.setInt(4, dto.gettTotPrice());
-			pstmt.setInt(5, dto.gettPayPrice());
-			pstmt.setInt(6, dto.gettDetailCodeSta());
-			pstmt.setInt(7, dto.gettDetailCodeEnd());
-			pstmt.setString(8, dto.gettBoardDate());
+			pstmt.setInt(3, dto.getbTotNum());
+			pstmt.setLong(4, dto.getbTotPrice());//int가 아니라 Long
+			pstmt.setLong(5, dto.getbPayPrice());//int가 아니라 Long
+			pstmt.setInt(6, dto.getbOperCode());
+			pstmt.setString(7, dto.getbBoardDate());
 			
 			result += pstmt.executeUpdate();
-				
 			pstmt.close();
 			
 			
+			for(int i=0; i<bPassenger.size(); i++) {
+				//버스예매번호 랜덤생성
+				String bNum;
+				Date now = new Date(System.currentTimeMillis());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+				bNum = sdf.format(now);
+				int randomInt = (int)Math.random()*1000;
+				bNum += randomInt;
+				
+				System.out.println(i+"--------");
+				sql = " INSERT INTO busTkDetail(bNum, bFee, bPassinger, bSeatNum, bNumId,  bTkNum) "
+						+ "	VALUES(?, ?, ?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, bNum);
+				pstmt.setLong(2, bFee.get(i));
+				pstmt.setString(3, bPassenger.get(i));
+				pstmt.setString(4, bSeatNum.get(i));
+				pstmt.setInt(5, dto.getbNumId());//String이 아니라 Int로 설정
+				pstmt.setInt(6, bTkNumSeq);
+				
+				System.out.println("실행 - "+i);
+				System.out.println(bNum);
+				System.out.println(bTkNumSeq);
+				System.out.println(bFee.get(i));
+				System.out.println(bPassenger.get(i));
+				System.out.println(dto.getbNumId());
+				System.out.println(bSeatNum.get(i));
+				
+				result += pstmt.executeUpdate();
+				
+				pstmt.close();
+			}
+			System.out.println("실행됨");
+
 			
 			conn.commit();
 		} catch (Exception e) {
@@ -531,35 +528,8 @@ public List<BusReserveDTO> getDepStationList() {
 				conn.setAutoCommit(true);
 			} catch (Exception e2) {
 			}
-			
 		}
 		return result;
 	}
-	*/
-	
-	
-	
-	
-	//2번째 페이지 왼쪽(할인적용전 버스요금)(가격): 노선코드 ->(busRoute+busFee테이블의 버스구분)-(노선의 버스종류별 요금)(bFee)
-	
-	//2번째 페이지 정보 테이블
-	//잔여석: 버스운행정보+버스테이블(
-	//가는날, 출발지,도착지 소요시간, 버스노선에 따른 요금(busFee테이블의)(bFeeCode+bFee), +역간거리(busRouteDetail-bDistance)
-	//버스예매의 탑승날짜+버스운행정보 테이블 첫출발시간, 마지막 도착시간, 버스이름 bdiscern(필요없을듯?)
-	
-	
-	
-	//bus 첫선택화면 필요한 정보
-	//버스 편도or왕복, 출발지,도착지, 
-	//가는날(bBoardDate),2번째 오는날(bBoardDate),버스등급(bType)
-	//승객유형별 탑승인원(bPassinger)을 리스트로 받아서 일반,초등학생,중고등학생별 인원
-	//session에 저장?
-	
-	// insert 테이블 4개 만들기
-	//버스예매
-	//버스예매상세
-	//버스예매 환불
-	//버스결제
-	
 	
 }

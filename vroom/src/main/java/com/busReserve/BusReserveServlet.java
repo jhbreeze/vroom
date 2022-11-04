@@ -2,7 +2,6 @@ package com.busReserve;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.member.SessionInfo;
+import com.reservetrain.PaymentDTO;
 import com.reservetrain.ReserveTrainDAO;
 import com.reservetrain.ReserveTrainSessionInfo;
 import com.util.MyServlet;
@@ -41,10 +41,26 @@ public class BusReserveServlet extends MyServlet {
 			busReserveSeat(req,resp);
 		}else if (uri.indexOf("reserveSeatList.do")!=-1) {
 			reserveSeatList(req,resp);
-		} 
+		}else if (uri.indexOf("buspay.do")!=-1) {
+			busPay(req,resp);
+		}else if(uri.indexOf("buspassengerinfo.do")!=-1) {
+			busPassengerInfo(req,resp);
+		}else if(uri.indexOf("insertpayinfo.do")!=-1) {
+			insertPayInfo(req,resp);
+		}
 	}
 
-	private void busInsertList(HttpServletRequest req, HttpServletResponse resp) {
+	
+	
+
+
+
+
+
+
+
+
+	private void busInsertList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BusReserveDAO dao = new BusReserveDAO();
 		try {
 			List<BusReserveDTO> depList = dao.getDepStationList();
@@ -177,6 +193,23 @@ public class BusReserveServlet extends MyServlet {
 			e.printStackTrace();
 		}
 	}	
+	private void reserveSeatList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// 예약된 좌석 리스트
+		
+		BusReserveDAO dao = new BusReserveDAO();
+		
+		int bNumId =Integer.parseInt(req.getParameter("bNumId"));
+		int bOperCode = Integer.parseInt(req.getParameter("bOperCode"));
+		String busBoardDate = req.getParameter("busBoardDate");
+		
+		List<String> reservedList = dao.getReservedSeats(bNumId, bOperCode, busBoardDate);
+		
+		resp.setContentType("text/html; charset=utf-8");
+		JSONObject job = new JSONObject();
+		job.put("reservedList", reservedList);
+		PrintWriter out = resp.getWriter();
+		out.print(job.toString());
+	}
 	protected void busReserveList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
@@ -359,55 +392,202 @@ public class BusReserveServlet extends MyServlet {
 	} catch (Exception e) {
 		e.printStackTrace(); 
 	}
-}/*
-	protected void busbeforePay(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+}
+	private void busPay(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		BusReserveDAO dao = new BusReserveDAO();
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
 		
 		try {
-			 let out = "${pageContext.request.contextPath}/busreserve/busPay.do?";
-    	out += "bFirstStaTime="+bFirstStaTime+"&bEndStaTime="+bEndStaTime+"&bName="+bName+"&bType="+bType+"&bFee="+bFee+"&seatNum="+seatNum;
-    	out += "&bcycle="+bcycle+"&busstaDate="+busstaDate+"&busendDate="+busendDate+"&depbStationName="+depbStationName;
-    	out += "&desbStationName="+desbStationName+"&btakeTime="+btakeTime+"&bTotalTimeString="+bTotalTimeString;
-    	out += "&bRouteDetailCode="+bRouteDetailCode+"&bRouteCode="+bRouteCode;
-    	
-승차권 정보 확인
-2022.11.4 금KTX   105서대구  11:21    김천구미  11:44일반   1호차   B-4 (상행)어른  1명5,850 원아이  0명0 원일반요금 적용5,850 원
-			 * 
-				int totalCost = adultCost + childCost;
-				DecimalFormat formatter = new DecimalFormat("###,###");
-				req.setAttribute("staadultCost", formatter.format(adultCost));
-				req.setAttribute("stachildCost", formatter.format(childCost));
-				req.setAttribute("statotalCost", formatter.format(totalCost));
-				req.setAttribute("adultCount", adultCount);
-				req.setAttribute("childCount", childCount);
+				req.setAttribute("bFirstStaTime", req.getParameter("bFirstStaTime"));
+				req.setAttribute("bEndStaTime", req.getParameter("bEndStaTime"));
+				req.setAttribute("bName", req.getParameter("bName"));
+				req.setAttribute("bType", req.getParameter("bType"));
+				req.setAttribute("bFee", req.getParameter("bFee"));
+				req.setAttribute("seatNum", req.getParameter("seatNum"));
+				req.setAttribute("busstaDate", req.getParameter("busstaDate"));
+				req.setAttribute("busendDate", req.getParameter("busendDate"));
+				req.setAttribute("depbStationName", req.getParameter("depbStationName"));
+				req.setAttribute("desbStationName", req.getParameter("desbStationName"));
+				req.setAttribute("btakeTime", req.getParameter("btakeTime"));
+				req.setAttribute("bTotalTimeString", req.getParameter("bTotalTimeString"));
+				req.setAttribute("bRouteDetailCode", req.getParameter("bRouteDetailCode"));
+				req.setAttribute("bRouteCode", req.getParameter("bRouteCode"));
+				req.setAttribute("bNor", req.getParameter("bNor"));
+				req.setAttribute("bNorFee", req.getParameter("bNorFee"));
+				req.setAttribute("bEle", req.getParameter("bEle"));
+				req.setAttribute("bEleFee", req.getParameter("bEleFee"));
+				req.setAttribute("bOld", req.getParameter("bOld"));
+				req.setAttribute("bOldFee", req.getParameter("bOldFee"));
+				req.setAttribute("totFee", req.getParameter("totFee"));
+				req.setAttribute("seatTotNum", req.getParameter("seatTotNum"));
+				req.setAttribute("bNumId", req.getParameter("bNumId"));
+				req.setAttribute("bOperCode", req.getParameter("bOperCode"));
+				req.setAttribute("busBoardDate", req.getParameter("busBoardDate")); // yyyy-MM-dd
+				req.setAttribute("reSeatArr", req.getParameter("reSeatArr"));
 				
-				
-				forward(req, resp, "/WEB-INF/views/reservetrain/trainPay.jsp");
+				forward(req, resp, "/WEB-INF/views/busReserve/busPay.jsp");
+				return;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void busPassengerInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		try {
+			req.setAttribute("bFirstStaTime", req.getParameter("bFirstStaTime"));
+			req.setAttribute("bEndStaTime", req.getParameter("bEndStaTime"));
+			req.setAttribute("bName", req.getParameter("bName"));
+			req.setAttribute("bType", req.getParameter("bType"));
+			req.setAttribute("bFee", req.getParameter("bFee"));
+			req.setAttribute("seatNum", req.getParameter("seatNum"));
+			req.setAttribute("busstaDate", req.getParameter("busstaDate"));
+			req.setAttribute("busendDate", req.getParameter("busendDate"));
+			req.setAttribute("depbStationName", req.getParameter("depbStationName"));
+			req.setAttribute("desbStationName", req.getParameter("desbStationName"));
+			req.setAttribute("btakeTime", req.getParameter("btakeTime"));
+			req.setAttribute("bTotalTimeString", req.getParameter("bTotalTimeString"));
+			req.setAttribute("bRouteDetailCode", req.getParameter("bRouteDetailCode"));
+			req.setAttribute("bRouteCode", req.getParameter("bRouteCode"));
+			req.setAttribute("bNor", req.getParameter("bNor"));
+			req.setAttribute("bNorFee", req.getParameter("bNorFee"));
+			req.setAttribute("bEle", req.getParameter("bEle"));
+			req.setAttribute("bEleFee", req.getParameter("bEleFee"));
+			req.setAttribute("bOld", req.getParameter("bOld"));
+			req.setAttribute("bOldFee", req.getParameter("bOldFee"));
+			req.setAttribute("totFee", req.getParameter("totFee"));
+			req.setAttribute("seatTotNum", req.getParameter("seatTotNum"));
+			req.setAttribute("bNumId", req.getParameter("bNumId"));
+			req.setAttribute("bOperCode", req.getParameter("bOperCode"));
+			req.setAttribute("busBoardDate", req.getParameter("busBoardDate")); // yyyy-MM-dd
+			req.setAttribute("reSeatArr", req.getParameter("reSeatArr"));
+			
+			forward(req, resp, "/WEB-INF/views/busReserve/busPassengerInfo.jsp");
+			return;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void insertPayInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+		BusReserveDAO dao = new BusReserveDAO();
+		BusReserveDTO dto = new BusReserveDTO();
+		
+		try {
+			int cusNum;
+			// 비회원이면 cusNum에 0 넣기
+			if(info==null) {
+				cusNum = 0;
+				dto.setName(req.getParameter("name"));
+				dto.setTel(req.getParameter("tel"));
+				dto.setEmail(req.getParameter("email"));
+				req.setAttribute("tel", req.getParameter("tel"));
+				req.setAttribute("email", req.getParameter("email"));
+			} else {
+				cusNum = info.getCusNum();
+				req.setAttribute("tel", req.getParameter("tel"));
+				req.setAttribute("email", req.getParameter("email"));
+			}
+			dto.setCusNum(cusNum);
+			
+			dto.setbTotNum(Integer.parseInt(req.getParameter("bNor"))+Integer.parseInt(req.getParameter("bEle"))+Integer.parseInt(req.getParameter("bOld")));
+			int totFee = Integer.parseInt(req.getParameter("totFee"));
+			int bOperCode = Integer.parseInt(req.getParameter("bOperCode"));
+			int bNumId = Integer.parseInt(req.getParameter("bNumId"));
+			int totNum = Integer.parseInt(req.getParameter("totNum"));
+
+			String busBoardDate = (req.getParameter("busBoardDate"));
+			int seatTotNum = Integer.parseInt(req.getParameter("seatTotNum"));
+			
+			dto.setbTotPrice(totFee);
+			dto.setbPayPrice(totFee);
+			dto.setbOperCode(bOperCode);
+			dto.setbNumId(bNumId);
+			
+			String staDate = req.getParameter("busstaDate");
+			staDate = staDate.substring(0, staDate.length()-2);
+			String[] sta = staDate.split("[.]");
+			if(Integer.parseInt(sta[1])<10){
+				sta[1] = "0"+sta[1];
+			}
+			if(Integer.parseInt(sta[2])<10){
+				sta[2] = "0"+sta[2];
+			}
+			staDate = sta[0]+"-"+sta[1]+"-"+sta[2];
+			
+			dto.setbBoardDate(staDate);
+			String bType =req.getParameter("bType");
+			dto.setbType(bType);
+			List<Long> feeList = new ArrayList<>();
+			List<String> passengerList = new ArrayList<>();
+			List<String> bSeatNum = new ArrayList<>();
+			int bNor = Integer.parseInt(req.getParameter("bNor"));
+			int bEle = Integer.parseInt(req.getParameter("bEle"));
+			int bOld = Integer.parseInt(req.getParameter("bOld"));
+			int bNorFee = Integer.parseInt(req.getParameter("bNorFee"));
+			int bEleFee = Integer.parseInt(req.getParameter("bEleFee"));
+			int bOldFee = Integer.parseInt(req.getParameter("bOldFee"));
+			String reSeat = req.getParameter("reSeatArr");
+			String[] reSeatArr = reSeat.split(",");
+			
+			int bNorPrice, bElePrice, bOldPrice;
+			
+			if(bNor==0) {
+				bNorPrice = 0;
+			} else {
+				bNorPrice = bNorFee;
+			}
+			if(bEle==0) {
+				bElePrice = 0;
+			} else {
+				bElePrice = bEleFee;
+			}
+			if(bOld==0) {
+				bOldPrice = 0;
+			} else {
+				bOldPrice = bEleFee;
+			}
+			
+			for(int i=0; i<totNum; i++) {
+				if(bNor>0) {
+					passengerList.add("일반");
+					bSeatNum.add(reSeatArr[i]);
+					feeList.add((bNorPrice));
+					bNor--;
+					continue;
+				} else if(bEle>0) {
+					passengerList.add("초등생");
+					bSeatNum.add(reSeatArr[i]);
+					feeList.add(bElePrice);
+					bEle--;
+				}else if(bOld>0) {
+					passengerList.add("중고등생");
+					bSeatNum.add(reSeatArr[i]);
+					feeList.add(bOldPrice);
+					bOld--;
+				}
+			}
+			dto.setbPassenger(passengerList);
+			dto.setbFeeFinal(feeList);
+			dto.setbSeatNum(bSeatNum);
+			//메일
+			// 편도 인서트
+			String bTkNumList;
+			//if (cycle.equals("half")) {
+			bTkNumList = dao.InsertPayInfo(dto);
+			if (bTkNumList != null) {
+				String reserveNum = bTkNumList;
+				req.setAttribute("reserveNum", reserveNum);
+				forward(req, resp, "/WEB-INF/views/reservetrain/mailsend.jsp");
 				return;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
-	
-	private void reserveSeatList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 예약된 좌석 리스트
-		
-		BusReserveDAO dao = new BusReserveDAO();
-		
-		int bNumId =Integer.parseInt(req.getParameter("bNumId"));
-		int bOperCode = Integer.parseInt(req.getParameter("bOperCode"));
-		String busBoardDate = req.getParameter("busBoardDate");
-		
-		List<String> reservedList = dao.getReservedSeats(bNumId, bOperCode, busBoardDate);
-		
-		resp.setContentType("text/html; charset=utf-8");
-		JSONObject job = new JSONObject();
-		job.put("reservedList", reservedList);
-		PrintWriter out = resp.getWriter();
-		out.print(job.toString());
+			//}
 	}
+	
 }
 

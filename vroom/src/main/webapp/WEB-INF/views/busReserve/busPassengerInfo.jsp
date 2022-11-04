@@ -147,12 +147,18 @@ function sendOk() {
 	</main>
 	
 <form name="hiddenForm" method="post">
-	<!-- bDisCern, bNumId 빠진거 같아요 ? 확신은 없음... -->
 	<input type="hidden" name="bcycle" value="${bcycle}">
 	
 	<input type="hidden" name="bNor" value="${bNor}">
 	<input type="hidden" name="bOld" value="${bOld}">
 	<input type="hidden" name="bEle" value="${bEle}">
+	
+	<!-- 밑에 5개 추가함 -->
+	<input type="hidden" name="bNumId" value="${bNumId}">
+	<input type="hidden" name="bOperCode" value="${bOperCode}">
+	<input type="hidden" name="busBoardDate" value="${busBoardDate}">
+	<input type="hidden" name="reSeatArr" value="${reSeatArr}">
+	<input type="hidden" name="seatTotNum" value="${seatTotNum}">
 	
 	<input type="hidden" name="busstaDate" value="${busstaDate}">
 	<input type="hidden" name="busendDate" value="${busendDate}">
@@ -185,6 +191,9 @@ function sendOk() {
 	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
 	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
 	
+	<input type="hidden" name="name" >
+	<input type="hidden" name="email">
+	<input type="hidden" name="tel">
 </form>
 
 	<footer>
@@ -241,13 +250,13 @@ function sendOk() {
 				
 				alert("결제가 완료되었습니다.");
 				
-				f.action = "${pageContext.request.contextPath}/busReserve/insertPayInfo.do";
+				f.action = "${pageContext.request.contextPath}/busreserve/insertpayinfo.do";
 				f.submit();
 				
 			} else {
 				msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
-                location.href="${pageContext.request.contextPath}/busReserve/beforePayment.do";
+                location.href="${pageContext.request.contextPath}/busreserve/passengerinfo.do";
                 alert(msg);
 			}
 		});

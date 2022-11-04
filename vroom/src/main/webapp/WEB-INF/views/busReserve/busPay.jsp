@@ -40,7 +40,6 @@ $(function(){
 	if(cycle==='half'){
 		$(".ticket-2").hide();
 		$(".ticket-4").hide();
-				
 	} else if(cycle==='full') {
 		$(".ticket-2").show();
 		$(".ticket-4").show();
@@ -49,7 +48,7 @@ $(function(){
 
 $(function(){
 	$("#next-btn").click(function(){
-		let url = "${pageContext.request.contextPath}/busReserve/beforePayment.do?";
+		let url = "${pageContext.request.contextPath}/busreserve/buspassengerinfo.do?";
 		let query = $("form[name=hiddenForm]").serialize();
 		alert(query);
 		
@@ -74,48 +73,31 @@ $(function(){
 				<span class="date">${busstaDate}</span>
 				<span class="ticket-count"></span>
 				<div class="info1">${bName}&nbsp;&nbsp;</div>
-				<div class="info2">${depbStationName}&nbsp; ${bFirstStaTime} &nbsp;<i class="bi bi-arrow-right"></i>&nbsp; ${desbStationName}&nbsp; ${bEndStaTime}</div>
-				<div class="info3"><span id="grade-1"></span>&nbsp;&nbsp; ${bType}&nbsp;&nbsp; ${bSeatNum}&nbsp;<span class="direction">(dDisCern인지 bcycle인지 모르겟음)</span></div>
-			</div>
-			<div class="ticket-2">
-				<span class="date">${busendDate}</span>
-				<span class="ticket-count"></span>
-				<div class="info1">${bName}&nbsp;&nbsp;</div>
-				<div class="info2">${depbStationName}&nbsp; ${bFirstStaTime} &nbsp;<i class="bi bi-arrow-right"></i>&nbsp; ${desbStationName}&nbsp; ${bEndStaTime}</div>
-				<div class="info3"><span id="grade-2"></span>&nbsp;&nbsp; ${bType}&nbsp;&nbsp; ${bSeatNum}&nbsp;<span class="direction">(dDisCern인지 bcycle인지 모르겟음)</span></div>
+				<div class="info2">출발지 : ${depbStationName}&nbsp;${bFirstStaTime} &nbsp;<br>도착지 : ${desbStationName}&nbsp; ${bEndStaTime}</div>
+				<div class="info3"><span id="grade-1"></span>${bType}&nbsp;&nbsp; 
+				<c:forEach items="${reSeatArr}" varStatus="status">
+				${status.current}번, 
+				</c:forEach>
+				&nbsp;<span class="direction"></span></div>
 			</div>
 			<div class="ticket-3">
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">일반&nbsp;&nbsp;${bNor}명</div>
-					<div class="left-side">${bNorFee}</div>
+					<div class="left-side">${bNorFee}원</div>
 				</div>
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">중고등&nbsp;&nbsp;${bOld}명</div>
-					<div class="left-side">${bOldFee}</div>
+					<div class="left-side">${bOldFee}원</div>
 				</div>
 				<div class="info5 d-flex justify-content-between">
 					<div class="left-side">초등&nbsp;&nbsp;${bEle}명</div>
-					<div class="left-side">${bEleFee}</div>
+					<div class="left-side">${bEleFee}원</div>
 				</div> 
 				<div id="grade-3" class="left-side"></div>
-				<div class="info6  d-flex justify-content-end"><span class="cost">${totFee}</span></div>
+				<div class="left-side">총금액</div>
+				<div class="info6  d-flex justify-content-end"><span class="cost">${totFee}원</span></div>
 			</div>
-			<div class="ticket-4">
-				<div class="info5 d-flex justify-content-between">
-					<div class="left-side">일반&nbsp;&nbsp;${bNor}명</div>
-					<div class="left-side">${bNorFee}</div>
-				</div>
-				<div class="info5 d-flex justify-content-between">
-					<div class="left-side">중고등&nbsp;&nbsp;${bOld}명</div>
-					<div class="left-side">${bOldFee}</div>
-				</div>
-				<div class="info5 d-flex justify-content-between">
-					<div class="left-side">초등&nbsp;&nbsp;${bEle}명</div>
-					<div class="left-side">${bEleFee}</div>
-				</div> 
-				<div id="grade-4" class="left-side"></div>
-				<div class="info6  d-flex justify-content-end"><span class="cost">${totFee}</span></div>
-			</div>
+			
 			<div class="d-flex justify-content-center">
 				<button class="btn btn-primary btn-pay" id="next-btn">다음단계</button>
 			</div>
@@ -124,8 +106,20 @@ $(function(){
 </main>
 
 <form name="hiddenForm" method="post">
-	<!-- bDisCern, bNumId 빠진거 같아요 ? 확신은 없음... -->
+<!-- "&bNumId="+bNumId+"&bOperCode="+bOperCode+"&busBoardDate="+busBoardDate;
+    	out += "&reSeatArr="+reSeatArr; -->
+	<!-- 
+	bcycle(편도,왕복인데 편도만 완성해서 bcycle필요없어요)
+	bDisCern(상행,하행 버스에서는 없어서 안넣었어요), 
+	bNumId 빠진거 같아요 ㅇㅈ ? 확신은 없음... 확신하셔도됩니다
+	 bNumId,bOperCode,busBoardDateyyyy-MM-dd 추가완료 -->
 	<input type="hidden" name="bcycle" value="${bcycle}">
+	<!-- 밑에 5개 추가함 -->
+	<input type="hidden" name="bNumId" value="${bNumId}">
+	<input type="hidden" name="bOperCode" value="${bOperCode}">
+	<input type="hidden" name="busBoardDate" value="${busBoardDate}">
+	<input type="hidden" name="seatTotNum" value="${seatTotNum}">
+	<input type="hidden" name="reSeatArr" value="${reSeatArr}">
 	
 	<input type="hidden" name="bNor" value="${bNor}">
 	<input type="hidden" name="bOld" value="${bOld}">

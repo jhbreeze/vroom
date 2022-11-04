@@ -318,6 +318,7 @@ $(function() {
 	<input type="hidden" name="bRouteDetailCode" data-bRouteDetailCode="${bRouteDetailCode}">
 	<input type="hidden" name="bRouteCode" data-bRouteCode="${bRouteCode}">
 </form>
+
 <footer>
     <jsp:include page="/WEB-INF/views/layout/footer.jsp"></jsp:include>
 </footer>

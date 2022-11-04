@@ -1,20 +1,23 @@
 package com.busReserve;
 
+import java.util.List;
+
 public class BusReserveDTO {
-	private int bTotPrice;
+	private long bTotPrice;
 	private int bStationCode;
 	private String bStationName;
 	private int bTkNum;
-	
+	private List<String> bPassenger;
+	private Long bFee;
+	private List<Long> bFeefinal; 
+	private List<String> bSeatNum;
 	private int cusNum;
 	private int bseatTotNum;
 	private	int reservedSeat;//예약된 좌석-> 1개
 	private String bBoardDate;
-	private String bPassenger;
 	private String name;
 	private String tel;
 	private String email;
-	
 	private int bTotNum;
 	private String bPayDay;
 	private long bPayPrice;
@@ -22,9 +25,7 @@ public class BusReserveDTO {
 	private int bOperCode;
 	private String bBoardString;
 	private int bNum;
-	private long bFee;
 	private String bPassinger;
-	private int bSeatNum;//좌석번호
 	private int bNumId;
 	private String bType;
 	private String bName;
@@ -40,6 +41,32 @@ public class BusReserveDTO {
 	private int bOrder;
 	private int bDistance;
 	private int bTakeTime;
+	
+	public Long getbFee() {
+		return bFee;
+	}
+	public void setbFee(Long bFee) {
+		this.bFee = bFee;
+	}
+	public List<Long> getbFeefinal() {
+		return bFeefinal;
+	}
+	public void setbFeefinal(List<Long> bFeefinal) {
+		this.bFeefinal = bFeefinal;
+	}
+	public List<String> getbPassenger() {
+		return bPassenger;
+	}
+	public void setbPassenger(List<String> bPassenger) {
+		this.bPassenger = bPassenger;
+	}
+	
+	public List<String> getbSeatNum() {
+		return bSeatNum;
+	}
+	public void setbSeatNum(List<String> bSeatNum) {
+		this.bSeatNum = bSeatNum;
+	}
 	
 	public int getReservedSeat() {
 		return reservedSeat;
@@ -59,12 +86,6 @@ public class BusReserveDTO {
 	public void setbBoardDate(String bBoardDate) {
 		this.bBoardDate = bBoardDate;
 	}
-	public String getbPassenger() {
-		return bPassenger;
-	}
-	public void setbPassenger(String bPassenger) {
-		this.bPassenger = bPassenger;
-	}
 	public String getName() {
 		return name;
 	}
@@ -83,10 +104,11 @@ public class BusReserveDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getbTotPrice() {
+	
+	public long getbTotPrice() {
 		return bTotPrice;
 	}
-	public void setbTotPrice(int bTotPrice) {
+	public void setbTotPrice(long bTotPrice) {
 		this.bTotPrice = bTotPrice;
 	}
 	public int getbStationCode() {
@@ -155,23 +177,12 @@ public class BusReserveDTO {
 	public void setbNum(int bNum) {
 		this.bNum = bNum;
 	}
-	public long getbFee() {
-		return bFee;
-	}
-	public void setbFee(long bFee) {
-		this.bFee = bFee;
-	}
+
 	public String getbPassinger() {
 		return bPassinger;
 	}
 	public void setbPassinger(String bPassinger) {
 		this.bPassinger = bPassinger;
-	}
-	public int getbSeatNum() {
-		return bSeatNum;
-	}
-	public void setbSeatNum(int bSeatNum) {
-		this.bSeatNum = bSeatNum;
 	}
 	public int getbNumId() {
 		return bNumId;
