@@ -17,8 +17,8 @@ public class MaintainDAO {
 		PreparedStatement pstmt = null;
 		String sql;
 		ResultSet rs = null;
-
 		try {
+			
 			sql = "	WITH tb AS ( "
 					+ "	   SELECT td.tDetailCode, td.tOperCode, td.tRouteDetailCode, td.tStaTime , td.tTakeTime,  tr.tStationCode, ts.tStationName   "
 					+ "	  	   FROM trainDetail td "

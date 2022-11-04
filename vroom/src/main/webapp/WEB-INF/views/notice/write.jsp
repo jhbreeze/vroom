@@ -76,10 +76,7 @@ main {
 	max-width: 1200px;
 	margin: auto;
 }
-#backColor{
-background: #0E6EFD;
-color: white;
-}
+
 </style>
 
 </head>
@@ -106,7 +103,7 @@ color: white;
 									value="${dto.boSubject}"></td>
 							</tr>
 							<tr>
-								<td id="backColor" scope="row">항 목</td>
+								<td scope="row">항 목</td>
 								<td><select name="categoryNum" class="form-select" >
 										<option value="1"
 											${dto.categoryNum == 1 ? "selected='selected' ":"" }>알림</option>
@@ -122,7 +119,7 @@ color: white;
 									class="form-check-label" for="notice"> 공지</label></td>
 							</tr>
 							<tr>
-								<td class="col-sm-2" scope="row" id="backColor">작성자명</td>
+								<td class="col-sm-2" scope="row" >작성자명</td>
 								<td>
 									<p class="form-control-plaintext">${sessionScope.member.userId}</p>
 								</td>

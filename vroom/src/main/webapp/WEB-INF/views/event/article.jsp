@@ -176,10 +176,6 @@ a {
 	width: 60%;
 }
 
-thead tr {
-	font-size: 45px;
-}
-
 .col-3, .container {
 	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border: none;

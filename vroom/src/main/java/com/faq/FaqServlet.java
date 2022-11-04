@@ -107,14 +107,14 @@ public class FaqServlet extends MyServlet {
 		FaqDAO dao = new FaqDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
-		
-		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			resp.sendRedirect(cp + "/faq/list.do");
 			return;
@@ -141,14 +141,14 @@ public class FaqServlet extends MyServlet {
 		FaqDAO dao = new FaqDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
-		
-		String cp = req.getContextPath();
 		
 		String page = req.getParameter("page");
 		String query = "page=" + page;

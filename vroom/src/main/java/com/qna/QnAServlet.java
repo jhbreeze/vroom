@@ -235,7 +235,7 @@ public class QnAServlet extends MyServlet {
 				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
 			}
 
-			QnADTO dto = dao.readQna(qnaNum);
+			QnADTO dto = dao.readQna(qnaNum, info.getUserId());
 			if (dto == null) {
 				resp.sendRedirect(cp + "/qna/list.do?" + query);
 				return;
@@ -334,7 +334,7 @@ public class QnAServlet extends MyServlet {
 				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
 			}
 
-			QnADTO dto = dao.readQna(qnaNum);
+			QnADTO dto = dao.readQna(qnaNum, info.getUserId());
 			if (dto == null) {
 				resp.sendRedirect(cp + "/qna/list.do?" + query);
 				return;
@@ -354,7 +354,6 @@ public class QnAServlet extends MyServlet {
 	}
 	protected void delete2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		QnADAO dao = new QnADAO();
-
 		String cp = req.getContextPath();
 
 		String page = req.getParameter("page");
@@ -374,7 +373,7 @@ public class QnAServlet extends MyServlet {
 				query += "&condition=" + condition + "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
 			}
 
-			QnADTO dto = dao.readQna(qnaNum);
+			QnADTO dto = dao.readQna1(qnaNum);
 			if (dto == null) {
 				resp.sendRedirect(cp + "/qna/list.do?" + query);
 				return;
@@ -392,10 +391,12 @@ public class QnAServlet extends MyServlet {
 		QnADAO dao = new QnADAO();
 
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
 
@@ -473,7 +474,14 @@ public class QnAServlet extends MyServlet {
 		QnADAO dao = new QnADAO();
 
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
 		String state = "false";
 
 		try {

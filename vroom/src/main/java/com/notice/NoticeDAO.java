@@ -185,6 +185,60 @@ public class NoticeDAO {
 		return list;
 	}
 	
+	public List<NoticeDTO> listNotice2() {
+		List<NoticeDTO> list = new ArrayList<NoticeDTO>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			sb.append(" SELECT boardNum, b.userId, name, boSubject, category, ");
+			sb.append(" boDate ");
+			sb.append(" FROM board b ");
+			sb.append(" JOIN member1 m ON b.userId = m.userId ");
+			sb.append(" JOIN customer c ON m.cusNum = c.cusNum ");
+			sb.append(" JOIN noticeCategory n ON b.categoryNum = n.categoryNum ");
+			sb.append(" ORDER BY boardNum DESC ");
+			sb.append(" FETCH FIRST 6 ROWS ONLY ");
+			
+			pstmt = conn.prepareStatement(sb.toString());
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				NoticeDTO dto = new NoticeDTO();
+				
+				dto.setBoardNum(rs.getLong("boardNum"));
+				dto.setUserId(rs.getString("userId"));
+				dto.setName(rs.getString("name"));
+				dto.setBoSubject(rs.getString("boSubject"));
+				dto.setBoDate(rs.getString("boDate"));
+				dto.setCategory(rs.getString("category"));
+				
+				list.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+				}
+			}
+			if(pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	
 	public List<NoticeDTO> listNotice(int offset, int size, String condition, String keyword) {
 		List<NoticeDTO> list = new ArrayList<NoticeDTO>();
 		PreparedStatement pstmt = null;

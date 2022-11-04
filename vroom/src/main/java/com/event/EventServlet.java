@@ -223,11 +223,13 @@ public class EventServlet extends MyUploadServlet {
 	}
 
 	protected void writeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String cp = req.getContextPath();
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-		if (info == null) { // 로그인 되지 않은 경우
-			resp.sendRedirect(cp + "/member/login.do");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
 		req.setAttribute("mode", "write");
@@ -238,14 +240,15 @@ public class EventServlet extends MyUploadServlet {
 		EventDAO dao = new EventDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
 
-		String cp = req.getContextPath();
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			resp.sendRedirect(cp + "/event/list.do");
 			return;
@@ -332,14 +335,14 @@ public class EventServlet extends MyUploadServlet {
 		EventDAO dao = new EventDAO();
 
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
-			return;
-		}
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
 		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
 
 		String page = req.getParameter("page");
 		String size = req.getParameter("size");
@@ -377,14 +380,14 @@ public class EventServlet extends MyUploadServlet {
 		EventDAO dao = new EventDAO();
 		
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
-
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
-			return;
-		}
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
 
 		String cp = req.getContextPath();
+		
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
+			return;
+		}
 		if (req.getMethod().equalsIgnoreCase("GET")) {
 			resp.sendRedirect(cp + "/event/list.do");
 			return;
@@ -425,13 +428,14 @@ public class EventServlet extends MyUploadServlet {
 		EventDAO dao = new EventDAO();
 
 		HttpSession session = req.getSession();
-		SessionInfo info = (SessionInfo) session.getAttribute("member");
+		SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+		String cp = req.getContextPath();
 		
-		if (info == null) {
-			forward(req, resp, "/WEB-INF/views/member/login.jsp");
+        if(!info.getUserId().equals("admin") || info == null) {
+			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
-		String cp = req.getContextPath();
 
 		String page = req.getParameter("page");
 		String query = "page=" + page;
@@ -471,8 +475,6 @@ public class EventServlet extends MyUploadServlet {
 		resp.sendRedirect(cp + "/event/list.do?" + query);
 	}
 	
-
-
 	protected void insertReply(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		EventDAO dao = new EventDAO();
 

@@ -24,18 +24,29 @@ public class MaintainServlet extends MyServlet {
 
 	@Override
 	protected void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("utf-8");
+		    req.setCharacterEncoding("utf-8");
+		    
+		    HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
 
-		String uri = req.getRequestURI();
-		if (uri.indexOf("reserve.do") != -1) {
-			list(req, resp);
-		} else if(uri.indexOf("reserve2.do") != -1) {
-			list2(req, resp);
-		} else if(uri.indexOf("reserve3.do") != -1) {
-			list3(req, resp);
-		} else if(uri.indexOf("reserve4.do") != -1) {
-			list4(req, resp);
-		}
+			String cp = req.getContextPath();
+			
+	        if(!info.getUserId().equals("admin") || info == null) {
+				resp.sendRedirect(cp+"/member/login.do");
+				return;
+			}
+		
+			String uri = req.getRequestURI();
+			if (uri.indexOf("reserve.do") != -1) {
+				list(req, resp);
+			} else if(uri.indexOf("reserve2.do") != -1) {
+				list2(req, resp);
+			} else if(uri.indexOf("reserve3.do") != -1) {
+				list3(req, resp);
+			} else if(uri.indexOf("reserve4.do") != -1) {
+				list4(req, resp);
+			}
+		
 	}
 
 	protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -114,8 +125,6 @@ public class MaintainServlet extends MyServlet {
 				
 				dto.settStaTime(dto.gettStaTime().substring(11, dto.gettStaTime().length()-3));
 				dto.setCountTime(sdf2.format(date2));
-				
-				dto.settTaketimeCount(result);
 			}
 			req.setAttribute("list", list);
 			req.setAttribute("page", current_page);
@@ -141,7 +150,7 @@ public class MaintainServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-		if(info == null) {
+        if(!info.getUserId().equals("admin") || info == null) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
@@ -209,8 +218,6 @@ public class MaintainServlet extends MyServlet {
 				
 				dto.settStaTime(dto.gettStaTime().substring(11, dto.gettStaTime().length()-3));
 				dto.setCountTime(sdf2.format(date2));
-				
-				dto.settTaketimeCount(result);
 			}
 			req.setAttribute("list", list);
 			req.setAttribute("page", current_page);

@@ -31,10 +31,7 @@ main {
 	max-width: 1200px;
 	margin: auto;
 }
-#backColor{
-background: #0E6EFD;
-color: white;
-}
+
 .btn:active, .btn:focus, .btn:hover {
 	background-color: #0E6EFD;
 	color: #eee;
@@ -90,7 +87,7 @@ color: white;
 									value="${dto.qnaSubject}"></td>
 							</tr>
 							<tr>
-								<td class=" col-sm-2" scope="row" id="backColor">작성자명</td>
+								<td class=" col-sm-2" scope="row">작성자명</td>
 								<td>
 									<p class="form-control-plaintext">${sessionScope.member.userId}</p>
 								</td>

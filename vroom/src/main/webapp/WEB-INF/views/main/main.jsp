@@ -96,6 +96,17 @@ main {
 	background: #0E6EFD; top: 0; left: 0; z-index: -1;
 	width: 100%; height: 600px; position: absolute;
 }
+.sort {
+	font-size: 10px;
+	border: 0;
+	width: 70px;
+	height: 27px;
+	border-radius: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+}
 </style>
 <script type="text/javascript">
 
@@ -923,32 +934,51 @@ $(function(){
 				</div>
 				<br> <br>
 				<div style="">
-					<div>
+					<div style="padding-left: 10px;">
 						<h4>공지사항</h4>
 					</div>
 					<br>
 					<div class="body-main">
 						<form name="listForm" method="post">
-							<table class="table">
-								<tbody>
-									<c:forEach var="dto" items="${list}" varStatus="status">
-										<tr>
-											<td scope="row" class="text-center">${dataCount - (page-1) * size - status.index}</td>
-											<td scope="row" class="text-center sort-td"><div
-													class="sort">${dto.category}</div></td>
-											<td class="left"><a
-												href="${articleUrl}&boardNum=${dto.boardNum}"
-												class="text-reset text-decoration-none">${dto.boSubject}</a>
-												<c:if test="${dto.gap<1}">
-													<img
-														src="${pageContext.request.contextPath}/resources/images/train.gif"
-														width="5%">
-												</c:if></td>
-											<td class="text-center date-th"><div class="date-div">${dto.boDate}</div></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+							<c:forEach var="dto" items="${list}" varStatus="status">
+
+								<c:if test="${status.index % 6 == 0}">
+									<c:set var="active" value="${status.index==0 ?'active':''}" />
+									<c:out value="<div class='carousel-item  ${active}'>"
+										escapeXml="false" />
+									<c:out value="<div class='row '>" escapeXml="false" />
+								</c:if>
+
+								<c:choose>
+									<c:when test="${dto.category == '보도기사'}">
+										<div style="float: left; margin: 10px; width: 30%;">
+											<div class="sort" style=" font-size: 12px; background-color: #43FFE4; margin-bottom: 10px;">${dto.category}</div>
+											<div style="font-weight: 600;margin-bottom: 10px; font-size: 20px;">
+												<a href="${articleUrl}&boardNum=${dto.boardNum}"
+													class="text-reset text-decoration-none">${dto.boSubject}</a>
+											</div>
+											<div class="date-div" style="color: gray; margin-bottom: 5px;">${dto.boDate}</div>
+										</div>
+									</c:when>
+									<c:otherwise>
+										<div style="float: left; margin: 10px; width: 30%;">
+											<div class="sort" style=" font-size: 15px; background-color: #FFFF88;margin-bottom: 10px;">${dto.category}</div>
+											<div style="font-weight: 600;margin-bottom: 10px; font-size: 20px;">
+												<a href="${articleUrl}&boardNum=${dto.boardNum}"
+													class="text-reset text-decoration-none">${dto.boSubject}</a>
+											</div>
+											<div class="date-div" style="color: gray; margin-bottom: 5px;">${dto.boDate}</div>
+										</div>
+									</c:otherwise>
+								</c:choose>
+								<c:if test="${status.count % 6 == 0 || status.last }">
+									<c:out value="</div>" escapeXml="false" />
+									<c:out value="</div>" escapeXml="false" />
+								</c:if>
+
+								
+
+							</c:forEach>
 						</form>
 					</div>
 				</div>

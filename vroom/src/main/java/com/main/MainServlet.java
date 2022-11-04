@@ -82,11 +82,7 @@ public class MainServlet extends MyServlet {
 
 			// 공지사항 리스트
 			List<NoticeDTO> list;
-			if (keyword.length() != 0) {
-				list = dao.listNotice(offset, size, condition, keyword);
-			} else {
-				list = dao.listNotice(offset, size);
-			}
+			list = dao.listNotice2();
 
 			List<NoticeDTO> listNotice = null;
 			listNotice = dao.listNotice();

@@ -63,10 +63,6 @@ main {
 	max-width: 1200px;
 	margin: auto;
 }
-#backColor{
-background: #0E6EFD;
-color: white;
-}
 </style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/board2.css"
@@ -176,7 +172,7 @@ color: white;
 							</tr>
 
 							<tr>
-								<td scope="row" id="backColor">작성자명</td>
+								<td scope="row">작성자명</td>
 								<td>
 									<p>${sessionScope.member.userId}</p>
 								</td>
@@ -191,7 +187,7 @@ color: white;
 							</tr>
 
 							<tr>
-								<td scope="row" id="backColor">내 용</td>
+								<td scope="row">내 용</td>
 								<td><textarea name="eveCont" id="ir1"
 										style="width: 95%; height: 270px;">${dto.eveCont}</textarea></td>
 							</tr>

@@ -291,13 +291,31 @@ public class QnADAO {
 		return list;
 	}
 
-	public QnADTO readQna(long qnaNum) {
+	public QnADTO readQna(long qnaNum, String userId) {
 		QnADTO dto = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
 
 		try {
+			if (!userId.equals("admin")) {
+				sql = " SELECT qnaNum FROM qna WHERE qnaNum = ? AND userId = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, qnaNum);
+				pstmt.setString(2, userId);
+				rs = pstmt.executeQuery();
+				boolean b = false;
+				if (rs.next()) {
+					b = true;
+				}
+				rs.close();
+				pstmt.close();
+
+				if (!b) {
+					return null;
+				}
+			}
+			
 			sql = " SELECT qnaNum, q.userId, SUBSTR(name,1,1)||NVL(LPAD('*', LENGTH(name)-2,'*'),'*') ||SUBSTR(name,-1,1) name, SUBSTR(qnaName,1,1)||NVL(LPAD('*', LENGTH(qnaName)-2,'*'),'*') ||SUBSTR(qnaName,-1,1)qnaName, qnaSubject, qnaContent, qnaRegDate " + " FROM qna q "
 					+ " LEFT OUTER JOIN member1 m ON q.userId = m.userId "
 					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum " + " WHERE qnaNum = ? ";
