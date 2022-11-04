@@ -1,7 +1,7 @@
 package com.reserve;
 
 public class ReserveDTO {
-	// 회원 기차 예매
+	// 기차 예매
 	private int tDetailCode;
 	private int tOperCode; 
 	private int tRouteDetailCodeSta;
@@ -22,8 +22,9 @@ public class ReserveDTO {
 	private String tStationNameSta;
 	private String tBoardDate;	
 	private String userId;
-
+	private int tDisPrice;
 	
+
 	// 시간계산
 	private int tTaketimeCount;
 	private String countTime;
@@ -32,20 +33,12 @@ public class ReserveDTO {
 	private int tFee;
 	private int bFee;
 	
-	// 임시
-	private String tFirstStaTime; 
-	private String tEndStaTime;
-	private String tDetailSta;
-	private String tDetailEnd; 
-	private int tDeptStationCode;
-	private int tDestStationCode;
-	private String tDiscern;	
 	
 	// 비회원
 	private String tel;
 	
 	
-	// 버스 예매 (최종)
+	// 버스 예매 
 	private int bNumId;
 	private String bTkNum; 	
 	private int bTotNum;
@@ -58,11 +51,10 @@ public class ReserveDTO {
 	private String bStationNameEnd;
 	private int bRouteDetailCodeSta,bRouteDetailCodeEnd; 
 	private String bStationName; 
+	private int bDisPrice;
 	
+
 	
-	// 임시
-	private String day;
-	private String date;
 	public int gettDetailCode() {
 		return tDetailCode;
 	}
@@ -183,48 +175,7 @@ public class ReserveDTO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String gettFirstStaTime() {
-		return tFirstStaTime;
-	}
-	public void settFirstStaTime(String tFirstStaTime) {
-		this.tFirstStaTime = tFirstStaTime;
-	}
-	public String gettEndStaTime() {
-		return tEndStaTime;
-	}
-	public void settEndStaTime(String tEndStaTime) {
-		this.tEndStaTime = tEndStaTime;
-	}
-	public String gettDetailSta() {
-		return tDetailSta;
-	}
-	public void settDetailSta(String tDetailSta) {
-		this.tDetailSta = tDetailSta;
-	}
-	public String gettDetailEnd() {
-		return tDetailEnd;
-	}
-	public void settDetailEnd(String tDetailEnd) {
-		this.tDetailEnd = tDetailEnd;
-	}
-	public int gettDeptStationCode() {
-		return tDeptStationCode;
-	}
-	public void settDeptStationCode(int tDeptStationCode) {
-		this.tDeptStationCode = tDeptStationCode;
-	}
-	public int gettDestStationCode() {
-		return tDestStationCode;
-	}
-	public void settDestStationCode(int tDestStationCode) {
-		this.tDestStationCode = tDestStationCode;
-	}
-	public String gettDiscern() {
-		return tDiscern;
-	}
-	public void settDiscern(String tDiscern) {
-		this.tDiscern = tDiscern;
-	}
+
 	public int getbNumId() {
 		return bNumId;
 	}
@@ -303,18 +254,7 @@ public class ReserveDTO {
 	public void setbRouteDetailCodeEnd(int bRouteDetailCodeEnd) {
 		this.bRouteDetailCodeEnd = bRouteDetailCodeEnd;
 	}
-	public String getDay() {
-		return day;
-	}
-	public void setDay(String day) {
-		this.day = day;
-	}
-	public String getDate() {
-		return date;
-	}
-	public void setDate(String date) {
-		this.date = date;
-	}
+
 	public int gettTaketimeCount() {
 		return tTaketimeCount;
 	}
@@ -350,6 +290,18 @@ public class ReserveDTO {
 	}
 	public void setbFee(int bFee) {
 		this.bFee = bFee;
+	}
+	public int gettDisPrice() {
+		return tDisPrice;
+	}
+	public void settDisPrice(int tDisPrice) {
+		this.tDisPrice = tDisPrice;
+	}
+	public int getbDisPrice() {
+		return bDisPrice;
+	}
+	public void setbDisPrice(int bDisPrice) {
+		this.bDisPrice = bDisPrice;
 	}
 	
 	

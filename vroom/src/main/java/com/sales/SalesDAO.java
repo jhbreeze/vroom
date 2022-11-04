@@ -177,9 +177,9 @@ public class SalesDAO {
 				bORr = " IS NULL ";
 			}
 
-			sql = " SELECT COUNT(*) FROM (SELECT tPayDay FROM ( " + " SELECT TO_CHAR(tPayDay, " + form2
-					+ ") tPayDay FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(tPayDay, " + form + ")= ? "
-					+ " GROUP BY tPayDay)) ";
+			sql = " SELECT COUNT(*) FROM (SELECT bPayDay FROM ( " + " SELECT TO_CHAR(bPayDay, " + form2
+					+ ") bPayDay FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(bPayDay, " + form + ")= ? "
+					+ " GROUP BY bPayDay)) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, searchDate);
 			rs = pstmt.executeQuery();
@@ -239,9 +239,9 @@ public class SalesDAO {
 				bORr = " IS NULL ";
 			}
 
-			sql = " SELECT TO_CHAR(tPayDay, " + form2 + "), TO_CHAR(NVL(SUM(tPayPrice),0),'999,999,999')  "
-					+ " FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(tPayDay, " + form + ")= ? "
-					+ " GROUP BY ROLLUP(TO_CHAR(tPayDay, " + form2 + ")) ";
+			sql = " SELECT TO_CHAR(bPayDay, " + form2 + "), TO_CHAR(NVL(SUM(bPayPrice),0),'999,999,999')  "
+					+ " FROM busTk " + " WHERE bDisPrice " + bORr + " AND TO_CHAR(bPayDay, " + form + ")= ? "
+					+ " GROUP BY ROLLUP(TO_CHAR(bPayDay, " + form2 + ")) ";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, searchDate);

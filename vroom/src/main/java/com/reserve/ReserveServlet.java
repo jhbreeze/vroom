@@ -34,7 +34,7 @@ public class ReserveServlet extends MyServlet{
 			// 비회원 예매 조회 완료
 			checkForm(req,resp); 
 		} else if (uri.indexOf("traincancel.do")!=-1) {
-			traincancle(req,resp);
+			traincancel(req,resp);
 		} else if (uri.indexOf("buscancel.do")!=-1) {
 			buscancel(req,resp);
 		} 
@@ -80,7 +80,9 @@ public class ReserveServlet extends MyServlet{
 			req.setAttribute("reserveTrainList", reserveTrainList);
 			req.setAttribute("reserveBusList", reserveBusList);			
 			
-			
+			if(reserveTrainList.size() == 0 && reserveBusList.size() == 0) {
+				req.setAttribute("message", "등록된 정보가 없습니다.");
+			}			
 
 			forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 			
@@ -128,6 +130,13 @@ public class ReserveServlet extends MyServlet{
 
 			req.setAttribute("reserveTrainList", NonReserveTrainlist);
 			req.setAttribute("reserveBusList", NonReserveBusList);
+			
+			// 메시지 띄우기
+			if(NonReserveTrainlist.size() == 0 && NonReserveBusList.size() == 0) {
+				req.setAttribute("message", "등록된 정보가 없습니다.");
+				forward(req, resp, "/WEB-INF/views/reserve/check.jsp");
+				return;
+			}
 
 			forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 		} catch (Exception e) {
@@ -161,13 +170,15 @@ public class ReserveServlet extends MyServlet{
 	
 	 */
 	
+	/*
 	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//
 		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
 	}
+	 */
 
 	
-	private void traincancle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	private void traincancel(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ReserveDAO dao = new ReserveDAO();
 
 		String state = "false";
@@ -175,7 +186,10 @@ public class ReserveServlet extends MyServlet{
 		try {
 			ReserveDTO dto = new ReserveDTO();
 			dto.settTkNum(req.getParameter("tTkNum"));
-			dao.cancelReservet(dto);
+			
+			int tPayPrice = dao.tPayPrice(dto);
+			
+			dao.cancelReservet(dto, tPayPrice);
 
 			state = "true";
 		} catch (Exception e) {
@@ -201,7 +215,10 @@ public class ReserveServlet extends MyServlet{
 		try {
 			ReserveDTO dto = new ReserveDTO();
 			dto.setbTkNum(req.getParameter("bTkNum"));
-			dao.cancelReserveb(dto);
+			
+			int bPayPrice =  dao.bPayPrice(dto);
+			
+			dao.cancelReserveb(dto, bPayPrice);
 
 			state = "true";
 		} catch (Exception e) {
@@ -219,4 +236,5 @@ public class ReserveServlet extends MyServlet{
 	}
 
 }
+
 

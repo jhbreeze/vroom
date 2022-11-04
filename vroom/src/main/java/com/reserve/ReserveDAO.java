@@ -46,7 +46,7 @@ public class ReserveDAO {
 				+ "	  SELECT tt.tTkNum, m.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, "
 				+ "	  tDetailCodeEnd, t2.tStationName tStationNameEnd, "  
 				+ "	        tDetailCodeSta, t1.tStationName tStationNameSta, "  
-				+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate" 
+				+ "	         TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate, tDisPrice" 
 				+ "	  	FROM trainTk tt "
 				+ "		JOIN tb t2 ON tt.tDetailCodeEnd = t2.tDetailCode "
 				+ "		JOIN tb t1 ON tt.tDetailCodeSta = t1.tDetailCode "
@@ -58,7 +58,11 @@ public class ReserveDAO {
 				// + "	  	JOIN trainTkDetail tdt ON tdt.tTkNum = tt.tTkNum  "
 				+ "	  	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum "
 				+ "	  	JOIN member1 m ON m.cusNum = tt.cusNum " 
-				+ "	  	WHERE userId = ? " ;
+				+ "		WHERE tDisPrice is null AND userId = ? "	
+				+ "  	ORDER BY tBoardDate DESC ";
+		
+		
+		
 		
 		
 				pstmt = conn.prepareStatement(sql);
@@ -84,7 +88,8 @@ public class ReserveDAO {
 				dto.settDetailCodeSta(rs.getInt("tDetailCodeSta"));
 				dto.settStationNameSta(rs.getString("tStationNameSta"));
 				dto.settBoardDate(rs.getString("tBoardDate"));
-	
+				dto.settDisPrice(rs.getInt("tDisPrice"));
+				
 				list.add(dto);
 		
 			}
@@ -172,7 +177,7 @@ public class ReserveDAO {
 			 + " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
 			 + " 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime, "
 			 + "	br.bRouteDetailCodeSta, br.bRouteDetailCodeEnd, " 
-			 + "    bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd " 
+			 + "    bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd, bDisPrice " 
 			 + "    FROM BusTk bt " 
 			 + "    JOIN ( " 
 			 + " SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum " 
@@ -187,7 +192,8 @@ public class ReserveDAO {
 			 + "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode " 
 			 + "	JOIN customer c ON c.cusNum = bt.cusNum " 
 			 + " 	JOIN member1 m ON m.cusNum = c.cusNum " 
-			 + "	WHERE userId = ? "; 
+			 + "	WHERE bt.bDisPrice is null AND userId = ? "	
+			 + " 	ORDER BY bBoardDate DESC ";
 			
 		
 				// TO_CHAR(bBoardDate, '""HH24":"MI"')  
@@ -217,6 +223,8 @@ public class ReserveDAO {
 				dto.setbStationNameEnd(rs.getString("bStationNameEnd"));	
 				dto.setbTotNum(rs.getInt("bTotNum"));
 				dto.setbBoardDate(rs.getString("bBoardDate"));
+				dto.setbTkNum(rs.getString("bTkNum")); 
+				dto.setbDisPrice(rs.getInt("bDisPrice")); 
 				
 				
 				/*
@@ -260,30 +268,28 @@ public class ReserveDAO {
 			
 			
 			try {
-				
-				sql = 
-						"  SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  " 
-						 + "    bd.bSeatNum, bd.bNumId,  " 
-						 + "    b.bType, b.bName, " 
-						 + " 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime, "
-						 + " 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime, "
-						 + "	br.bRouteDetailCodeSta, br.bRouteDetailCodeEnd, " 
-						 + "    bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd , tel " 
-						 + "    FROM BusTk bt " 
-						 + "    JOIN ( " 
-						 + "	SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum " 
-						 + "    FROM busTkDetail " 
-						 + "    GROUP BY bTkNum, bNumId " 
-						 + "	) bd ON bt.bTkNum = bd.bTkNum " 
-						 + "	JOIN bus b ON b.bNumId = bd.bNumId "
-						 + "	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode " 
-						 + "	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta " 
-						 + "	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode "
-						 + "	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd " 
-						 + "	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode " 
-						 + "	JOIN customer c ON c.cusNum = bt.cusNum " 
-						// + " 	JOIN member1 m ON m.cusNum = c.cusNum " 
-						 + "	WHERE tel = ? AND bt.bTkNum = ? ";
+
+				sql = " SELECT bt.bTkNum, bt.bTotNum, bt.cusNum,  TO_CHAR(bt.bBoardDate, 'YY/MM/DD(DY)') bBoardDate,  "
+						+ " bd.bSeatNum, bd.bNumId,  " 
+						+ "		   b.bType, b.bName, "
+						+ "		 	TO_CHAR(bFirstStaTime, '\"\"HH24\":\"MI\"') bFirstStaTime,  "
+						+ "	 	TO_CHAR(bEndStaTime, '\"\"HH24\":\"MI\"') bEndStaTime,  "
+						+ "		br.bRouteDetailCodeSta, br.bRouteDetailCodeEnd,   "
+						+ "	     bs1.bStationName bStationNameSta, bs2.bStationName bStationNameEnd , tel, bDisPrice   "
+						+ "	     FROM BusTk bt  " 
+						+ "	     JOIN (  "
+						+ "	 	SELECT bTkNum, bNumId, LISTAGG(bSeatNum, ',') WITHIN GROUP(ORDER BY bSeatNum) bSeatNum "
+						+ "    FROM busTkDetail " + "    GROUP BY bTkNum, bNumId " 
+						+ " 	) bd ON bt.bTkNum = bd.bTkNum "
+						+ " 	JOIN bus b ON b.bNumId = bd.bNumId "
+						+ " 	JOIN busRouteInfo br ON bt.bOperCode = br.bOperCode  "
+						+ "	 	JOIN busRouteDetail brd1 ON brd1.bRouteDetailCode = br.bRouteDetailCodeSta  "
+						+ "	 	JOIN busStation bs1 ON brd1.bStationCode = bs1.bStationCode  "
+						+ "	 	JOIN busRouteDetail brd2 ON brd2.bRouteDetailCode = br.bRouteDetailCodeEnd  "
+						+ "	 	JOIN busStation bs2 ON brd2.bStationCode = bs2.bStationCode  "
+						+ " 	JOIN customer c ON c.cusNum = bt.cusNum  "
+						+ " 	WHERE bt.bDisPrice is null AND tel = ? AND bt.bTkNum = ?  "
+						+ " 	ORDER BY bBoardDate DESC ";
 				
 				
 						pstmt = conn.prepareStatement(sql);
@@ -311,6 +317,10 @@ public class ReserveDAO {
 					dto.setbRouteDetailCodeEnd(rs.getInt("bRouteDetailCodeEnd"));
 					dto.setbStationNameEnd(rs.getString("bStationNameEnd"));
 					dto.setbStationNameSta(rs.getString("bStationNameSta"));
+					dto.setbDisPrice(rs.getInt("bDisPrice")); 
+					dto.setTel(rs.getString("tel"));
+					dto.setbNumId(rs.getInt("bNumId"));
+					dto.setCusNum(rs.getInt("cusNum"));
 					
 					
 					
@@ -359,7 +369,7 @@ public class ReserveDAO {
 				+ "				SELECT tt.tTkNum, c.cusNum, tTotNum, tSeatNum, tSeat , t1.tStaTime, t1.tTakeTime, hc.tHoNum, hc.tNumId, " 
 				+ "				tDetailCodeEnd, t2.tStationName tStationNameEnd,  "
 				+ "				tDetailCodeSta, t1.tStationName tStationNameSta,  "
-				+ "				TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate, tel "
+				+ "				TO_CHAR(tBoardDate, 'YY/MM/DD(DY)') tBoardDate, tel, tDisPrice "
 				+ "				FROM trainTk tt  "
 				+ "				JOIN tb t2 ON tt.tDetailCodeEnd = t2.tDetailCode  "
 				+ "				JOIN tb t1 ON tt.tDetailCodeSta = t1.tDetailCode  "
@@ -368,7 +378,9 @@ public class ReserveDAO {
 				+ "				FROM trainTkDetail 	GROUP BY tSeat, tTkNum, tHoNum   "
 				+ "				) tdt ON tdt.tTkNum = tt.tTkNum   	JOIN hocha hc ON hc.tHoNum = tdt.tHoNum  "
 				+ "				JOIN customer c ON c.cusNum = tt.cusNum  "
-				+ "				WHERE tel = ? AND tt.tTkNum = ? " ; 
+				+ "				WHERE tel = ? AND tt.tTkNum = ? AND tDisPrice is null "
+				+ "  			ORDER BY tBoardDate DESC " ;
+				
 				
 				pstmt = conn.prepareStatement(sql);
 
@@ -392,7 +404,7 @@ public class ReserveDAO {
 					dto.settDetailCodeSta(rs.getInt("tDetailCodeSta"));
 					dto.settStationNameSta(rs.getString("tStationNameSta"));
 					dto.settBoardDate(rs.getString("tBoardDate"));
-					
+					dto.settDisPrice(rs.getInt("tDisPrice"));
 					
 					list.add(dto);
 
@@ -516,10 +528,49 @@ public class ReserveDAO {
 			return dto;
 		}
 	
-		// 탑승날짜 select 해서 불러오기 여기에다가 WHERE 
+
+		
+		// 기차 운임요금 
+		public int tPayPrice(ReserveDTO dto) throws SQLException {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql; 
+
+			try {
+				sql = " SELECT tPayPrice FROM trainTk WHERE tTkNum = ? "; 
+				
+				pstmt = conn.prepareStatement(sql); 
+				pstmt.setString(1, dto.gettTkNum());
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt("tPayPrice");
+				}
+				
+				System.out.println(result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e2) {
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e2) {
+					}
+				}
+			}
+			return result;
+		}
 		
 		// 예매취소(기차)
-		public void cancelReservet(ReserveDTO dto) throws SQLException {
+		public void cancelReservet(ReserveDTO dto, int tPayPrice) throws SQLException {
 			PreparedStatement pstmt = null;
 			String sql;
 
@@ -539,7 +590,7 @@ public class ReserveDAO {
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, dto.gettTkNum());
-				pstmt.setInt(2, 30000); // 임의로 넣음
+				pstmt.setInt(2, tPayPrice); // 임의로 넣음
 
 				pstmt.executeUpdate();
 				conn.commit();
@@ -566,9 +617,48 @@ public class ReserveDAO {
 			}
 
 		}
+		
+		// 버스 운임요금
+		public int bPayPrice(ReserveDTO dto) throws SQLException {
+			int result = 0;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql; 
+
+			try {
+				sql = " SELECT bPayPrice FROM busTK WHERE bTkNum = ? "; 
+				
+				pstmt = conn.prepareStatement(sql); 
+				pstmt.setString(1, dto.getbTkNum());
+				
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt("bPayPrice");
+				}
+				
+				System.out.println(result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e2) {
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e2) {
+					}
+				}
+			}
+			return result;
+		}
 
 		// 에매취소(버스)
-		public void cancelReserveb(ReserveDTO dto) throws SQLException {
+		public void cancelReserveb(ReserveDTO dto, int bPayPrice) throws SQLException {
 			PreparedStatement pstmt = null;
 			String sql;
 
@@ -588,7 +678,7 @@ public class ReserveDAO {
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1, dto.getbTkNum());
-				pstmt.setInt(2, 30000); // 임의로 넣음
+				pstmt.setInt(2, bPayPrice); 
 
 				pstmt.executeUpdate();
 				conn.commit();

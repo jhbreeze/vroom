@@ -585,13 +585,13 @@ $(function(){
 				</div>
 				<div class="row row-cols-3 text-dark second-row">
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-busdeparture position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11" style="overflow: scroll; height: 80px;">
+					  	<button type="button" class="btn select-busdeparture position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal11" style="height: 80px; overflow: hidden">
 					  		<div class="small-text">출발지</div>
 					  		<div class="middle-hilight-text" id="busdeparture" data-busdeparture="" style="line-height: 20px;">선택</div>
 					  	</button>
 					</div>
 					<div class="col-3" style="margin: 2px; width: 24%">
-					  	<button type="button" class="btn select-busdestination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22" style="overflow: scroll; height: 80px;">
+					  	<button type="button" class="btn select-busdestination position-relative" data-bs-toggle="modal" data-bs-target="#myDialogModal22" style="height: 80px; overflow: hidden">
 						  	<div class="small-text">도착지</div>
 						  	<div class="middle-hilight-text" id="busdestination" data-busdestination="" style="line-height: 20px;">선택</div>
 					  	</button>

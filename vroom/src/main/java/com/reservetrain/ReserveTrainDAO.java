@@ -1149,7 +1149,7 @@ public class ReserveTrainDAO {
 					+ "	?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setString(1, tNumList.get(0));
+			pstmt.setString(1, tTkNumList.get(0));
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, staDto.gettTotNum());
 			pstmt.setInt(4, staDto.gettTotPrice());
@@ -1170,7 +1170,7 @@ public class ReserveTrainDAO {
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, tNumList.get(0));
+				pstmt.setString(1, tTkNumList.get(0));
 				pstmt.setInt(2, tFee.get(i));
 				pstmt.setString(3, tPassenger.get(i));
 				pstmt.setString(4, staDto.gettSeat());
@@ -1194,7 +1194,7 @@ public class ReserveTrainDAO {
 					+ "	?, ?, ?, TO_DATE( ?, 'YYYY-MM-DD'))";
 			pstmt = conn.prepareStatement(sql);
 				
-			pstmt.setString(1, tNumList.get(1));
+			pstmt.setString(1, tTkNumList.get(1));
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, endDto.gettTotNum());
 			pstmt.setInt(4, endDto.gettTotPrice());
@@ -1214,8 +1214,8 @@ public class ReserveTrainDAO {
 						+ "	VALUES(tTkNum_seq.NEXTVAL, ?, ?, ?, ?, ?, ?)";
 				
 				pstmt = conn.prepareStatement(sql);
-				
-				pstmt.setString(1, tNumList.get(1));
+				System.out.println("호차번호 : "+endDto.gettHoNum());
+				pstmt.setString(1, tTkNumList.get(1));
 				pstmt.setInt(2, tFee2.get(i));
 				pstmt.setString(3, tPassenger2.get(i));
 				pstmt.setString(4, endDto.gettSeat());
@@ -1226,6 +1226,7 @@ public class ReserveTrainDAO {
 				
 				pstmt.close();
 				pstmt = null;
+				System.out.println("실행 완료");
 			}
 			
 			conn.commit();

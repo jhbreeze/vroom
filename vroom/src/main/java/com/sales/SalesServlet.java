@@ -9,8 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-
+import com.member.SessionInfo;
 import com.util.MyServlet;
 
 @WebServlet("/sales/*")
@@ -42,6 +43,16 @@ public class SalesServlet extends MyServlet{
 		SalesDAO dao = new SalesDAO();
 		
 		try {
+			HttpSession session = req.getSession();
+			SessionInfo info = (SessionInfo)session.getAttribute("member");
+
+			String cp = req.getContextPath();
+			
+	        if(!info.getUserId().equals("admin") || info == null) {
+				resp.sendRedirect(cp+"/member/login.do");
+				return;
+			}
+	        
 			int year = Integer.parseInt(req.getParameter("year").equals("년도") ? "0" : req.getParameter("year"));
 			int month = Integer.parseInt(req.getParameter("month").equals("월") ? "0" : req.getParameter("month"));
 			int date = Integer.parseInt(req.getParameter("date").equals("일") ? "0" : req.getParameter("date"));
@@ -100,67 +111,4 @@ public class SalesServlet extends MyServlet{
 		resp.sendError(400);
 	}
 	
-//	protected void datalist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//		SalesDAO dao = new SalesDAO();
-//		
-//		try {
-//			int year = Integer.parseInt(req.getParameter("year").equals("년도") ? "0" : req.getParameter("year"));
-//			int month = Integer.parseInt(req.getParameter("month").equals("월") ? "0" : req.getParameter("month"));
-//			int date = Integer.parseInt(req.getParameter("date").equals("일") ? "0" : req.getParameter("date"));
-//			String mode = req.getParameter("mode"); // 구매내역 or 환불내역
-//			String tORb = req.getParameter("tORb");
-//			
-//			// 연도에 대한 내용이 없다면(검색이 아닌 경우), 오늘 날짜로
-//			if(year == 0) {
-//				Calendar cal = Calendar.getInstance();
-//				year = cal.get(Calendar.YEAR);
-//				month = cal.get(Calendar.MONTH)+1;
-//				date = cal.get(Calendar.DATE);
-//				mode = "매출내역";
-//			}
-//			
-//			String y = year + "";
-//			String m = month + "";
-//			String d;
-//			if(date < 10) {
-//				d = "0"+date;
-//			} else {
-//				d = date + "";
-//			}
-//			
-//			if(month < 10) {
-//				m = "0"+month;
-//			} else {
-//				m = month + "";
-//			}
-//			
-//			List<SalesDTO> list = new ArrayList<>();
-//			
-//			if(tORb.equals("기차")) {
-//				list = dao.listSalesTrain(y, m, d, mode);
-//			} else {
-//				list = dao.listSalesBus(y, m, d, mode);
-//			}
-//			
-//			List<String> dateList = new ArrayList<>();
-//			List<String> priceList = new ArrayList<>();
-//			for(SalesDTO dto : list) {
-//				dateList.add(dto.getPayDay());
-//				priceList.add(dto.getPayPrice().replace(",", "").trim());
-//			}
-//			String[] dateArr = dateList.toArray(new String[0]);
-//			String[] priceArr = priceList.toArray(new String[0]);
-//					
-//			JSONObject job = new JSONObject();
-//			job.put("dateArr", dateArr);
-//			job.put("priceArr", priceArr);
-//			
-//			resp.setContentType("text/html;charset=utf-8");
-//			PrintWriter out = resp.getWriter();
-//			out.print(job.toString());
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 }
