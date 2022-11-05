@@ -214,6 +214,7 @@ main {
 											class="bi bi-x"></i>
 									</button> <c:if test="${mode=='update'}">
 										<input type="hidden" name="eveNum" value="${dto.eveNum}">
+										<input type="hidden" name="imageFilename" value="${dto.imageFilename}">
 										<input type="hidden" name="page" value="${page}">
 									</c:if>
 								</td>

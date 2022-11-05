@@ -357,7 +357,7 @@ public class EventServlet extends MyUploadServlet {
 			}
 
 			if (!dto.getUserId().equals(info.getUserId())) {
-				resp.sendRedirect(cp + "/sbbs/list.do?page=" + page);
+				resp.sendRedirect(cp + "/event/list.do?page=" + page);
 				return;
 			}
 

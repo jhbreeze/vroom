@@ -345,8 +345,8 @@ public class EventDAO {
 		try {
 			sql = " SELECT eveNum, e.userId, eveTitle, eveCont, eveRegDate, imageFilename, event, name "
 					+ " FROM event e"
-					+ " JOIN member1 m ON e.userId = m.userId " 
-					+ " JOIN customer c ON m.cusNum = c.cusNum " 
+					+ " LEFT OUTER JOIN member1 m ON e.userId = m.userId " 
+					+ " LEFT OUTER JOIN customer c ON m.cusNum = c.cusNum " 
 					+ " WHERE eveNum = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
