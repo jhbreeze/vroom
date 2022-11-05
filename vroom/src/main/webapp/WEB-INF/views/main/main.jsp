@@ -107,6 +107,11 @@ main {
 	align-items: center;
 	
 }
+
+#sb{
+position: relative;
+top: 20px;
+}
 </style>
 <script type="text/javascript">
 
@@ -923,11 +928,11 @@ $(function(){
 			</div>
 			
 			<button class="carousel-control-prev" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="carousel-control-prev-icon" aria-hidden="true" style="position: relative; top: 20px;"></span>
 				<span class="visually-hidden">Previous</span>
 			</button>
 			<button class="carousel-control-next" type="button" data-bs-target="#carouselImageCaptions" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="carousel-control-next-icon" aria-hidden="true" style="position: relative; top: 20px;"></span>
 				<span class="visually-hidden">Next</span>
 			</button>
 		
