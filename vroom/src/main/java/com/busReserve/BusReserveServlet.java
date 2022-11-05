@@ -138,8 +138,10 @@ public class BusReserveServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
 		String bTotalTimeString;
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
-
+		ReserveBusSessionInfo reserveInfo2 = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		session.setAttribute("reservebusinfo", reserveInfo2);
+		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
+		session.removeAttribute("reserveBusInfo");
 		
 		try {
 			String bcycle = reserveInfo.getBcycle();
@@ -210,7 +212,7 @@ public class BusReserveServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
 		String bTotalTimeString;
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
 
 		
 		try {
@@ -287,7 +289,7 @@ public class BusReserveServlet extends MyServlet {
 	private void busReserveSeat(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
 
 		try {
 			int bNumId =Integer.parseInt(req.getParameter("bNumId"));
