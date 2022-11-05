@@ -13,8 +13,15 @@
 main { 
 	position: relative; top: -55px; background: white;
 }
-.container { min-height: 900px; }
+.container2 { width: 1920px; height: 1000px; margin: 0 auto; text-align: center; }
 
+.photo-1{
+	width: 100%; height: 100%; background-size: contain; object-fit: cover; overflow: hidden;
+	background-position: center; background-repeat: no-repeat; text-align: center;
+	/* object-fit: cover; width: 100%; height: 100%;
+	background-repeat: no-repeat; background-position: center; background-size: contain */
+	background-image: url("${pageContext.request.contextPath}/resources/images/train_route.png");
+}
 </style>
 
 </head>
@@ -25,9 +32,9 @@ main {
 </header>
 	
 <main>
-	<div class="container body-container">
-	
-		 <div class="">
+	<div class="container2 body-container ">
+		
+		 <div class="photo-1">
 		 	
 		 </div>
 	
