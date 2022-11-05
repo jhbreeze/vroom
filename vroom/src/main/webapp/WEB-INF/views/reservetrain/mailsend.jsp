@@ -28,7 +28,7 @@ main {
 	<input type="hidden" name="reserveNum" value="${reserveNum}">
 </form>
 
-<div> 예매 진행중입니다 </div>
+<div style="margin: 0 auto"> 예매 진행중입니다 </div>
 
 
 <script type="text/javascript">

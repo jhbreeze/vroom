@@ -1121,7 +1121,6 @@ public class ReserveTrainDAO {
 			String tNum;
 			Date now = new Date(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			List<String> tNumList = new ArrayList<>();
 			int[] randomArr = new int[2];
 			tNum = sdf.format(now);
 			
