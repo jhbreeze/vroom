@@ -401,7 +401,7 @@ public List<BusReserveDTO> getDepStationList() {
 	public String InsertPayInfo(BusReserveDTO dto) {
 		String bTkNumList = null;
 		String result = "";
-		int bTkNumSeq = 0;
+
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql;
@@ -474,19 +474,13 @@ public List<BusReserveDTO> getDepStationList() {
 				
 				pstmt = conn.prepareStatement(sql);
 				
-				
 				pstmt.setLong(1, bFee.get(i));
 				pstmt.setString(2, bPassenger.get(i));
 				pstmt.setString(3, bSeatNum.get(i));
 				pstmt.setInt(4, dto.getbNumId());//String이 아니라 Int로 설정
 				pstmt.setString(5, bTkNumList);
 				
-				System.out.println("실행 - "+i);
-				System.out.println(bTkNumSeq);
-				System.out.println(bFee.get(i));
-				System.out.println(bPassenger.get(i));
-				System.out.println(dto.getbNumId());
-				System.out.println(bSeatNum.get(i));
+				result =bTkNumList;
 				
 				pstmt.executeUpdate();
 				

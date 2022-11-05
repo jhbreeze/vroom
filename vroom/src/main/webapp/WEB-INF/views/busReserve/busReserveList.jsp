@@ -280,7 +280,7 @@ $(function() {
 				</div>
 				<div class="list-group list-group-flush border-bottom buslistgroup" id="list-group" >
 				<c:forEach var="dto" items="${bRouteInfoList}" varStatus="status">
-					<a class=" list-group-item row" id="buslist" >
+					<a class="list-group-item row" id="buslist">
 						<div class="buslist col-2 fw-bold fs-6  text-center" id="bFirstStaTime" >${dto.bFirstStaTime}</div>
 						<div style="display: none;" id="bEndStaTime" >${dto.bEndStaTime}</div>
 						<div style="display: none;" id="bRouteDetailCode" >${dto.bRouteDetailCode}</div>
@@ -296,7 +296,6 @@ $(function() {
 						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bName"  >${dto.bName}</div>
 						<div  class="buslist col-2 fw-bold fs-6  text-center" id="bType" >${dto.bType}</div>
 						<div  class="buslist col-2 fw-bold fs-6  text-center " id="bFee" >${dto.bFee}</div>
-						
 						<div class="buslist col-2 fw-bold fs-6  text-center "style="min-width: 130px;" id="seatNum" data-seatNum="${dto.seatNum}">${dto.seatNum-dto.reservedSeat}석/전체${dto.seatNum}석</div>
 						<div class="buslist col-2 fw-bold fs-6  text-center "><input type="button" id="reserveBtn" value="예매하기"></div>
 					</a>
