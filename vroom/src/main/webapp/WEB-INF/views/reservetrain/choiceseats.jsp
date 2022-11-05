@@ -354,6 +354,9 @@ $(function(){
 	}
 	
 	$("body").on("change", "#ho-select", function(){
+		$("input[name=seats]").each(function(){
+			$(this).prop("checked", false);
+		});
 		let tHoNum = $(this).val();
 		listSeats(tHoNum);
 	});

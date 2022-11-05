@@ -142,6 +142,14 @@ public class ReserveTrainServlet extends MyServlet{
 		session.setAttribute("reservetraininfo", reserveInfo);
 		ReserveTrainSessionInfo reserveInfo2 = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
 		session.removeAttribute("reserveTrainInfo");
+		
+		String cp = req.getContextPath();
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
+		
 		try {
 			String cycle = reserveInfo2.getCycle();
 			String staDate = reserveInfo2.getStaDate();
@@ -173,7 +181,8 @@ public class ReserveTrainServlet extends MyServlet{
 		
 		
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
-		if(reserveInfo == null) {
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
 			resp.sendRedirect(cp + "/");
 			return;
 		}
@@ -259,6 +268,12 @@ public class ReserveTrainServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
 		ReserveTrainDAO dao = new ReserveTrainDAO();
+		String cp = req.getContextPath();
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
 		try {
 			if(reserveInfo.getCycle().equals("full")) {
 				int deptStationCode = reserveInfo.getDeptStationCode();
@@ -319,6 +334,13 @@ public class ReserveTrainServlet extends MyServlet{
 	protected void choiceSeatsListHTML(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 필요한 파라미터 : 운행코드, 노선상세코드, 등급, 호차번호, 출발상세코드, 도착상세코드, 일자
 		ReserveTrainDAO dao = new ReserveTrainDAO();
+		HttpSession session = req.getSession();
+		String cp = req.getContextPath();
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
 		try {
 			String hORf = req.getParameter("hORf");
 			String cycle = req.getParameter("cycle");
@@ -594,6 +616,12 @@ public class ReserveTrainServlet extends MyServlet{
 		HttpSession session = req.getSession();
 		ReserveTrainSessionInfo reserveInfo = (ReserveTrainSessionInfo)session.getAttribute("reservetraininfo");
 		ReserveTrainDAO dao = new ReserveTrainDAO();
+		String cp = req.getContextPath();
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
 		try {
 			String cycle = reserveInfo.getCycle();
 			int adultCount = reserveInfo.getAdultCount();
@@ -770,6 +798,12 @@ public class ReserveTrainServlet extends MyServlet{
 		String cycle = reserveInfo.getCycle();
 		PaymentDTO dto = new PaymentDTO();
 		PaymentDTO dto2 = new PaymentDTO();
+		String cp = req.getContextPath();
+		String reserve = (String)session.getAttribute("reserve");
+		if(!reserve.equals("기차")) {
+			resp.sendRedirect(cp + "/");
+			return;
+		}
 		
 		try {
 			int cusNum;
