@@ -23,7 +23,7 @@ main {
 	justify-content: center;
     align-items: center;
     position: absolute;
-	background-image: url("${pageContext.request.contextPath}/resources/images/train_route.png");
+	background-image: url("${pageContext.request.contextPath}/resources/images/train_route3.png");
 }
 </style>
 
