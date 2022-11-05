@@ -675,7 +675,7 @@ public class MaintainDAO {
 					} else if(condition.equals("cusNum")){
 						sql += " WHERE bDisPrice IS null AND TO_CHAR(bt.cusNum) = ? ";
 					} else if(condition.equals("bStationName")){
-						sql += " WHERE bDisPrice IS NULL AND INSTR(bs2.bStationName, ?) >= 1 ";
+						sql += " WHERE bDisPrice IS NULL AND INSTR(bs1.bStationName, ?) >= 1 ";
 					}
 					sql+= " ORDER BY bBoardDate DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
@@ -788,7 +788,7 @@ public class MaintainDAO {
 			sql = " SELECT NVL(COUNT(*),0) FROM busTk bt "
 					+ " JOIN customer c ON bt.cusNum = c.cusNum "
 					+ " JOIN busRouteInfo bi ON bt.bOperCode = bi.bOperCode "
-					+ " JOIN busRouteDetail bd ON bi.bRouteDetailCodeEnd = bd.bRouteDetailCode "
+					+ " JOIN busRouteDetail bd ON bi.bRouteDetailCodeSta = bd.bRouteDetailCode "
 			        + " JOIN busStation bs ON bd.bStationCode = bs.bStationCode ";
 			if (condition.equals("name")) {
 				sql += " WHERE bDisPrice IS NULL AND INSTR(c.name, ?) >= 1 ";
@@ -948,7 +948,7 @@ public class MaintainDAO {
 			} else if(condition.equals("cusNum")){
 				sql += " WHERE bDisPrice = 0 AND TO_CHAR(bt.cusNum) = ? ";
 			} else if(condition.equals("bStationName")){
-				sql += " WHERE bDisPrice = 0 AND INSTR(bs2.bStationName, ?) >= 1 ";
+				sql += " WHERE bDisPrice = 0 AND INSTR(bs1.bStationName, ?) >= 1 ";
 			}
 					sql+= " ORDER BY bBoardDate DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
@@ -1060,7 +1060,7 @@ public class MaintainDAO {
 			sql = " SELECT NVL(COUNT(*),0) FROM busTk bt "
 					+ " LEFT OUTER JOIN customer c ON bt.cusNum = c.cusNum "
 					+ " LEFT OUTER JOIN busRouteInfo bi ON bt.bOperCode = bi.bOperCode "
-					+ " LEFT OUTER JOIN busRouteDetail bd ON bi.bRouteDetailCodeEnd = bd.bRouteDetailCode "
+					+ " LEFT OUTER JOIN busRouteDetail bd ON bi.bRouteDetailCodeSta = bd.bRouteDetailCode "
 			        + " LEFT OUTER JOIN busStation bs ON bd.bStationCode = bs.bStationCode ";
 			if (condition.equals("name")) {
 				sql += " WHERE bDisPrice = 0 AND INSTR(c.name, ?) >= 1 ";

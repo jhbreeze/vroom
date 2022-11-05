@@ -148,8 +148,8 @@ tr:hover {
 								<td>${dto.userId.length() > 0 ? "회원" : "비회원"}</td>
 							    <td>${dto.cusNum}</td>
 								<td>${dto.name}</td>
-								<td>${dto.bStationNameEnd}</td>
 								<td>${dto.bStationNameSta}</td>
+								<td>${dto.bStationNameEnd}</td>
 								<td>${dto.bTkNum}</td>
 								<td>${dto.bTotNum}</td>
 								<td>${dto.bBoardDate}</td>
