@@ -121,7 +121,7 @@ main {
 							<tr>
 								<td class="col-sm-2" scope="row" >작성자명</td>
 								<td>
-									<p class="form-control-plaintext">${sessionScope.member.userId}</p>
+									<p class="form-control-plaintext">${sessionScope.member.userName}</p>
 								</td>
 							</tr>
 							<tr>

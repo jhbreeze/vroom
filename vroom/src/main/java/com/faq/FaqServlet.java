@@ -111,7 +111,7 @@ public class FaqServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-        if(!info.getUserId().equals("admin") || info == null) {
+        if(info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
@@ -145,7 +145,7 @@ public class FaqServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-        if(!info.getUserId().equals("admin") || info == null) {
+        if(info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}

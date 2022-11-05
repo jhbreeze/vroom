@@ -31,7 +31,7 @@ public class MaintainServlet extends MyServlet {
 
 			String cp = req.getContextPath();
 			
-	        if(!info.getUserId().equals("admin") || info == null) {
+	        if(info == null || !info.getUserId().equals("admin")) {
 				resp.sendRedirect(cp+"/member/login.do");
 				return;
 			}
@@ -150,7 +150,7 @@ public class MaintainServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-        if(!info.getUserId().equals("admin") || info == null) {
+        if(info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
@@ -275,7 +275,7 @@ public class MaintainServlet extends MyServlet {
 				dataCount = dao.bDataCount(condition, keyword);
 			}
 			
-			int size = 5;
+			int size = 10;
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
@@ -359,7 +359,7 @@ public class MaintainServlet extends MyServlet {
 				dataCount = dao.bDataCount2(condition, keyword);
 			}
 			
-			int size = 5;
+			int size = 10;
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;

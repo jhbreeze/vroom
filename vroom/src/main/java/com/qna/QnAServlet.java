@@ -89,7 +89,7 @@ public class QnAServlet extends MyServlet {
 				dataCount = dao.dataCount(condition, keyword);
 			}
 
-			int size = 5;
+			int size = 10;
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
@@ -156,7 +156,7 @@ public class QnAServlet extends MyServlet {
 		try {
 			QnADTO dto = new QnADTO();
 
-			if(info==null || !info.getUserId().equals("admin")) {
+			if(info==null) {
 				forward(req, resp, "/WEB-INF/views/member/login.jsp");
 				return;
 			} else {
@@ -396,7 +396,7 @@ public class QnAServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-        if(!info.getUserId().equals("admin") || info == null) {
+        if(info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}
@@ -479,7 +479,7 @@ public class QnAServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 		
-        if(!info.getUserId().equals("admin") || info == null) {
+        if(info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp+"/member/login.do");
 			return;
 		}

@@ -154,7 +154,7 @@ public class NoticeServlet extends MyServlet {
 
 		String size = req.getParameter("size");
 
-		if (!info.getUserId().equals("admin")) {
+		if (info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp + "/notice/list.do?size=" + size);
 			return;
 		}
@@ -253,7 +253,7 @@ public class NoticeServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 
-		if (!info.getUserId().equals("admin")) {
+		if (info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp + "/notice/list.do");
 			return;
 		}
@@ -298,7 +298,7 @@ public class NoticeServlet extends MyServlet {
 			return;
 		}
 
-		if (!info.getUserId().equals("admin")) {
+		if (info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp + "/notice/list.do");
 			return;
 		}
@@ -333,7 +333,7 @@ public class NoticeServlet extends MyServlet {
 
 		String cp = req.getContextPath();
 
-		if (!info.getUserId().equals("admin")) {
+		if (info == null || !info.getUserId().equals("admin")) {
 			resp.sendRedirect(cp + "/notice/list.do");
 			return;
 		}

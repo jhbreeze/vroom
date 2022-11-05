@@ -217,7 +217,7 @@ public class EventDAO {
 		return list;
 	}
 	
-	public List<EventDTO> listEvent2(int offset, int size) {
+	public List<EventDTO> listEvent2() {
 		List<EventDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -229,12 +229,9 @@ public class EventDAO {
 					+ " JOIN member1 m ON e.userId = m.userId " 
 					+ " WHERE event = 0 "
 		            + " ORDER BY eveNum DESC "
-					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
+					+ " FETCH FIRST 6 ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setInt(1, offset);
-			pstmt.setInt(2, size);
 
 			rs = pstmt.executeQuery();
 

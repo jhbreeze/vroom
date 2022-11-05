@@ -117,7 +117,7 @@ public class MainServlet extends MyServlet {
 			}
 			
 			// 이벤트
-			List<EventDTO> eventList = dao1.listEvent2(offset, size);
+			List<EventDTO> eventList = dao1.listEvent2();
 			articleUrl2 = cp + "/event/article.do?page=" +current_page;
 			if(query.length() != 0) {
 				articleUrl2 += "&" +query;
