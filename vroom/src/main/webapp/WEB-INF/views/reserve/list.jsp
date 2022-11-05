@@ -12,27 +12,58 @@
 <title>부릉부릉 - 템플릿</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 <style type="text/css">
-main { 
-	position: relative; top: -55px; background: white;
+
+.container {
+	min-height: 700px;
 }
-.container { min-height: 1100px; margin-left: 300px; margin-top: 40px;}
+
+main {
+	position: relative;
+	top: -55px;
+	background: white;
+}
+
+.body-container {
+	max-width: 1050px;
+	margin: auto;
+}
+
+
+
+
+/*
+.container { min-height: 1100px; display:flex;  margin-top: 40px; }
+
+/*
+.container { display: flex; }
+*/
+/*
+.ticket1 { display: flex }
+*/
+
+
+
+
 
 .ticketBoxBack { margin-right:0px; position:relative; width: 200px; height: 150px; border-bottom-left-radius: 2em; border-top-left-radius: 2em; background-color: #0E6EFD; }
 .ticketBoxFirst {position:absolute; left:16px;  width: 400px; height: 150px; border-bottom-left-radius: 0.5em; border-top-left-radius: 0.5em; border-right-style:dotted; border-width:9px; border-right-color:white;  background-color: #F1F5FC;}
 .ticketBoxSecond { width: 500px; margin-left: 300px; height: 150px; border-bottom-right-radius: 2em; border-top-right-radius: 2.5em; border-left-style:dotted; border-width:9px; border-left-color:white;  background-color: #F1F5FC; }
-.ticketBoxThird { top:50px; position:absolute; width: 100px; margin-left: 870px; height: 50px;}
+.ticketBoxThird { top:50px; position:absolute; width: 100px; margin-left: 550px; height: 50px;}
 .ticketBoxFourth { top:40px; position:absolute; width: 100px; margin-left: 780px; height: 100px; }
 
 
-.ticket1 { width: 1100px; height: 600px;}
+/*
+.ticket1 { width: 1100px; height: 600px; }
+*/
 
-.titleName { font-weight: bold; }
+
+.titleName { font-weight: bold; width: 300px; }
 
 .titleDateSearch { float: left; }
 .inputDateSearch { display: inline-block; margin-left: 10px; }
 
 h6 {font-weight: bold; font-size: 19px;}
-h2 { font-size: 30px;}
+h2 { font-size: 34px; font-weight: bold; } 
 .searchDate2 {font-weight: bold; font-size: 19px;}
 
 
@@ -169,9 +200,7 @@ $(function() {
 </header>
 	<main>
 		<div class="container body-container">
-			<h2 class="titleName">예매내역 조회</h2>
-			<br>
-			<hr>
+			<div class="fs-4 fw-bolder">예매내역 조회</div> 
 			<br>
 			<div class="ticket1" style="overflow-y: scroll;">
 				<c:forEach var="dto" items="${reserveTrainList}" varStatus="status">
@@ -201,12 +230,13 @@ $(function() {
 										<p class="infoRightSeatShow">${dto.tSeatNum}</p>
 									</div>
 								</div>
-							</div>
-							<div class="ticketBoxThird">
+								<div class="ticketBoxThird">
 									<button type="button" class="btn btn-primary cancel-btn"
 										style="height: 50px; width: 140px;" data-tTkNum="${dto.tTkNum}">예매 취소</button>
 
 							</div>
+							</div>
+							
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
 							</div>
@@ -244,7 +274,7 @@ $(function() {
 							</div>
 							<div class="ticketBoxThird">
 								<button type="button" class="btn btn-primary cancel-btn2" 
-									style="height: 50px; width: 140px;" data-bTkNum="${dto.bTkNum}" >예매 취소</button> 
+									 data-bTkNum="${dto.bTkNum}" >예매 취소</button> 
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
