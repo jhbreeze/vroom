@@ -11,22 +11,6 @@ import com.util.DBConn;
 
 public class ReserveDAO {
 	private Connection conn = DBConn.getConnection();
-	// 1. 예약내역 리스트 뿌리기부터 하기 (여러가지 하면 머리 아프다 .. ) 
-			// (비회원)전화번호로 가져오는 셀렉트문 하나 짜야함 .. . . . .. . .
-			// 해당하는 예매번호 가져오기 
-			
-			// 회원용 예매내역리스트 따로 가져오기 
-			// 비회원용 예매내역리스트 따로가져오기 
-			// -> 그다음 info 있으면 회원용 정보 가ㅕ오기, 비회원이면 두개의 입력을 받아오기.. 
-		
-	// 선생님께 받은 답변 
-		// 전화번호로 가져오는 셀렉트문 하나 짜야함 .. . . . .. . .
-		// 해당하는 예매번호 가져오기 
-		// 회원용 따로 가져오기 // 비회원용 따로가져오기 -> 그다음 info 있으면 회원용 정보 가ㅕ오기, 비회원이면 두개의 입력을 받아오기.. 
-		// 버스,비회원 다 지우고 기차부터 시작하기 
-		// 기차만 되면 다른건 복붙해서 할 수 있으니까 일단 회원 기차만 해봐라
-	
-	
 	// [회원] 기차 예매내역 리스트
 	public List<ReserveDTO> memberTReserve(String userId) {
 		List<ReserveDTO> list = new ArrayList<>();
@@ -136,7 +120,6 @@ public class ReserveDAO {
 			if (rs.next()) {
 				
 				result = rs.getInt("tTakeTime");
-				System.out.println("걸리는시간:"+result);
 			}
 			
 			
