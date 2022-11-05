@@ -16,10 +16,13 @@ main {
 .container2 { width: 1920px; height: 1000px; margin: 0 auto; text-align: center; }
 
 .photo-1{
-	width: 100%; height: 100%; background-size: contain; object-fit: cover; overflow: hidden;
+	width: 100vw;height: 100vh; 
+	background-size: contain; object-fit: cover; overflow: hidden;
 	background-position: center; background-repeat: no-repeat; text-align: center;
-	/* object-fit: cover; width: 100%; height: 100%;
-	background-repeat: no-repeat; background-position: center; background-size: contain */
+	background-size: cover;
+	justify-content: center;
+    align-items: center;
+    position: absolute;
 	background-image: url("${pageContext.request.contextPath}/resources/images/train_route.png");
 }
 </style>
