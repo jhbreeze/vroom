@@ -23,7 +23,7 @@ main {
 	margin-top: 450px; position: relative;
 }
 
-.body-container { min-height: 700px; margin-top: 100px; }
+.body-container { min-height: 600px; margin-top: 100px; }
 .reserve-container { 
 	background: #fff; width: 700px; height: 280px;
 	position: relative; top: -400px; z-index: 100;  
@@ -93,8 +93,8 @@ main {
     color: #0E6EFD;
 }
 .blue-box2 {
-	background: #0E6EFD; top: 0; left: 0; z-index: -1;
-	width: 100%; height: 600px; position: absolute;
+	top: 0; left: 0; z-index: -1; background-size: cover;
+	width: 100%; height: 600px; position: absolute; background-image: url("${pageContext.request.contextPath}/resources/images/vroom_back.png")
 }
 .sort {
 	font-size: 10px;
