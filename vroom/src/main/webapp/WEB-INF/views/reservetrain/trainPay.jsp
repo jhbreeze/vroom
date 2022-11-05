@@ -87,7 +87,6 @@ $(function(){
 	$("#next-btn").click(function(){
 		let url = "${pageContext.request.contextPath}/reservetrain/beforePayment.do?";
 		let query = $("form[name=hiddenForm]").serialize();
-		alert(query);
 		
 		location.href= url + query;
 	});

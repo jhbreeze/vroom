@@ -38,6 +38,7 @@
 							<li><a href="${pageContext.request.contextPath}/faq/list.do" aria-label="subemnu">자주하는 질문</a></li>
 							<li><a href="${pageContext.request.contextPath}/qna/list.do" aria-label="subemnu">1:1 문의</a></li>
 							<li><a href="${pageContext.request.contextPath}/event/list.do" aria-label="subemnu">이벤트</a></li>
+							<li><a href="${pageContext.request.contextPath}/introduce/introduceTrainPath.do" aria-label="subemnu">기차노선소개</a></li>
 						</ul>
 					</li>
 				

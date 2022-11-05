@@ -27,18 +27,14 @@ main {
 }
 
 div.member {
-	border-bottom: 1px solid lightgray;
-	border-right: 1px solid lightgray;
-	box-shadow: 5px 5px 5px lightgray;
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border-radius: 15px;
 	display: inline-block;
 	width: 90%;
 }
 
 div.member2 {
-	border-bottom: 1px solid lightgray;
-	border-right: 1px solid lightgray;
-	box-shadow: 5px 5px 5px lightgray;
+	box-shadow: 4px 4px 4px rgb(72, 92, 161, 0.2);
 	border-radius: 15px;
 	display: inline-block;
 	width: 40%;
@@ -56,7 +52,6 @@ div.form-1 {
 	padding: 10px;
 	height: 4em;
 	width: 90%;
-	box-shadow: 2px 2px 2px lightgrey
 }
 
 .btn-control {
@@ -65,7 +60,6 @@ div.form-1 {
 	padding: 10px;
 	height: 4em;
 	width: 90%;
-	box-shadow: 2px 2px 2px lightgrey
 }
 
 .loginbtn {

@@ -964,10 +964,8 @@ public class ReserveTrainServlet extends MyServlet{
 				// 왕복 인서트
 				List<String> tTkNumList2 = new ArrayList<>();
 				if(cycle.equals("full")) {
-					System.out.println("실행중 - 1");
 					tTkNumList2 = dao.fullInsertPayInfo(dto, dto2);
 					if(tTkNumList2.size() > 0) {
-						System.out.println("실행중 - 4");
 						String reserveNum = tTkNumList2.get(0) + ", " + tTkNumList2.get(1);
 						req.setAttribute("reserveNum", reserveNum);
 						forward(req, resp, "/WEB-INF/views/reservetrain/mailsend.jsp");

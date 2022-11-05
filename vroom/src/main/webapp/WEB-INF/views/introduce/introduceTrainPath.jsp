@@ -26,13 +26,11 @@ main {
 	
 <main>
 	<div class="container body-container">
-	    <div class="body-title">
-			<h2><i class="fa-regular fa-square"></i> 제목 </h2>
-	    </div>
-	    
-	    <div class="body-main mx-auto">
-			내용 입니다....
-	    </div>
+	
+		 <div class="">
+		 	
+		 </div>
+	
 	</div>
 </main>
 

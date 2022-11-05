@@ -233,7 +233,7 @@ public class MemberDAO {
 		try {
 			conn.setAutoCommit(false);
 			
-			sql = " DELETE FROM member1 WHERE userId = ? ";
+			sql = " UPDATE member1 SET enabled = 0 WHERE userId = ? ";
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, userId);

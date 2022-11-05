@@ -1078,7 +1078,6 @@ public class ReserveTrainDAO {
 	}
 	
 	public List<String> fullInsertPayInfo(PaymentDTO staDto, PaymentDTO endDto) {
-		System.out.println("실행중 - 2");
 		List<String> tTkNumList = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -1099,7 +1098,6 @@ public class ReserveTrainDAO {
 				pstmt.close();
 				pstmt = null;
 				rs.close();
-				System.out.println("실행중 - 2.1");
 				
 				sql = "INSERT INTO customer(cusNum, name, tel, email) VALUES(?, ?, ?, ?)";
 				pstmt = conn.prepareStatement(sql);
@@ -1112,7 +1110,6 @@ public class ReserveTrainDAO {
 					
 				pstmt.close();
 				pstmt = null;
-				System.out.println("실행중 - 2.2");
 			}
 			
 			// ---------------- 가는날
@@ -1128,7 +1125,6 @@ public class ReserveTrainDAO {
 			int[] randomArr = new int[2];
 			tNum = sdf.format(now);
 			
-			System.out.println("실행중 - 2.3");
 			for (int i = 0; i < 2; i++) {
 				randomArr[i]= (int)(Math.random()*1000);
 				for(int j = 0; j < i; j++) {
@@ -1141,7 +1137,6 @@ public class ReserveTrainDAO {
 			for(int i=0; i<2; i++) {
 				tTkNumList.add(tNum+randomArr[i]);
 			}
-			System.out.println("실행중 - 2.4");
 				
 			sql = "INSERT INTO trainTk(tTkNum, cusNum, tTotNum, tTotPrice, tPayDay, "
 					+ "	tPayPrice, tDetailCodeSta, tDetailCodeEnd, tBoardDate) "
@@ -1162,7 +1157,6 @@ public class ReserveTrainDAO {
 				
 			pstmt.close();
 			pstmt = null;
-			System.out.println("실행중 - 2.5");
 			for(int i=0; i<staDto.gettPassenger().size(); i++) {
 				
 				sql = "INSERT INTO trainTkDetail(tNum, tTkNum, tFee, tPassinger, tSeat, tHoNum, tSeatNum) "
@@ -1182,7 +1176,7 @@ public class ReserveTrainDAO {
 				pstmt.close();
 				pstmt = null;
 			}
-			System.out.println("실행중 - 3");
+			
 			// ---------------- 오는날
 			List<String> tPassenger2 = endDto.gettPassenger();
 			List<Integer> tFee2 = endDto.gettFee();
@@ -1214,7 +1208,6 @@ public class ReserveTrainDAO {
 						+ "	VALUES(tTkNum_seq.NEXTVAL, ?, ?, ?, ?, ?, ?)";
 				
 				pstmt = conn.prepareStatement(sql);
-				System.out.println("호차번호 : "+endDto.gettHoNum());
 				pstmt.setString(1, tTkNumList.get(1));
 				pstmt.setInt(2, tFee2.get(i));
 				pstmt.setString(3, tPassenger2.get(i));
@@ -1226,7 +1219,6 @@ public class ReserveTrainDAO {
 				
 				pstmt.close();
 				pstmt = null;
-				System.out.println("실행 완료");
 			}
 			
 			conn.commit();
