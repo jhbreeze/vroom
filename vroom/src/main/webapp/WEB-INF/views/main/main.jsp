@@ -892,13 +892,14 @@ $(function(){
 			<div class="body-container">
 				<div class="row">
 					<div id="carouselImageCaptions" class="carousel slide" data-bs-ride="carousel">
-			<div class="carousel-indicators">
-				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="첫번째 이미지"></button>
-				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="1" aria-current="true" aria-label="두번째 이미지"></button>
-				<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="2" aria-current="true" aria-label="세번째 이미지"></button>
-			</div>
-			
-			<div class="carousel-inner">
+				<div class="fs-4 fw-bolder" style="margin-left: 10px">이벤트</div>
+				<div class="carousel-indicators">
+					<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="첫번째 이미지"></button>
+					<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="1" aria-current="true" aria-label="두번째 이미지"></button>
+					<button type="button" data-bs-target="#carouselImageCaptions" data-bs-slide-to="2" aria-current="true" aria-label="세번째 이미지"></button>
+				</div>
+				
+				<div class="carousel-inner">
 					<c:forEach var="dto" items="${eventList}" varStatus="status">
 						
 						<c:if test="${status.index % 3 == 0}">
@@ -910,7 +911,7 @@ $(function(){
 							<div class="col-4 p-4">
 							<a href="${articleUrl2}&eveNum=${dto.eveNum}"
 									title="${dto.eveTitle}" class="text"><img class="img-fluid img-thumbnail w-100 h-100 image"
-									src="${pageContext.request.contextPath}/uploads/photo/${dto.imageFilename}"></a>
+									src="${pageContext.request.contextPath}/uploads/photo/${dto.imageFilename}" style="padding: 0; border: 0px;"></a>
 							</div>
 						<c:if test="${status.count % 3 == 0 || status.last }">
 								<c:out value="</div>" escapeXml="false"/>
@@ -935,10 +936,9 @@ $(function(){
 				<br> <br>
 				<div style="">
 					<div style="padding-left: 10px;">
-						<h4>공지사항</h4>
+						<div class="fs-4 fw-bolder" style="margin-bottom: 5px;">공지사항</div>
 					</div>
-					<br>
-					<div class="body-main">
+					<div class="body-main row">
 						<form name="listForm" method="post">
 							<c:forEach var="dto" items="${list}" varStatus="status">
 
@@ -951,7 +951,7 @@ $(function(){
 
 								<c:choose>
 									<c:when test="${dto.category == '보도기사'}">
-										<div style="float: left; margin: 10px; width: 30%;">
+										<div class="col-3" style="float: left; margin: 19px; width: 30%; box-shadow: none;">
 											<div class="sort" style=" font-size: 12px; background-color: #43FFE4; margin-bottom: 10px;">${dto.category}</div>
 											<div style="font-weight: 600;margin-bottom: 10px; font-size: 20px;">
 												<a href="${articleUrl}&boardNum=${dto.boardNum}"
@@ -961,7 +961,7 @@ $(function(){
 										</div>
 									</c:when>
 									<c:otherwise>
-										<div style="float: left; margin: 10px; width: 30%;">
+										<div class="col-3" style="float: left; margin: 19px; width: 30%; box-shadow: none;">
 											<div class="sort" style=" font-size: 15px; background-color: #FFFF88;margin-bottom: 10px;">${dto.category}</div>
 											<div style="font-weight: 600;margin-bottom: 10px; font-size: 20px;">
 												<a href="${articleUrl}&boardNum=${dto.boardNum}"
