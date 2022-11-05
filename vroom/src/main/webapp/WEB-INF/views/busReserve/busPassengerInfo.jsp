@@ -256,7 +256,7 @@ function sendOk() {
 			} else {
 				msg = '결제에 실패하였습니다.';
                 msg += '에러내용 : ' + rsp.error_msg;
-                location.href="${pageContext.request.contextPath}/busreserve/passengerinfo.do";
+                location.href="${pageContext.request.contextPath}/busreserve/buspassengerinfo.do";
                 alert(msg);
 			}
 		});

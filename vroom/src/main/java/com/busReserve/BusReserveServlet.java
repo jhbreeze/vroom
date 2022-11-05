@@ -15,9 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.member.SessionInfo;
-import com.reservetrain.PaymentDTO;
-import com.reservetrain.ReserveTrainDAO;
-import com.reservetrain.ReserveTrainSessionInfo;
 import com.util.MyServlet;
 
 @WebServlet("/busreserve/*")
@@ -128,7 +125,6 @@ public class BusReserveServlet extends MyServlet {
 		reserveInfo.setBusstaDate(req.getParameter("busstaDate"));
 		reserveInfo.setBusendDate(req.getParameter("busendDate"));
 		
-		System.out.print(reserveInfo);
 		session.setAttribute("reserveBusInfo", reserveInfo);
 		session.setAttribute("reserve", "버스");
 		if(info == null) {
@@ -394,7 +390,6 @@ public class BusReserveServlet extends MyServlet {
 	}
 }
 	private void busPay(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
 		
 		try {
 				req.setAttribute("bFirstStaTime", req.getParameter("bFirstStaTime"));
@@ -470,7 +465,6 @@ public class BusReserveServlet extends MyServlet {
 	}
 	private void insertPayInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
 		SessionInfo info = (SessionInfo)session.getAttribute("member");
 		BusReserveDAO dao = new BusReserveDAO();
 		BusReserveDTO dto = new BusReserveDTO();
@@ -496,31 +490,19 @@ public class BusReserveServlet extends MyServlet {
 			int totFee = Integer.parseInt(req.getParameter("totFee"));
 			int bOperCode = Integer.parseInt(req.getParameter("bOperCode"));
 			int bNumId = Integer.parseInt(req.getParameter("bNumId"));
-			int totNum = Integer.parseInt(req.getParameter("totNum"));
+			int totNum = Integer.parseInt(req.getParameter("bNor"))+Integer.parseInt(req.getParameter("bEle"))+Integer.parseInt(req.getParameter("bOld"));
 
 			String busBoardDate = (req.getParameter("busBoardDate"));
-			int seatTotNum = Integer.parseInt(req.getParameter("seatTotNum"));
+			dto.setbBoardDate(busBoardDate);
 			
 			dto.setbTotPrice(totFee);
 			dto.setbPayPrice(totFee);
 			dto.setbOperCode(bOperCode);
 			dto.setbNumId(bNumId);
 			
-			String staDate = req.getParameter("busstaDate");
-			staDate = staDate.substring(0, staDate.length()-2);
-			String[] sta = staDate.split("[.]");
-			if(Integer.parseInt(sta[1])<10){
-				sta[1] = "0"+sta[1];
-			}
-			if(Integer.parseInt(sta[2])<10){
-				sta[2] = "0"+sta[2];
-			}
-			staDate = sta[0]+"-"+sta[1]+"-"+sta[2];
-			
-			dto.setbBoardDate(staDate);
 			String bType =req.getParameter("bType");
 			dto.setbType(bType);
-			List<Long> feeList = new ArrayList<>();
+			List<Integer> feeList = new ArrayList<>();
 			List<String> passengerList = new ArrayList<>();
 			List<String> bSeatNum = new ArrayList<>();
 			int bNor = Integer.parseInt(req.getParameter("bNor"));
@@ -529,6 +511,7 @@ public class BusReserveServlet extends MyServlet {
 			int bNorFee = Integer.parseInt(req.getParameter("bNorFee"));
 			int bEleFee = Integer.parseInt(req.getParameter("bEleFee"));
 			int bOldFee = Integer.parseInt(req.getParameter("bOldFee"));
+			
 			String reSeat = req.getParameter("reSeatArr");
 			String[] reSeatArr = reSeat.split(",");
 			
@@ -547,7 +530,7 @@ public class BusReserveServlet extends MyServlet {
 			if(bOld==0) {
 				bOldPrice = 0;
 			} else {
-				bOldPrice = bEleFee;
+				bOldPrice = bOldFee;
 			}
 			
 			for(int i=0; i<totNum; i++) {
@@ -570,7 +553,7 @@ public class BusReserveServlet extends MyServlet {
 				}
 			}
 			dto.setbPassenger(passengerList);
-			dto.setbFeeFinal(feeList);
+			dto.setbFeefinal(feeList);
 			dto.setbSeatNum(bSeatNum);
 			//메일
 			// 편도 인서트
@@ -580,7 +563,7 @@ public class BusReserveServlet extends MyServlet {
 			if (bTkNumList != null) {
 				String reserveNum = bTkNumList;
 				req.setAttribute("reserveNum", reserveNum);
-				forward(req, resp, "/WEB-INF/views/reservetrain/mailsend.jsp");
+				forward(req, resp, "/WEB-INF/views/busReserve/mailsend.jsp");
 				return;
 			}
 		} catch (Exception e) {

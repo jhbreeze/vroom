@@ -9,7 +9,7 @@ public class BusReserveDTO {
 	private int bTkNum;
 	private List<String> bPassenger;
 	private Long bFee;
-	private List<Long> bFeefinal; 
+	private List<Integer> bFeefinal; 
 	private List<String> bSeatNum;
 	private int cusNum;
 	private int bseatTotNum;
@@ -48,10 +48,10 @@ public class BusReserveDTO {
 	public void setbFee(Long bFee) {
 		this.bFee = bFee;
 	}
-	public List<Long> getbFeefinal() {
+	public List<Integer> getbFeefinal() {
 		return bFeefinal;
 	}
-	public void setbFeefinal(List<Long> bFeefinal) {
+	public void setbFeefinal(List<Integer> bFeefinal) {
 		this.bFeefinal = bFeefinal;
 	}
 	public List<String> getbPassenger() {

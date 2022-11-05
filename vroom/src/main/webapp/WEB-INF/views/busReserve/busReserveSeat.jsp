@@ -432,7 +432,7 @@ function countNor(type){
 	bNorFee=Math.round(bNor*bFee / 10) * 10;
 	seatTotNum =fseatTotCount(bNor,bEle,bOld);
 	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
-	$("#fblock2-3-3-1").text(totFee);
+	$("#fblock2-3-3-1").text(totFee+"원");
 	$("#fblock2-3-2-1-2").text(Math.round(bNor*bFee / 10) * 10 +"원");
 	f2.innerText = "일반"+ bNor + "명";
 }
@@ -454,7 +454,7 @@ function countEle(type){
 	bEleFee=Math.round(bEle*bFee*0.5 / 10) * 10;
 	seatTotNum =fseatTotCount(bNor,bEle,bOld);
 	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
-	$("#fblock2-3-3-1").text(totFee);
+	$("#fblock2-3-3-1").text(totFee+"원");
 	$("#fblock2-3-2-2-2").text(Math.round(bEle*bFee*0.5 / 10) * 10 +"원");
 	f2.innerText = "초등생"+ bEle + "명";
 }
@@ -475,7 +475,7 @@ function countMid(type){
 	bOldFee = Math.round(bOld*bFee*0.7 / 10) * 10;
 	seatTotNum =fseatTotCount(bNor,bEle,bOld);
 	totFee = ftotFee(bNorFee,bEleFee, bOldFee);
-	$("#fblock2-3-3-1").text(totFee);
+	$("#fblock2-3-3-1").text(totFee+"원");
 	$("#fblock2-3-2-3-2").text(Math.round(bOld*bFee*0.7 / 10) * 10 +"원");
 	f2.innerText = "중고등생"+ bOld + "명";
 }	
@@ -492,20 +492,19 @@ $(function() {
 	$("form[name=seatForm] input:checkbox").on('click', function() {
 		let chk_id = $(this).attr("id");
 		let num = parseInt($(this).attr("data-num"));
-		
+		let idx;
 	    if ($(this).prop('checked')) {
 	    	reSeatCount++;
 	    	if(reSeatCount>(bNor+bEle+bOld)){
 				alert("선택가능한 좌석수를 초과하였습니다.다시 선택해주세요");
 				$(this).prop("checked", false);
-				resetBtn();
-				$("form[name=seatForm] input:checkbox").prop("checked", false);
+				reSeatCount--;
 				return;
 			}
 	    	reSeatArr.push(num);
 	    } else {
 	    	reSeatCount--;
-	    	let idx = reSeatArr.indexOf(num);
+	    	idx = reSeatArr.indexOf(num);
 	    	if(idx > -1) reSeatArr.splice(idx, 1);
 	    }
 	    
@@ -802,7 +801,7 @@ $(function(){
 							<div id="fblock2-3-3">
 								<div id="fblock2-3-3-title">총결제금액</div>
 								<div id="fblock2-3-3-1" class="totFee" data-num="">원</div>
-								<input type="button" id="reserveBtn" value="예매하기">
+								<input type="button" id="reserveBtn" value="결제하기">
 							</div>
 						</div>
 						

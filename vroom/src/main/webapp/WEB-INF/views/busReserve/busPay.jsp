@@ -50,8 +50,6 @@ $(function(){
 	$("#next-btn").click(function(){
 		let url = "${pageContext.request.contextPath}/busreserve/buspassengerinfo.do?";
 		let query = $("form[name=hiddenForm]").serialize();
-		alert(query);
-		
 		location.href= url + query;
 	});
 });
@@ -130,10 +128,7 @@ $(function(){
 	
 	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
 	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
-	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
-	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
 	
-	<input type="hidden" name="bSeatNum" value="${bSeatNum}">
 	<input type="hidden" name="bSeatNum" value="${bSeatNum}">
 	
 	<input type="hidden" name="bName" value="${bName}">
@@ -149,11 +144,7 @@ $(function(){
 	<input type="hidden" name="totFee" value="${totFee}">
 	
 	<input type="hidden" name="bRouteCode" value="${bRouteCode}">
-	<input type="hidden" name="bRouteCode" value="${bRouteCode}">
 	
-	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
-	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
-	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
 	<input type="hidden" name="bRouteDetailCode" value="${bRouteDetailCode}">
 </form>
 

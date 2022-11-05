@@ -399,6 +399,7 @@ public List<BusReserveDTO> getDepStationList() {
 	
 	// 버스예매 
 	public String InsertPayInfo(BusReserveDTO dto) {
+		String bTkNumList = null;
 		String result = "";
 		int bTkNumSeq = 0;
 		PreparedStatement pstmt = null;
@@ -409,7 +410,7 @@ public List<BusReserveDTO> getDepStationList() {
 			conn.setAutoCommit(false);
 			
 			List<String> bPassenger = dto.getbPassenger();
-			List<Long> bFee = dto.getbFeefinal();
+			List<Integer> bFee = dto.getbFeefinal();
 			List<String> bSeatNum = dto.getbSeatNum();
 			
 			System.out.println("승객수 : " + bPassenger.size());
@@ -441,22 +442,21 @@ public List<BusReserveDTO> getDepStationList() {
 				pstmt = null;
 			}
 			
-			sql = "SELECT bTkNum_seq.NEXTVAL FROM dual";
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				bTkNumSeq = rs.getInt(1);
-			}
-			
-			pstmt.close();
+			String bTkNum;
+			Date now = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			int random = (int)Math.random()*1000;
+			bTkNum = sdf.format(now)+random;
+			bTkNumList = bTkNum;
 			
 			//busTk
 			sql = "INSERT INTO busTk(bTkNum, cusNum, bTotNum, bTotPrice, bPayDay, "
-					+ "	bPayPrice, bOperCode, bBoardDate) "
-					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'))";
+					+ "	bPayPrice, bOperCode, bBoardDate, bDisPrice) "
+					+ "	VALUES( ?, ?, ?, ?, SYSDATE, ?, ?, TO_DATE( ? , 'YYYY-MM-DD'),NULL)";
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, bTkNumSeq);
+			//버스별예매번호 랜덤생성 return값 bTkNum
+			pstmt.setString(1, bTkNumList);
 			pstmt.setInt(2, cusNum);
 			pstmt.setInt(3, dto.getbTotNum());
 			pstmt.setLong(4, dto.getbTotPrice());//int가 아니라 Long
@@ -464,45 +464,36 @@ public List<BusReserveDTO> getDepStationList() {
 			pstmt.setInt(6, dto.getbOperCode());
 			pstmt.setString(7, dto.getbBoardDate());
 			
-			result += pstmt.executeUpdate();
+			pstmt.executeUpdate();
 			pstmt.close();
-			
-			
+			pstmt = null;
+			//버스예매상세
 			for(int i=0; i<bPassenger.size(); i++) {
-				//버스예매번호 랜덤생성
-				String bNum;
-				Date now = new Date(System.currentTimeMillis());
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-				bNum = sdf.format(now);
-				int randomInt = (int)Math.random()*1000;
-				bNum += randomInt;
-				
-				System.out.println(i+"--------");
 				sql = " INSERT INTO busTkDetail(bNum, bFee, bPassinger, bSeatNum, bNumId,  bTkNum) "
-						+ "	VALUES(?, ?, ?, ?, ?, ?)";
+						+ "	VALUES(bTkNum_seq.NEXTVAL,?, ?, ?, ?, ? )";
+				
 				pstmt = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, bNum);
-				pstmt.setLong(2, bFee.get(i));
-				pstmt.setString(3, bPassenger.get(i));
-				pstmt.setString(4, bSeatNum.get(i));
-				pstmt.setInt(5, dto.getbNumId());//String이 아니라 Int로 설정
-				pstmt.setInt(6, bTkNumSeq);
+				
+				pstmt.setLong(1, bFee.get(i));
+				pstmt.setString(2, bPassenger.get(i));
+				pstmt.setString(3, bSeatNum.get(i));
+				pstmt.setInt(4, dto.getbNumId());//String이 아니라 Int로 설정
+				pstmt.setString(5, bTkNumList);
 				
 				System.out.println("실행 - "+i);
-				System.out.println(bNum);
 				System.out.println(bTkNumSeq);
 				System.out.println(bFee.get(i));
 				System.out.println(bPassenger.get(i));
 				System.out.println(dto.getbNumId());
 				System.out.println(bSeatNum.get(i));
 				
-				result += pstmt.executeUpdate();
+				pstmt.executeUpdate();
 				
 				pstmt.close();
 			}
 			System.out.println("실행됨");
-
+			
 			
 			conn.commit();
 		} catch (Exception e) {
