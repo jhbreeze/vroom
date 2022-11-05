@@ -134,6 +134,7 @@ public class BusReserveServlet extends MyServlet {
 		}
 	}
 	//운행코드
+	/*
 	protected void bOperCode(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
@@ -174,16 +175,7 @@ public class BusReserveServlet extends MyServlet {
 			req.setAttribute("bRouteDetailCode",bRouteDetailCode);
 			req.setAttribute("bRouteCode",bRouteCode);
 			
-			/*
-			 String hORf2 = req.getParameter("hORf"); // 없으면 null
-			if(hORf2==null||hORf2.equals("1")) {//편도 or 왕복 가는날
-				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
-				req.setAttribute("bRouteInfoList", bRouteInfoList);	
-			} else if(hORf2.equals("2")) {
-				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(desbRouteDetailCode) ;
-				req.setAttribute("bRouteInfoList", bRouteInfoList);	
-			}
-			*/
+			
 			
 			forward(req, resp, "/WEB-INF/views/busReserve/busReserveList.jsp");
 			return;
@@ -191,6 +183,7 @@ public class BusReserveServlet extends MyServlet {
 			e.printStackTrace();
 		}
 	}	
+	*/
 	private void reserveSeatList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 예약된 좌석 리스트
 		
@@ -212,8 +205,10 @@ public class BusReserveServlet extends MyServlet {
 		HttpSession session = req.getSession();
 		BusReserveDAO dao = new BusReserveDAO();
 		String bTotalTimeString;
+		ReserveBusSessionInfo reserveInfo2 = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
+		session.setAttribute("reservebusinfo", reserveInfo2);
 		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
-
+		session.removeAttribute("reserveBusInfo");
 		
 		try {
 			String bcycle = reserveInfo.getBcycle();
