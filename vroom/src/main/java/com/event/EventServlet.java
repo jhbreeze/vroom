@@ -306,7 +306,7 @@ public class EventServlet extends MyUploadServlet {
 			}
 
 			EventDTO dto = dao.readList(eveNum);
-			if (dto == null) { // 게시물이 없으면 다시 리스트로
+			if (dto == null) {
 				resp.sendRedirect(cp + "/event/list.do?" + query);
 				return;
 			}

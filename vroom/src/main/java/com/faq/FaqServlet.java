@@ -63,14 +63,12 @@ public class FaqServlet extends MyServlet {
 			int dataCount;
 			dataCount = dao.dataCount();
 
-			// 전체 페이지 수
 			int size = 10;
 			int total_page = util.pageCount(dataCount, size);
 			if (current_page > total_page) {
 				current_page = total_page;
 			}
 
-			// 게시글 가져오기
 			int offset = (current_page - 1) * size;
 			if (offset < 0)
 				offset = 0;

@@ -12,7 +12,6 @@ import com.util.DBConn;
 public class FaqDAO {
 	private Connection conn = DBConn.getConnection();
 
-	// 자주하는 질문 입력
 	public void insertFaq(FaqDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;
@@ -40,7 +39,6 @@ public class FaqDAO {
 		}
 	}
 
-	// 전체 데이터 개수
 	public int dataCount() {
 		int result = 0;
 		PreparedStatement pstmt = null;
@@ -76,7 +74,6 @@ public class FaqDAO {
 		return result;
 	}
 
-	// 리스트출력 및 내용 출력
 	public List<FaqDTO> listFaq(int offset, int size) {
 		List<FaqDTO> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
@@ -173,7 +170,6 @@ public class FaqDAO {
 		return dto;
 	}
 
-	//
 	public void updateFaq(FaqDTO dto) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql;

@@ -100,7 +100,7 @@ main {
 
 	$(function() {
 		let img = "${dto.imageFilename}";
-		if (img) { // 수정인 경우
+		if (img) {
 			img = "${pageContext.request.contextPath}/uploads/photo/" + img;
 			$(".write-form .img-viewer").empty();
 			$(".write-form .img-viewer").css("background-image",

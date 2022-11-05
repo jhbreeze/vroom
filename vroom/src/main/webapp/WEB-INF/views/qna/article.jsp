@@ -117,11 +117,11 @@ main {
 			let url = "${pageContext.request.contextPath}/qna/insertReply.do";
 			let query = "qnaNum=" + qnaNum + "&qnaReplyCont=" + qnaReplyCont;
 
-			const fn = function(data) { // 데이터를 함수로 표현
+			const fn = function(data) { 
 				$tb.find("textarea").val("");
 
 				if (data.state === "true") {
-					listPage(1); // 등록이 끝나면 리스트 페이지 부름
+					listPage(1); 
 				} else {
 					alert("댓글 등록에 실패했습니다.");
 				}

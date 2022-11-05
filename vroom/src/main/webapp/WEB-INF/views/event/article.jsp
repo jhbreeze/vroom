@@ -53,7 +53,6 @@
 		});
 	}
 
-	// 페이징 처리
 	$(function() {
 		listPage(1);
 	});
@@ -68,13 +67,12 @@
 		ajaxFun(url, "get", query, "html", fn);
 	}
 
-	// 리플 등록
 	$(function() {
 		$(".btnSendReply")
 				.click(
 						function() {
-							let eveNum = "${dto.eveNum}"; // boardservlet 글보기에서 dto를 넘겼기 때문에 게시물 번호를 사용할 수 있음. 아버지 번호
-							const $tb = $(this).closest("table"); // this = button
+							let eveNum = "${dto.eveNum}";  
+							const $tb = $(this).closest("table"); 
 							let evReplyContent = $tb.find("textarea").val()
 									.trim();
 							if (!evReplyContent) {
@@ -87,11 +85,11 @@
 							let query = "eveNum=" + eveNum + "&evReplyContent="
 									+ evReplyContent;
 
-							const fn = function(data) { // 데이터를 함수로 표현
+							const fn = function(data) { 
 								$tb.find("textarea").val("");
 
 								if (data.state === "true") {
-									listPage(1); // 등록이 끝나면 리스트 페이지 부름
+									listPage(1); 
 								} else {
 									alert("댓글 등록에 실패했습니다.");
 								}
@@ -102,7 +100,6 @@
 						});
 	});
 
-	// 댓글 삭제
 	$(function() {
 		$("body")
 				.on(

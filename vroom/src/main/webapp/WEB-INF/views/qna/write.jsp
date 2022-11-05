@@ -136,7 +136,6 @@ main {
 		function submitContents(elClickedObj) {
 			oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []);
 			try {
-				// elClickedObj.form.submit();
 				return check();
 			} catch (e) {
 			}

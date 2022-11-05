@@ -356,7 +356,6 @@ public class QnADAO {
 		return dto;
 	}
 
-	// 비회원 글 가져오기
 	public QnADTO readQna1(long qnaNum) {
 		QnADTO dto = null;
 		PreparedStatement pstmt = null;
@@ -516,7 +515,6 @@ public class QnADAO {
 		}
 	}
 
-	// 답글 갯수 가져오기
 	public int dataCountReply(long qnaNum) {
 		int result = 0;
 		PreparedStatement pstmt = null;
