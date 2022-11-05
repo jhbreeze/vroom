@@ -94,7 +94,7 @@ function sendOk() {
 					<div class="col-md-7">
 						<div class="mt-5 pb-2">
 							<form name="checkForm" method="post" class="row g-3">
-								<h3 class="text-center fw-bold mb-5">🔹 비회원 조회 🔹</h3>
+								<h3 class="text-center fw-bold">비회원 조회</h3>
 
 								<div class="d-grid mb-3">
 									<label class="mb-2 fw-bold">예매번호</label>
