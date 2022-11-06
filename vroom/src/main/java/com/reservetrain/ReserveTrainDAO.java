@@ -1192,8 +1192,8 @@ public class ReserveTrainDAO {
 			pstmt.setInt(3, endDto.gettTotNum());
 			pstmt.setInt(4, endDto.gettTotPrice());
 			pstmt.setInt(5, endDto.gettPayPrice());
-			pstmt.setInt(6, endDto.gettDetailCodeEnd());
-			pstmt.setInt(7, endDto.gettDetailCodeSta());
+			pstmt.setInt(6, endDto.gettDetailCodeSta());
+			pstmt.setInt(7, endDto.gettDetailCodeEnd());
 			pstmt.setString(8, endDto.gettBoardDate());
 				
 			pstmt.executeUpdate();
