@@ -1125,7 +1125,6 @@ public class MaintainDAO {
 			if (rs.next()) {
 
 				result = rs.getInt("tTakeTime");
-				System.out.println("걸리는시간:" + result);
 			}
 
 		} catch (Exception e) {
