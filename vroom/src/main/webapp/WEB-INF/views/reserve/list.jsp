@@ -26,8 +26,10 @@ main {
 .body-container {
 	max-width: 1050px;
 	margin: auto;
+	height: 400px;
 }
 
+.ticket1 { height: 500px; }
 
 .ticketBoxBack { margin-right:0px; position:relative; width: 200px; height: 150px; border-bottom-left-radius: 2em; border-top-left-radius: 2em; background-color: #0E6EFD; }
 .ticketBoxFirst {position:absolute; left:16px;  width: 400px; height: 150px; border-bottom-left-radius: 0.5em; border-top-left-radius: 0.5em; border-right-style:dotted; border-width:9px; border-right-color:white;  background-color: #F1F5FC;}
@@ -47,13 +49,13 @@ h2 { font-size: 34px; font-weight: bold; }
 .testStation { margin-left: 20px; margin-top: 20px;}
 
 
-.infoLeft { margin-left: 30px; margin-top: 15px;}
+.infoLeft { margin-left: 30px; margin-top: 15px; height: 120px;}
 .textStaition {font-weight: bold; color: #0E6EFD; font-size: 24px; }
 .textTrasnport { margin-top: -15px; color: #848484; font-size: 15px; }
 .textDate { margin-top: 33px; font-size: 14px; font-weight:bold; }
-.textDateBUS { margin-top: 45px; font-size: 14px; font-weight:bold; } 
+.textDateBUS {  font-size: 14px; font-weight:bold; margin: 0px; position: relative; top: 15px;} 
 
-.textStaitionBUS {font-weight: bold; color: #0E6EFD; font-size: 17px; }
+.textStaitionBUS {font-weight: bold; color: #0E6EFD; font-size: 17px; text-align: left; width: 330px;}
 
 
 .infoRightMemberTitle  { margin-bottom:5px; margin-left: 140px; top: 20px; width: 40px; height: 20px; display: inline-block; margin-top: 35px; color: #0E6EFD; font-weight: bold;}
@@ -68,16 +70,23 @@ h2 { font-size: 34px; font-weight: bold; }
 
 
 .infoRightSeatTitle { margin-bottom:5px; display: inline-block; margin-left: 140px; color: #0E6EFD; font-weight: bold; }
+
 .infoRightSeatShow { margin-bottom:5px; display: inline-block;  font-weight: bold; color: #6E6E6E; float: right; }
 
-.infoRightSeatShowB { margin-bottom:5px; display: inline-block;  font-weight: bold; color: #6E6E6E; float: right; }
+.infoRightSeatShowBus { margin: 0px; text-align: right; float: right; font-weight: bold; color: #6E6E6E;}
+
+.infoRight3 { width: 445px; margin: 0px;} 
 
 .infoRight22 { height: 28px; width: 445px; }
-.infoRight3 { width: 445px; }
+
 
 .infoRightSeatTitle-1 { display: inline-block; float: right; }
 
 .ticketBoxFourthCircle { color: white; font-size: 40px; }
+
+.ticketBoxThirdB { top:50px; position:absolute; width: 100px; margin-left: 860px; height: 50px;  }
+
+
 
 
 </style>
@@ -243,15 +252,13 @@ $(function() {
 									</div>
 									<div class="infoRight3">
 										<p class="infoRightSeatTitle">좌석</p>
-											<div class="infoRightSeatTitle-1">
-												<p class="infoRightSeatShow">${dto.bSeatNum}</p>
-											</div>	
+										<p class="infoRightSeatShowBus" >${dto.bSeatNum}</p>
 									</div>
 								</div>
 							</div>
-							<div class="ticketBoxThird">
-								<button type="button" class="btn btn-primary cancel-btn2" 
-									 data-bTkNum="${dto.bTkNum}" >예매 취소</button> 
+							<div class="ticketBoxThirdB">
+								<button type="button" class="btn btn-primary cancel-btn2" data-bTkNum="${dto.bTkNum}" 
+									style="height: 50px; width: 140px;" >예매 취소</button> 
 							</div>
 							<div class="ticketBoxFourth">
 								<p class="ticketBoxFourthCircle">●</p>
