@@ -41,7 +41,7 @@ public class MaintainDAO {
 					+ "   LEFT OUTER  JOIN customer c ON tt.cusNum = c.cusNum "
 					+ "   LEFT OUTER JOIN member1 m ON c.cusNum = m.cusNum "
 					+ " WHERE tDisPrice IS null "
-					+ " ORDER BY tt.tboarddate DESC "
+					+ " ORDER BY tt.tboarddate DESC, tStaTime DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -132,7 +132,7 @@ public class MaintainDAO {
 			} else if(condition.equals("tStationName")){
 				sql += " WHERE tDisPrice IS NULL AND INSTR(t1.tStationName, ?) >= 1 ";
 			}
-			sql += " ORDER BY tt.tboarddate DESC ";
+			sql += " ORDER BY tt.tboarddate DESC, tStaTime DESC ";
 			sql += " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -314,7 +314,7 @@ public class MaintainDAO {
 					+ "   LEFT OUTER  JOIN customer c ON tt.cusNum = c.cusNum "
 					+ "   LEFT OUTER JOIN member1 m ON c.cusNum = m.cusNum "
 					+ " WHERE tDisPrice = 0 "
-					+ " ORDER BY tt.tboarddate DESC "
+					+ " ORDER BY tt.tboarddate DESC, tStaTime DESC "
 					+ " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -405,7 +405,7 @@ public class MaintainDAO {
 			} else if(condition.equals("tStationName")){
 				sql += " WHERE tDisPrice = 0 AND INSTR(t1.tStationName, ?) >= 1 ";
 			}
-			sql += " ORDER BY tt.tboarddate DESC ";
+			sql += " ORDER BY tt.tboarddate DESC, tStaTime DESC ";
 			sql += " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -587,7 +587,7 @@ public class MaintainDAO {
 					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
 					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum "
 					+ " WHERE bDisPrice IS NULL "
-			        + " ORDER BY bBoardDate DESC "
+			        + " ORDER BY bBoardDate DESC, bFirstStaTime DESC "
 			        + " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -677,7 +677,7 @@ public class MaintainDAO {
 					} else if(condition.equals("bStationName")){
 						sql += " WHERE bDisPrice IS NULL AND INSTR(bs1.bStationName, ?) >= 1 ";
 					}
-					sql+= " ORDER BY bBoardDate DESC ";
+					sql+= " ORDER BY bBoardDate DESC, bFirstStaTime DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -861,7 +861,7 @@ public class MaintainDAO {
 					+ "	LEFT OUTER JOIN customer c ON c.cusNum = bt.cusNum " 
 					+ " LEFT OUTER JOIN member1 m ON m.cusNum = c.cusNum "
 					+ " WHERE bDisPrice = 0 "
-			        + " ORDER BY bBoardDate DESC "
+			        + " ORDER BY bBoardDate DESC, bFirstStaTime DESC "
 			        + " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -950,7 +950,7 @@ public class MaintainDAO {
 			} else if(condition.equals("bStationName")){
 				sql += " WHERE bDisPrice = 0 AND INSTR(bs1.bStationName, ?) >= 1 ";
 			}
-					sql+= " ORDER BY bBoardDate DESC ";
+					sql+= " ORDER BY bBoardDate DESC, bFirstStaTime DESC ";
 			        sql+= " OFFSET ? ROWS FETCH FIRST ? ROWS ONLY ";
 
 			pstmt = conn.prepareStatement(sql);
