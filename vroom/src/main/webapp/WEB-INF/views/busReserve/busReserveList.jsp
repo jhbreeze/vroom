@@ -123,6 +123,17 @@ min-height: 60px;
     box-shadow: 4px 4px 4px rgb(0 0 0 / 12%);
 
 }
+
+.date-title{
+	display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    font-size: 25px;
+    font-weight: 700;
+}
 #fblock2_title{
 	padding: 10px 16px;
 	width: 860px;
@@ -267,8 +278,11 @@ $(function() {
 	    
 	    <div class="fblock2">
 	    	<div class="Bcycle" style="display: none;">${bcycle}배차조회</div>
-		    <div id="calendarLayout" style="z-index: 1000;" >
-		    </div>
+		    <div class="date-title" >
+		    	<a class="arrow" id="left-arrow"><i class="bi bi-caret-left-fill" style="width: 20px;"></i></a>
+			    	<div style="z-index: 1000, display: flex , align-items: center;" >${busstaDate}</div>
+	    		<a class="arrow" id="right-arrow"><i class="bi bi-caret-right-fill" style="width: 20px;"></i></a>
+    		</div>
 		    <div class="fblock2-1" >
 			  	<div id="fblock2_title" class="row" >
 					<div class="buslist_title col-2  fw-bold fs-5 text-center">출발</div>

@@ -806,6 +806,7 @@ $(function(){
 
 	<form name="hiddenForm">
 	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum, reSeatNum 예약좌석번호 -->
+	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum -->
 	<!--    reserveSeatNum잔여석, reSeatCount예약된좌석수 -->
 	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
 	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">
