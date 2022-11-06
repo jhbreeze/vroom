@@ -332,7 +332,6 @@ $(function(){
 									</div>	
 									<div class="m-2 ms-0 ">
 										<label class="form-check-label"> 
-										<!--  <a href="#" class="text-decoration-none">이용약관</a> 에 동의합니다.  -->
 										개인정보 수집 및 이용에 동의합니다.
 										</label>
 									</div>
