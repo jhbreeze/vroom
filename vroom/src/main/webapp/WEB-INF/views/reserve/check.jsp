@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VROONG</title>
+<title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp" />
 
 <style type="text/css">
@@ -53,23 +53,6 @@ function sendOk() {
 		f.tel.focus();
 		return;
 	}
-	
-	/*
-	let str = f.reserveNum.value.trim();
-	if ( str !== f.reserveNum.valuetrim) {
-		alert("예매번호 혹은 전화번호가 존재하지 않습니다. ");
-		f.reserveNum.focus();
-		return;
-	}
-	
-	let str =  f.tel.value.trim();
-	if ( str !== f.tel.valuetrim) {
-		alert("예매번호 혹은 전화번호가 존재하지 않습니다. ");
-		f.tel.focus();
-		return;
-	}
-		
-	*/	
 	
 	
 	f.action = "${pageContext.request.contextPath}/reserve/check_ok.do";

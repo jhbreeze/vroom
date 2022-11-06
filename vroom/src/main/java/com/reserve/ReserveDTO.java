@@ -24,7 +24,6 @@ public class ReserveDTO {
 	private String userId;
 	private int tDisPrice;
 	
-
 	// 시간계산
 	private int tTaketimeCount;
 	private String countTime;
@@ -33,10 +32,8 @@ public class ReserveDTO {
 	private int tFee;
 	private int bFee;
 	
-	
 	// 비회원
 	private String tel;
-	
 	
 	// 버스 예매 
 	private int bNumId;
@@ -53,7 +50,6 @@ public class ReserveDTO {
 	private String bStationName; 
 	private int bDisPrice;
 	
-
 	
 	public int gettDetailCode() {
 		return tDetailCode;

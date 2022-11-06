@@ -34,8 +34,10 @@ public class ReserveServlet extends MyServlet{
 			// 비회원 예매 조회 완료
 			checkForm(req,resp); 
 		} else if (uri.indexOf("traincancel.do")!=-1) {
+			// 기차 취소
 			traincancel(req,resp);
 		} else if (uri.indexOf("buscancel.do")!=-1) {
+			// 버스 취소
 			buscancel(req,resp);
 		} 
 	}
@@ -76,7 +78,6 @@ public class ReserveServlet extends MyServlet{
 	
 			List<ReserveDTO> reserveBusList = dao.memberBReserve(userId);
 			
-			// System.out.println(reserveBusList.size());
 			req.setAttribute("reserveTrainList", reserveTrainList);
 			req.setAttribute("reserveBusList", reserveBusList);			
 			
@@ -97,8 +98,6 @@ public class ReserveServlet extends MyServlet{
 	// 비회원 예매 조회 완료
 		
 		ReserveDAO dao = new ReserveDAO();
-		
-		// String cp = req.getContextPath();
 		
 		try {
 			
@@ -143,41 +142,7 @@ public class ReserveServlet extends MyServlet{
 		}
 	}
 	
-	
-	
-	
-	/*	( 여기는 필요없음. 나중에 지울 예정 )  
-	private void nomemcheckForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// 비회원 예매조회 입력부분 을 예매리스트에서 하기  
-		ReserveDAO dao = new ReserveDAO(); 
-		
-		String tel;
-		int tTkNum, bTkNum; 
-		
-		
-		try {
-			ReserveDTO dto = new ReserveDTO();
-			
-			dto.setTel(req.getParameter("tel"));
-			dto.settTkNum(req.getParameter("tTkNum"));
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		forward(req, resp, "/WEB-INF/views/reserve/check.jsp");	
-	}
-	
-	 */
-	
-	/*
-	private void nomemSubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//
-		forward(req, resp, "/WEB-INF/views/reserve/list.jsp");
-	}
-	 */
-
-	
+	// 기차 취소
 	private void traincancel(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ReserveDAO dao = new ReserveDAO();
 
@@ -207,6 +172,7 @@ public class ReserveServlet extends MyServlet{
 
 	}
 
+	// 버스 취소
 	private void buscancel(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ReserveDAO dao = new ReserveDAO();
 

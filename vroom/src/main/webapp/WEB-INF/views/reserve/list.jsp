@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>부릉부릉 - 템플릿</title>
+<title>부릉부릉</title>
 <jsp:include page="/WEB-INF/views/layout/staticHeader.jsp"/>
 <style type="text/css">
 
@@ -29,34 +29,11 @@ main {
 }
 
 
-
-
-/*
-.container { min-height: 1100px; display:flex;  margin-top: 40px; }
-
-/*
-.container { display: flex; }
-*/
-/*
-.ticket1 { display: flex }
-*/
-
-
-
-
-
 .ticketBoxBack { margin-right:0px; position:relative; width: 200px; height: 150px; border-bottom-left-radius: 2em; border-top-left-radius: 2em; background-color: #0E6EFD; }
 .ticketBoxFirst {position:absolute; left:16px;  width: 400px; height: 150px; border-bottom-left-radius: 0.5em; border-top-left-radius: 0.5em; border-right-style:dotted; border-width:9px; border-right-color:white;  background-color: #F1F5FC;}
 .ticketBoxSecond { width: 500px; margin-left: 300px; height: 150px; border-bottom-right-radius: 2em; border-top-right-radius: 2.5em; border-left-style:dotted; border-width:9px; border-left-color:white;  background-color: #F1F5FC; }
 .ticketBoxThird { top:50px; position:absolute; width: 100px; margin-left: 550px; height: 50px;}
 .ticketBoxFourth { top:40px; position:absolute; width: 100px; margin-left: 780px; height: 100px; }
-
-
-/*
-.ticket1 { width: 1100px; height: 600px; }
-*/
-
-
 .titleName { font-weight: bold; width: 300px; }
 
 .titleDateSearch { float: left; }

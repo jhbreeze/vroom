@@ -209,14 +209,6 @@ public class ReserveDAO {
 				dto.setbTkNum(rs.getString("bTkNum")); 
 				dto.setbDisPrice(rs.getInt("bDisPrice")); 
 				
-				
-				/*
-				dto.setbTkNum(rs.getInt("bTkNum"));
-				dto.setbRouteDetailCodeSta(rs.getInt("bRouteDetailCodeSta"));
-				dto.setbRouteDetailCodeEnd(rs.getInt("bRouteDetailCodeEnd"));
-				dto.setbStationName(rs.getString("bStationName"));
-				*/
-	
 				list.add(dto);
 		
 			}
