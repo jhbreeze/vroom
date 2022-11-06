@@ -179,8 +179,6 @@ div.subject {
 .subject span {
 	cursor: pointer;
 }
-///////////////////////////////////
-////////////////////////////////////////
 #refresh {
 	width: 101px;
 	height: 42px;
@@ -520,18 +518,12 @@ $(function() {
 	    f.innerText = s;
 	});
 	
-	
     $('#fblock2-3-3 input[type="button"]').click(function() {
-    	/*
     	
-	
-	<input type="hidden" name="bRouteInfoList" value="${bRouteInfoList}">
-	bNorFee bEleFee bOldFee totFee(+원붙어있음) -> data-로 변경
-	bNor, bEle, bOld b
-    	*/
-    	
-    	//수정 bFee를 일반 초등학생, 중고등생으로 구분하여 전송
-    	
+    	if(reSeatCount<(bNor+bEle+bOld)){
+			alert('좌석을 인원수만큼 선택해주세요');
+			return;
+		}
     	
 		let bName = $("form[name=hiddenForm] input[name=bName]").val();
 		let bType = $("form[name=hiddenForm] input[name=bType]").val();
@@ -814,7 +806,6 @@ $(function(){
 
 	<form name="hiddenForm">
 	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum, reSeatNum 예약좌석번호 -->
-	<!-- 좌석번호 bSeatNum, 총좌석수 seatNum, 잔여석 reserveSeatNum -->
 	<!--    reserveSeatNum잔여석, reSeatCount예약된좌석수 -->
 	<input type="hidden" name="bFirstStaTime" value="${bFirstStaTime}">
 	<input type="hidden" name="bEndStaTime" value="${bEndStaTime}">

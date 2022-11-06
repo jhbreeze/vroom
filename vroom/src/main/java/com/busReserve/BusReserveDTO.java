@@ -13,7 +13,7 @@ public class BusReserveDTO {
 	private List<String> bSeatNum;
 	private int cusNum;
 	private int bseatTotNum;
-	private	int reservedSeat;//예약된 좌석-> 1개
+	private	int reservedSeat;
 	private String bBoardDate;
 	private String name;
 	private String tel;

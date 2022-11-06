@@ -47,16 +47,6 @@ public class BusReserveServlet extends MyServlet {
 		}
 	}
 
-	
-	
-
-
-
-
-
-
-
-
 	private void busInsertList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BusReserveDAO dao = new BusReserveDAO();
 		try {
@@ -133,57 +123,6 @@ public class BusReserveServlet extends MyServlet {
 			busReserveList(req, resp);
 		}
 	}
-	//운행코드
-	/*
-	protected void bOperCode(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		BusReserveDAO dao = new BusReserveDAO();
-		String bTotalTimeString;
-		ReserveBusSessionInfo reserveInfo2 = (ReserveBusSessionInfo)session.getAttribute("reserveBusInfo");
-		session.setAttribute("reservebusinfo", reserveInfo2);
-		ReserveBusSessionInfo reserveInfo = (ReserveBusSessionInfo)session.getAttribute("reservebusinfo");
-		session.removeAttribute("reserveBusInfo");
-		
-		try {
-			String bcycle = reserveInfo.getBcycle();
-			String bgrade = reserveInfo.getBgrade();
-			String depbStationName = reserveInfo.getDepbStationName();
-			String desbStationName = reserveInfo.getDesbStationName();
-			int depbStationCode = reserveInfo.getDepbStationCode();
-			int desbStationCode = reserveInfo.getDesbStationCode();
-			int depbRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
-			//int desbRouteDetailCode = dao.getbRouteDetailCode(desbStationCode, depbStationCode);
-			int takeTime = dao.getBTakeTime(depbRouteDetailCode);
-			int bRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
-			int bRouteCode = dao.getRouteCode(depbStationCode, desbStationCode);
-			String busstaDate = reserveInfo.getBusstaDate();
-			String busendDate = null;
-			if(bcycle.equals("full")) {
-				busendDate = reserveInfo.getBusendDate();
-			}
-			bTotalTimeString = bTakeTime(depbStationCode, desbStationCode);
-			req.setAttribute("bcycle", bcycle);
-			req.setAttribute("bgrade", bgrade);
-			req.setAttribute("busstaDate", busstaDate);
-			req.setAttribute("busendDate", busendDate);
-			req.setAttribute("depbStationName", depbStationName);
-			req.setAttribute("desbStationName", desbStationName);
-			req.setAttribute("btakeTime", takeTime);
-			req.setAttribute("bTotalTimeString",bTotalTimeString);
-			List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
-			req.setAttribute("bRouteInfoList", bRouteInfoList);	
-			req.setAttribute("bRouteDetailCode",bRouteDetailCode);
-			req.setAttribute("bRouteCode",bRouteCode);
-			
-			
-			
-			forward(req, resp, "/WEB-INF/views/busReserve/busReserveList.jsp");
-			return;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}	
-	*/
 	private void reserveSeatList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 예약된 좌석 리스트
 		
@@ -219,7 +158,6 @@ public class BusReserveServlet extends MyServlet {
 			int depbStationCode = reserveInfo.getDepbStationCode();
 			int desbStationCode = reserveInfo.getDesbStationCode();
 			int depbRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
-			//int desbRouteDetailCode = dao.getbRouteDetailCode(desbStationCode, depbStationCode);
 			int takeTime = dao.getBTakeTime(depbRouteDetailCode);
 			List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
 			int bRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
@@ -245,18 +183,7 @@ public class BusReserveServlet extends MyServlet {
 			req.setAttribute("bRouteCode",bRouteCode);
 			req.setAttribute("bBoardDate1", bBoardDate1);
 			
-			//reservedSeats = dao.getReservedSeats(bNumId, bOperCode, bBoardDate1); 
-			
-			/*
-			 String hORf2 = req.getParameter("hORf"); // 없으면 null
-			if(hORf2==null||hORf2.equals("1")) {//편도 or 왕복 가는날
-				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode) ;
-				req.setAttribute("bRouteInfoList", bRouteInfoList);	
-			} else if(hORf2.equals("2")) {
-				List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(desbRouteDetailCode) ;
-				req.setAttribute("bRouteInfoList", bRouteInfoList);	
-			}
-			*/
+		
 			
 			forward(req, resp, "/WEB-INF/views/busReserve/busReserveList.jsp");
 			return;
@@ -338,20 +265,7 @@ public class BusReserveServlet extends MyServlet {
 			req.setAttribute("bFee", req.getParameter("bFee"));
 			req.setAttribute("seatNum", req.getParameter("seatNum"));
 			
-			/*req.setAttribute("busstaDate", busstaDate);
-			String busendDate = req.getParameter("busendDate");
-			busendDate = busendDate.substring(0, busendDate.length()-2);
-			String[] end= busendDate.split("[.]");
-			if(Integer.parseInt(end[1])<10){
-				end[1] = "0"+end[1];
-			}
-			if(Integer.parseInt(sta[2])<10){
-				end[2] = "0"+end[2];
-			}
-			busendDate = end[0]+"-"+end[1]+"-"+end[2];
 			
-			req.setAttribute("busendDate", req.getParameter("busendDate"));
-			*/
 			req.setAttribute("depbStationName", req.getParameter("depbStationName"));
 			req.setAttribute("desbStationName", req.getParameter("desbStationName"));
 			req.setAttribute("btakeTime", req.getParameter("btakeTime"));
@@ -363,19 +277,7 @@ public class BusReserveServlet extends MyServlet {
 			int depbStationCode = reserveInfo.getDepbStationCode();
 			int desbStationCode = reserveInfo.getDesbStationCode();
 			int depbRouteDetailCode = dao.getbRouteDetailCode(depbStationCode, desbStationCode);
-			//int desbRouteDetailCode = dao.getbRouteDetailCode(desbStationCode, depbStationCode);
-/*		왕복	
- * 			String busstaDate = reserveInfo.getBusstaDate();
-			String busendDate = null;
-			if(bcycle.equals("full")) {
-				busendDate = reserveInfo.getBusendDate();
-			}
-			req.setAttribute("busstaDate", busstaDate);
-			req.setAttribute("busendDate", busendDate);
-			*/
-			
-			//req.setAttribute("bseatNum", req.getParameter("bseatNum")); //좌석번호
-			req.setAttribute("bcycle", bcycle);
+	
 			
 			List<BusReserveDTO> bRouteInfoList = dao.getbRouteInfoList(depbRouteDetailCode);
 			req.setAttribute("bRouteInfoList", bRouteInfoList);
@@ -553,9 +455,9 @@ public class BusReserveServlet extends MyServlet {
 			dto.setbFeefinal(feeList);
 			dto.setbSeatNum(bSeatNum);
 			//메일
-			// 편도 인서트
+			
 			String bTkNumList;
-			//if (cycle.equals("half")) {
+			
 			bTkNumList = dao.InsertPayInfo(dto);
 			if (bTkNumList != null) {
 				String reserveNum = bTkNumList;
@@ -566,7 +468,7 @@ public class BusReserveServlet extends MyServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			//}
+			
 	}
 	
 }

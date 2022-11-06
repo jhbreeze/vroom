@@ -198,26 +198,7 @@ public List<BusReserveDTO> getDepStationList() {
 		}
 		return bRouteDetailCode;
 	}
-	
-	
-	//busTk테이블 (버스예매)
-	//bTkNum	cusNum	bTotNum	bTotPrice	bPayDay	bPayPrice	bDisPrice	bOperCode	bBoardDate
-	//버스별예매번호	고객번호	총예매수	총금액	결제일	결제금액	할인금액	운행코드	탑승날짜
-	
-	
-	
-	
-	// 해당시간대의 버스 예매정보 insert update delete? (busTkDetail 버스예매상세테이블)
-	//(bNum(버스예매번호) bfee(운임요금)
-	//bPassinger승객유형(어른, 어린이, 경로,장애인)) bSeatNum좌석번호
-	//bNumId차량번호	bTkNum버스별예매번호
 
-	
-	// 해당시간대의 버스 예매정보 가져오기+ 버스좌석정보(select)
-	// 운행테이블의 해당 버스 정보 : (세션정보가져옴)->(노선상세코드_출발역, 노선상세코드_도착역,버스구분) =>해당조건에 맞는 list반환
-	//buslist에 필요한 정보
-	//버스이름->고속사, 버스등급->등급
-	
 	//상세노선코드->출발지및 운행정보리스트
 	public List<BusReserveDTO> getbRouteInfoList(int bRouteDetailCode){
 		List<BusReserveDTO> list = new ArrayList<>();
@@ -418,7 +399,7 @@ public List<BusReserveDTO> getDepStationList() {
 			int cusNum = dto.getCusNum();
 			
 			if(cusNum == 0) {
-				//customer 시퀀스로customer
+				
 				sql = "SELECT customer_seq.NEXTVAL FROM dual";
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
