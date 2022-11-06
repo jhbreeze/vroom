@@ -929,7 +929,7 @@ public class ReserveTrainServlet extends MyServlet{
 				int childCost2 = Integer.parseInt(req.getParameter("endchildCost").replace(",", ""));
 				int ac2;
 				int cc2;
-				if(adultCount==0) {
+				if(adultCount2==0) {
 					ac2 = 0;
 				} else {
 					ac2 = adultCost2/adultCount2;

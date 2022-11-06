@@ -214,7 +214,6 @@ function sendOk() {
 		let money1 = $('input[name="statotalCost"]').val().replace(",", "");
 		let money2 = $('input[name="endtotalCost"]').val().replace(",", "");
 		money = Number(money1) + Number(money2);
-		alert(money);
 	}		
 	
 	function requestPay() {

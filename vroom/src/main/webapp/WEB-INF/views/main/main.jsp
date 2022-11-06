@@ -94,7 +94,7 @@ main {
 }
 .blue-box2 {
 	top: 0; left: 0; z-index: -1; background-size: cover;
-	width: 100%; height: 600px; position: absolute; background-image: url("${pageContext.request.contextPath}/resources/images/vroom_back.png")
+	width: 100%; height: 600px; position: absolute; background-image: url("${pageContext.request.contextPath}/resources/images/vroom_back2.png")
 }
 .sort {
 	font-size: 10px;
