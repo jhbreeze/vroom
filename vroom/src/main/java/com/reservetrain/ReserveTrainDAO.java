@@ -1148,8 +1148,8 @@ public class ReserveTrainDAO {
 			pstmt.setInt(3, staDto.gettTotNum());
 			pstmt.setInt(4, staDto.gettTotPrice());
 			pstmt.setInt(5, staDto.gettPayPrice());
-			pstmt.setInt(6, staDto.gettDetailCodeEnd());
-			pstmt.setInt(7, staDto.gettDetailCodeSta());
+			pstmt.setInt(6, staDto.gettDetailCodeSta());
+			pstmt.setInt(7, staDto.gettDetailCodeEnd());
 			pstmt.setString(8, staDto.gettBoardDate());
 				
 			pstmt.executeUpdate();
@@ -1192,8 +1192,8 @@ public class ReserveTrainDAO {
 			pstmt.setInt(3, endDto.gettTotNum());
 			pstmt.setInt(4, endDto.gettTotPrice());
 			pstmt.setInt(5, endDto.gettPayPrice());
-			pstmt.setInt(6, endDto.gettDetailCodeSta());
-			pstmt.setInt(7, endDto.gettDetailCodeEnd());
+			pstmt.setInt(6, endDto.gettDetailCodeEnd());
+			pstmt.setInt(7, endDto.gettDetailCodeSta());
 			pstmt.setString(8, endDto.gettBoardDate());
 				
 			pstmt.executeUpdate();
