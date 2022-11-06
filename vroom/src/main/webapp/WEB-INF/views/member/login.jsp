@@ -12,7 +12,7 @@
 
 <style type="text/css">
 .container {
-	min-height: 700px;
+	min-height: 500px;
 }
 
 main {
@@ -94,9 +94,9 @@ function sendLogin() {
 
 	<main>
 		<div class="container">
-			<div class="body-container">
-				<div class="body-title mb-5">
-					<div class="fs-4 fw-bolder">&nbsp;로그인</div>
+			<div class="body-container" style="margin-top: 30px;">
+				<div class="body-title">
+					<div class="fs-4 fw-bolder" style="margin-left: 28px;">&nbsp;로그인</div>
 				</div>
 
 				<div class="d-flex">
@@ -114,7 +114,7 @@ function sendLogin() {
 								</div>
 								<div class="loginbtn">
 									<button type="button" class="btn btn-primary fw-bold"
-										style="height: 100%; box-shadow: 2px 2px 2px lightgrey" onclick="sendLogin();">&nbsp;로그인&nbsp;</button>
+										style="height: 100%;" onclick="sendLogin();">&nbsp;로그인&nbsp;</button>
 								</div>
 							</form>
 							<div>

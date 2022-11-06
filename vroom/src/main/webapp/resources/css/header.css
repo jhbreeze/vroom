@@ -76,7 +76,7 @@ a:hover, a:active { cursor:pointer; }
   	visibility: visible;
 }
 .sub-menu > li >  a:hover {
- 	color: #4971FF; font-weight: 900;
+ 	color: #0E6EFD; font-weight: 900;
 }
 .main-menu-a { position: relative; }
 .main-menu-a:after{

@@ -13,7 +13,7 @@
 main { 
 	position: relative; top: -55px; background: white;
 }
-.container2 { width: 1920px; height: 1000px; margin: 0 auto; text-align: center; }
+.container2 { width: 100%; height: 1000px; margin: 0 auto; text-align: center; }
 
 .photo-1{
 	width: 100vw;height: 100vh; 
@@ -23,7 +23,7 @@ main {
 	justify-content: center;
     align-items: center;
     position: absolute;
-	background-image: url("${pageContext.request.contextPath}/resources/images/train_route.png");
+	background-image: url("${pageContext.request.contextPath}/resources/images/train_route3.png");
 }
 </style>
 

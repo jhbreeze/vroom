@@ -108,6 +108,7 @@ main {
 	
 }
 
+.image:hover { opacity: 50%; cursor: pointer; }
 #sb{
 position: relative;
 top: 20px;
