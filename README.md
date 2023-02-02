@@ -1,5 +1,5 @@
 # :pushpin: vroom
->KTX, 고속버스 통합 예매시스
+>KTX, 고속버스 통합 예매시스템
 
 
 </br>
