@@ -24,12 +24,11 @@
 </br>
 
 ## 3. ERD 설계
-<img src="https://user-images.githubusercontent.com/103633968/215769843-bfbc8d41-97f3-4d8d-8c95-e7a1c83623ce.png" width="700" height="400"/>
+<img src="https://user-images.githubusercontent.com/103633968/216342886-8b18cd08-e562-4223-9110-f190e2a9fe00.png" width="700" height="400"/>
 
 
 ## 4. 핵심 기능
-<b>빅데이터 플랫폼</b>으로써 다양한 주제에 대한 트위터, 블로그 등의 <br>
-<b>SNS 채널별 소비자의 반응을 통합적으로 확인</b>하는 것이 이 프로젝트의 핵심 기능입니다. 
+가상으로 KTX, 고속버스 좌석을 예매하고 결제, 조회까지 가능하도록 구현했습니다. 
 <img src="https://user-images.githubusercontent.com/103633968/215778109-4d56584f-7e9f-4d5c-91f5-58df47799df6.jpg" width="700" height="400"/>
 
 <details>
