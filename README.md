@@ -29,7 +29,7 @@
 
 ## 4. 핵심 기능
 가상으로 KTX, 고속버스 좌석을 예매하고 결제, 조회까지 가능하도록 구현했습니다. 
-<img src="https://user-images.githubusercontent.com/103633968/215778109-4d56584f-7e9f-4d5c-91f5-58df47799df6.jpg" width="700" height="400"/>
+<img src="https://user-images.githubusercontent.com/103633968/216345486-25e6b660-df7a-458e-86d6-d47e60510b88.png" width="700" height="400"/>
 
 <details>
 <summary><b>핵심 기능 설명 펼치기</b></summary>
