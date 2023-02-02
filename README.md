@@ -28,7 +28,7 @@
 
 
 ## 4. 핵심 기능
-가상으로 KTX, 고속버스 좌석을 예매하고 결제, 조회까지 가능하도록 구현했습니다. 
+✔️ 가상으로 KTX, 고속버스 좌석을 예매하고 결제, 조회까지 가능하도록 구현했습니다. 
 <img src="https://user-images.githubusercontent.com/103633968/216345486-25e6b660-df7a-458e-86d6-d47e60510b88.png" width="800" height="700"/>
 
 <details>
@@ -49,25 +49,25 @@
 ## 5. 프로젝트 담당 부분
 ✔️ 전체 템플릿 디자인, 스토리보드 설계, 데이터베이스 모델링<br>
 ✔️ 요구사항 분석<br>
-✔️ Spring 환경설정(POI 라이브러리, Security, JDBC, tiles 등)<br>
-✔️ SNS 채널별 키워드 언급량에 따른 날짜별 차트 구현(Apache Echarts 활용)<br>
-✔️ SNS 채널별 키워드 언급량 추이 POI 라이브러리를 활용하여 excel 파일 다운로드 기능<br>
-✔️ Selenium을 활용한 네이버 블로그 크롤링 및 1차 데이터 가공<br>
-✔️ CkEditor를 활용한 채용 공고 게시판 CRUD 기능, 화면 디자인 작업<br>
-✔️ 게시글 등록 시 MultipartFile 활용한 파일 첨부, 파일 다운로드 기능 <br>
-✔️ 채널톡 API를 활용한 1:1 상담문의 채팅 기능 구현, 화면 디자인 작업<br>
+✔️ 로그인, 로그아웃, 회원가입 기능 구현<br>
+✔️ 회원, 비회원 session 처리 <br>
+✔️ 마이페이지(정보 수정, 회원 탈퇴) <br>
+✔️ 예매 취소 기능 구현 <br>
+✔️ API를 활용한 카카오페이 결제 기능 구현 <br>
 
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
-<img src="https://user-images.githubusercontent.com/103633968/215780426-f1ff6a39-e6fc-46b7-a58a-254d9149afbb.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215780555-6362d2c7-7d5f-4c98-afeb-a3b9c12a2045.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215780639-65e78622-cc47-4514-b384-255d814868e0.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215780995-3c72f209-1643-4876-9953-0878a623fcec.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215781131-f107c37a-5cad-4623-b593-558a2c9ab030.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215781214-3b588009-f822-4ac4-a19d-2d68a06e7ce0.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/215781296-4e0c8ad0-c845-4f2d-af7a-12568ffb2ed9.png" width="800" height="500"/>
-<img src="https://user-images.githubusercontent.com/103633968/216260275-d85665b7-fafb-4391-87a6-32f28c917e6b.png" width="800" height="500"/>
+✔️ 로그인
+<img src="https://user-images.githubusercontent.com/103633968/216348629-d6624620-5806-4940-b032-7eb71c919b7a.png" width="800" height="500"/>
+✔️ 회원가입
+<img src="https://user-images.githubusercontent.com/103633968/216348759-7c201a50-df0f-4f58-a961-71dddaa2c452.png" width="800" height="500"/>
+✔️ 세션처리
+✔️ 예매 취소
+<img src="https://user-images.githubusercontent.com/103633968/216349317-7c4105b5-e88c-4c3f-ab56-d5a39112cd28.png" width="800" height="500"/>
+✔️ 결제
+<img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="800" height="500"/>
+✔️회원정보 조회
 
 
 </div>
