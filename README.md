@@ -28,7 +28,7 @@
 
 
 ## 4. 핵심 기능
-✔️ 가상으로 KTX, 고속버스 좌석을 <b>예매하고 결제, 조회</b>까지 가능하도록 구현했습니다. 
+✔️ 가상으로 KTX, 고속버스 좌석을 <b>예매하고 결제, 조회</b>까지 가능하도록 구현했습니다. <br>
 <img src="https://user-images.githubusercontent.com/103633968/216350959-fcd735a8-5678-4f9d-897e-51c10fecb322.jpg" width="900" height="500"/>
 
 <details>
@@ -58,15 +58,15 @@
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
-✔️ 로그인
-<img src="https://user-images.githubusercontent.com/103633968/216348629-d6624620-5806-4940-b032-7eb71c919b7a.png" width="800" height="500"/>
-✔️ 회원가입
-<img src="https://user-images.githubusercontent.com/103633968/216348759-7c201a50-df0f-4f58-a961-71dddaa2c452.png" width="800" height="500"/>
+  ✔️ 로그인&마이페이지
+<img src="https://user-images.githubusercontent.com/103633968/216352709-e4c24073-951f-4eec-9547-c07c60ec797d.png" width="900" height="500"/>
+  ✔️ 회원가입
+<img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
 ✔️ 세션처리
 ✔️ 예매 취소
-<img src="https://user-images.githubusercontent.com/103633968/216349317-7c4105b5-e88c-4c3f-ab56-d5a39112cd28.png" width="800" height="500"/>
+<img src="https://user-images.githubusercontent.com/103633968/216349317-7c4105b5-e88c-4c3f-ab56-d5a39112cd28.png" width="900" height="500"/>
 ✔️ 결제
-<img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="800" height="500"/>
+<img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="900" height="500"/>
 ✔️회원정보 조회
 
 
