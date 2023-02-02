@@ -58,16 +58,16 @@
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
-  ✔️ 로그인&마이페이지
+  🔹 로그인&마이페이지
 <img src="https://user-images.githubusercontent.com/103633968/216352709-e4c24073-951f-4eec-9547-c07c60ec797d.png" width="900" height="500"/>
-  ✔️ 회원가입
+  🔹 회원가입
 <img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
-✔️ 세션처리
-✔️ 예매 취소
-<img src="https://user-images.githubusercontent.com/103633968/216349317-7c4105b5-e88c-4c3f-ab56-d5a39112cd28.png" width="900" height="500"/>
-✔️ 결제
+  🔹 세션처리
+  🔹 예매 취소
+<img src="https://user-images.githubusercontent.com/103633968/216353512-517d4253-bc92-4bc3-8b39-142e41768f99.png" width="900" height="500"/>
+  🔹 결제
 <img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="900" height="500"/>
-✔️회원정보 조회
+  🔹회원정보 조회
 
 
 </div>
