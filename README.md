@@ -24,22 +24,22 @@
 </br>
 
 ## 3. ERD 설계
-<img src="https://user-images.githubusercontent.com/103633968/216342886-8b18cd08-e562-4223-9110-f190e2a9fe00.png"/>
+<img src="https://user-images.githubusercontent.com/103633968/216342886-8b18cd08-e562-4223-9110-f190e2a9fe00.png" width="800" height="600"/>
 
 
 ## 4. 핵심 기능
 가상으로 KTX, 고속버스 좌석을 예매하고 결제, 조회까지 가능하도록 구현했습니다. 
-<img src="https://user-images.githubusercontent.com/103633968/216345486-25e6b660-df7a-458e-86d6-d47e60510b88.png" />
+<img src="https://user-images.githubusercontent.com/103633968/216345486-25e6b660-df7a-458e-86d6-d47e60510b88.png" width="800" height="700"/>
 
 <details>
 <summary><b>핵심 기능 설명 펼치기</b></summary>
 <div markdown="1"> 
 
 ### 4.1. Class Diagram
-<img src="https://user-images.githubusercontent.com/103633968/216344718-f90ad4d0-f8c5-49a0-beec-3651d20b420f.jpg"/>
+<img src="https://user-images.githubusercontent.com/103633968/216344718-f90ad4d0-f8c5-49a0-beec-3651d20b420f.jpg" width="800" height="700"/>
 
 ### 4.2. Use-Cases Diagram
-<img src="https://user-images.githubusercontent.com/103633968/216344341-34a2fa81-e26b-408e-ac54-dded4f2225c6.png" />
+<img src="https://user-images.githubusercontent.com/103633968/216344341-34a2fa81-e26b-408e-ac54-dded4f2225c6.png" width="800" height="700"/>
 
 </div>
 </details>
