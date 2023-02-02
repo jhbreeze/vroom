@@ -33,16 +33,13 @@
 
 <details>
 <summary><b>핵심 기능 설명 펼치기</b></summary>
-<div markdown="1">
+<div markdown="1"> 
 
-### 4.1. 프로젝트 구조
-![KakaoTalk_20230131_223047423](https://user-images.githubusercontent.com/103633968/215773986-a4318395-7dae-46b3-9749-61cdf237bc1d.png)
+### 4.1. Class Diagram
+<img src="https://user-images.githubusercontent.com/103633968/216344718-f90ad4d0-f8c5-49a0-beec-3651d20b420f.jpg" width="700" height="400"/>
 
-### 4.2. 메뉴 구조도
-<img src="https://user-images.githubusercontent.com/103633968/215777580-a44d9279-8468-44cc-8e12-d8418a4f887b.jpg" width="700" height="400"/>
-
-### 4.3. Use-Cases Diagram
-<img src="https://user-images.githubusercontent.com/103633968/215777629-e1932cef-83e7-4d7b-8cce-5ae84d1c910e.png" width="700" height="600"/>
+### 4.2. Use-Cases Diagram
+<img src="https://user-images.githubusercontent.com/103633968/216344341-34a2fa81-e26b-408e-ac54-dded4f2225c6.png" width="700" height="600"/>
 
 </div>
 </details>
