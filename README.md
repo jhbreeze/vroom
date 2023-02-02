@@ -60,7 +60,7 @@
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
-  
+  <br>
   ✔️<b>로그인&마이페이지</b>
   
     - DB에 저장된 정보와 입력받은 정보를 비교하여 로그인 처리를 합니다.
@@ -81,11 +81,15 @@
   
   ✔️<b>결제</b>
   
+    - API를 활용하여 (가상으로) 카카오페이 결제가 가능합니다.
+
 <img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="900" height="500"/>
   
   ✔️<b>회원정보 조회</b>
   
-<img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
+    - 검색 조건 설정과 페이징 처리를 통해 쉽게 회원 정보를 파악할 수 있습니다.
+  
+<img src="https://user-images.githubusercontent.com/103633968/216362681-376292bd-8a25-4976-969a-3f2c2915eb05.png" width="900" height="500"/>
 
 </div>
 </details>
