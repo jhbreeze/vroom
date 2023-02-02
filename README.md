@@ -83,6 +83,7 @@
   ✔️<b>결제</b>
   
     - API를 활용하여 (가상으로) 카카오페이 결제가 가능합니다.
+    - 결제 실패의 경우를 대비하여 트랜잭션 처리를 하였습니다. 
 
 <img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="900" height="500"/>
   
