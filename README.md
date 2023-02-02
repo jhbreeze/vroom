@@ -47,28 +47,30 @@
 </br>
 
 ## 5. 프로젝트 담당 부분
-✔️ 전체 템플릿 디자인, 스토리보드 설계, 데이터베이스 모델링<br>
-✔️ 요구사항 분석<br>
-✔️ 로그인, 로그아웃, 회원가입 기능 구현<br>
-✔️ 회원, 비회원 session 처리 <br>
-✔️ 마이페이지(정보 수정, 회원 탈퇴) <br>
-✔️ 예매 취소 기능 구현 <br>
-✔️ API를 활용한 카카오페이 결제 기능 구현 <br>
+#### 
+  - 전체 템플릿 디자인, 스토리보드 설계, 데이터베이스 모델링<br>
+  - 요구사항 분석<br>
+  - 로그인, 로그아웃, 회원가입 기능 구현<br>
+  - 회원, 비회원 session 처리 <br>
+  - 마이페이지(정보 수정, 회원 탈퇴) <br>
+  - 예매 취소 기능 구현 <br>
+  - API를 활용한 카카오페이 결제 기능 구현 <br>
 
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
-  🔹 로그인&마이페이지
+  ✔️<b>로그인&마이페이지</b>
 <img src="https://user-images.githubusercontent.com/103633968/216352709-e4c24073-951f-4eec-9547-c07c60ec797d.png" width="900" height="500"/>
-  🔹 회원가입
+  ✔️<b>회원가입</b>
 <img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
-  🔹 세션처리
-  🔹 예매 취소
+  ✔️<b>세션처리</b>
+<img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
+  ✔️<b>예매 취소</b>
 <img src="https://user-images.githubusercontent.com/103633968/216353512-517d4253-bc92-4bc3-8b39-142e41768f99.png" width="900" height="500"/>
-  🔹 결제
+  ✔️<b>결제</b>
 <img src="https://user-images.githubusercontent.com/103633968/216350110-dc6ba2e0-24ac-4f1b-9b42-28dc9847d573.png" width="900" height="500"/>
-  🔹회원정보 조회
-
+  ✔️<b>회원정보 조회</b>
+<img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
 
 </div>
 </details>
