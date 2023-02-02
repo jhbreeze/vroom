@@ -60,6 +60,7 @@
 <details>
 <summary><b>주요 개발내용</b></summary>
 <div markdown="1">
+  
   ✔️<b>로그인&마이페이지</b>
   
     - DB에 저장된 정보와 입력받은 정보를 비교하여 로그인 처리를 합니다.
@@ -68,6 +69,9 @@
 <img src="https://user-images.githubusercontent.com/103633968/216352709-e4c24073-951f-4eec-9547-c07c60ec797d.png" width="900" height="500"/>
   
   ✔️<b>회원가입</b>
+    
+    - 회원 정보 입력 칸은 모두 정규 표현식을 활용하여 유효성 검사를 합니다. 
+    - 아이디 중복검사를 통해 회원 정보 데이터 무결성을 유지했습니다. 
   
 <img src="https://user-images.githubusercontent.com/103633968/216352364-3b136524-735a-4518-94e9-9553a17f7f12.png" width="900" height="500"/>
 
